@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Environment
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Database
+*.db
+
+# Model weights — tracked in git (files are < 100MB, within GitHub limits)
+# *.pth  ← intentionally NOT ignored so Render gets them on deploy
+# *.tflite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Debug / test artifacts
+test_card.png
+result.json
+*.log
+
+# Gemini brain (AI tooling artifacts)
+.gemini/
+
+# Virtual environment
+.venv/
+venv/
+
+# Backend env (contains JWT secret)
+backend/.env
+
+# Frontend local env
+frontend/.env.local

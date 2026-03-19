@@ -1,0 +1,108 @@
+"""
+API — Admin endpoints for product catalog management.
+
+Provides endpoints to trigger scrapes, view catalog stats,
+and manually manage products. All endpoints require admin privileges.
+"""
+
+import logging
+
+from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependencies import get_db, require_admin
+from app.repositories import product_repo
+from app.services.brand_catalog import get_brands, get_all_vibes, get_all_genders
+
+logger = logging.getLogger("lumiqe.api.admin")
+router = APIRouter(prefix="/api/admin", tags=["Admin"])
+
+
+@router.post("/products/refresh")
+async def refresh_products(
+    background_tasks: BackgroundTasks,
+    gender: str = Query(..., description="'male' or 'female'"),
+    vibe: str = Query(..., description="'Casual', 'Gym', 'Party', 'Formal'"),
+    max_per_brand: int = Query(8, ge=1, le=20),
+    admin_user: dict = Depends(require_admin),
+):
+    """
+    Trigger a Firecrawl scrape for a Gender + Vibe combination.
+    Runs in the background so the request returns immediately.
+    Requires admin privileges.
+    """
+    brands = get_brands(gender.lower(), vibe)
+    if not brands:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "NO_BRANDS",
+                "detail": f"No brands configured for {gender}/{vibe}",
+                "code": 404,
+            },
+        )
+
+    async def _run_scrape():
+        from app.services.scraper import scrape_and_save
+        try:
+            count = await scrape_and_save(gender.lower(), vibe, max_per_brand)
+            logger.info(f"Background scrape complete: {count} products saved for {gender}/{vibe}")
+        except Exception as e:
+            logger.error(f"Background scrape failed for {gender}/{vibe}: {e}", exc_info=True)
+
+    background_tasks.add_task(_run_scrape)
+
+    return {
+        "message": f"Scrape started for {gender}/{vibe}",
+        "brands": [b["brand"] for b in brands],
+        "status": "running_in_background",
+    }
+
+
+@router.post("/products/refresh-all")
+async def refresh_all_products(
+    background_tasks: BackgroundTasks,
+    max_per_brand: int = Query(6, ge=1, le=20),
+    admin_user: dict = Depends(require_admin),
+):
+    """
+    Trigger scraping for ALL Gender × Vibe combinations.
+    Use with caution — consumes many Firecrawl API credits.
+    Requires admin privileges.
+    """
+    combos = []
+    for gender in get_all_genders():
+        for vibe in get_all_vibes():
+            brands = get_brands(gender, vibe)
+            if brands:
+                combos.append((gender, vibe))
+
+    async def _run_full_scrape():
+        from app.services.scraper import scrape_and_save
+        total = 0
+        for gender, vibe in combos:
+            try:
+                count = await scrape_and_save(gender, vibe, max_per_brand)
+                total += count
+                logger.info(f"Scraped {count} for {gender}/{vibe}")
+            except Exception as e:
+                logger.error(f"Scrape failed for {gender}/{vibe}: {e}")
+        logger.info(f"Full catalog refresh complete: {total} total products")
+
+    background_tasks.add_task(_run_full_scrape)
+
+    return {
+        "message": f"Full catalog refresh started for {len(combos)} combinations",
+        "combinations": [f"{g}/{v}" for g, v in combos],
+        "status": "running_in_background",
+    }
+
+
+@router.get("/products/stats")
+async def catalog_stats(
+    session: AsyncSession = Depends(get_db),
+    admin_user: dict = Depends(require_admin),
+):
+    """Return catalog health statistics. Requires admin privileges."""
+    stats = await product_repo.get_catalog_stats(session)
+    return stats

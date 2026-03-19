@@ -1,0 +1,986 @@
+{
+  "Light Spring": [
+    {
+      "id": "ls-001",
+      "name": "Peach Floral Wrap Dress",
+      "brand": "ZARA",
+      "price": "₹3,490",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=peach+floral+wrap+dress+women",
+      "match_score": 96,
+      "category": "Dresses"
+    },
+    {
+      "id": "ls-002",
+      "name": "Ivory Cashmere Sweater",
+      "brand": "Marks & Spencer",
+      "price": "₹2,999",
+      "image": "https://m.media-amazon.com/images/I/61nUPxQFdIL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=ivory+cashmere+sweater+women",
+      "match_score": 93,
+      "category": "Tops"
+    },
+    {
+      "id": "ls-003",
+      "name": "Coral Statement Earrings",
+      "brand": "Accessorize",
+      "price": "₹899",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=coral+statement+earrings+gold",
+      "match_score": 91,
+      "category": "Accessories"
+    },
+    {
+      "id": "ls-004",
+      "name": "Light Gold Pleated Skirt",
+      "brand": "H&M",
+      "price": "₹1,799",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=gold+pleated+midi+skirt+women",
+      "match_score": 89,
+      "category": "Bottoms"
+    },
+    {
+      "id": "ls-005",
+      "name": "Warm Nude Lipstick",
+      "brand": "MAC",
+      "price": "₹1,750",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mac+warm+nude+lipstick",
+      "match_score": 94,
+      "category": "Beauty"
+    },
+    {
+      "id": "ls-006",
+      "name": "Cream Canvas Tote Bag",
+      "brand": "Levi's",
+      "price": "₹1,299",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=cream+canvas+tote+bag",
+      "match_score": 87,
+      "category": "Bags"
+    },
+    {
+      "id": "ls-007",
+      "name": "Peach Ballet Flats",
+      "brand": "Aldo",
+      "price": "₹4,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=peach+ballet+flats+women",
+      "match_score": 90,
+      "category": "Shoes"
+    },
+    {
+      "id": "ls-008",
+      "name": "Gold Chain Necklace",
+      "brand": "Tanishq",
+      "price": "₹8,999",
+      "image": "https://m.media-amazon.com/images/I/61Jlm4bAe9L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=delicate+gold+chain+necklace",
+      "match_score": 95,
+      "category": "Jewelry"
+    }
+  ],
+  "True Spring": [
+    {
+      "id": "ts-001",
+      "name": "Coral Linen Blouse",
+      "brand": "ZARA",
+      "price": "₹2,490",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=coral+linen+blouse+women",
+      "match_score": 95,
+      "category": "Tops"
+    },
+    {
+      "id": "ts-002",
+      "name": "Warm Turquoise Maxi Dress",
+      "brand": "AND",
+      "price": "₹3,599",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=turquoise+maxi+dress+women",
+      "match_score": 92,
+      "category": "Dresses"
+    },
+    {
+      "id": "ts-003",
+      "name": "Salmon Pink Kurti",
+      "brand": "Biba",
+      "price": "₹1,399",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=salmon+pink+kurti+women",
+      "match_score": 93,
+      "category": "Ethnic"
+    },
+    {
+      "id": "ts-004",
+      "name": "Warm Gold Hoop Earrings",
+      "brand": "Accessorize",
+      "price": "₹1,099",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=gold+hoop+earrings+women",
+      "match_score": 91,
+      "category": "Jewelry"
+    },
+    {
+      "id": "ts-005",
+      "name": "Peach Blush Compact",
+      "brand": "Maybelline",
+      "price": "₹599",
+      "image": "https://m.media-amazon.com/images/I/61YdC1UAHRL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=maybelline+peach+blush",
+      "match_score": 94,
+      "category": "Beauty"
+    },
+    {
+      "id": "ts-006",
+      "name": "Warm Beige Chinos",
+      "brand": "Allen Solly",
+      "price": "₹1,799",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=beige+chinos+women",
+      "match_score": 88,
+      "category": "Bottoms"
+    },
+    {
+      "id": "ts-007",
+      "name": "Tan Leather Crossbody",
+      "brand": "Hidesign",
+      "price": "₹3,995",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=tan+leather+crossbody+bag",
+      "match_score": 90,
+      "category": "Bags"
+    },
+    {
+      "id": "ts-008",
+      "name": "Coral Wedge Sandals",
+      "brand": "Bata",
+      "price": "₹1,499",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=coral+wedge+sandals+women",
+      "match_score": 89,
+      "category": "Shoes"
+    }
+  ],
+  "Warm Spring": [
+    {
+      "id": "ws-001",
+      "name": "Burnt Orange Blazer",
+      "brand": "Mango",
+      "price": "₹4,990",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=burnt+orange+blazer+women",
+      "match_score": 96,
+      "category": "Outerwear"
+    },
+    {
+      "id": "ws-002",
+      "name": "Olive Green Jumpsuit",
+      "brand": "ZARA",
+      "price": "₹3,990",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=olive+green+jumpsuit+women",
+      "match_score": 93,
+      "category": "Dresses"
+    },
+    {
+      "id": "ws-003",
+      "name": "Camel Wool Scarf",
+      "brand": "Marks & Spencer",
+      "price": "₹1,999",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=camel+wool+scarf",
+      "match_score": 91,
+      "category": "Accessories"
+    },
+    {
+      "id": "ws-004",
+      "name": "Mustard Silk Saree",
+      "brand": "Fabindia",
+      "price": "₹5,990",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mustard+silk+saree",
+      "match_score": 95,
+      "category": "Ethnic"
+    },
+    {
+      "id": "ws-005",
+      "name": "Terracotta Lipstick",
+      "brand": "Lakme",
+      "price": "₹695",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=lakme+terracotta+lipstick",
+      "match_score": 94,
+      "category": "Beauty"
+    },
+    {
+      "id": "ws-006",
+      "name": "Gold Cuff Bracelet",
+      "brand": "Voylla",
+      "price": "₹799",
+      "image": "https://m.media-amazon.com/images/I/61Jlm4bAe9L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=gold+cuff+bracelet+women",
+      "match_score": 92,
+      "category": "Jewelry"
+    },
+    {
+      "id": "ws-007",
+      "name": "Cognac Leather Boots",
+      "brand": "Clarks",
+      "price": "₹6,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=cognac+leather+ankle+boots+women",
+      "match_score": 90,
+      "category": "Shoes"
+    },
+    {
+      "id": "ws-008",
+      "name": "Rust Corduroy Pants",
+      "brand": "H&M",
+      "price": "₹1,999",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=rust+corduroy+pants+women",
+      "match_score": 89,
+      "category": "Bottoms"
+    }
+  ],
+  "Light Summer": [
+    {
+      "id": "lsm-001",
+      "name": "Lavender Midi Dress",
+      "brand": "AND",
+      "price": "₹3,299",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=lavender+midi+dress+women",
+      "match_score": 96,
+      "category": "Dresses"
+    },
+    {
+      "id": "lsm-002",
+      "name": "Powder Blue Blouse",
+      "brand": "Vero Moda",
+      "price": "₹1,799",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=powder+blue+blouse+women",
+      "match_score": 94,
+      "category": "Tops"
+    },
+    {
+      "id": "lsm-003",
+      "name": "Rose Pink Kurti Set",
+      "brand": "Biba",
+      "price": "₹2,199",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=rose+pink+kurti+set+women",
+      "match_score": 93,
+      "category": "Ethnic"
+    },
+    {
+      "id": "lsm-004",
+      "name": "Silver Pearl Studs",
+      "brand": "Tanishq",
+      "price": "₹2,499",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=silver+pearl+stud+earrings",
+      "match_score": 95,
+      "category": "Jewelry"
+    },
+    {
+      "id": "lsm-005",
+      "name": "Mauve Lip Tint",
+      "brand": "Nykaa",
+      "price": "₹499",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mauve+lip+tint",
+      "match_score": 92,
+      "category": "Beauty"
+    },
+    {
+      "id": "lsm-006",
+      "name": "Dusty Pink Crossbody",
+      "brand": "Lavie",
+      "price": "₹1,499",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=dusty+pink+crossbody+bag",
+      "match_score": 90,
+      "category": "Bags"
+    },
+    {
+      "id": "lsm-007",
+      "name": "Lilac Sneakers",
+      "brand": "Puma",
+      "price": "₹3,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=lilac+sneakers+women+puma",
+      "match_score": 88,
+      "category": "Shoes"
+    },
+    {
+      "id": "lsm-008",
+      "name": "Soft Grey Cardigan",
+      "brand": "Marks & Spencer",
+      "price": "₹2,499",
+      "image": "https://m.media-amazon.com/images/I/61nUPxQFdIL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=soft+grey+cardigan+women",
+      "match_score": 87,
+      "category": "Tops"
+    }
+  ],
+  "True Summer": [
+    {
+      "id": "tsm-001",
+      "name": "Dusty Blue Maxi Dress",
+      "brand": "ZARA",
+      "price": "₹3,990",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=dusty+blue+maxi+dress+women",
+      "match_score": 95,
+      "category": "Dresses"
+    },
+    {
+      "id": "tsm-002",
+      "name": "Cool Grey Blazer",
+      "brand": "Van Heusen",
+      "price": "₹3,499",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=grey+blazer+women",
+      "match_score": 92,
+      "category": "Outerwear"
+    },
+    {
+      "id": "tsm-003",
+      "name": "Mauve Chiffon Saree",
+      "brand": "Fabindia",
+      "price": "₹4,590",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mauve+chiffon+saree",
+      "match_score": 94,
+      "category": "Ethnic"
+    },
+    {
+      "id": "tsm-004",
+      "name": "Silver Chain Necklace",
+      "brand": "Giva",
+      "price": "₹1,799",
+      "image": "https://m.media-amazon.com/images/I/61Jlm4bAe9L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=silver+chain+necklace+women",
+      "match_score": 93,
+      "category": "Jewelry"
+    },
+    {
+      "id": "tsm-005",
+      "name": "Rose Berry Lipstick",
+      "brand": "Maybelline",
+      "price": "₹549",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=maybelline+rose+berry+lipstick",
+      "match_score": 91,
+      "category": "Beauty"
+    },
+    {
+      "id": "tsm-006",
+      "name": "Slate Blue Palazzo Pants",
+      "brand": "Global Desi",
+      "price": "₹1,599",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=blue+palazzo+pants+women",
+      "match_score": 89,
+      "category": "Bottoms"
+    },
+    {
+      "id": "tsm-007",
+      "name": "Grey Suede Handbag",
+      "brand": "Hidesign",
+      "price": "₹4,495",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=grey+suede+handbag+women",
+      "match_score": 88,
+      "category": "Bags"
+    },
+    {
+      "id": "tsm-008",
+      "name": "Dusty Rose Block Heels",
+      "brand": "Inc.5",
+      "price": "₹2,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=dusty+rose+block+heels+women",
+      "match_score": 90,
+      "category": "Shoes"
+    }
+  ],
+  "Soft Summer": [
+    {
+      "id": "ssm-001",
+      "name": "Muted Sage Dress",
+      "brand": "AND",
+      "price": "₹2,999",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=sage+green+dress+women",
+      "match_score": 94,
+      "category": "Dresses"
+    },
+    {
+      "id": "ssm-002",
+      "name": "Taupe Silk Blouse",
+      "brand": "Vero Moda",
+      "price": "₹2,199",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=taupe+silk+blouse+women",
+      "match_score": 93,
+      "category": "Tops"
+    },
+    {
+      "id": "ssm-003",
+      "name": "Stone Grey Kurti",
+      "brand": "W",
+      "price": "₹1,599",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=stone+grey+kurti+women",
+      "match_score": 91,
+      "category": "Ethnic"
+    },
+    {
+      "id": "ssm-004",
+      "name": "Matte Silver Bangles Set",
+      "brand": "Voylla",
+      "price": "₹699",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=matte+silver+bangles+women",
+      "match_score": 90,
+      "category": "Jewelry"
+    },
+    {
+      "id": "ssm-005",
+      "name": "Dusty Mauve Eyeshadow Palette",
+      "brand": "Nykaa",
+      "price": "₹899",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mauve+eyeshadow+palette",
+      "match_score": 92,
+      "category": "Beauty"
+    },
+    {
+      "id": "ssm-006",
+      "name": "Mushroom Linen Trousers",
+      "brand": "H&M",
+      "price": "₹1,799",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mushroom+linen+trousers+women",
+      "match_score": 89,
+      "category": "Bottoms"
+    },
+    {
+      "id": "ssm-007",
+      "name": "Dove Grey Bucket Bag",
+      "brand": "Lavie",
+      "price": "₹1,899",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=grey+bucket+bag+women",
+      "match_score": 87,
+      "category": "Bags"
+    },
+    {
+      "id": "ssm-008",
+      "name": "Cool Beige Loafers",
+      "brand": "Aldo",
+      "price": "₹4,499",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=beige+loafers+women",
+      "match_score": 88,
+      "category": "Shoes"
+    }
+  ],
+  "Soft Autumn": [
+    {
+      "id": "sa-001",
+      "name": "Terracotta Wrap Dress",
+      "brand": "ZARA",
+      "price": "₹3,490",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=terracotta+wrap+dress+women",
+      "match_score": 95,
+      "category": "Dresses"
+    },
+    {
+      "id": "sa-002",
+      "name": "Olive Linen Shirt",
+      "brand": "Gap",
+      "price": "₹2,299",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=olive+linen+shirt+women",
+      "match_score": 93,
+      "category": "Tops"
+    },
+    {
+      "id": "sa-003",
+      "name": "Warm Taupe Chanderi Kurti",
+      "brand": "Fabindia",
+      "price": "₹2,490",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=taupe+chanderi+kurti",
+      "match_score": 92,
+      "category": "Ethnic"
+    },
+    {
+      "id": "sa-004",
+      "name": "Antique Gold Jhumkas",
+      "brand": "Voylla",
+      "price": "₹599",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=antique+gold+jhumka+earrings",
+      "match_score": 94,
+      "category": "Jewelry"
+    },
+    {
+      "id": "sa-005",
+      "name": "Warm Nude Foundation",
+      "brand": "Lakme",
+      "price": "₹799",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=lakme+warm+nude+foundation",
+      "match_score": 91,
+      "category": "Beauty"
+    },
+    {
+      "id": "sa-006",
+      "name": "Camel Wide-Leg Trousers",
+      "brand": "Mango",
+      "price": "₹2,990",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=camel+wide+leg+trousers+women",
+      "match_score": 90,
+      "category": "Bottoms"
+    },
+    {
+      "id": "sa-007",
+      "name": "Tan Suede Tote",
+      "brand": "Hidesign",
+      "price": "₹4,995",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=tan+suede+tote+bag+women",
+      "match_score": 89,
+      "category": "Bags"
+    },
+    {
+      "id": "sa-008",
+      "name": "Warm Brown Chelsea Boots",
+      "brand": "Woodland",
+      "price": "₹3,995",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=brown+chelsea+boots+women",
+      "match_score": 88,
+      "category": "Shoes"
+    }
+  ],
+  "True Autumn": [
+    {
+      "id": "ta-001",
+      "name": "Rust Cashmere Sweater",
+      "brand": "Marks & Spencer",
+      "price": "₹2,999",
+      "image": "https://m.media-amazon.com/images/I/61nUPxQFdIL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=rust+cashmere+sweater+women",
+      "match_score": 96,
+      "category": "Tops"
+    },
+    {
+      "id": "ta-002",
+      "name": "Mustard Anarkali Suit",
+      "brand": "Biba",
+      "price": "₹3,999",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mustard+anarkali+suit+women",
+      "match_score": 94,
+      "category": "Ethnic"
+    },
+    {
+      "id": "ta-003",
+      "name": "Pumpkin Orange Shirt Dress",
+      "brand": "Vero Moda",
+      "price": "₹2,699",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=pumpkin+orange+shirt+dress+women",
+      "match_score": 93,
+      "category": "Dresses"
+    },
+    {
+      "id": "ta-004",
+      "name": "Tiger Eye Pendant Set",
+      "brand": "Tanishq",
+      "price": "₹5,999",
+      "image": "https://m.media-amazon.com/images/I/61Jlm4bAe9L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=tiger+eye+pendant+gold",
+      "match_score": 95,
+      "category": "Jewelry"
+    },
+    {
+      "id": "ta-005",
+      "name": "Burnt Sienna Matte Lipstick",
+      "brand": "MAC",
+      "price": "₹1,950",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mac+burnt+sienna+lipstick",
+      "match_score": 94,
+      "category": "Beauty"
+    },
+    {
+      "id": "ta-006",
+      "name": "Olive Cargo Pants",
+      "brand": "Levi's",
+      "price": "₹2,799",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=olive+cargo+pants+women",
+      "match_score": 91,
+      "category": "Bottoms"
+    },
+    {
+      "id": "ta-007",
+      "name": "Cognac Leather Sling Bag",
+      "brand": "Hidesign",
+      "price": "₹3,495",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=cognac+leather+sling+bag",
+      "match_score": 90,
+      "category": "Bags"
+    },
+    {
+      "id": "ta-008",
+      "name": "Deep Tan Oxford Shoes",
+      "brand": "Clarks",
+      "price": "₹5,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=tan+oxford+shoes+women",
+      "match_score": 89,
+      "category": "Shoes"
+    }
+  ],
+  "Deep Autumn": [
+    {
+      "id": "da-001",
+      "name": "Burgundy Velvet Blazer",
+      "brand": "Mango",
+      "price": "₹5,990",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=burgundy+velvet+blazer+women",
+      "match_score": 96,
+      "category": "Outerwear"
+    },
+    {
+      "id": "da-002",
+      "name": "Forest Green Silk Saree",
+      "brand": "Fabindia",
+      "price": "₹6,990",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=forest+green+silk+saree",
+      "match_score": 95,
+      "category": "Ethnic"
+    },
+    {
+      "id": "da-003",
+      "name": "Chocolate Brown Wrap Dress",
+      "brand": "AND",
+      "price": "₹3,599",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=chocolate+brown+wrap+dress+women",
+      "match_score": 93,
+      "category": "Dresses"
+    },
+    {
+      "id": "da-004",
+      "name": "Antique Bronze Cuff",
+      "brand": "Voylla",
+      "price": "₹899",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=antique+bronze+cuff+bracelet",
+      "match_score": 92,
+      "category": "Jewelry"
+    },
+    {
+      "id": "da-005",
+      "name": "Deep Berry Lipstick",
+      "brand": "Lakme",
+      "price": "₹695",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=lakme+deep+berry+lipstick",
+      "match_score": 94,
+      "category": "Beauty"
+    },
+    {
+      "id": "da-006",
+      "name": "Dark Olive Slim Pants",
+      "brand": "Allen Solly",
+      "price": "₹1,999",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=dark+olive+slim+pants+women",
+      "match_score": 90,
+      "category": "Bottoms"
+    },
+    {
+      "id": "da-007",
+      "name": "Mahogany Leather Handbag",
+      "brand": "Hidesign",
+      "price": "₹5,995",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=mahogany+leather+handbag+women",
+      "match_score": 91,
+      "category": "Bags"
+    },
+    {
+      "id": "da-008",
+      "name": "Dark Brown Knee Boots",
+      "brand": "Dune",
+      "price": "₹7,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=dark+brown+knee+boots+women",
+      "match_score": 89,
+      "category": "Shoes"
+    }
+  ],
+  "Deep Winter": [
+    {
+      "id": "dw-001",
+      "name": "Emerald Green Gown",
+      "brand": "ZARA",
+      "price": "₹5,990",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=emerald+green+gown+women",
+      "match_score": 96,
+      "category": "Dresses"
+    },
+    {
+      "id": "dw-002",
+      "name": "Ruby Red Velvet Lehenga",
+      "brand": "Sabyasachi",
+      "price": "₹12,999",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=ruby+red+velvet+lehenga",
+      "match_score": 95,
+      "category": "Ethnic"
+    },
+    {
+      "id": "dw-003",
+      "name": "Black Tailored Blazer",
+      "brand": "Mango",
+      "price": "₹4,990",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=black+tailored+blazer+women",
+      "match_score": 93,
+      "category": "Outerwear"
+    },
+    {
+      "id": "dw-004",
+      "name": "Sapphire Pendant Necklace",
+      "brand": "Tanishq",
+      "price": "₹9,999",
+      "image": "https://m.media-amazon.com/images/I/61Jlm4bAe9L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=sapphire+pendant+necklace+silver",
+      "match_score": 94,
+      "category": "Jewelry"
+    },
+    {
+      "id": "dw-005",
+      "name": "Deep Plum Lipstick",
+      "brand": "MAC",
+      "price": "₹1,950",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mac+deep+plum+lipstick",
+      "match_score": 95,
+      "category": "Beauty"
+    },
+    {
+      "id": "dw-006",
+      "name": "Navy Tailored Trousers",
+      "brand": "Van Heusen",
+      "price": "₹2,499",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=navy+tailored+trousers+women",
+      "match_score": 91,
+      "category": "Bottoms"
+    },
+    {
+      "id": "dw-007",
+      "name": "Black Leather Structured Bag",
+      "brand": "Coach",
+      "price": "₹8,999",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=black+leather+structured+bag+women",
+      "match_score": 92,
+      "category": "Bags"
+    },
+    {
+      "id": "dw-008",
+      "name": "Black Patent Heels",
+      "brand": "Aldo",
+      "price": "₹5,999",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=black+patent+heels+women",
+      "match_score": 90,
+      "category": "Shoes"
+    }
+  ],
+  "True Winter": [
+    {
+      "id": "tw-001",
+      "name": "Fuchsia Satin Top",
+      "brand": "Mango",
+      "price": "₹2,490",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=fuchsia+satin+top+women",
+      "match_score": 96,
+      "category": "Tops"
+    },
+    {
+      "id": "tw-002",
+      "name": "Royal Blue Sharara Set",
+      "brand": "W",
+      "price": "₹3,999",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=royal+blue+sharara+set+women",
+      "match_score": 95,
+      "category": "Ethnic"
+    },
+    {
+      "id": "tw-003",
+      "name": "Pure White Shirt Dress",
+      "brand": "ZARA",
+      "price": "₹3,290",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=white+shirt+dress+women",
+      "match_score": 93,
+      "category": "Dresses"
+    },
+    {
+      "id": "tw-004",
+      "name": "Platinum Diamond Studs",
+      "brand": "Tanishq",
+      "price": "₹15,999",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=platinum+diamond+stud+earrings",
+      "match_score": 94,
+      "category": "Jewelry"
+    },
+    {
+      "id": "tw-005",
+      "name": "Bright Cherry Red Lipstick",
+      "brand": "MAC",
+      "price": "₹1,950",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=mac+cherry+red+lipstick",
+      "match_score": 95,
+      "category": "Beauty"
+    },
+    {
+      "id": "tw-006",
+      "name": "Icy Blue Linen Pants",
+      "brand": "H&M",
+      "price": "₹1,599",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=ice+blue+linen+pants+women",
+      "match_score": 90,
+      "category": "Bottoms"
+    },
+    {
+      "id": "tw-007",
+      "name": "Silver Metallic Clutch",
+      "brand": "Accessorize",
+      "price": "₹2,999",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=silver+metallic+clutch",
+      "match_score": 91,
+      "category": "Bags"
+    },
+    {
+      "id": "tw-008",
+      "name": "Navy Pointed-Toe Pumps",
+      "brand": "Aldo",
+      "price": "₹5,499",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=navy+pointed+toe+pumps+women",
+      "match_score": 89,
+      "category": "Shoes"
+    }
+  ],
+  "Bright Winter": [
+    {
+      "id": "bw-001",
+      "name": "Electric Blue Bodycon Dress",
+      "brand": "ZARA",
+      "price": "₹3,990",
+      "image": "https://m.media-amazon.com/images/I/71rr5E8F3YL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=electric+blue+bodycon+dress+women",
+      "match_score": 96,
+      "category": "Dresses"
+    },
+    {
+      "id": "bw-002",
+      "name": "Hot Pink Silk Blouse",
+      "brand": "Vero Moda",
+      "price": "₹2,199",
+      "image": "https://m.media-amazon.com/images/I/61fFH+wNX6L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=hot+pink+silk+blouse+women",
+      "match_score": 95,
+      "category": "Tops"
+    },
+    {
+      "id": "bw-003",
+      "name": "Bright Purple Lehenga",
+      "brand": "Biba",
+      "price": "₹4,999",
+      "image": "https://m.media-amazon.com/images/I/71kx2w3YLQL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=bright+purple+lehenga",
+      "match_score": 93,
+      "category": "Ethnic"
+    },
+    {
+      "id": "bw-004",
+      "name": "Crystal Drop Earrings",
+      "brand": "Swarovski",
+      "price": "₹4,999",
+      "image": "https://m.media-amazon.com/images/I/61xq7DMIORL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=swarovski+crystal+drop+earrings",
+      "match_score": 94,
+      "category": "Jewelry"
+    },
+    {
+      "id": "bw-005",
+      "name": "Neon Pink Lip Gloss",
+      "brand": "Nykaa",
+      "price": "₹599",
+      "image": "https://m.media-amazon.com/images/I/51YwJEjNF7L._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=neon+pink+lip+gloss",
+      "match_score": 92,
+      "category": "Beauty"
+    },
+    {
+      "id": "bw-006",
+      "name": "Bright White Tailored Pants",
+      "brand": "Mango",
+      "price": "₹2,990",
+      "image": "https://m.media-amazon.com/images/I/71dJ5zBYFbL._SY879_.jpg",
+      "url": "https://www.amazon.in/s?k=white+tailored+pants+women",
+      "match_score": 90,
+      "category": "Bottoms"
+    },
+    {
+      "id": "bw-007",
+      "name": "Cobalt Blue Mini Bag",
+      "brand": "Accessorize",
+      "price": "₹1,999",
+      "image": "https://m.media-amazon.com/images/I/81pVSqci67L._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=cobalt+blue+mini+bag",
+      "match_score": 91,
+      "category": "Bags"
+    },
+    {
+      "id": "bw-008",
+      "name": "White Platform Sneakers",
+      "brand": "Nike",
+      "price": "₹6,495",
+      "image": "https://m.media-amazon.com/images/I/61Xhe2GGGKL._SY695_.jpg",
+      "url": "https://www.amazon.in/s?k=white+platform+sneakers+women+nike",
+      "match_score": 88,
+      "category": "Shoes"
+    }
+  ]
+}
