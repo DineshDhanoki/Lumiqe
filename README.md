@@ -1,322 +1,338 @@
-#  Lumiqe AI — Your Personal Color Intelligence
+<div align="center">
 
-> **AI-powered skin tone analysis and color matching.** Discover your seasonal color palette, find clothes that complement your skin, and never wear the wrong color again.
+<img src="https://img.shields.io/badge/LUMIQE-AI%20Color%20Intelligence-FF2D55?style=for-the-badge&labelColor=000000" alt="Lumiqe" />
 
-[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://python.org)
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green?logo=fastapi)](https://fastapi.tiangolo.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+<br/><br/>
+
+# ✦ LUMIQE
+### *Your Personal AI Color Consultant*
+
+**Discover the exact colors that make you look extraordinary.**
+Professional-grade seasonal color analysis — powered by computer vision, delivered in seconds.
+
+<br/>
+
+[![Stars](https://img.shields.io/github/stars/DineshDhanoki/lumiqe?style=social)](https://github.com/DineshDhanoki/lumiqe/stargazers)
+[![Forks](https://img.shields.io/github/forks/DineshDhanoki/lumiqe?style=social)](https://github.com/DineshDhanoki/lumiqe/network/members)
+&nbsp;
+![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=flat-square&logo=next.js&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwind-css&logoColor=white)
+&nbsp;
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+
+<br/>
+
+> 💡 **If this project helps you, please give it a ⭐ — it means the world and helps others find it!**
+
+<br/>
 
 ---
 
-##  What Is Lumiqe?
+</div>
 
-Lumiqe is a full-stack AI application that analyzes your skin tone to determine your **12-season color type** (e.g., Deep Winter, True Autumn) and provides personalized recommendations for:
+## 🎯 What is Lumiqe?
 
--  **Your best colors** — a hex palette tailored to your undertone
--  **Colors to avoid** — shades that wash you out
--  **Metal recommendations** — Gold, Silver, or Both
--  **Celebrity matches** — famous people who share your season
--  **Makeup palette** — ideal lips, blush, and eyeshadow tones
--  **Shopping feed** — curated products that match your palette
--  **Buy or Pass Scanner** — snap a photo of any clothing item in-store and get an instant match score against your personal palette
+Most people wear the wrong colors their entire life — not because they lack style, but because nobody ever told them their season.
 
----
+A professional color analysis consultation costs **$200–$500**. Lumiqe does it in **3 seconds**, for free.
 
-##  Architecture
+Upload a selfie (or use the live camera), and Lumiqe's AI identifies your **12-season color type** using the same science professional stylists use. You'll get a complete color blueprint — what to wear, what to avoid, how to do your makeup, how to build your wardrobe, and an AI stylist you can chat with 24/7.
+
+<br/>
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎨 Core Analysis
+- **12-Season Color Typing** — Light/True/Warm Spring, Light/True/Soft Summer, Soft/True/Deep Autumn, Deep/True/Bright Winter
+- **Live Camera Capture** — Real-time lighting guidance, face alignment oval, 3-second countdown
+- **Skin Tone Detection** — BiSeNet face parsing + MediaPipe + K-Means clustering
+- **Confidence Scoring** — Know how reliable your result is
+- **Celebrity Matches** — Famous people who share your season
+
+</td>
+<td width="50%">
+
+### 💼 Professional Depth
+- **Color Profile Deep Dive** — Style archetype, signature color, value, chroma, harmonies
+- **7-Occasion Style Guide** — Work, formal, casual, date night, beach, wedding, athletic
+- **10-Piece Capsule Wardrobe** — Each piece with hex code and reasoning
+- **Hair & Beauty Guide** — Best shades, highlights to get, colors to avoid
+- **AI Stylist Chat** — Conversational styling advice powered by Llama 3.3 70B
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🛍️ Shopping Intelligence
+- **Buy or Pass Scanner** — Snap any clothing item in-store, get an instant match score
+- **Curated Shopping Feed** — Products filtered to your exact palette
+- **Delta-E Color Science** — CIE2000 standard for perceptually accurate matching
+
+</td>
+<td>
+
+### 🔒 Privacy First
+- **Photos never saved** — All processing happens in-memory only
+- **No third-party image APIs** — Your face never leaves the server
+- **GDPR-aligned** — Only derived color data (hex codes) is stored
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## 🖥️ Screenshots
+
+> *Take a selfie → Get your complete color universe in seconds*
 
 ```
-┌─────────────────────────────────────────────────┐
-│                  FRONTEND                       │
-│           Next.js 15 (App Router)               │
-│  Landing • Analyze • Results • Feed • Scanner   │
-│          NextAuth.js (Google + Email)           │
-└──────────────┬──────────────────────┬───────────|
-               │  REST API           │
-               ▼                     ▼
-┌──────────────────────┐  ┌────────────────────────┐
-│   FastAPI Backend     │ │   Color Matcher Svc    │
-│  /api/analyze         │ │  K-Means + Delta-E     │
-│  /api/scan-item       │ │  (Pure color science)  │
-│  /api/products/{s}    │ └────────────────────────┘
-│  /api/palette-card    │
-│  /api/auth/*          │
-└──────────┬────────────┘
+┌─────────────────────┐    ┌─────────────────────────────────────────┐
+│                     │    │  Overview │ Profile │ Occasions │ ...    │
+│   📷 Live Camera    │ →  │                                         │
+│                     │    │  ✦ Deep Autumn                          │
+│  [ Face Oval Guide ]│    │  Your Core Palette  ████ ████ ████      │
+│  ✓ Good lighting    │    │  Best Metal: Gold                        │
+│                     │    │  Contrast: High                          │
+│  [ Capture Photo ]  │    │                                         │
+└─────────────────────┘    └─────────────────────────────────────────┘
+```
+
+<br/>
+
+## 🧠 How the Science Works
+
+```
+📸 Selfie
+   │
+   ▼
+👤 Face Detection        — MediaPipe BlazeFace isolates the face region
+   │
+   ▼
+🎭 Skin Segmentation     — BiSeNet model masks skin pixels only (ignores hair, eyes, lips)
+   │
+   ▼
+💡 Lighting Correction   — CLAHE on L*a*b* L-channel removes harsh shadows
+   │
+   ▼
+🎨 Color Extraction      — K-Means++ clusters skin pixels → dominant tone
+   │
+   ▼
+📐 ITA Angle Calculation — Individual Typology Angle classifies skin lightness
+   │
+   ▼
+🌸 Season Mapping        — Undertone + ITA → 1 of 12 seasonal color types
+   │
+   ▼
+📚 Profile Enrichment    — seasons.json adds palette, occasions, wardrobe, beauty guide
+   │
+   ▼
+✨ Your Complete Color Blueprint
+```
+
+<br/>
+
+## 🏗️ Architecture
+
+```
+┌────────────────────────────────────────────────────────────┐
+│                     FRONTEND (Next.js 15)                   │
+│         Landing • Analyze • Results (6 tabs) • Feed        │
+│              Scanner • Account • Pricing                    │
+│                  NextAuth.js v5 (Google + Email)            │
+└────────────────┬───────────────────────────────────────────┘
+                 │  REST API
+                 ▼
+┌────────────────────────────────────────────────────────────┐
+│                   BACKEND (FastAPI + Python 3.12)           │
+│                                                            │
+│  /api/analyze          →  CV Pipeline                      │
+│  /api/complete-profile →  seasons.json enrichment          │
+│  /api/color-chat       →  Groq Llama 3.3 70B               │
+│  /api/scan-item        →  Delta-E color matching           │
+│  /api/styling-tips     →  AI fashion advice                │
+│  /api/auth/*           →  JWT authentication               │
+└──────────┬─────────────────────────────────────────────────┘
            │
-    ┌──────▼──────┐    ┌───────────────┐
-    │ CV Pipeline │    │  SQLite DB    │
-    │ OpenCV +    │    │  Users        │
-    │ MediaPipe + │    │  Palettes     │ 
-    │ Face Parsing│    │  Free Scans   │
-    │ Model (.pth)│    └───────────────┘
-    └─────────────┘
+   ┌───────▼────────┐    ┌──────────────────┐    ┌──────────────┐
+   │  CV Pipeline   │    │   PostgreSQL DB   │    │  Groq API    │
+   │  OpenCV        │    │  Users • Palettes │    │  Llama 3.3   │
+   │  MediaPipe     │    │  Scan credits     │    │  70B         │
+   │  BiSeNet .pth  │    └──────────────────┘    └──────────────┘
+   └────────────────┘
 ```
 
-### Data Flow
+<br/>
 
-1. **Upload selfie** → Frontend sends to `POST /api/analyze`
-2. **Face detection** → MediaPipe detects face landmarks
-3. **Skin masking** → Face parsing model isolates skin pixels
-4. **Color extraction** → K-Means clustering on skin region
-5. **Season mapping** → ITA angle + undertone → 12-season classification
-6. **Enrichment** → `seasons.json` adds celebrities, makeup, avoid colors
-7. **Response** → Full JSON result displayed on Results page
-8. **Palette saved** → Stored in SQLite for the Buy or Pass scanner
-
----
-
-##  Tech Stack
-
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Frontend** | Next.js 15, React, TypeScript | App Router, Server Components |
-| **Styling** | Tailwind CSS 4, Framer Motion | Glassmorphism, scroll animations |
-| **Auth** | NextAuth.js v5 | Google OAuth + Email/Password |
-| **Backend** | Python 3.12, FastAPI | Async API, Pydantic v2 schemas |
-| **CV Pipeline** | OpenCV, MediaPipe, PyTorch | Face detection, skin parsing |
-| **Color Science** | Custom (NumPy) | K-Means clustering, CIE2000 ΔE |
-| **Database** | SQLite | User accounts, palette storage |
-| **Security** | bcrypt, rate limiting | Password hashing, abuse prevention |
-
----
-
-##  Project Structure
-
-```
-lumiqe/
-├── backend/
-│   ├── api.py                  # FastAPI server (all endpoints)
-│   ├── lumiqe_engine.py         # CV pipeline (face → season)
-│   ├── db.py                   # SQLite database (users, palettes)
-│   ├── 79999_iter.pth          # Face parsing model weights
-│   ├── blaze_face_short_range.tflite
-│   ├── face-parsing/           # BiSeNet face parsing model
-│   │   ├── model.py
-│   │   └── resnet.py
-│   ├── services/
-│   │   ├── palette_card.py     # Shareable palette image generator
-│   │   └── color_matcher.py    # Buy or Pass color science engine
-│   ├── data/
-│   │   ├── seasons.json        # 12-season knowledge base
-│   │   ├── products.json       # Curated product catalog
-│   │   └── demo_results.json   # Landing page demo data
-│   ├── requirements.txt
-│   └── test_api.py
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── page.tsx        # Landing page (8 sections)
-│   │   │   ├── analyze/        # Upload & scan selfie
-│   │   │   ├── results/        # Full analysis report
-│   │   │   ├── feed/           # Shopping recommendations
-│   │   │   ├── scan/           # Buy or Pass scanner
-│   │   │   └── api/auth/       # NextAuth.js handler
-│   │   ├── components/         # 15+ reusable components
-│   │   └── lib/                # Auth config, utilities
-│   ├── tests/                  # Vitest unit tests
-│   ├── package.json
-│   └── tailwind.config.ts
-├── context/
-│   ├── architecture-rules.md
-│   └── business-constraints.md
-└── claude.md                   # Engineering principles
-```
-
----
-
-##  API Endpoints
-
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/health` | GET | No | Health check + model status |
-| `/api/analyze` | POST | Optional | Upload selfie → full color analysis |
-| `/api/scan-item` | POST | Yes (email) | Upload clothing → match score |
-| `/api/products/{season}` | GET | No | Curated products by season |
-| `/api/demo-results` | GET | No | Pre-computed demos for landing page |
-| `/api/palette-card` | POST | No | Generate downloadable palette PNG |
-| `/api/auth/register` | POST | No | Create user account |
-| `/api/auth/login` | POST | No | Authenticate user |
-
-### Example Response: `/api/analyze`
-```json
-{
-  "season": "Deep Autumn",
-  "description": "Rich, warm, and muted tones...",
-  "hex_color": "#B07848",
-  "undertone": "warm",
-  "confidence": 0.87,
-  "palette": ["#8B4513", "#CD853F", "#D2691E", "#DEB887", "#C76B3F", "#A0522D"],
-  "avoid_colors": ["#FF69B4", "#87CEEB", "#E6E6FA", "#98FB98"],
-  "metal": "Gold",
-  "celebrities": [{"name": "Julia Roberts", "image": "..."}],
-  "makeup": {"lips": "#C44536", "blush": "#E07A5F", "eyeshadow": "#81B29A"}
-}
-```
-
-### Example Response: `/api/scan-item`
-```json
-{
-  "item_hex": "#B85C38",
-  "item_name": "Burnt Sienna",
-  "match_score": 87,
-  "verdict": "BUY",
-  "best_palette_match": "#C76B3F",
-  "suggestions": [
-    {"hex": "#C76B3F", "name": "Burnt Sienna", "delta_e": 4.2},
-    {"hex": "#A0522D", "name": "Sienna", "delta_e": 8.1}
-  ]
-}
-```
-
----
-
-##  Business Model
-
-| Tier | Price | Includes |
-|------|-------|----------|
-| **Free Trial** | $0 | 1 face analysis scan |
-| **Premium** (planned) | $4.99/mo | Unlimited scans, unlimited Buy or Pass, priority support |
-
-### Revenue Streams
-- **Subscription fees** — Premium tier for power users
-- **Affiliate commissions** — Product recommendations via Amazon.in links
-- **B2B API** (future) — License the color matching engine to fashion retailers
-
-### Unit Economics
-- **Infrastructure cost**: ~$20/mo (CPU-only server, no GPU needed)
-- **Per-analysis cost**: ~$0.001 (pure CPU computation)
-- **Break-even**: ~5 premium subscribers/month
-
----
-
-##  Privacy & Security
-
-> **Your photos never leave our server's memory and are never saved.**
-
--  All image processing happens **in-memory only** — raw photos are never written to disk
--  Only derived color data (hex codes, season) is stored
--  Passwords hashed with **bcrypt** (industry standard)
--  Rate limiting on API endpoints (10 analyses/hour per IP)
--  File upload validation (10MB max, JPEG/PNG/WebP only)
--  CORS restricted to known origins
--  No third-party image processing APIs — all CV runs locally
-
----
-
-##  Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
+- Python 3.12+
+- Node.js 18+
+- npm
 
-- **Python 3.12+**
-- **Node.js 18+**
-- **npm** or **yarn**
-
-### 1. Clone the Repository
+### 1. Clone
 
 ```bash
-git clone https://github.com/kanishk083/Lumiqe-ai.git
-cd Lumiqe-ai
+git clone https://github.com/DineshDhanoki/lumiqe.git
+cd lumiqe
 ```
 
-### 2. Backend Setup
+### 2. Backend
 
 ```bash
 cd backend
+
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Create environment file
+cp .env.example .env
+# Edit .env and add your JWT_SECRET_KEY
+
+# Start server
+uvicorn app.main:app --reload --port 8000
 ```
 
-Create a `.env` file (optional, for production):
-```env
-# No .env needed for local development
-# The server runs with defaults
-```
-
-Start the backend:
-```bash
-uvicorn api:app --reload --port 8000
-```
-
-### 3. Frontend Setup
+### 3. Frontend
 
 ```bash
 cd frontend
 npm install
-```
 
-Create `.env.local`:
-```env
-NEXTAUTH_SECRET=your-secret-key-here
-NEXTAUTH_URL=http://localhost:3000
+# Create environment file
+cp .env.example .env.local
+# Edit .env.local:
+#   NEXTAUTH_SECRET=any-random-string
+#   NEXTAUTH_URL=http://localhost:3000
+#   NEXT_PUBLIC_API_URL=http://localhost:8000
 
-# Optional: Google OAuth
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-```
-
-Start the frontend:
-```bash
 npm run dev
 ```
 
-### 4. Open the App
+### 4. Open
 
-Visit **http://localhost:3000** — you're ready to go!
+Visit **http://localhost:3000** ✨
 
----
+> **No database?** No problem. The app works fully without PostgreSQL — auth endpoints gracefully return 503, while the entire analysis + results experience works perfectly.
 
-##  Testing
+<br/>
 
-```bash
-# Frontend unit tests
-cd frontend && npm test
+## 📡 API Reference
 
-# Backend endpoint test
-cd backend && python test_api.py
+| Endpoint | Method | Auth | Description |
+|---|---|---|---|
+| `/api/health` | GET | — | Health check + model status |
+| `/api/analyze` | POST | Optional | Selfie → full 12-season analysis |
+| `/api/complete-profile` | GET | — | Full professional season profile |
+| `/api/color-chat` | POST | Optional | AI stylist conversation |
+| `/api/styling-tips` | GET | Optional | Personalized fashion advice |
+| `/api/scan-item` | POST | Yes | Clothing photo → Buy/Pass verdict |
+| `/api/palette-card` | POST | — | Generate downloadable palette PNG |
+| `/api/auth/register` | POST | — | Create account |
+| `/api/auth/login` | POST | — | Authenticate |
+
+<details>
+<summary><strong>Example: POST /api/analyze response</strong></summary>
+
+```json
+{
+  "season": "Deep Autumn",
+  "description": "Rich, warm, and grounded — your coloring has depth and intensity...",
+  "hex_color": "#B07848",
+  "undertone": "warm",
+  "confidence": 0.91,
+  "contrast_level": "High",
+  "palette": ["#8B4513", "#CD853F", "#D2691E", "#DEB887", "#C76B3F", "#A0522D"],
+  "avoid_colors": ["#FF69B4", "#87CEEB", "#E6E6FA"],
+  "metal": "Gold",
+  "makeup": { "lips": "#C44536", "blush": "#E07A5F", "eyeshadow": "#81B29A" },
+  "celebrities": [{ "name": "Julia Roberts", "season": "Deep Autumn" }]
+}
 ```
 
----
+</details>
 
-## 🧠 How the Color Science Works
+<br/>
 
-### Face Analysis Pipeline
-1. **Face Detection** — MediaPipe BlazeFace finds the face region
-2. **Skin Parsing** — BiSeNet face parsing model isolates skin pixels
-3. **Lighting Correction** — CLAHE on L*a*b* L-channel
-4. **Color Clustering** — K-Means (k=3-5) on skin pixels → dominant tone
-5. **ITA Angle** — Individual Typology Angle classifies skin lightness
-6. **Season Mapping** — Undertone + ITA → one of 12 seasonal types
+## 🛠️ Tech Stack
 
-### Buy or Pass Scanner
-1. **Dominant Color** — K-Means (k=3) extracts the most prominent color from a clothing photo
-2. **L\*a\*b\* Conversion** — RGB → XYZ → CIE L\*a\*b\* (device-independent color space)
-3. **Delta-E 2000** — CIE standard for human-perceptual color distance
-4. **Match Score** — `100 - (ΔE / 30 × 100)` → 0-100% score
-5. **Verdict** — ≥70% = BUY ✅, 40-69% = MAYBE 🤔, <40% = PASS ❌
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 15 (App Router), React 19, TypeScript |
+| **Styling** | Tailwind CSS 4, Framer Motion |
+| **Auth** | NextAuth.js v5 — Google OAuth + Email/Password |
+| **Backend** | Python 3.12, FastAPI, Pydantic v2 |
+| **Computer Vision** | OpenCV, MediaPipe BlazeFace, PyTorch (BiSeNet) |
+| **Color Science** | K-Means++, CIE L\*a\*b\*, Delta-E CIE2000, ITA angle |
+| **AI / LLM** | Groq API — Llama 3.3 70B (styling tips + chat) |
+| **Database** | PostgreSQL + pgvector (graceful fallback without it) |
+| **Security** | bcrypt, JWT, rate limiting, magic-byte validation |
 
----
+<br/>
 
 ## 🗺️ Roadmap
 
-- [x] Core CV pipeline (face → season)
+- [x] CV pipeline — face detection → 12-season classification
 - [x] FastAPI backend with full endpoint suite
-- [x] Production landing page with 8+ sections
-- [x] Rich results page (palette, celebrities, makeup, metals)
-- [x] Auth (Google OAuth + Email/Password)
-- [x] Free trial system with scan limits
-- [x] Buy or Pass In-Store Scanner
-- [ ] Premium subscription (Stripe integration)
-- [ ] Dynamic product recommendations (SerpAPI)
+- [x] 6-tab results experience (Overview, Profile, Occasions, Wardrobe, Beauty, AI Chat)
+- [x] Professional season profiles — occasions, capsule wardrobe, hair & beauty
+- [x] AI Stylist chat — conversational styling powered by Llama 3.3 70B
+- [x] Live camera capture with real-time lighting guidance
+- [x] Buy or Pass in-store scanner
+- [x] Curated shopping feed
+- [ ] Stripe subscription (Premium tier)
 - [ ] Mobile app (React Native)
 - [ ] Multi-language support
+- [ ] Outfit builder — combine pieces from your wardrobe formula
+- [ ] Body shape analysis
 
----
+<br/>
 
-##  Author
+## 🤝 Contributing
 
-**Kanishk** — [GitHub](https://github.com/kanishk083)
+Contributions are very welcome! Here's how:
 
----
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feat/amazing-feature`
+3. Commit your changes: `git commit -m 'feat: add amazing feature'`
+4. Push: `git push origin feat/amazing-feature`
+5. Open a Pull Request
+
+Please read [CLAUDE.md](CLAUDE.md) for engineering principles and code standards.
+
+<br/>
 
 ## 📄 License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
+
+<br/>
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Dinesh Dhanoki](https://github.com/DineshDhanoki)**
+
+*If Lumiqe helped you discover your colors, please consider giving it a ⭐*
+*It helps more people find the project and motivates continued development.*
+
+<br/>
+
+[![Star this repo](https://img.shields.io/badge/⭐%20Star%20this%20repo-FF2D55?style=for-the-badge)](https://github.com/DineshDhanoki/lumiqe/stargazers)
+[![Fork this repo](https://img.shields.io/badge/🍴%20Fork%20this%20repo-000000?style=for-the-badge)](https://github.com/DineshDhanoki/lumiqe/fork)
+
+</div>
