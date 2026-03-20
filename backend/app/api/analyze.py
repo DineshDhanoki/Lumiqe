@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.analysis import AnalyzeResponse
 from app.repositories import user_repo
-from app.core.dependencies import get_db, get_current_user
+from app.core.dependencies import get_optional_user
 from app.core.config import settings
 from app.core.security import validate_image_bytes
 from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
@@ -42,25 +42,22 @@ def _get_engine():
 async def analyze_image(
     request: Request,
     image: UploadFile = File(..., description="Selfie image (JPEG, PNG, WebP)"),
-    current_user: dict = Depends(get_current_user),
-    session: AsyncSession = Depends(get_db),
+    current_user: dict | None = Depends(get_optional_user),
 ):
     """
     Upload a selfie → receive full color analysis.
 
     Accepts JPEG, PNG, or WebP images up to 10MB.
     Returns season, palette, avoid colors, metal, celebrities, and more.
-    Requires authentication — user identity extracted from JWT token.
+    Authentication optional — logged-in users get scan quota tracking.
     """
-    email = current_user["email"]
-
-    # Rate limiting: 5/hour free, 50/hour premium
-    max_requests = 50 if current_user.get("is_premium") else 5
-    rate_key = get_rate_limit_key(request, current_user, "analyze")
+    # Rate limiting
+    rate_key = get_rate_limit_key(request, current_user or {}, "analyze")
+    max_requests = 50 if (current_user or {}).get("is_premium") else 5
     await check_rate_limit(rate_key, max_requests)
 
-    # Enforce free pass logic
-    if current_user["free_scans_left"] <= 0 and not current_user.get("is_premium"):
+    # Enforce free scan quota only for logged-in users
+    if current_user and current_user["free_scans_left"] <= 0 and not current_user.get("is_premium"):
         raise HTTPException(
             status_code=403,
             detail={
@@ -128,21 +125,21 @@ async def analyze_image(
             detail={"error": error_code, "detail": error_msg, "code": 422},
         )
 
-    # Post-success: only decrement scan quota if confidence meets threshold
-    # (protects users from losing a free scan on a blurry or poorly-lit selfie)
+    # Post-success: only decrement scan quota if logged in and confidence meets threshold
     confidence = result.get("confidence", 0.0)
-    if confidence >= _MIN_CONFIDENCE_TO_DEDUCT:
-        await user_repo.decrement_scan(session, current_user["id"])
-    else:
-        logger.info(
-            f"Scan not deducted for {email}: confidence {confidence:.3f} "
-            f"below threshold {_MIN_CONFIDENCE_TO_DEDUCT}"
-        )
-
     season_name = result.get("season", "")
     palette_list = result.get("palette", [])
-    if season_name and palette_list:
-        await user_repo.update_palette(session, email, season_name, palette_list)
-        logger.info(f"Saved palette for {email}: {season_name}")
+
+    if current_user:
+        try:
+            from app.core.dependencies import async_session_factory
+            async with async_session_factory() as session:
+                if confidence >= _MIN_CONFIDENCE_TO_DEDUCT:
+                    await user_repo.decrement_scan(session, current_user["id"])
+                if season_name and palette_list:
+                    await user_repo.update_palette(session, current_user["email"], season_name, palette_list)
+                    logger.info(f"Saved palette for {current_user['email']}: {season_name}")
+        except Exception as e:
+            logger.warning(f"Could not update user record: {e}")
 
     return AnalyzeResponse(**result)

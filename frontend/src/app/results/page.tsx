@@ -73,6 +73,21 @@ function ResultsContent() {
         if (s) makeup = JSON.parse(decodeURIComponent(s));
     } catch { /* ignore */ }
 
+    // Save analysis to localStorage for dashboard history
+    useEffect(() => {
+        if (!searchParams.has('season')) return;
+        const entry = {
+            season, hexColor, undertone, confidence, contrastLevel,
+            palette, metal, timestamp: Date.now(),
+        };
+        try {
+            const prev = JSON.parse(localStorage.getItem('lumiqe-history') || '[]');
+            const updated = [entry, ...prev].slice(0, 10);
+            localStorage.setItem('lumiqe-history', JSON.stringify(updated));
+            localStorage.setItem('lumiqe-last-analysis', JSON.stringify(entry));
+        } catch { /* ignore */ }
+    }, []);
+
     // Fetch the complete professional profile on first non-overview tab click
     useEffect(() => {
         if (activeTab !== 'overview' && !completeProfile && !profileLoading) {

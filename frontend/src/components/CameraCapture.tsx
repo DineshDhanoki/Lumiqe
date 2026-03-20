@@ -3,10 +3,12 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, RotateCcw, Sun, AlertCircle, CheckCircle2, Zap } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 interface CameraCaptureProps {
     onCapture: (file: File) => void;
     onCancel: () => void;
+    lang?: string;
 }
 
 type LightingStatus = 'good' | 'too_dark' | 'too_bright' | 'checking';
@@ -14,7 +16,7 @@ type FaceStatus = 'good' | 'too_close' | 'too_far' | 'off_center' | 'checking';
 
 const CAPTURE_COUNTDOWN = 3;
 
-export default function CameraCapture({ onCapture, onCancel }: CameraCaptureProps) {
+export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: CameraCaptureProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
@@ -180,10 +182,10 @@ export default function CameraCapture({ onCapture, onCancel }: CameraCaptureProp
     }, [lightingStatus, captureFrame]);
 
     const lightingConfig = {
-        good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <CheckCircle2 className="w-4 h-4" />, label: 'Good lighting' },
-        too_dark: { color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', icon: <Sun className="w-4 h-4" />, label: 'Move to better light' },
-        too_bright: { color: 'text-orange-400', bg: 'bg-orange-500/20 border-orange-500/30', icon: <Zap className="w-4 h-4" />, label: 'Too much light behind you' },
-        checking: { color: 'text-white/40', bg: 'bg-white/5 border-white/10', icon: <Camera className="w-4 h-4" />, label: 'Checking lighting...' },
+        good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <CheckCircle2 className="w-4 h-4" />, label: t(lang, 'goodLighting') },
+        too_dark: { color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', icon: <Sun className="w-4 h-4" />, label: t(lang, 'tooDark') },
+        too_bright: { color: 'text-orange-400', bg: 'bg-orange-500/20 border-orange-500/30', icon: <Zap className="w-4 h-4" />, label: t(lang, 'tooBright') },
+        checking: { color: 'text-white/40', bg: 'bg-white/5 border-white/10', icon: <Camera className="w-4 h-4" />, label: t(lang, 'checkingLight') },
     };
 
     const canCapture = lightingStatus === 'good' && isReady && countdown === null;
@@ -300,10 +302,10 @@ export default function CameraCapture({ onCapture, onCancel }: CameraCaptureProp
             {/* Guidance text */}
             {isReady && !cameraError && (
                 <p className="text-white/50 text-sm text-center px-4">
-                    {lightingStatus === 'too_dark' && 'Face a window or turn on a light for best results'}
-                    {lightingStatus === 'too_bright' && 'Avoid strong light sources directly behind you'}
-                    {lightingStatus === 'good' && 'Centre your face in the oval and press capture'}
-                    {lightingStatus === 'checking' && 'Checking lighting conditions...'}
+                    {lightingStatus === 'too_dark' && t(lang, 'guidanceDark')}
+                    {lightingStatus === 'too_bright' && t(lang, 'guidanceBright')}
+                    {lightingStatus === 'good' && t(lang, 'guidanceGood')}
+                    {lightingStatus === 'checking' && t(lang, 'guidanceChecking')}
                 </p>
             )}
 
@@ -314,10 +316,9 @@ export default function CameraCapture({ onCapture, onCancel }: CameraCaptureProp
                         onClick={onCancel}
                         className="flex-1 py-3 rounded-2xl border border-white/15 text-white/60 hover:text-white hover:bg-white/5 transition-all text-sm font-semibold"
                     >
-                        Cancel
+                        {t(lang, 'cancel')}
                     </button>
 
-                    {/* Capture button */}
                     <button
                         onClick={startCountdown}
                         disabled={!canCapture}
@@ -328,7 +329,7 @@ export default function CameraCapture({ onCapture, onCancel }: CameraCaptureProp
                         }`}
                     >
                         <Camera className="w-4 h-4" />
-                        {countdown !== null ? `Capturing in ${countdown}…` : 'Capture Photo'}
+                        {countdown !== null ? `${t(lang, 'capturePhoto')} ${countdown}…` : t(lang, 'capturePhoto')}
                     </button>
                 </div>
             )}
@@ -336,13 +337,13 @@ export default function CameraCapture({ onCapture, onCancel }: CameraCaptureProp
             {/* Tips */}
             {isReady && !cameraError && (
                 <div className="w-full bg-zinc-900/50 border border-white/10 rounded-2xl p-4">
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-2">Tips for best results</p>
+                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-2">{t(lang, 'tipTitle')}</p>
                     <ul className="space-y-1">
                         {[
-                            'Use natural daylight — face a window',
-                            'Remove heavy makeup if possible',
-                            'Keep hair away from your face',
-                            'Look directly at the camera',
+                            t(lang, 'tip1'),
+                            t(lang, 'tip2'),
+                            t(lang, 'tip3'),
+                            t(lang, 'tip4'),
                         ].map((tip, i) => (
                             <li key={i} className="flex items-start gap-2 text-xs text-white/50">
                                 <span className="text-red-400 mt-0.5">•</span>
