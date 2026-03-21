@@ -42,7 +42,7 @@ async def count_products(
     vibe: Optional[str] = None,
 ) -> int:
     """Count active products matching the given filters."""
-    conditions = [Product.is_active == True]
+    conditions = [Product.is_active]
     if season:
         conditions.append(Product.season == season)
     if gender:
@@ -66,7 +66,7 @@ async def get_by_season(
     """Get active products for a season, optionally filtered by gender/vibe."""
     conditions = [
         Product.season == season,
-        Product.is_active == True,
+        Product.is_active,
     ]
     if gender:
         conditions.append(Product.gender == gender.lower())
@@ -93,7 +93,7 @@ async def get_by_filters(
     limit: int = 50,
 ) -> list[dict]:
     """Get products by any combination of filters."""
-    conditions = [Product.is_active == True]
+    conditions = [Product.is_active]
 
     if gender:
         conditions.append(Product.gender == gender.lower())
@@ -294,7 +294,7 @@ async def search_by_color(
 
     conditions = [
         Product.color_embedding.isnot(None),
-        Product.is_active == True,
+        Product.is_active,
     ]
     if gender:
         conditions.append(Product.gender == gender.lower())
@@ -316,13 +316,13 @@ async def get_catalog_stats(session: AsyncSession) -> dict:
     """Return catalog health stats."""
     total = await session.scalar(select(func.count(Product.id)))
     active = await session.scalar(
-        select(func.count(Product.id)).where(Product.is_active == True)
+        select(func.count(Product.id)).where(Product.is_active)
     )
     by_vibe = {}
     for vibe in ["Casual", "Gym", "Party", "Formal"]:
         count = await session.scalar(
             select(func.count(Product.id)).where(
-                and_(Product.vibe == vibe, Product.is_active == True)
+                and_(Product.vibe == vibe, Product.is_active)
             )
         )
         by_vibe[vibe] = count or 0
@@ -331,7 +331,7 @@ async def get_catalog_stats(session: AsyncSession) -> dict:
     for gender in ["male", "female"]:
         count = await session.scalar(
             select(func.count(Product.id)).where(
-                and_(Product.gender == gender, Product.is_active == True)
+                and_(Product.gender == gender, Product.is_active)
             )
         )
         by_gender[gender] = count or 0

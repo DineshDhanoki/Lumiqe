@@ -153,7 +153,7 @@ def sanitize_llm_input(value: str, max_length: int = 100) -> str:
     lower = cleaned.lower()
     for pattern in _INJECTION_PATTERNS:
         if pattern in lower:
-            raise ValueError(f"Invalid input: contains disallowed pattern")
+            raise ValueError("Invalid input: contains disallowed pattern")
 
     return cleaned
 

@@ -9,7 +9,6 @@ operations are identical to lumiqe_engine.py. Nothing has been changed.
 """
 
 import logging
-import math
 
 import cv2
 import numpy as np

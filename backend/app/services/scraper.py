@@ -7,7 +7,6 @@ brand URLs, then processes colors and inserts into PostgreSQL.
 
 import hashlib
 import logging
-import io
 from typing import Optional
 
 import httpx
@@ -15,7 +14,7 @@ from firecrawl import FirecrawlApp
 from pydantic import BaseModel, Field
 
 from app.core.config import settings
-from app.services.brand_catalog import BRAND_CATALOG, get_brands
+from app.services.brand_catalog import get_brands
 
 logger = logging.getLogger("lumiqe.services.scraper")
 
@@ -268,7 +267,6 @@ async def scrape_and_save(gender: str, vibe: str, max_per_brand: int = 8) -> int
     """
     from app.core.dependencies import async_session_factory as AsyncSessionLocal
     from app.models import Product
-    from sqlalchemy.dialects.postgresql import insert as pg_insert
     from sqlalchemy import select
 
     products = scrape_vibe(gender, vibe, max_per_brand)

@@ -32,7 +32,6 @@ def _fix_exif_rotation(image: np.ndarray, image_path: str = None) -> np.ndarray:
 
     try:
         # Use OpenCV's built-in EXIF reader (available since 4.x)
-        exif_data = None
         with open(image_path, "rb") as f:
             header = f.read(32)
             # Check for JPEG EXIF marker

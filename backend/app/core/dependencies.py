@@ -8,7 +8,7 @@ rate limiting, and user authentication.
 import logging
 from collections.abc import AsyncGenerator
 
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import (
     AsyncSession,

@@ -284,7 +284,7 @@ _COLOR_NAMES = {
     "#E6E6FA": "Lavender", "#7B68EE": "Medium Slate Blue", "#9932CC": "Dark Orchid",
     "#B57EDC": "Lavender Purple", "#614051": "Eggplant",
     # Metallic / Special
-    "#FFD700": "Gold", "#C0C0C0": "Silver", "#B87333": "Copper",
+    "#B87333": "Copper",
     "#CD7F32": "Bronze", "#E5E4E2": "Platinum", "#CC7722": "Ochre",
 }
 

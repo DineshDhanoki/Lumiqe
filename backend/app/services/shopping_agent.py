@@ -405,7 +405,7 @@ async def _query_slot_products(
         .where(
             Product.gender == gender_key,
             Product.category.in_(db_categories),
-            Product.is_active == True,
+            Product.is_active,
         )
         .limit(10)
     )

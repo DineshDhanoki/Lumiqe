@@ -6,7 +6,6 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.analysis import AnalyzeResponse
 from app.repositories import user_repo, analysis_repo
