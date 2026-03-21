@@ -14,7 +14,7 @@ export default function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const isPremium = !!(session as any)?.isPremium;
+    const isPremium = !!session?.isPremium;
 
     useMotionValueEvent(scrollY, 'change', (latest) => {
         setIsScrolled(latest > 50);

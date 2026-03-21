@@ -17,6 +17,7 @@ logger = logging.getLogger("lumiqe.rate_limiter")
 
 # ─── In-Memory Fallback (dev only) ───────────────────────────
 _memory_store: dict[str, list[float]] = defaultdict(list)
+_MEMORY_MAX_KEYS = 10_000  # prevent unbounded growth under bot traffic
 
 
 # ─── Redis Connection ────────────────────────────────────────
@@ -105,7 +106,12 @@ def _check_memory(key: str, max_requests: int, window_seconds: int) -> None:
     now = time.time()
     window_start = now - window_seconds
 
-    # Prune old entries
+    # Drop oldest keys if store is too large (bot protection)
+    if len(_memory_store) >= _MEMORY_MAX_KEYS and key not in _memory_store:
+        oldest_key = next(iter(_memory_store))
+        del _memory_store[oldest_key]
+
+    # Prune old entries for this key
     _memory_store[key] = [ts for ts in _memory_store[key] if ts > window_start]
 
     if len(_memory_store[key]) >= max_requests:

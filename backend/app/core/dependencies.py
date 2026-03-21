@@ -139,9 +139,8 @@ async def get_current_user(
 
 async def get_optional_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
-    session: AsyncSession = Depends(get_db),
 ) -> dict | None:
-    """Optionally extract user from JWT. Returns None if no token provided."""
+    """Optionally extract user from JWT. Returns None if no token or DB unavailable."""
     if credentials is None:
         return None
 
@@ -153,8 +152,12 @@ async def get_optional_user(
     if not user_email:
         return None
 
+    if not db_available:
+        return None
+
     from app.repositories import user_repo
-    return await user_repo.get_by_email(session, user_email)
+    async with async_session_factory() as session:
+        return await user_repo.get_by_email(session, user_email)
 
 
 # ─── Role-Based Authorization ────────────────────────────────
