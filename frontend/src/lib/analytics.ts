@@ -11,18 +11,30 @@ let posthog: { capture: (event: string, properties?: EventProperties) => void } 
 
 export async function initAnalytics(): Promise<void> {
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-  if (!key) return;
+  if (!key || typeof window === 'undefined') return;
 
   try {
-    const ph = (await import("posthog-js")).default;
-    ph.init(key, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
-      capture_pageview: true,
-      capture_pageleave: true,
+    // Load PostHog via CDN to avoid bundling it as a dependency
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://us-assets.i.posthog.com/static/array.js';
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('PostHog script failed to load'));
+      document.head.appendChild(script);
     });
-    posthog = ph;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ph = (window as any).posthog;
+    if (ph) {
+      ph.init(key, {
+        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+        capture_pageview: true,
+        capture_pageleave: true,
+      });
+      posthog = ph;
+    }
   } catch {
-    // PostHog not installed or blocked — fail silently
+    // PostHog blocked or unavailable — fail silently
   }
 }
 
