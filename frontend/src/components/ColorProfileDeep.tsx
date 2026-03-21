@@ -36,7 +36,7 @@ interface ColorProfileDeepProps {
 }
 
 export default function ColorProfileDeep({
-    season,
+    season: _season,
     styleArchetype,
     signatureColor,
     value,

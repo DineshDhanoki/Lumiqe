@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, ArrowLeft, ShoppingBag, Sparkles, AlertCircle, Check, X, Loader2 } from 'lucide-react';
+import { Camera, ArrowLeft, ShoppingBag, Sparkles, AlertCircle, Check, X } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 
 interface ScanSuggestion {
@@ -98,7 +98,7 @@ export default function ScanPage() {
                 >
                     <h1 className="text-3xl font-bold mb-2">Scan a Clothing Item</h1>
                     <p className="text-white/60 text-sm">
-                        Snap a photo and we'll tell you if it matches your palette.
+                        Snap a photo and we&apos;ll tell you if it matches your palette.
                     </p>
                 </motion.div>
 

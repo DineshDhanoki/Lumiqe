@@ -43,7 +43,7 @@ export default function SharePageClient({ token }: { token: string }) {
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
                 <Sparkles className="w-12 h-12 text-red-500 mb-6" />
                 <h1 className="text-3xl font-bold text-white mb-4">Analysis Not Found</h1>
-                <p className="text-white/60 mb-8">This shared link may have expired or doesn't exist.</p>
+                <p className="text-white/60 mb-8">This shared link may have expired or doesn&apos;t exist.</p>
                 <Link href="/" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors">
                     Discover Your Colors
                 </Link>

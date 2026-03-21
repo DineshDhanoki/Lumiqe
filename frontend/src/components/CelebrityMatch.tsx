@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { Users } from 'lucide-react';
-import Image from 'next/image';
 
 interface Celebrity {
     name: string;
@@ -24,7 +23,7 @@ export default function CelebrityMatch({ celebrities }: CelebrityMatchProps) {
             </div>
 
             <p className="text-white/60 mb-6 max-w-lg">
-                These celebrities share your exact color season. Notice the colors they wear on the red carpet—they've already paid the stylists to figure out what works.
+                These celebrities share your exact color season. Notice the colors they wear on the red carpet—they&apos;ve already paid the stylists to figure out what works.
             </p>
 
             <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 custom-scrollbar">

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, Loader2, MessageCircle } from 'lucide-react';
+import { Send, Sparkles, Loader2 } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 
 interface Message {

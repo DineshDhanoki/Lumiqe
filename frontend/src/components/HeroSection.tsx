@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight, PlayCircle } from 'lucide-react';
+import { ArrowRight, PlayCircle } from 'lucide-react';
 import { AuroraBackground } from '@/components/ui/aurora-background';
 
 interface HeroSectionProps {
@@ -26,7 +26,7 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                 </h1>
 
                 <p className="max-w-2xl text-lg md:text-xl text-white/70 leading-relaxed drop-shadow-md">
-                    Stop guessing. Let Lumiqe's AI analyze your skin tone and find the exact colors, metals, and makeup that make you shine.
+                    Stop guessing. Let Lumiqe&apos;s AI analyze your skin tone and find the exact colors, metals, and makeup that make you shine.
                 </p>
 
                 <motion.div

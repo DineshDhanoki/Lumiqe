@@ -66,7 +66,7 @@ export default function OccasionGuide({ occasions, season }: OccasionGuideProps)
                                 </div>
                                 <div>
                                     <h3 className="text-white font-bold text-lg">{OCCASION_LABELS[key] ?? key}</h3>
-                                    <p className="text-white/50 text-sm italic">"{occasion.formula}"</p>
+                                    <p className="text-white/50 text-sm italic">&ldquo;{occasion.formula}&rdquo;</p>
                                 </div>
                             </div>
 

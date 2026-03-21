@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Filter, Lock, User } from 'lucide-react';
+import { ArrowLeft, Filter, Lock, User } from 'lucide-react';
 
 import VibeSelector from '@/components/VibeSelector';
 import SubscriptionModal from '@/components/SubscriptionModal';

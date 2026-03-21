@@ -32,7 +32,7 @@ export default function Footer() {
                             <span className="text-xl font-bold tracking-wider text-white">LUMIQE</span>
                         </Link>
                         <p className="text-white/50 max-w-sm leading-relaxed mb-6">
-                            The world's most precise AI skin tone analysis engine, running directly on your device. Privacy guaranteed.
+                            The world&apos;s most precise AI skin tone analysis engine, running directly on your device. Privacy guaranteed.
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">

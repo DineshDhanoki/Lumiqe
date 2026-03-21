@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { Sparkles, Loader2, AlertCircle } from 'lucide-react';
 
 interface DemoResult {
@@ -30,7 +29,7 @@ export default function DemoPreview() {
                 if (!res.ok) throw new Error('Failed to load demo data');
                 const data = await res.json();
                 setDemos(data);
-            } catch (err) {
+            } catch {
                 setError('Could not load demo examples. Ensure backend is running.');
             } finally {
                 setLoading(false);

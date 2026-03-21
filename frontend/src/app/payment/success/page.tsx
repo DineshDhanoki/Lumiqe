@@ -9,7 +9,7 @@ import { CheckCircle, Sparkles, ArrowRight, Crown } from 'lucide-react';
 
 function SuccessContent() {
     const searchParams = useSearchParams();
-    const sessionId = searchParams.get('session_id');
+    const _sessionId = searchParams.get('session_id');
     const [countdown, setCountdown] = useState(5);
 
     useEffect(() => {

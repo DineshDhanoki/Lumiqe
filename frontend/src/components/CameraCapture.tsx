@@ -24,7 +24,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
 
     const [cameraError, setCameraError] = useState<string | null>(null);
     const [lightingStatus, setLightingStatus] = useState<LightingStatus>('checking');
-    const [faceStatus, setFaceStatus] = useState<FaceStatus>('checking');
+    const [_faceStatus, setFaceStatus] = useState<FaceStatus>('checking');
     const [countdown, setCountdown] = useState<number | null>(null);
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
     const [isReady, setIsReady] = useState(false);

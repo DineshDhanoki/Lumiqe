@@ -40,9 +40,6 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
         setImgSrc('');
     };
 
-    // Derive accent color from the product's hex or use a rich default
-    const accent = product.color_hex || '#6366f1';
-
     return (
         <motion.div
             key={product.id || idx}

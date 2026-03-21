@@ -52,7 +52,7 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
                                 </h2>
 
                                 <p className="text-white/60 mb-8 leading-relaxed">
-                                    You've used your free premium peek! Upgrade to access the Gym, Party, and Formal curated catalogs matched to your exact color season.
+                                    You&apos;ve used your free premium peek! Upgrade to access the Gym, Party, and Formal curated catalogs matched to your exact color season.
                                 </p>
 
                                 <div className="w-full space-y-3">

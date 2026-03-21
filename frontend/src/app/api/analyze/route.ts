@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         };
 
         return NextResponse.json(mockResult);
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Crown, Sparkles, LogOut, Loader2, ArrowRight, User, Settings, CreditCard, Droplets } from 'lucide-react';
+import { Crown, Sparkles, LogOut, Loader2, User, CreditCard, Droplets } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -242,7 +242,7 @@ export default function AccountPage() {
                                 ) : (
                                     <div className="text-center py-8 z-10 relative bg-black/20 rounded-2xl border border-white/5">
                                         <Sparkles className="w-8 h-8 text-white/20 mx-auto mb-3" />
-                                        <p className="text-white/60 mb-4">You haven't analyzed your skin tone yet.</p>
+                                        <p className="text-white/60 mb-4">You haven&apos;t analyzed your skin tone yet.</p>
                                         <Link
                                             href="/analyze"
                                             className="inline-block py-2 px-6 rounded-full bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition"

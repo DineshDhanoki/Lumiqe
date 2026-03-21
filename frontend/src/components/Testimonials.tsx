@@ -52,7 +52,7 @@ export default function Testimonials() {
                                 ))}
                             </div>
                             <p className="text-white/80 leading-relaxed max-w-sm mb-8 flex-grow">
-                                "{t.text}"
+                                &ldquo;{t.text}&rdquo;
                             </p>
                             <div>
                                 <h4 className="text-white font-bold">{t.name}</h4>

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
     Sparkles, ArrowLeft, Camera, ShoppingBag, MessageCircle,
-    User, Scissors, LayoutGrid, ChevronRight, Clock,
-    Droplets, Zap, Star, BookOpen, Shirt
+    User, ChevronRight, Clock,
+    Droplets, Star, Shirt
 } from 'lucide-react';
 
 interface AnalysisEntry {
