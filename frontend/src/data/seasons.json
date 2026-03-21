@@ -1,0 +1,1046 @@
+{
+  "Light Spring": {
+    "palette": ["#FDDBB4", "#F9C784", "#FFF0DC", "#FFE8B0", "#F5DCA0", "#FFF5E6"],
+    "avoid": ["#000000", "#4A0020", "#1A1A2E", "#808080"],
+    "metal": "Gold",
+    "contrast": "Low",
+    "value": "Light",
+    "chroma": "Clear",
+    "style_archetype": "Ethereal Natural",
+    "signature_color": { "hex": "#F9C784", "name": "Warm Honey" },
+    "foundation_undertone": "Warm peach to light warm beige",
+    "jewelry_guide": "Delicate gold, rose gold, pearl, coral beads",
+    "description": "You have warm, light coloring. Soft pastels and warm ivories look beautiful on you.",
+    "tips": "Stick to light, warm, and clear colors. Avoid anything too dark, heavy, or icy.",
+    "celebrities": [
+      {"name": "Taylor Swift", "image": "/celebrities/taylor-swift.webp"},
+      {"name": "Amanda Seyfried", "image": "/celebrities/amanda-seyfried.webp"},
+      {"name": "Scarlett Johansson", "image": "/celebrities/scarlett-johansson.webp"}
+    ],
+    "makeup": { "lips": "#E8A090", "blush": "#F0B8A0", "eyeshadow": "#D4A870" },
+    "makeup_extended": {
+      "foundation": "Warm ivory to light warm beige",
+      "concealer": "Warm peachy undertone",
+      "lips_shades": ["Peach coral", "Warm nude", "Soft coral pink"],
+      "eyeliner": "Brown, warm bronze — avoid harsh black",
+      "mascara": "Brown-black",
+      "brow_color": "Light golden brown"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Ivory base + peach accent + gold jewelry",
+        "colors": ["#FFF5E6", "#F0B878", "#DEB887"],
+        "key_pieces": ["Cream blazer", "Soft peach blouse", "Light camel trousers", "Gold stud earrings"]
+      },
+      "formal": {
+        "formula": "Warm blush gown or champagne — avoid white",
+        "colors": ["#FDDBB4", "#F4C2A1", "#FFD5A0"],
+        "key_pieces": ["Champagne midi dress", "Rose gold clutch", "Strappy gold heels"]
+      },
+      "casual": {
+        "formula": "Warm denim + peach or ivory top",
+        "colors": ["#FFF0DC", "#E8C8A0", "#F9C784"],
+        "key_pieces": ["Warm white tee", "Light wash denim", "Camel sandals", "Woven tote"]
+      },
+      "date_night": {
+        "formula": "Coral or warm rose — luminous, not dark",
+        "colors": ["#E8A070", "#F0B898", "#FFD5A0"],
+        "key_pieces": ["Coral wrap dress", "Gold heels", "Dainty gold necklace"]
+      },
+      "beach": {
+        "formula": "Soft pastels — peach, mint, pale yellow",
+        "colors": ["#FDDBB4", "#FFF0DC", "#CDEFD8"],
+        "key_pieces": ["Peach swimsuit", "White linen cover-up", "Woven sun hat", "Gold sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Champagne, blush, or warm pastel — never white or black",
+        "colors": ["#FDDBB4", "#F0C8B0", "#E8D8C0"],
+        "key_pieces": ["Blush midi dress", "Nude heels", "Pearl accessories"]
+      },
+      "athletic": {
+        "formula": "Warm pastels — peach, coral, soft yellow",
+        "colors": ["#F9C784", "#F0B878", "#FFF0DC"],
+        "key_pieces": ["Peach leggings", "Coral sports bra", "White sneakers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Ivory cream blazer", "hex": "#FFF5E6", "why": "Warm neutral anchor for all outfits"},
+      {"piece": "Peach silk blouse", "hex": "#F0B878", "why": "Signature flattering tone near your face"},
+      {"piece": "Light camel trousers", "hex": "#DEB887", "why": "Warm neutral bottom for versatility"},
+      {"piece": "Warm white tee", "hex": "#FFFAF0", "why": "Everyday base — warm white not cool white"},
+      {"piece": "Coral midi dress", "hex": "#E8A070", "why": "Statement piece in your best color family"},
+      {"piece": "Light denim jeans", "hex": "#A8B8C8", "why": "Casual anchor — medium wash only"},
+      {"piece": "Champagne evening top", "hex": "#FDDBB4", "why": "Evening wear that enhances your glow"},
+      {"piece": "Camel coat", "hex": "#C8A870", "why": "Outerwear statement in your power neutral"},
+      {"piece": "Gold leather belt", "hex": "#C89840", "why": "Accessory that ties any warm outfit together"},
+      {"piece": "Nude-warm heels", "hex": "#D4A882", "why": "Lengthens leg in your undertone range"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Honey Blonde", "Golden Brown", "Warm Light Brown", "Strawberry Blonde"],
+      "highlights": ["Honey highlights", "Golden balayage", "Caramel baby-lights"],
+      "avoid": ["Ash blonde", "Cool platinum", "Blue-black", "Cool dark brown", "Jet black"]
+    },
+    "patterns": {
+      "best": ["Delicate watercolor florals", "Small ditsy prints", "Soft abstract", "Fine paisley"],
+      "scale": "Small to Medium",
+      "avoid": ["Bold black/white graphic", "Sharp high-contrast geometric", "Dark animal print"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer ivory, peach, and warm honey — all in the same warm-light family",
+      "complementary": "Pair warm peach tones with muted dusty teal-green for interest",
+      "analogous": "Combine pale yellow, peach, and soft coral for a sun-kissed look",
+      "neutral_base": "#FFF5E6"
+    },
+    "wardrobe_formula": "Build on warm ivory and camel as your neutrals. Add depth with peach, coral, and warm honey. One bold coral or apricot piece per outfit keeps the look current."
+  },
+
+  "True Spring": {
+    "palette": ["#F5C191", "#E8A96B", "#FDE8C8", "#FFD5A0", "#F0B878", "#FFF0D8"],
+    "avoid": ["#000000", "#800020", "#2E1A47", "#C0C0C0"],
+    "metal": "Gold",
+    "contrast": "Medium",
+    "value": "Light-Medium",
+    "chroma": "Clear",
+    "style_archetype": "Warm Natural",
+    "signature_color": { "hex": "#E8A96B", "name": "Peach Apricot" },
+    "foundation_undertone": "Warm golden beige",
+    "jewelry_guide": "Yellow gold, hammered gold, amber, coral, citrine",
+    "description": "You have warm, golden coloring. Peach, coral, and warm greens are your best friends.",
+    "tips": "Choose warm, saturated colors. Coral, salmon, and warm turquoise are perfect. Skip cool pastels.",
+    "celebrities": [
+      {"name": "Emma Stone", "image": "/celebrities/emma-stone.webp"},
+      {"name": "Amy Adams", "image": "/celebrities/amy-adams.webp"},
+      {"name": "Jessica Chastain", "image": "/celebrities/jessica-chastain.webp"}
+    ],
+    "makeup": { "lips": "#D47050", "blush": "#E09878", "eyeshadow": "#C08848" },
+    "makeup_extended": {
+      "foundation": "Warm golden beige",
+      "concealer": "Warm peachy-yellow undertone",
+      "lips_shades": ["Warm coral", "Terracotta nude", "Peach-orange"],
+      "eyeliner": "Warm brown, bronze, copper",
+      "mascara": "Brown or brown-black",
+      "brow_color": "Golden brown, warm auburn"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Warm camel suit or coral blouse with gold accessories",
+        "colors": ["#F0B878", "#DEB887", "#E8A96B"],
+        "key_pieces": ["Camel structured blazer", "Warm coral blouse", "Cognac leather bag"]
+      },
+      "formal": {
+        "formula": "Rich coral or warm gold gown — luminous and vivid",
+        "colors": ["#E8A96B", "#F5C191", "#DAA520"],
+        "key_pieces": ["Coral evening gown", "Gold heeled sandals", "Amber statement earrings"]
+      },
+      "casual": {
+        "formula": "Warm orange or coral top with khaki or camel",
+        "colors": ["#F5C191", "#E8A96B", "#C8A870"],
+        "key_pieces": ["Coral tee", "Khaki chinos", "Cognac sneakers"]
+      },
+      "date_night": {
+        "formula": "Deep coral or warm terracotta for high impact",
+        "colors": ["#D47050", "#E8A040", "#C87840"],
+        "key_pieces": ["Terracotta wrap dress", "Gold strappy heels", "Amber drop earrings"]
+      },
+      "beach": {
+        "formula": "Bright coral and warm turquoise — vacation energy",
+        "colors": ["#F5C191", "#40C8B0", "#FFD5A0"],
+        "key_pieces": ["Coral bikini", "Warm turquoise sarong", "Gold sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Bright coral, warm yellow, or peach-gold",
+        "colors": ["#F5C191", "#E8A96B", "#DAA520"],
+        "key_pieces": ["Warm peach midi dress", "Gold heels", "Amber accessories"]
+      },
+      "athletic": {
+        "formula": "Bright warm tones — coral, orange, warm yellow",
+        "colors": ["#F5C191", "#E8A040", "#F0B878"],
+        "key_pieces": ["Orange sports set", "Warm yellow sneakers", "Coral water bottle"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Camel tailored blazer", "hex": "#C8A870", "why": "Warm power neutral for professional settings"},
+      {"piece": "Coral blouse", "hex": "#E8A070", "why": "Signature color closest to your natural glow"},
+      {"piece": "Khaki trousers", "hex": "#C8B890", "why": "Warm neutral bottom — pairs with everything"},
+      {"piece": "Warm white shirt", "hex": "#FFFAF0", "why": "Essential base in warm white, not cool white"},
+      {"piece": "Terracotta wrap dress", "hex": "#C87848", "why": "All-occasion statement in your best color"},
+      {"piece": "Medium wash denim", "hex": "#9098A8", "why": "Casual anchor — medium warm tone"},
+      {"piece": "Warm gold evening top", "hex": "#DAA520", "why": "Evening shimmer in your metal"},
+      {"piece": "Tan leather jacket", "hex": "#C89060", "why": "Outerwear in your warm-leather family"},
+      {"piece": "Cognac leather bag", "hex": "#A07040", "why": "Accessory anchor in warm brown"},
+      {"piece": "Camel ankle boots", "hex": "#B08050", "why": "Footwear that grounds every warm outfit"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Golden Blonde", "Strawberry Blonde", "Warm Auburn", "Copper Brown"],
+      "highlights": ["Copper highlights", "Golden balayage", "Warm amber pieces"],
+      "avoid": ["Cool ash blonde", "Platinum", "Dark blue-black", "Cool espresso"]
+    },
+    "patterns": {
+      "best": ["Tropical florals", "Warm geometric", "Ikat", "Animal print in warm tones"],
+      "scale": "Medium to Large",
+      "avoid": ["Cool grey geometric", "Ice-tone abstract", "Cool blue/white patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer peach, apricot, and coral in different textures",
+      "complementary": "Pair warm coral/orange with teal-green for vibrant contrast",
+      "analogous": "Combine warm yellow, peach, and coral — three steps on the warm wheel",
+      "neutral_base": "#DEB887"
+    },
+    "wardrobe_formula": "Camel and cognac as your neutrals. Coral and warm orange as your statement colors. Avoid grey and cool blue entirely — swap for warm teal or olive instead."
+  },
+
+  "Warm Spring": {
+    "palette": ["#E8A96B", "#D4875A", "#F5D5B5", "#C07848", "#DDA070", "#F0C8A0"],
+    "avoid": ["#000080", "#FF00FF", "#C0C0C0", "#1A1A2E"],
+    "metal": "Gold",
+    "contrast": "Medium-High",
+    "value": "Medium",
+    "chroma": "Clear",
+    "style_archetype": "Bold Natural",
+    "signature_color": { "hex": "#D4875A", "name": "Burnt Caramel" },
+    "foundation_undertone": "Medium warm golden to warm tan",
+    "jewelry_guide": "Bold yellow gold, hammered brass, amber, turquoise in warm setting",
+    "description": "You have warm, clear coloring. Bold, bright colors with warm undertones suit you perfectly.",
+    "tips": "Go for rich, warm tones — burnt orange, olive, camel. Avoid cool blues and icy pinks.",
+    "celebrities": [
+      {"name": "Jennifer Lopez", "image": "/celebrities/jennifer-lopez.webp"},
+      {"name": "Beyoncé", "image": "/celebrities/beyonce.webp"},
+      {"name": "Gigi Hadid", "image": "/celebrities/gigi-hadid.webp"}
+    ],
+    "makeup": { "lips": "#C06040", "blush": "#D08868", "eyeshadow": "#A07038" },
+    "makeup_extended": {
+      "foundation": "Warm medium beige to warm tan",
+      "concealer": "Golden-yellow undertone",
+      "lips_shades": ["Warm terracotta", "Deep coral", "Brick red"],
+      "eyeliner": "Warm brown, bronze, warm black",
+      "mascara": "Black or rich brown-black",
+      "brow_color": "Warm medium brown, warm chestnut"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Warm brown or olive suit — bold and professional",
+        "colors": ["#C07848", "#8C6030", "#A08048"],
+        "key_pieces": ["Brown leather blazer", "Warm olive trousers", "Cognac pumps"]
+      },
+      "formal": {
+        "formula": "Rich burnt orange or deep warm gold — dramatic and radiant",
+        "colors": ["#C07840", "#D4875A", "#B06020"],
+        "key_pieces": ["Burnt orange gown", "Gold statement earrings", "Bronze heels"]
+      },
+      "casual": {
+        "formula": "Camel, rust, and warm khaki — effortlessly rich",
+        "colors": ["#D4875A", "#C07848", "#A08048"],
+        "key_pieces": ["Rust orange tee", "Camel wide-leg pants", "Tan leather sneakers"]
+      },
+      "date_night": {
+        "formula": "Deep copper or warm terracotta — confident and striking",
+        "colors": ["#B06040", "#C07030", "#A05020"],
+        "key_pieces": ["Copper satin top", "Dark camel skirt", "Bronze block heels"]
+      },
+      "beach": {
+        "formula": "Warm turquoise with burnt orange — vibrant tropical",
+        "colors": ["#D4875A", "#38B0A0", "#F0C880"],
+        "key_pieces": ["Terracotta swimsuit", "Turquoise sarong", "Woven tan hat"]
+      },
+      "wedding_guest": {
+        "formula": "Warm coral, bright turmeric, or olive green",
+        "colors": ["#D4875A", "#C8A830", "#8C7038"],
+        "key_pieces": ["Warm olive silk dress", "Gold accessories", "Brown block heels"]
+      },
+      "athletic": {
+        "formula": "Deep warm tones — terracotta, warm brown, olive",
+        "colors": ["#C07848", "#D4875A", "#8C7038"],
+        "key_pieces": ["Terracotta set", "Olive jacket", "Tan trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Olive utility jacket", "hex": "#8C7038", "why": "Warm-neutral outerwear anchor"},
+      {"piece": "Terracotta silk top", "hex": "#C07848", "why": "Your power color — closest to your natural warmth"},
+      {"piece": "Dark camel wide-leg pants", "hex": "#B08050", "why": "Warm statement trouser"},
+      {"piece": "Warm white linen shirt", "hex": "#FFFFF0", "why": "Warm-white base — versatile essential"},
+      {"piece": "Burnt orange knit dress", "hex": "#C06030", "why": "Statement piece in signature warm family"},
+      {"piece": "Dark wash denim", "hex": "#303848", "why": "The one cool neutral that works for Warm Spring"},
+      {"piece": "Deep gold evening cami", "hex": "#B8880A", "why": "Evening piece in your best metal"},
+      {"piece": "Brown leather trench coat", "hex": "#8B5E3C", "why": "Power outerwear in deep warm neutral"},
+      {"piece": "Tan leather tote", "hex": "#B08850", "why": "Everyday bag in your neutral family"},
+      {"piece": "Cognac ankle boots", "hex": "#9A6040", "why": "Footwear that grounds warm outfits"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Warm Auburn", "Rich Copper", "Dark Golden Brown", "Warm Chestnut"],
+      "highlights": ["Copper balayage", "Warm red pieces", "Golden auburn highlights"],
+      "avoid": ["Cool ashy tones", "Platinum", "Jet black", "Cool espresso"]
+    },
+    "patterns": {
+      "best": ["Bold animal print", "Ethnic geometric", "Warm abstract brushstroke", "Ikat"],
+      "scale": "Medium to Bold",
+      "avoid": ["Cool blue/grey geometric", "Black and white graphic", "Icy tones"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer caramel, terracotta, and burnt orange in tonal head-to-toe",
+      "complementary": "Pair burnt orange with deep warm teal for the richest contrast",
+      "analogous": "Combine golden yellow, terracotta, and warm rust for earthy depth",
+      "neutral_base": "#C07848"
+    },
+    "wardrobe_formula": "Terracotta, burnt orange, and warm olive are your power trio. Brown leather is your best neutral material. Keep one warm-camel piece in every outfit as your foundation."
+  },
+
+  "Light Summer": {
+    "palette": ["#E8C4C4", "#D4A0A0", "#F5E0E0", "#C8B0C0", "#E0D0D8", "#F0E8EE"],
+    "avoid": ["#FF4500", "#FF8C00", "#8B4513", "#000000"],
+    "metal": "Silver",
+    "contrast": "Low",
+    "value": "Light",
+    "chroma": "Muted",
+    "style_archetype": "Soft Romantic",
+    "signature_color": { "hex": "#E8C4C4", "name": "Rose Petal" },
+    "foundation_undertone": "Cool pink to cool light beige",
+    "jewelry_guide": "Delicate silver, white gold, rose quartz, pearl, light amethyst",
+    "description": "You have cool, delicate coloring. Soft lavenders, powder blues, and rose pinks flatter you.",
+    "tips": "Choose soft, cool, muted tones. Dusty rose, lavender, and powder blue are ideal. Avoid harsh oranges.",
+    "celebrities": [
+      {"name": "Cate Blanchett", "image": "/celebrities/cate-blanchett.webp"},
+      {"name": "Elle Fanning", "image": "/celebrities/elle-fanning.webp"},
+      {"name": "Naomi Watts", "image": "/celebrities/naomi-watts.webp"}
+    ],
+    "makeup": { "lips": "#C08888", "blush": "#D0A0A0", "eyeshadow": "#B098A8" },
+    "makeup_extended": {
+      "foundation": "Cool light to cool neutral beige",
+      "concealer": "Cool pink-beige undertone",
+      "lips_shades": ["Soft rose", "Cool pink nude", "Dusty mauve"],
+      "eyeliner": "Soft grey, navy, lavender — avoid harsh black",
+      "mascara": "Dark brown or soft black",
+      "brow_color": "Cool light brown or taupe"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Soft grey or cool lavender with silver accessories",
+        "colors": ["#E0D0D8", "#C8B0C0", "#D0C8D8"],
+        "key_pieces": ["Dove grey blazer", "Lavender silk blouse", "Silver stud earrings"]
+      },
+      "formal": {
+        "formula": "Icy lavender or dusty rose gown — ethereally beautiful",
+        "colors": ["#E8C4C4", "#D8D0E8", "#C8B0C0"],
+        "key_pieces": ["Dusty rose gown", "Pearl necklace", "Silver strappy heels"]
+      },
+      "casual": {
+        "formula": "Powder blue and soft white — fresh and airy",
+        "colors": ["#C8D8E8", "#F0E8EE", "#E8C4C4"],
+        "key_pieces": ["Powder blue sweater", "White linen trousers", "Silver sandals"]
+      },
+      "date_night": {
+        "formula": "Soft dusty rose or cool mauve — quietly captivating",
+        "colors": ["#D4A0A0", "#C8B0C0", "#B0A0B8"],
+        "key_pieces": ["Mauve satin dress", "Silver heels", "Amethyst drop earrings"]
+      },
+      "beach": {
+        "formula": "Icy blue, soft lavender, pale pink — calm and ethereal",
+        "colors": ["#C8D8F0", "#E8C4C4", "#E0D0E8"],
+        "key_pieces": ["Pale blue swimsuit", "White linen cover-up", "Silver sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Soft lavender, dusty rose, or icy blue — never warm tones",
+        "colors": ["#E8C4C4", "#D8D0E8", "#C8D8F0"],
+        "key_pieces": ["Lavender midi dress", "Pearl accessories", "Silver kitten heels"]
+      },
+      "athletic": {
+        "formula": "Cool pastel tones — powder blue, soft pink, light grey",
+        "colors": ["#C8D8F0", "#E8C4C4", "#D8D0E0"],
+        "key_pieces": ["Powder blue set", "White trainers", "Rose pink water bottle"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Dove grey tailored blazer", "hex": "#D0C8D0", "why": "Cool neutral anchor for all outfits"},
+      {"piece": "Dusty rose silk blouse", "hex": "#D4A0A0", "why": "Signature soft cool tone near your face"},
+      {"piece": "Soft lavender trousers", "hex": "#C8B8D0", "why": "Elegant cool-toned bottom"},
+      {"piece": "White-cool tee", "hex": "#F8F8FF", "why": "Cool white — not warm — everyday base"},
+      {"piece": "Mauve midi dress", "hex": "#C09090", "why": "Signature cool-pink all-occasion piece"},
+      {"piece": "Light wash denim", "hex": "#B0B8C8", "why": "Only denim in a cool light wash"},
+      {"piece": "Icy lavender evening top", "hex": "#E0D8F0", "why": "Evening elegance in your best cool-light tone"},
+      {"piece": "Soft grey coat", "hex": "#C0B8C0", "why": "Cool-neutral outerwear statement"},
+      {"piece": "Silver leather bag", "hex": "#C0C0C0", "why": "Best metal in accessory form"},
+      {"piece": "Nude-cool heels", "hex": "#D0B8B8", "why": "Cool nude that works with your undertone"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Ash Blonde", "Pearl Blonde", "Cool Light Brown", "Sandy Blonde"],
+      "highlights": ["Pearl highlights", "Cool ash baby-lights", "Soft platinum pieces"],
+      "avoid": ["Golden blonde", "Warm honey", "Copper", "Any warm or red tones"]
+    },
+    "patterns": {
+      "best": ["Soft watercolor florals", "Delicate ditsy", "Ombre washes", "Fine lace texture"],
+      "scale": "Small",
+      "avoid": ["Bold warm-tone prints", "High contrast graphic", "Earth tone patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer rose petal, blush, and dusty mauve — total soft-cool harmony",
+      "complementary": "Pair soft rose with powder blue for a classic cool pairing",
+      "analogous": "Combine lavender, powder pink, and cool mauve for a romantic palette",
+      "neutral_base": "#E0D0D8"
+    },
+    "wardrobe_formula": "Build on soft grey and cool white as neutrals. Layer dusty rose, lavender, and powder blue. Avoid any warmth entirely — every piece should feel like a watercolor painting."
+  },
+
+  "True Summer": {
+    "palette": ["#C9A0A0", "#B07878", "#E8D0D0", "#A08888", "#D0B8B8", "#E0C8C8"],
+    "avoid": ["#FF6600", "#FFD700", "#8B4513", "#FF0000"],
+    "metal": "Silver",
+    "contrast": "Medium",
+    "value": "Medium",
+    "chroma": "Muted",
+    "style_archetype": "Classic Romantic",
+    "signature_color": { "hex": "#C9A0A0", "name": "Dusty Rose" },
+    "foundation_undertone": "Cool neutral beige to cool medium beige",
+    "jewelry_guide": "Sterling silver, white gold, grey pearl, amethyst, blue topaz",
+    "description": "You have cool, muted coloring. Dusty blues, soft grays, and cool mauves are ideal.",
+    "tips": "Go for soft, smoky tones with cool undertones. Avoid bright oranges and warm yellows.",
+    "celebrities": [
+      {"name": "Jennifer Aniston", "image": "/celebrities/jennifer-aniston.webp"},
+      {"name": "Sarah Jessica Parker", "image": "/celebrities/sarah-jessica-parker.webp"},
+      {"name": "Emily Blunt", "image": "/celebrities/emily-blunt.webp"}
+    ],
+    "makeup": { "lips": "#B07080", "blush": "#C09090", "eyeshadow": "#908898" },
+    "makeup_extended": {
+      "foundation": "Cool medium beige or cool neutral",
+      "concealer": "Cool pink-neutral undertone",
+      "lips_shades": ["Dusty rose", "Cool berry nude", "Soft raspberry"],
+      "eyeliner": "Slate grey, navy, plum — not warm brown",
+      "mascara": "Black",
+      "brow_color": "Cool medium brown or taupe"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Cool charcoal or slate blue suit — polished and authoritative",
+        "colors": ["#808898", "#A0A8B0", "#B0B8C0"],
+        "key_pieces": ["Slate blue blazer", "Cool grey trousers", "Silver chain necklace"]
+      },
+      "formal": {
+        "formula": "Dusty rose or cool blue gown — timelessly elegant",
+        "colors": ["#C9A0A0", "#9090B8", "#B0B8D0"],
+        "key_pieces": ["Dusty rose gown", "Silver clutch", "Pearl earrings"]
+      },
+      "casual": {
+        "formula": "Cool blue denim + soft rose or grey — relaxed sophistication",
+        "colors": ["#8898B0", "#C9A0A0", "#D0D0D8"],
+        "key_pieces": ["Cool blue jeans", "Dusty rose tee", "White leather sneakers"]
+      },
+      "date_night": {
+        "formula": "Deep cool berry or slate blue — mysterious and striking",
+        "colors": ["#8070A0", "#9080A8", "#704878"],
+        "key_pieces": ["Plum midi dress", "Silver heels", "Amethyst accessories"]
+      },
+      "beach": {
+        "formula": "Cool aqua and soft rose — serene and beautiful",
+        "colors": ["#8BCCCC", "#C9A0A0", "#B0C8D8"],
+        "key_pieces": ["Cool aqua swimsuit", "Soft grey coverup", "Silver sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Dusty mauve, slate blue, or soft lavender",
+        "colors": ["#C9A0A0", "#9898C0", "#B8C0D0"],
+        "key_pieces": ["Slate blue midi dress", "Silver accessories", "Nude-cool heels"]
+      },
+      "athletic": {
+        "formula": "Cool tones — slate, dusty blue, soft rose",
+        "colors": ["#8898B0", "#C9A0A0", "#A0A8B8"],
+        "key_pieces": ["Slate blue set", "Cool grey jacket", "White trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Slate blue blazer", "hex": "#7888A0", "why": "Cool power neutral — your professional anchor"},
+      {"piece": "Dusty rose silk top", "hex": "#C9A0A0", "why": "Signature tone — closest to your ideal"},
+      {"piece": "Cool grey tailored trousers", "hex": "#A0A0A8", "why": "Versatile cool neutral bottom"},
+      {"piece": "Soft white shirt", "hex": "#F5F5FF", "why": "Cool white — pure base for layering"},
+      {"piece": "Cool mauve wrap dress", "hex": "#B08090", "why": "All-occasion signature dress"},
+      {"piece": "Dark blue jeans", "hex": "#384860", "why": "Cool-toned denim in a deep wash"},
+      {"piece": "Dusty blue evening top", "hex": "#9098B8", "why": "Evening elegance in your cool palette"},
+      {"piece": "Cool grey coat", "hex": "#9090A0", "why": "Outerwear in your best neutral"},
+      {"piece": "Silver leather bag", "hex": "#B8B8C0", "why": "Accessory in your best metal family"},
+      {"piece": "Dusty pink heels", "hex": "#C0A0A0", "why": "Footwear that completes cool outfits"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Cool Medium Brown", "Ash Brown", "Mocha Brown", "Cool Dark Blonde"],
+      "highlights": ["Ash highlights", "Cool mushroom tones", "Soft grey pieces"],
+      "avoid": ["Golden highlights", "Warm auburn", "Red tones", "Any warm or brassy tones"]
+    },
+    "patterns": {
+      "best": ["Soft floral", "Cool-toned stripe", "Subtle plaid in cool tones", "Abstract watercolor"],
+      "scale": "Small to Medium",
+      "avoid": ["Warm earth-tone prints", "Bright high-contrast graphic", "Orange/yellow patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer dusty rose, mauve, and deep cool berry in one harmonious outfit",
+      "complementary": "Pair dusty rose with cool teal-blue for gentle contrast",
+      "analogous": "Combine lavender, dusty rose, and cool mauve for a sophisticated palette",
+      "neutral_base": "#D0C8C8"
+    },
+    "wardrobe_formula": "Slate blue and cool grey as power neutrals. Dusty rose as your accent. Layer muted cool tones — never let a warm or bright color enter. Soft and sophisticated is your brand."
+  },
+
+  "Soft Autumn": {
+    "palette": ["#C4956A", "#A87848", "#DDB88C", "#B8885C", "#D0A478", "#E0C098"],
+    "avoid": ["#0000FF", "#FF00FF", "#000000", "#E0E0E0"],
+    "metal": "Gold",
+    "contrast": "Low-Medium",
+    "value": "Medium",
+    "chroma": "Muted",
+    "style_archetype": "Earthy Natural",
+    "signature_color": { "hex": "#C4956A", "name": "Warm Camel" },
+    "foundation_undertone": "Warm neutral to medium warm beige",
+    "jewelry_guide": "Matte gold, hammered bronze, amber, brown jasper, tortoiseshell",
+    "description": "You have warm, muted coloring. Earthy olives, warm taupes, and terracotta suit you.",
+    "tips": "Choose soft, warm earth tones. Camel, sage, terracotta work beautifully. Avoid electric and neon colors.",
+    "celebrities": [
+      {"name": "Drew Barrymore", "image": "/celebrities/drew-barrymore.webp"},
+      {"name": "Gisele Bündchen", "image": "/celebrities/gisele-bundchen.webp"},
+      {"name": "Jennifer Garner", "image": "/celebrities/jennifer-garner.webp"}
+    ],
+    "makeup": { "lips": "#B87858", "blush": "#C89878", "eyeshadow": "#A08050" },
+    "makeup_extended": {
+      "foundation": "Warm neutral to warm medium beige",
+      "concealer": "Warm peachy-neutral undertone",
+      "lips_shades": ["Warm nude brown", "Muted terracotta", "Soft caramel"],
+      "eyeliner": "Warm brown, warm khaki, bronze",
+      "mascara": "Brown-black",
+      "brow_color": "Warm medium brown, warm taupe"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Camel or warm taupe with bronze touches",
+        "colors": ["#C4956A", "#A87848", "#DDB88C"],
+        "key_pieces": ["Camel blazer", "Warm taupe blouse", "Bronze accessories"]
+      },
+      "formal": {
+        "formula": "Muted gold or warm bronze gown — understated luxury",
+        "colors": ["#C4956A", "#B8885C", "#A87848"],
+        "key_pieces": ["Warm bronze gown", "Matte gold accessories", "Cognac heels"]
+      },
+      "casual": {
+        "formula": "Khaki and warm earth tones — relaxed and grounded",
+        "colors": ["#DDB88C", "#C4956A", "#A87848"],
+        "key_pieces": ["Khaki utility pants", "Warm camel tee", "Brown leather sneakers"]
+      },
+      "date_night": {
+        "formula": "Warm terracotta or deep bronze — rich and inviting",
+        "colors": ["#B86848", "#A06030", "#C07848"],
+        "key_pieces": ["Terracotta midi dress", "Bronze heels", "Amber jewelry"]
+      },
+      "beach": {
+        "formula": "Warm sand, camel, and muted olive — natural beach goddess",
+        "colors": ["#DDB88C", "#C4956A", "#A89868"],
+        "key_pieces": ["Warm sand swimsuit", "Camel cover-up", "Woven sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Warm dusty rose, camel, or muted gold",
+        "colors": ["#DDB88C", "#C4956A", "#B8885C"],
+        "key_pieces": ["Dusty peach midi dress", "Gold accessories", "Camel heels"]
+      },
+      "athletic": {
+        "formula": "Earthy olive and warm camel — natural and sporty",
+        "colors": ["#A89868", "#C4956A", "#DDB88C"],
+        "key_pieces": ["Olive leggings", "Camel sports top", "Tan trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Camel structured blazer", "hex": "#C4956A", "why": "Best warm neutral — works for every occasion"},
+      {"piece": "Warm taupe blouse", "hex": "#D0B098", "why": "Muted warm tone that flatters near face"},
+      {"piece": "Khaki trousers", "hex": "#B8A878", "why": "Warm neutral bottom anchor"},
+      {"piece": "Warm ivory linen shirt", "hex": "#FAEBD7", "why": "Warm-white base for casual layering"},
+      {"piece": "Terracotta dress", "hex": "#C07848", "why": "Signature earth-tone statement piece"},
+      {"piece": "Warm brown jeans", "hex": "#8C6040", "why": "Warm-toned casual bottom"},
+      {"piece": "Muted olive evening top", "hex": "#8C8050", "why": "Evening wear in grounded earth tone"},
+      {"piece": "Warm brown leather coat", "hex": "#8B6040", "why": "Outerwear in your best earthy neutral"},
+      {"piece": "Amber leather bag", "hex": "#B87830", "why": "Warm-toned accessory anchor"},
+      {"piece": "Cognac ankle boots", "hex": "#9A6040", "why": "Signature warm-leather footwear"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Warm Medium Brown", "Golden Chestnut", "Warm Dark Blonde", "Light Auburn"],
+      "highlights": ["Caramel highlights", "Warm brown balayage", "Soft golden pieces"],
+      "avoid": ["Cool ash", "Platinum", "Blue-black", "Cool espresso without warm tones"]
+    },
+    "patterns": {
+      "best": ["Warm paisley", "Earthy abstract", "Muted animal print", "Autumn botanical"],
+      "scale": "Medium",
+      "avoid": ["Cool grey prints", "High-contrast black/white", "Icy-tone patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer warm camel, taupe, and cognac for rich tonal dressing",
+      "complementary": "Pair warm camel with muted sage green for earthy balance",
+      "analogous": "Combine warm peach, camel, and terracotta for an earth-tone story",
+      "neutral_base": "#DDB88C"
+    },
+    "wardrobe_formula": "Camel and warm taupe as your foundation neutrals. Terracotta and olive as accent colors. Think of a forest in early autumn — your wardrobe should feel like nature's palette."
+  },
+
+  "True Autumn": {
+    "palette": ["#C07840", "#A05820", "#D89060", "#8C4818", "#B06830", "#E0A070"],
+    "avoid": ["#0000FF", "#FF00FF", "#C0C0C0", "#E8E8E8"],
+    "metal": "Gold",
+    "contrast": "Medium-High",
+    "value": "Medium-Deep",
+    "chroma": "Clear",
+    "style_archetype": "Dramatic Natural",
+    "signature_color": { "hex": "#C07840", "name": "Burnt Orange" },
+    "foundation_undertone": "Warm medium to warm golden-tan",
+    "jewelry_guide": "Bold yellow gold, hammered copper, amber, tiger's eye, garnet",
+    "description": "You have warm, rich coloring. Burnt orange, mustard, and deep teals are your palette.",
+    "tips": "Go bold with warm, saturated earthy tones. Pumpkin, olive, and rust are stunning on you.",
+    "celebrities": [
+      {"name": "Julianne Moore", "image": "/celebrities/julianne-moore.webp"},
+      {"name": "Deepika Padukone", "image": "/celebrities/deepika-padukone.webp"},
+      {"name": "Julia Roberts", "image": "/celebrities/julia-roberts.webp"}
+    ],
+    "makeup": { "lips": "#B05030", "blush": "#C07858", "eyeshadow": "#8C5828" },
+    "makeup_extended": {
+      "foundation": "Warm medium-dark golden beige",
+      "concealer": "Warm golden-yellow undertone",
+      "lips_shades": ["Deep terracotta", "Warm brick red", "Burnt sienna"],
+      "eyeliner": "Deep brown, bronze, warm olive",
+      "mascara": "Black",
+      "brow_color": "Warm dark brown, warm chestnut"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Rich olive suit or warm brown — commanding and warm",
+        "colors": ["#6B5038", "#8C6038", "#A07840"],
+        "key_pieces": ["Olive green blazer", "Warm brown trousers", "Copper accessories"]
+      },
+      "formal": {
+        "formula": "Deep burnt orange or forest green gown — unforgettable",
+        "colors": ["#C07840", "#3D6B3D", "#8C4818"],
+        "key_pieces": ["Burnt orange gown", "Gold statement earrings", "Bronze heels"]
+      },
+      "casual": {
+        "formula": "Mustard or rust with dark brown denim — rich and effortless",
+        "colors": ["#C8A030", "#C07840", "#4A3020"],
+        "key_pieces": ["Mustard sweater", "Dark brown jeans", "Tan leather boots"]
+      },
+      "date_night": {
+        "formula": "Deep rust or warm hunter green — rich and magnetic",
+        "colors": ["#A04020", "#2D5A2D", "#8C4818"],
+        "key_pieces": ["Rust satin top", "Dark olive skirt", "Bronze heeled boots"]
+      },
+      "beach": {
+        "formula": "Warm turquoise and burnt orange — tropical richness",
+        "colors": ["#C07840", "#2898A0", "#D89060"],
+        "key_pieces": ["Terracotta bikini", "Teal sarong", "Woven platform sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Forest green, warm bronze, or deep terracotta",
+        "colors": ["#3D6B3D", "#C07840", "#8C6038"],
+        "key_pieces": ["Forest green midi dress", "Gold accessories", "Brown strappy heels"]
+      },
+      "athletic": {
+        "formula": "Bold earth tones — deep olive, rust, warm brown",
+        "colors": ["#8C6038", "#C07840", "#6B5038"],
+        "key_pieces": ["Olive sports set", "Rust jacket", "Dark brown trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Olive green blazer", "hex": "#6B7038", "why": "Your richest neutral — grounded and authoritative"},
+      {"piece": "Burnt orange silk top", "hex": "#C07840", "why": "Signature tone — vibrant near your face"},
+      {"piece": "Dark brown leather trousers", "hex": "#5C3820", "why": "Deep warm neutral bottom"},
+      {"piece": "Warm ivory shirt", "hex": "#FFF0DC", "why": "Warm-white base — not cool white"},
+      {"piece": "Forest green wrap dress", "hex": "#3D6B3D", "why": "Complementary jewel tone statement piece"},
+      {"piece": "Dark wash warm denim", "hex": "#303828", "why": "Deep-tone casual anchor"},
+      {"piece": "Mustard knit dress", "hex": "#C8A030", "why": "Rich autumn statement color"},
+      {"piece": "Chocolate brown wool coat", "hex": "#5C3020", "why": "Deep warm outerwear — your power coat"},
+      {"piece": "Cognac leather bag", "hex": "#9A5020", "why": "Rich leather accessory anchor"},
+      {"piece": "Dark tan leather boots", "hex": "#8C6038", "why": "Signature warm footwear for every season"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Rich Auburn", "Deep Copper", "Warm Chestnut", "Dark Golden Brown"],
+      "highlights": ["Copper balayage", "Auburn pieces", "Deep warm highlights"],
+      "avoid": ["Ash tones", "Cool brown", "Platinum", "Jet black without warmth"]
+    },
+    "patterns": {
+      "best": ["Bold animal print", "Rich paisley", "Ethnic geometric", "Autumnal plaid"],
+      "scale": "Medium to Bold",
+      "avoid": ["Cool pastels", "Icy or grey-based prints", "Cool blue geometric"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer burnt orange, terracotta, and deep rust in total warm depth",
+      "complementary": "Pair burnt orange with teal or forest green for maximum richness",
+      "analogous": "Combine mustard, burnt orange, and deep rust for autumn fire",
+      "neutral_base": "#8C6038"
+    },
+    "wardrobe_formula": "Olive, dark brown, and cognac are your power neutrals. Burnt orange and forest green as your statement colors. Every outfit should look like autumn leaves — rich, warm, and deeply saturated."
+  },
+
+  "Deep Autumn": {
+    "palette": ["#8B5E3C", "#6B3E1C", "#A87848", "#5C2E10", "#7A4E30", "#B88858"],
+    "avoid": ["#ADD8E6", "#FFB6C1", "#E0E0E0", "#FFFFFF"],
+    "metal": "Gold",
+    "contrast": "High",
+    "value": "Deep",
+    "chroma": "Muted",
+    "style_archetype": "Bold Dramatic",
+    "signature_color": { "hex": "#6B3E1C", "name": "Dark Chocolate" },
+    "foundation_undertone": "Deep warm to warm tan-brown",
+    "jewelry_guide": "Bold gold, raw brass, amber, garnet, deep coral, tiger's eye",
+    "description": "You have warm, deep coloring. Rich, saturated warm tones like burgundy and forest green shine.",
+    "tips": "Embrace deep, warm colors. Chocolate, burgundy, forest green, and bronze are your power colors.",
+    "celebrities": [
+      {"name": "Priyanka Chopra", "image": "/celebrities/priyanka-chopra.webp"},
+      {"name": "Salma Hayek", "image": "/celebrities/salma-hayek.webp"},
+      {"name": "Eva Mendes", "image": "/celebrities/eva-mendes.webp"}
+    ],
+    "makeup": { "lips": "#7A3020", "blush": "#A06048", "eyeshadow": "#6B4020" },
+    "makeup_extended": {
+      "foundation": "Deep warm to deep golden-brown",
+      "concealer": "Deep warm golden undertone",
+      "lips_shades": ["Deep burgundy", "Warm brick", "Rich oxblood"],
+      "eyeliner": "Deep brown, warm black, dark bronze",
+      "mascara": "Black",
+      "brow_color": "Dark warm brown, near-black brown"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Deep chocolate or espresso suit — powerful and commanding",
+        "colors": ["#5C3020", "#6B3E1C", "#4A2810"],
+        "key_pieces": ["Chocolate brown blazer", "Deep camel trousers", "Gold hardware bag"]
+      },
+      "formal": {
+        "formula": "Deep burgundy or forest green gown — regal and magnetic",
+        "colors": ["#7A2030", "#2D5A2D", "#5C2E10"],
+        "key_pieces": ["Deep burgundy gown", "Gold statement necklace", "Dark bronze heels"]
+      },
+      "casual": {
+        "formula": "Deep warm brown with camel or forest green accents",
+        "colors": ["#6B3E1C", "#8B5E3C", "#A87848"],
+        "key_pieces": ["Chocolate brown sweater", "Camel chinos", "Tan leather boots"]
+      },
+      "date_night": {
+        "formula": "Deep oxblood or dark forest — dramatic and unforgettable",
+        "colors": ["#6B1020", "#1E4A1E", "#5C2E10"],
+        "key_pieces": ["Oxblood velvet dress", "Gold accessories", "Dark bronze heels"]
+      },
+      "beach": {
+        "formula": "Deep turquoise and warm bronze — rich tropical depth",
+        "colors": ["#8B5E3C", "#1A7878", "#A87848"],
+        "key_pieces": ["Warm bronze swimsuit", "Deep teal sarong", "Gold sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Deep forest green, warm burgundy, or rich chocolate",
+        "colors": ["#2D5A2D", "#7A2030", "#6B3E1C"],
+        "key_pieces": ["Forest green dress", "Gold accessories", "Brown strappy heels"]
+      },
+      "athletic": {
+        "formula": "Deep earthy tones — dark olive, deep brown, forest",
+        "colors": ["#4A4020", "#5C3020", "#2D4020"],
+        "key_pieces": ["Dark olive set", "Deep brown jacket", "Tan trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Dark chocolate blazer", "hex": "#5C3020", "why": "Your power neutral — deep and commanding"},
+      {"piece": "Camel cashmere top", "hex": "#C4956A", "why": "Warm light accent against deep neutrals"},
+      {"piece": "Deep warm brown leather pants", "hex": "#6B3E1C", "why": "Statement bottom in your richest tone"},
+      {"piece": "Warm ivory silk shirt", "hex": "#FFF0DC", "why": "Light contrast piece — warm white only"},
+      {"piece": "Oxblood wrap dress", "hex": "#7A2030", "why": "Deep jewel-tone statement piece"},
+      {"piece": "Dark wash slim jeans", "hex": "#1A1A28", "why": "Deep-tone casual denim anchor"},
+      {"piece": "Forest green evening top", "hex": "#1E4A1E", "why": "Complementary deep tone for evenings"},
+      {"piece": "Deep espresso wool coat", "hex": "#3C1C0C", "why": "Outerwear in your deepest warm neutral"},
+      {"piece": "Dark cognac leather bag", "hex": "#7A4020", "why": "Rich warm leather bag — essential"},
+      {"piece": "Dark tan leather boots", "hex": "#7A5030", "why": "Footwear in your deep warm family"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Dark Espresso Brown", "Deep Chocolate", "Warm Black-Brown", "Deep Auburn"],
+      "highlights": ["Deep copper pieces", "Warm mahogany highlights", "Rich caramel on deep base"],
+      "avoid": ["Platinum", "Ash blonde", "Cool black", "Grey-toned highlights"]
+    },
+    "patterns": {
+      "best": ["Rich animal print", "Bold ethnic print", "Deep batik", "Warm jacquard"],
+      "scale": "Bold",
+      "avoid": ["Pale or pastel prints", "Cool grey geometric", "Icy-tone patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer chocolate, espresso, and dark cognac — deep tonal dressing",
+      "complementary": "Pair deep chocolate with deep teal for the most luxurious pairing",
+      "analogous": "Combine oxblood, deep chocolate, and dark olive for rich earthy depth",
+      "neutral_base": "#6B3E1C"
+    },
+    "wardrobe_formula": "Deep brown, espresso, and dark olive are your neutrals. Oxblood and forest green as your statement colors. Light colors should be rare contrasts — warm ivory at most. Own your depth."
+  },
+
+  "Deep Winter": {
+    "palette": ["#2C1810", "#4A2820", "#6B3830", "#1A1018", "#3C2028", "#584038"],
+    "avoid": ["#FFD700", "#FFA500", "#F0E68C", "#FAEBD7"],
+    "metal": "Silver",
+    "contrast": "High",
+    "value": "Deep",
+    "chroma": "Clear",
+    "style_archetype": "High Dramatic",
+    "signature_color": { "hex": "#1A1018", "name": "Midnight" },
+    "foundation_undertone": "Deep cool to deep neutral",
+    "jewelry_guide": "Bold silver, white gold, black diamond, deep garnet, dark sapphire, onyx",
+    "description": "You have cool, deep coloring. Dramatic jewel tones — ruby, emerald, sapphire — are perfect.",
+    "tips": "Wear bold, deep, cool colors. Emerald, ruby, and royal blue create striking contrast with your features.",
+    "celebrities": [
+      {"name": "Aishwarya Rai", "image": "/celebrities/aishwarya-rai.webp"},
+      {"name": "Penélope Cruz", "image": "/celebrities/penelope-cruz.webp"},
+      {"name": "Kim Kardashian", "image": "/celebrities/kim-kardashian.webp"}
+    ],
+    "makeup": { "lips": "#8B1A30", "blush": "#A05060", "eyeshadow": "#3C2840" },
+    "makeup_extended": {
+      "foundation": "Deep cool to deep neutral",
+      "concealer": "Cool neutral to cool deep undertone",
+      "lips_shades": ["Deep burgundy", "Dark plum", "Black-cherry red"],
+      "eyeliner": "Black, deep navy, dark plum",
+      "mascara": "Black",
+      "brow_color": "Dark cool brown to near-black"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Pure black or charcoal — sharp, authoritative, iconic",
+        "colors": ["#1A1018", "#2C1810", "#383848"],
+        "key_pieces": ["Black tailored blazer", "Charcoal trousers", "Silver accessories"]
+      },
+      "formal": {
+        "formula": "Emerald green or ruby red gown — absolutely unforgettable",
+        "colors": ["#0A5020", "#8B1A30", "#0A0A50"],
+        "key_pieces": ["Emerald gown", "Diamond accessories", "Black heels"]
+      },
+      "casual": {
+        "formula": "Black + one bold jewel-tone accent",
+        "colors": ["#1A1018", "#0A5020", "#1A1A60"],
+        "key_pieces": ["Black jeans", "Emerald top", "Black leather sneakers"]
+      },
+      "date_night": {
+        "formula": "All black or deep ruby — commanding and magnetic",
+        "colors": ["#1A1018", "#8B1A30", "#1A0838"],
+        "key_pieces": ["Black satin dress", "Ruby red lip", "Diamond stud earrings"]
+      },
+      "beach": {
+        "formula": "Deep sapphire or emerald — dramatic even at the beach",
+        "colors": ["#0A3060", "#0A5020", "#1A1018"],
+        "key_pieces": ["Navy swimsuit", "Black cover-up", "Silver sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Jewel tones only — emerald, sapphire, or deep plum",
+        "colors": ["#0A5020", "#1A1A60", "#4A0840"],
+        "key_pieces": ["Deep plum gown", "Silver accessories", "Black strappy heels"]
+      },
+      "athletic": {
+        "formula": "Black and jewel tones — high contrast sporting edge",
+        "colors": ["#1A1018", "#0A5020", "#1A1A60"],
+        "key_pieces": ["Black leggings", "Royal blue top", "Black trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Black structured blazer", "hex": "#1A1018", "why": "Your most powerful piece — the foundation of everything"},
+      {"piece": "Emerald green blouse", "hex": "#0A5020", "why": "Jewel-tone signature — makes your features pop"},
+      {"piece": "Black tailored trousers", "hex": "#1A1018", "why": "Essential deep-neutral bottom"},
+      {"piece": "White-pure shirt", "hex": "#FFFFFF", "why": "Maximum contrast — use as sharp accent"},
+      {"piece": "Deep plum wrap dress", "hex": "#4A0840", "why": "Evening jewel-tone statement piece"},
+      {"piece": "Black slim jeans", "hex": "#1A1018", "why": "Casual anchor in your best neutral"},
+      {"piece": "Sapphire evening cami", "hex": "#0A1A60", "why": "Evening depth in cool jewel tone"},
+      {"piece": "Black wool coat", "hex": "#1A1018", "why": "Outerwear icon — pure and powerful"},
+      {"piece": "Silver leather bag", "hex": "#C0C0C8", "why": "Best metal in statement form"},
+      {"piece": "Black patent heels", "hex": "#0A0810", "why": "Polished deep-neutral footwear"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Blue-Black", "Espresso Black", "Cool Dark Brown", "Jet Black"],
+      "highlights": ["No highlights needed — depth is your power", "If any: cool dark mahogany subtle sheen"],
+      "avoid": ["Golden highlights", "Warm brown", "Copper", "Any warm or red undertones"]
+    },
+    "patterns": {
+      "best": ["Bold graphic", "High-contrast black/white", "Jewel-tone abstract", "Dramatic animal print"],
+      "scale": "Bold",
+      "avoid": ["Pastel prints", "Warm earth tones", "Muted or dusty patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Black + deep charcoal + near-black navy — total deep cool impact",
+      "complementary": "Black with pure white for maximum contrast, or emerald with ruby",
+      "analogous": "Deep navy, midnight plum, and emerald — cool jewel-tone harmony",
+      "neutral_base": "#1A1018"
+    },
+    "wardrobe_formula": "Black is your ultimate neutral — own it completely. Add jewel tones as color statements: emerald, sapphire, ruby. Pure white for sharp contrast only. Never wear anything muted, warm, or pastels — you need drama."
+  },
+
+  "True Winter": {
+    "palette": ["#E8E0F0", "#C0B0D8", "#A090C0", "#D8D0E8", "#B0A0C8", "#9080B0"],
+    "avoid": ["#FFA500", "#F4A460", "#D2B48C", "#FAEBD7"],
+    "metal": "Silver",
+    "contrast": "High",
+    "value": "Medium-Deep",
+    "chroma": "Clear",
+    "style_archetype": "Classic Dramatic",
+    "signature_color": { "hex": "#4169E1", "name": "Royal Blue" },
+    "foundation_undertone": "Cool neutral to cool medium-deep",
+    "jewelry_guide": "Bold silver, white gold, sapphire, clear diamond, cool emerald, platinum",
+    "description": "You have cool, icy coloring. Pure white, navy, and fuchsia create striking contrast.",
+    "tips": "Choose pure, vivid, cool colors. Navy, bright white, fuchsia, and emerald make you radiate.",
+    "celebrities": [
+      {"name": "Lupita Nyong'o", "image": "/celebrities/lupita-nyongo.webp"},
+      {"name": "Zendaya", "image": "/celebrities/zendaya.webp"},
+      {"name": "Viola Davis", "image": "/celebrities/viola-davis.webp"}
+    ],
+    "makeup": { "lips": "#A02050", "blush": "#C07088", "eyeshadow": "#6050A0" },
+    "makeup_extended": {
+      "foundation": "Cool medium to cool deep",
+      "concealer": "Cool pink-neutral undertone",
+      "lips_shades": ["True red", "Deep fuchsia", "Cool berry"],
+      "eyeliner": "Black, navy, deep plum",
+      "mascara": "Black",
+      "brow_color": "Cool dark brown to cool black"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Navy or charcoal with crisp white — sharp and polished",
+        "colors": ["#000080", "#383848", "#FFFFFF"],
+        "key_pieces": ["Navy blazer", "White crisp shirt", "Silver accessories"]
+      },
+      "formal": {
+        "formula": "Royal blue, fuchsia, or black gown — vivid and striking",
+        "colors": ["#4169E1", "#C02060", "#1A1A40"],
+        "key_pieces": ["Royal blue gown", "Diamond accessories", "Silver heels"]
+      },
+      "casual": {
+        "formula": "Navy + pure white with silver accents — nautical cool",
+        "colors": ["#000080", "#FFFFFF", "#C0C0C8"],
+        "key_pieces": ["Navy jeans", "White tee", "White leather sneakers"]
+      },
+      "date_night": {
+        "formula": "True red or deep fuchsia — maximum impact",
+        "colors": ["#C00020", "#C01868", "#1A1A60"],
+        "key_pieces": ["True red dress", "Diamond earrings", "Black heels"]
+      },
+      "beach": {
+        "formula": "Vivid cool blue or hot pink — bright and striking",
+        "colors": ["#4169E1", "#FF1493", "#C0D8F8"],
+        "key_pieces": ["Royal blue swimsuit", "White cover-up", "Silver sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Vivid jewel tones — royal blue, deep fuchsia, emerald",
+        "colors": ["#4169E1", "#C01868", "#0A5020"],
+        "key_pieces": ["Emerald midi dress", "Silver accessories", "Black heels"]
+      },
+      "athletic": {
+        "formula": "Bold cool tones — royal blue, white, black",
+        "colors": ["#4169E1", "#FFFFFF", "#1A1A40"],
+        "key_pieces": ["Royal blue set", "White trainers", "Black cap"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Navy blazer", "hex": "#000080", "why": "True Winter's perfect professional neutral"},
+      {"piece": "White crisp shirt", "hex": "#FFFFFF", "why": "Pure white — no warmth allowed, sharp contrast"},
+      {"piece": "Black tailored trousers", "hex": "#1A1A28", "why": "Deep neutral bottom anchor"},
+      {"piece": "Royal blue silk top", "hex": "#4169E1", "why": "Signature vivid cool color near face"},
+      {"piece": "True red dress", "hex": "#C00020", "why": "Statement red — cool and vivid, not warm"},
+      {"piece": "Black slim jeans", "hex": "#1A1A28", "why": "Essential casual anchor"},
+      {"piece": "Fuchsia evening top", "hex": "#C01868", "why": "Evening drama in vivid cool pink"},
+      {"piece": "Black leather trench coat", "hex": "#1A1018", "why": "Sharp dramatic outerwear"},
+      {"piece": "Silver structured bag", "hex": "#C0C0C8", "why": "Power accessory in best metal"},
+      {"piece": "Navy pointed heels", "hex": "#000060", "why": "Classic footwear in deep cool neutral"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Pure Black", "Cool Dark Brown", "Icy Platinum Blonde", "Blue-Black"],
+      "highlights": ["Icy platinum", "Cool ash highlights", "Blue-toned black sheen"],
+      "avoid": ["Golden highlights", "Warm auburn", "Copper", "Brassy or warm tones of any kind"]
+    },
+    "patterns": {
+      "best": ["Graphic black/white", "Bold cool geometric", "High-contrast stripe", "Abstract cool-tone print"],
+      "scale": "Bold and graphic",
+      "avoid": ["Warm earth tones", "Soft florals", "Muted or blended patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Navy + royal blue + icy lavender for a cool tonal statement",
+      "complementary": "Royal blue with true red for the sharpest contrast",
+      "analogous": "Navy, cool purple, and bright blue — vivid cool progression",
+      "neutral_base": "#1A1A40"
+    },
+    "wardrobe_formula": "Navy and black as powerful neutrals. Pure white for sharp contrast. Bold, vivid jewel tones — royal blue, fuchsia, true red — as your statement colors. Nothing soft, muted, or warm is allowed in your wardrobe."
+  },
+
+  "Bright Winter": {
+    "palette": ["#F0E8FF", "#D0C0F0", "#B0A0E0", "#E0D8F8", "#C0B0E8", "#A098D0"],
+    "avoid": ["#DAA520", "#CD853F", "#D2B48C", "#808080"],
+    "metal": "Silver",
+    "contrast": "High",
+    "value": "Medium",
+    "chroma": "Bright",
+    "style_archetype": "Vivid Dramatic",
+    "signature_color": { "hex": "#B0A0E0", "name": "Electric Violet" },
+    "foundation_undertone": "Cool neutral to cool light-medium",
+    "jewelry_guide": "Bold silver, white gold, amethyst, clear crystal, bright sapphire, platinum",
+    "description": "You have cool, vivid coloring. High-contrast, electric shades make you glow.",
+    "tips": "Go for bright, icy, high-contrast colors. Electric blue, hot pink, and pure white are your signature.",
+    "celebrities": [
+      {"name": "Rihanna", "image": "/celebrities/rihanna.webp"},
+      {"name": "Megan Fox", "image": "/celebrities/megan-fox.webp"},
+      {"name": "Dua Lipa", "image": "/celebrities/dua-lipa.webp"}
+    ],
+    "makeup": { "lips": "#C02060", "blush": "#D07898", "eyeshadow": "#7060B8" },
+    "makeup_extended": {
+      "foundation": "Cool neutral light to medium",
+      "concealer": "Cool pink or neutral undertone",
+      "lips_shades": ["Hot pink", "Cool berry red", "Electric fuchsia"],
+      "eyeliner": "Black, electric blue, vivid purple",
+      "mascara": "Black",
+      "brow_color": "Cool dark brown or cool black"
+    },
+    "occasions": {
+      "work": {
+        "formula": "Sharp black + one vivid cool accent — confident and modern",
+        "colors": ["#1A1A2E", "#B0A0E0", "#FFFFFF"],
+        "key_pieces": ["Black blazer", "Electric violet blouse", "Silver accessories"]
+      },
+      "formal": {
+        "formula": "Electric blue or hot pink gown — you were made for this moment",
+        "colors": ["#2030B8", "#C01868", "#B0A0E0"],
+        "key_pieces": ["Electric blue gown", "Crystal accessories", "Silver stilettos"]
+      },
+      "casual": {
+        "formula": "White + electric accent — graphic and fresh",
+        "colors": ["#FFFFFF", "#B0A0E0", "#2030B8"],
+        "key_pieces": ["White tee", "Electric purple jeans", "White sneakers"]
+      },
+      "date_night": {
+        "formula": "Hot pink or vivid purple — electric and unforgettable",
+        "colors": ["#C01868", "#B0A0E0", "#1A1A2E"],
+        "key_pieces": ["Hot pink slip dress", "Diamond earrings", "Black heels"]
+      },
+      "beach": {
+        "formula": "Electric blue and hot pink — chromatic and confident",
+        "colors": ["#2030B8", "#C01868", "#B0A0E0"],
+        "key_pieces": ["Electric blue swimsuit", "White coverup", "Silver sandals"]
+      },
+      "wedding_guest": {
+        "formula": "Electric violet, bright cool blue, or vivid fuchsia",
+        "colors": ["#B0A0E0", "#2030B8", "#C01868"],
+        "key_pieces": ["Violet midi dress", "Crystal accessories", "Silver heels"]
+      },
+      "athletic": {
+        "formula": "Vivid cool tones — electric blue, purple, bright white",
+        "colors": ["#2030B8", "#B0A0E0", "#FFFFFF"],
+        "key_pieces": ["Electric blue set", "Purple jacket", "White trainers"]
+      }
+    },
+    "capsule_wardrobe": [
+      {"piece": "Black sleek blazer", "hex": "#1A1A2E", "why": "Your sharpest neutral — foundation of every look"},
+      {"piece": "Electric violet blouse", "hex": "#B0A0E0", "why": "Signature vivid cool tone — irresistibly you"},
+      {"piece": "White tailored trousers", "hex": "#FFFFFF", "why": "Pure white contrast — maximizes your brightness"},
+      {"piece": "Black slim trousers", "hex": "#1A1A28", "why": "Essential deep-cool bottom"},
+      {"piece": "Hot pink dress", "hex": "#C01868", "why": "Statement piece in your most vivid tone"},
+      {"piece": "Black jeans", "hex": "#1A1A28", "why": "Casual anchor — cool, sharp, modern"},
+      {"piece": "Electric blue top", "hex": "#2030B8", "why": "Vivid jewel-tone for evenings and impact"},
+      {"piece": "Black structured coat", "hex": "#1A1A2E", "why": "Outerwear in your sharpest neutral"},
+      {"piece": "Crystal/silver bag", "hex": "#C0C0D0", "why": "Bright metal accessory to complete vivid looks"},
+      {"piece": "Black patent heels", "hex": "#0A0820", "why": "Signature footwear — sleek and powerful"}
+    ],
+    "hair_colors": {
+      "best_natural": ["Pure Black", "Icy Platinum Blonde", "Cool Dark Brown"],
+      "highlights": ["Vivid violet or blue fashion tones suit you perfectly", "Icy platinum highlights on dark base"],
+      "avoid": ["Golden blonde", "Warm auburn", "Any warm or brassy tones", "Muted brown"]
+    },
+    "patterns": {
+      "best": ["High-contrast graphic", "Abstract bold print", "Vivid geometric", "Bold color-block"],
+      "scale": "Large and bold",
+      "avoid": ["Muted or earthy prints", "Warm tones", "Soft florals", "Blended patterns"]
+    },
+    "color_harmonies": {
+      "monochromatic": "Layer icy lavender, violet, and electric purple for vibrant depth",
+      "complementary": "Electric violet with hot pink — bold and unexpected",
+      "analogous": "Electric blue, violet, and cool fuchsia — cool vivid spectrum",
+      "neutral_base": "#1A1A2E"
+    },
+    "wardrobe_formula": "Black and pure white as your graphic neutrals. Electric violet, hot pink, and electric blue as your statement colors. Bold color-blocking is your format. Muted is your enemy — always go bright or go home."
+  }
+}

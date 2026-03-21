@@ -85,6 +85,86 @@ def _generate_source_id(brand: str, product_url: str) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()[:20]
 
 
+# ─── Season Mapping from Hex Color ───────────────────────────
+
+def _map_hex_to_season(color_hex: str) -> str:
+    """Map a hex color to a seasonal palette name via CIE L*a*b* + ITA."""
+    try:
+        import cv2
+        import numpy as np
+        from app.cv.color_analysis import map_to_season, calculate_ita
+
+        r_val = int(color_hex[1:3], 16)
+        g_val = int(color_hex[3:5], 16)
+        b_val = int(color_hex[5:7], 16)
+        bgr = np.array([[[b_val, g_val, r_val]]], dtype=np.uint8)
+        lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB)
+        L_cv, a_cv, b_cv = float(lab[0, 0, 0]), float(lab[0, 0, 1]), float(lab[0, 0, 2])
+
+        L_cie = L_cv * 100.0 / 255.0
+        a_cie = a_cv - 128.0
+        b_cie = b_cv - 128.0
+
+        ita = calculate_ita(L_cie, b_cie)
+        season_name, _, _ = map_to_season(ita, a_cie, b_cie)
+        return season_name.replace(" (Neutral Flow)", "")
+    except Exception as e:
+        logger.warning(f"Season mapping failed for {color_hex}: {e}")
+        return "Unknown"
+
+
+# ─── Single Product Processing ───────────────────────────────
+
+def _process_raw_product(
+    item: dict,
+    brand: str,
+    category: str,
+    gender: str,
+    vibe: str,
+    tier: str,
+    base_url: str,
+) -> Optional[dict]:
+    """Validate and enrich a single raw scraped product."""
+    name = item.get("name", "").strip()
+    price = item.get("price", "").strip()
+    image_url = item.get("image_url", "").strip()
+    product_url = item.get("product_url", "").strip()
+
+    if not name or not image_url.startswith("http") or not product_url.startswith("http"):
+        logger.debug(f"Skipping invalid item: {name}")
+        return None
+
+    source_id = _generate_source_id(brand, product_url)
+    color_hex = None
+    color_embedding = None
+    season = "Unknown"
+
+    color_result = _extract_dominant_color_from_url(image_url)
+    if color_result:
+        color_hex, color_embedding = color_result
+        season = _map_hex_to_season(color_hex)
+
+    return {
+        "id": source_id,
+        "name": name,
+        "brand": brand,
+        "price": price if price else "Price N/A",
+        "image": image_url,
+        "url": product_url,
+        "category": category,
+        "season": season,
+        "gender": gender,
+        "vibe": vibe,
+        "tier": tier,
+        "source": "firecrawl",
+        "source_id": source_id,
+        "is_active": True,
+        "match_score": 85,
+        "color_hex": color_hex,
+        "color_embedding": color_embedding,
+    }
+
+
 # ─── Main Scraping Function ──────────────────────────────────
 
 def scrape_brand(
@@ -154,76 +234,13 @@ def scrape_brand(
 
     logger.info(f"Extracted {len(raw_products)} raw products from {brand}")
 
-    # ── Post-scrape validation & color processing ────────────
-    valid_products = []
-    for item in raw_products[:max_products]:
-        # Validate required fields
-        name = item.get("name", "").strip()
-        price = item.get("price", "").strip()
-        image_url = item.get("image_url", "").strip()
-        product_url = item.get("product_url", "").strip()
-
-        if not name or not image_url.startswith("http") or not product_url.startswith("http"):
-            logger.debug(f"Skipping invalid item: {name}")
-            continue
-
-        # Generate source_id for deduplication
-        source_id = _generate_source_id(brand, product_url)
-
-        # Extract dominant color from the product image
-        color_result = _extract_dominant_color_from_url(image_url)
-        color_hex = None
-        color_embedding = None
-        season = "Unknown"
-
-        if color_result:
-            color_hex, color_embedding = color_result
-            # Map to season using our CV logic
-            try:
-                from app.cv.color_analysis import map_to_season
-                import cv2
-                import numpy as np
-
-                # Convert hex to LAB for season mapping
-                r_val = int(color_hex[1:3], 16)
-                g_val = int(color_hex[3:5], 16)
-                b_val = int(color_hex[5:7], 16)
-                bgr = np.array([[[b_val, g_val, r_val]]], dtype=np.uint8)
-                lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB)
-                L_cv, a_cv, b_cv = float(lab[0, 0, 0]), float(lab[0, 0, 1]), float(lab[0, 0, 2])
-
-                # Convert to CIE scale
-                L_cie = L_cv * 100.0 / 255.0
-                a_cie = a_cv - 128.0
-                b_cie = b_cv - 128.0
-
-                from app.cv.color_analysis import calculate_ita
-                ita = calculate_ita(L_cie, b_cie)
-                season_name, _, _ = map_to_season(ita, a_cie, b_cie)
-                season = season_name.replace(" (Neutral Flow)", "")
-            except Exception as e:
-                logger.warning(f"Season mapping failed for {name}: {e}")
-
-        product_dict = {
-            "id": source_id,
-            "name": name,
-            "brand": brand,
-            "price": price if price else "Price N/A",
-            "image": image_url,
-            "url": product_url,
-            "category": category,
-            "season": season,
-            "gender": gender,
-            "vibe": vibe,
-            "tier": tier,
-            "source": "firecrawl",
-            "source_id": source_id,
-            "is_active": True,
-            "match_score": 85,
-            "color_hex": color_hex,
-            "color_embedding": color_embedding,
-        }
-        valid_products.append(product_dict)
+    valid_products = [
+        p for p in (
+            _process_raw_product(item, brand, category, gender, vibe, tier, url)
+            for item in raw_products[:max_products]
+        )
+        if p is not None
+    ]
 
     logger.info(f"Validated {len(valid_products)}/{len(raw_products)} products from {brand}")
     return valid_products

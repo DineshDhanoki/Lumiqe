@@ -175,16 +175,28 @@ async def require_admin(
 async def require_premium(
     current_user: dict = Depends(get_current_user),
 ) -> dict:
-    """Require the authenticated user to have a premium subscription."""
-    if not current_user.get("is_premium"):
-        raise HTTPException(
-            status_code=403,
-            detail={
-                "error": "PREMIUM_REQUIRED",
-                "detail": "This feature requires a premium subscription. Please upgrade to continue.",
-                "code": 403,
-            },
-        )
-    return current_user
+    """Require premium subscription or active trial."""
+    if current_user.get("is_premium"):
+        return current_user
+
+    # Check active trial
+    trial_ends = current_user.get("trial_ends_at")
+    if trial_ends:
+        from datetime import datetime, timezone
+        try:
+            trial_dt = datetime.fromisoformat(trial_ends) if isinstance(trial_ends, str) else trial_ends
+            if trial_dt > datetime.now(timezone.utc):
+                return current_user
+        except (ValueError, TypeError):
+            pass
+
+    raise HTTPException(
+        status_code=403,
+        detail={
+            "error": "PREMIUM_REQUIRED",
+            "detail": "This feature requires a premium subscription. Please upgrade to continue.",
+            "code": 403,
+        },
+    )
 
 

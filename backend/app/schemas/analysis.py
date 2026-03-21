@@ -18,6 +18,7 @@ class MakeupPalette(BaseModel):
 
 class AnalyzeResponse(BaseModel):
     """Full analysis result from the CV pipeline."""
+    analysis_id: str | None = None
     season: str
     description: str
     ita_angle: float
@@ -33,6 +34,36 @@ class AnalyzeResponse(BaseModel):
     tips: str = ""
     skin_pixels: int = 0
     processing_time_ms: float = 0.0
+
+
+class AnalysisHistoryItem(BaseModel):
+    """Summary of a past analysis for history lists."""
+    id: str
+    season: str
+    hex_color: str
+    undertone: str
+    confidence: float
+    contrast_level: str = ""
+    palette: list[str] = Field(default_factory=list)
+    metal: str = ""
+    created_at: str | None = None
+
+
+class AnalysisDetailResponse(BaseModel):
+    """Full persisted analysis result."""
+    id: str
+    share_token: str = ""
+    user_id: int
+    season: str
+    hex_color: str
+    undertone: str
+    confidence: float
+    contrast_level: str = ""
+    palette: list[str] = Field(default_factory=list)
+    avoid_colors: list[str] = Field(default_factory=list)
+    metal: str = ""
+    full_result: dict = Field(default_factory=dict)
+    created_at: str | None = None
 
 
 class HealthResponse(BaseModel):

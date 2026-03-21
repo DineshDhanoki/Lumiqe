@@ -234,16 +234,32 @@ def generate_card(
         )
         y_cursor += 60
 
-    # ─── Footer ──────────────────────────────────────────────
-    footer_y = CARD_HEIGHT - 100
-    footer_text = "Discover your true colors at lumiqe.app"
-    ft_bbox = draw.textbbox((0, 0), footer_text, font=font_small)
-    ft_width = ft_bbox[2] - ft_bbox[0]
+    # ─── Footer — Lumiqe branding & CTA ─────────────────────
+    footer_y = CARD_HEIGHT - 140
+    # Divider line
+    draw.line([(100, footer_y), (CARD_WIDTH - 100, footer_y)], fill=(*accent, 60) if len(accent) == 3 else accent, width=1)
+    footer_y += 20
+
+    cta_text = "Discover yours at lumiqe.in"
+    cta_bbox = draw.textbbox((0, 0), cta_text, font=font_small)
+    cta_width = cta_bbox[2] - cta_bbox[0]
     draw.text(
-        ((CARD_WIDTH - ft_width) // 2, footer_y),
-        footer_text,
-        fill=TEXT_MUTED,
+        ((CARD_WIDTH - cta_width) // 2, footer_y),
+        cta_text,
+        fill=TEXT_WHITE,
         font=font_small,
+    )
+
+    footer_y += 50
+    watermark = "LUMIQE"
+    wm_font = _get_font(36)
+    wm_bbox = draw.textbbox((0, 0), watermark, font=wm_font)
+    wm_width = wm_bbox[2] - wm_bbox[0]
+    draw.text(
+        ((CARD_WIDTH - wm_width) // 2, footer_y),
+        watermark,
+        fill=(*TEXT_MUTED[:3], 120) if len(TEXT_MUTED) == 3 else TEXT_MUTED,
+        font=wm_font,
     )
 
     # ─── Save to bytes ───────────────────────────────────────
@@ -251,4 +267,102 @@ def generate_card(
     img.save(output, format="PNG", optimize=True)
     png_bytes = output.getvalue()
     logger.info(f"Generated palette card: {len(png_bytes)} bytes")
+    return png_bytes
+
+
+def generate_square_card(
+    season: str,
+    palette: list[str],
+    hex_color: str,
+    undertone: str,
+    metal: str = "",
+    confidence: float = 0.0,
+) -> bytes:
+    """
+    Generate a 1080x1080 Instagram-friendly palette card.
+
+    Same content as the story card but in square format.
+    """
+    SIZE = 1080
+    img = Image.new("RGB", (SIZE, SIZE), BG_COLOR)
+    draw = ImageDraw.Draw(img)
+
+    accent = ACCENT_WARM if undertone == "warm" else ACCENT_COOL
+
+    # Gradient background
+    for y in range(SIZE):
+        ratio = y / SIZE
+        r = int(BG_COLOR[0] + (accent[0] - BG_COLOR[0]) * ratio * 0.15)
+        g = int(BG_COLOR[1] + (accent[1] - BG_COLOR[1]) * ratio * 0.15)
+        b = int(BG_COLOR[2] + (accent[2] - BG_COLOR[2]) * ratio * 0.15)
+        draw.line([(0, y), (SIZE, y)], fill=(r, g, b))
+
+    font_brand = _get_font(36)
+    font_season = _get_font(56)
+    font_label = _get_font(26)
+    font_hex = _get_font(20)
+    font_small = _get_font(22)
+
+    # Brand
+    y_cursor = 60
+    brand_text = "LUMIQE"
+    br_bbox = draw.textbbox((0, 0), brand_text, font=font_brand)
+    draw.text(((SIZE - (br_bbox[2] - br_bbox[0])) // 2, y_cursor), brand_text, fill=accent, font=font_brand)
+
+    # Season
+    y_cursor += 80
+    s_bbox = draw.textbbox((0, 0), season, font=font_season)
+    draw.text(((SIZE - (s_bbox[2] - s_bbox[0])) // 2, y_cursor), season, fill=TEXT_WHITE, font=font_season)
+
+    # Undertone
+    y_cursor += 80
+    ut_text = f"{undertone.title()} Undertone"
+    ut_bbox = draw.textbbox((0, 0), ut_text, font=font_label)
+    draw.text(((SIZE - (ut_bbox[2] - ut_bbox[0])) // 2, y_cursor), ut_text, fill=TEXT_MUTED, font=font_label)
+
+    # Skin color circle
+    y_cursor += 60
+    skin_rgb = _hex_to_rgb(hex_color)
+    circle_size = 70
+    circle_x = (SIZE - circle_size) // 2
+    draw.ellipse([circle_x, y_cursor, circle_x + circle_size, y_cursor + circle_size], fill=skin_rgb, outline=TEXT_WHITE, width=2)
+
+    # Palette swatches (2 rows x 3)
+    y_cursor += circle_size + 50
+    swatch_size = 120
+    swatch_gap = 24
+    swatch_colors = palette[:6] if len(palette) >= 6 else palette
+    row_width = 3 * swatch_size + 2 * swatch_gap
+    start_x = (SIZE - row_width) // 2
+
+    for i, hex_col in enumerate(swatch_colors):
+        row = i // 3
+        col = i % 3
+        sx = start_x + col * (swatch_size + swatch_gap)
+        sy = y_cursor + row * (swatch_size + swatch_gap + 32)
+        rgb = _hex_to_rgb(hex_col)
+        _draw_rounded_rect(draw, (sx, sy, sx + swatch_size, sy + swatch_size), fill=rgb, radius=12)
+        hl = hex_col.upper()
+        hl_bbox = draw.textbbox((0, 0), hl, font=font_hex)
+        draw.text((sx + (swatch_size - (hl_bbox[2] - hl_bbox[0])) // 2, sy + swatch_size + 6), hl, fill=TEXT_MUTED, font=font_hex)
+
+    # Metal + confidence
+    y_cursor += 2 * (swatch_size + swatch_gap + 32) + 20
+    if metal:
+        metal_icon = "Gold" if metal.lower() == "gold" else "Silver"
+        mt_text = f"Best Metal: {metal_icon}"
+        mt_bbox = draw.textbbox((0, 0), mt_text, font=font_small)
+        draw.text(((SIZE - (mt_bbox[2] - mt_bbox[0])) // 2, y_cursor), mt_text, fill=TEXT_WHITE, font=font_small)
+        y_cursor += 40
+
+    # Footer CTA
+    footer_y = SIZE - 60
+    cta = "Discover yours at lumiqe.in"
+    cta_bbox = draw.textbbox((0, 0), cta, font=font_small)
+    draw.text(((SIZE - (cta_bbox[2] - cta_bbox[0])) // 2, footer_y), cta, fill=TEXT_MUTED, font=font_small)
+
+    output = BytesIO()
+    img.save(output, format="PNG", optimize=True)
+    png_bytes = output.getvalue()
+    logger.info(f"Generated square palette card: {len(png_bytes)} bytes")
     return png_bytes

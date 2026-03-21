@@ -49,6 +49,10 @@ class UserResponse(BaseModel):
     email: str
     free_scans_left: int
     is_premium: bool = False
+    credits: int = 0
+    trial_ends_at: str | None = None
+    referral_code: str | None = None
+    referral_count: int = 0
 
 
 class ProfileResponse(BaseModel):
@@ -58,6 +62,10 @@ class ProfileResponse(BaseModel):
     email: str
     is_premium: bool = False
     free_scans_left: int = 0
+    credits: int = 0
+    trial_ends_at: str | None = None
+    referral_code: str | None = None
+    referral_count: int = 0
     season: str | None = None
     palette: list | None = None
     stripe_subscription_id: str | None = None

@@ -16,6 +16,7 @@ from pydantic import BaseModel
 
 from app.core.dependencies import get_current_user
 from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
+from app.services.affiliate import affiliatize_url
 
 logger = logging.getLogger("lumiqe.api.shopping_agent")
 router = APIRouter(prefix="/api/shopping-agent", tags=["Shopping Agent"])
@@ -112,6 +113,12 @@ async def generate_outfit(
                     "code": 500,
                 },
             )
+
+        # Affiliatize product URLs in each outfit slot
+        for slot_key in ("upper", "layering", "lower", "shoes", "watch", "bag", "eyewear", "jewelry"):
+            slot = result.get(slot_key)
+            if isinstance(slot, dict) and slot.get("product_url"):
+                slot["product_url"] = affiliatize_url(slot["product_url"])
 
         return CuratedOutfitResponse(**result)
 

@@ -6,6 +6,7 @@ All settings in one Pydantic BaseSettings class, loaded from .env.
 
 from pathlib import Path
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings
 
 # ─── Paths ────────────────────────────────────────────────────
@@ -52,11 +53,17 @@ class Settings(BaseSettings):
     # Model files — auto-downloaded on startup if missing (see download_models.py)
     BISENET_WEIGHTS_URL: str | None = None
 
-    # JWT Authentication
-    JWT_SECRET_KEY: str = ""
+    # JWT Authentication (no default — app refuses to start without it)
+    JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+
+    @model_validator(mode="after")
+    def _validate_jwt_secret(self) -> "Settings":
+        if len(self.JWT_SECRET_KEY) < 32:
+            raise ValueError("JWT_SECRET_KEY must be at least 32 characters long")
+        return self
 
     # Redis (Rate Limiting)
     REDIS_URL: str | None = None
@@ -64,8 +71,22 @@ class Settings(BaseSettings):
     # Stripe
     STRIPE_SECRET_KEY: str = ""
     STRIPE_PUBLISHABLE_KEY: str = ""
-    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_WEBHOOK_SECRET: str | None = None
+    STRIPE_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_ANNUAL_PRICE_ID: str | None = None
     FRONTEND_URL: str = "http://localhost:3000"
+
+    # Affiliate Links
+    AFFILIATE_AMAZON_TAG: str | None = None
+    AFFILIATE_CUELINKS_PID: str | None = None
+    AFFILIATE_ADMITAD_UID: str | None = None
+
+    # Email (Resend)
+    RESEND_API_KEY: str | None = None
+    EMAIL_FROM: str = "Lumiqe <hello@lumiqe.in>"
+
+    # Observability
+    SENTRY_DSN: str | None = None
 
     # Debug
     DEBUG: bool = False

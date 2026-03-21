@@ -71,21 +71,26 @@ export default function AnalyzePage() {
 
             const data = await res.json();
 
-            const params = new URLSearchParams();
-            params.set('season', data.season);
-            params.set('description', data.description || '');
-            params.set('hexColor', data.hex_color || '');
-            params.set('undertone', data.undertone || '');
-            params.set('confidence', data.confidence?.toString() || '0');
-            if (data.palette) params.set('palette', data.palette.join(','));
-            if (data.avoid_colors) params.set('avoidColors', data.avoid_colors.join(','));
-            if (data.metal) params.set('metal', data.metal);
-            if (data.celebrities) params.set('celebrities', encodeURIComponent(JSON.stringify(data.celebrities)));
-            if (data.makeup) params.set('makeup', encodeURIComponent(JSON.stringify(data.makeup)));
-            if (data.tips) params.set('tips', data.tips);
-            if (data.contrast_level) params.set('contrastLevel', data.contrast_level);
-
-            router.push(`/results?${params.toString()}`);
+            // Redirect to persisted result page if we got an analysis_id (logged-in user)
+            if (data.analysis_id) {
+                router.push(`/results/${data.analysis_id}`);
+            } else {
+                // Fallback for anonymous users: pass data via URL params
+                const params = new URLSearchParams();
+                params.set('season', data.season);
+                params.set('description', data.description || '');
+                params.set('hexColor', data.hex_color || '');
+                params.set('undertone', data.undertone || '');
+                params.set('confidence', data.confidence?.toString() || '0');
+                if (data.palette) params.set('palette', data.palette.join(','));
+                if (data.avoid_colors) params.set('avoidColors', data.avoid_colors.join(','));
+                if (data.metal) params.set('metal', data.metal);
+                if (data.celebrities) params.set('celebrities', encodeURIComponent(JSON.stringify(data.celebrities)));
+                if (data.makeup) params.set('makeup', encodeURIComponent(JSON.stringify(data.makeup)));
+                if (data.tips) params.set('tips', data.tips);
+                if (data.contrast_level) params.set('contrastLevel', data.contrast_level);
+                router.push(`/results?${params.toString()}`);
+            }
         } catch (err: any) {
             setError(err.message || 'Something went wrong. Please try again.');
             setIsAnalyzing(false);

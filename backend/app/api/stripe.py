@@ -1,5 +1,6 @@
 """API — Stripe payment endpoints for subscription management."""
 
+import asyncio
 import logging
 
 import stripe
@@ -10,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.dependencies import get_db, get_current_user
 from app.repositories import user_repo
+from app.services.email import send_subscription_confirmed_email
 
 logger = logging.getLogger("lumiqe.api.stripe")
 router = APIRouter(prefix="/api/stripe", tags=["Stripe"])
@@ -19,9 +21,16 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # ─── Price Map (INR paise) ────────────────────────────────────
 # Stripe uses smallest currency unit → 1 INR = 100 paise
+# When STRIPE_*_PRICE_ID env vars are set, we use pre-created Prices (recommended).
+# Otherwise falls back to inline price_data.
 PRICE_MAP = {
     "monthly": {"amount": 14900, "interval": "month", "interval_count": 1, "label": "Lumiqe Premium — Monthly"},
     "annual":  {"amount": 49900, "interval": "year",  "interval_count": 1, "label": "Lumiqe Premium — Annual"},
+}
+
+PLAN_TO_PRICE_ID = {
+    "monthly": settings.STRIPE_MONTHLY_PRICE_ID,
+    "annual": settings.STRIPE_ANNUAL_PRICE_ID,
 }
 
 
@@ -29,8 +38,18 @@ class CheckoutRequest(BaseModel):
     plan: str  # "monthly" or "annual"
 
 
+class CreditPurchaseRequest(BaseModel):
+    pack: str = "single"  # "single" = 1 credit for ₹49
+
+
 class PortalRequest(BaseModel):
     pass  # No body needed, user is identified via JWT
+
+
+# ─── Credit Pack Prices (one-time payments) ──────────────────
+CREDIT_PACKS = {
+    "single": {"amount": 4900, "credits": 1, "label": "Single Analysis — 1 credit"},
+}
 
 
 # ─── Create Checkout Session ──────────────────────────────────
@@ -43,17 +62,18 @@ async def create_checkout_session(
 ):
     """Create a Stripe Checkout Session and return the URL."""
     if current_user.get("is_premium"):
-        raise HTTPException(status_code=400, detail="You are already a premium member!")
+        raise HTTPException(status_code=400, detail={"error": "ALREADY_PREMIUM", "detail": "You are already a premium member", "code": 400})
 
     price_config = PRICE_MAP.get(body.plan)
     if not price_config:
-        raise HTTPException(status_code=400, detail="Invalid plan. Use 'monthly' or 'annual'.")
+        raise HTTPException(status_code=400, detail={"error": "INVALID_PLAN", "detail": "Invalid plan. Use 'monthly' or 'annual'.", "code": 400})
 
     try:
         # Get or create Stripe customer
         stripe_customer_id = current_user.get("stripe_customer_id")
         if not stripe_customer_id:
-            customer = stripe.Customer.create(
+            customer = await asyncio.to_thread(
+                stripe.Customer.create,
                 email=current_user["email"],
                 name=current_user.get("name", ""),
                 metadata={"lumiqe_user_id": str(current_user["id"])},
@@ -61,13 +81,12 @@ async def create_checkout_session(
             stripe_customer_id = customer.id
             await user_repo.set_stripe_customer_id(session, current_user["id"], stripe_customer_id)
 
-        # Create the Stripe Price on-the-fly (or use pre-created ones)
-        checkout_session = stripe.checkout.Session.create(
-            customer=stripe_customer_id,
-            mode="subscription",
-            currency="inr",
-            payment_method_types=["card"],
-            line_items=[{
+        # Prefer pre-created Stripe Price IDs; fall back to inline price_data
+        price_id = PLAN_TO_PRICE_ID.get(body.plan)
+        if price_id:
+            line_items = [{"price": price_id, "quantity": 1}]
+        else:
+            line_items = [{
                 "price_data": {
                     "currency": "inr",
                     "product_data": {
@@ -81,7 +100,15 @@ async def create_checkout_session(
                     },
                 },
                 "quantity": 1,
-            }],
+            }]
+
+        checkout_session = await asyncio.to_thread(
+            stripe.checkout.Session.create,
+            customer=stripe_customer_id,
+            mode="subscription",
+            currency="inr",
+            payment_method_types=["card"],
+            line_items=line_items,
             success_url=f"{settings.FRONTEND_URL}/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=f"{settings.FRONTEND_URL}/pricing",
             metadata={"lumiqe_user_id": str(current_user["id"])},
@@ -91,7 +118,62 @@ async def create_checkout_session(
 
     except stripe.StripeError as e:
         logger.error(f"Stripe checkout error: {e}")
-        raise HTTPException(status_code=500, detail="Payment service unavailable. Please try again.")
+        raise HTTPException(status_code=500, detail={"error": "PAYMENT_SERVICE_ERROR", "detail": "Payment service unavailable. Please try again.", "code": 500})
+
+
+# ─── Buy Credits (One-Time Payment) ──────────────────────────
+
+@router.post("/buy-credits")
+async def buy_credits(
+    body: CreditPurchaseRequest,
+    current_user: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db),
+):
+    """Create a one-time Stripe Checkout Session for credit purchase."""
+    pack = CREDIT_PACKS.get(body.pack)
+    if not pack:
+        raise HTTPException(status_code=400, detail={"error": "INVALID_PACK", "detail": "Invalid credit pack.", "code": 400})
+
+    try:
+        stripe_customer_id = current_user.get("stripe_customer_id")
+        if not stripe_customer_id:
+            customer = await asyncio.to_thread(
+                stripe.Customer.create,
+                email=current_user["email"],
+                name=current_user.get("name", ""),
+                metadata={"lumiqe_user_id": str(current_user["id"])},
+            )
+            stripe_customer_id = customer.id
+            await user_repo.set_stripe_customer_id(session, current_user["id"], stripe_customer_id)
+
+        checkout_session = await asyncio.to_thread(
+            stripe.checkout.Session.create,
+            customer=stripe_customer_id,
+            mode="payment",
+            currency="inr",
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": "inr",
+                    "product_data": {"name": pack["label"]},
+                    "unit_amount": pack["amount"],
+                },
+                "quantity": 1,
+            }],
+            success_url=f"{settings.FRONTEND_URL}/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{settings.FRONTEND_URL}/pricing",
+            metadata={
+                "lumiqe_user_id": str(current_user["id"]),
+                "type": "credit_purchase",
+                "credits": str(pack["credits"]),
+            },
+        )
+
+        return {"checkout_url": checkout_session.url}
+
+    except stripe.StripeError as e:
+        logger.error(f"Stripe credit purchase error: {e}")
+        raise HTTPException(status_code=500, detail={"error": "PAYMENT_SERVICE_ERROR", "detail": "Payment service unavailable.", "code": 500})
 
 
 # ─── Stripe Webhook ───────────────────────────────────────────
@@ -105,37 +187,48 @@ async def stripe_webhook(
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature", "")
 
+    if settings.STRIPE_WEBHOOK_SECRET is None:
+        raise HTTPException(
+            status_code=500,
+            detail={"error": "WEBHOOK_NOT_CONFIGURED", "detail": "Webhook secret not configured", "code": 500},
+        )
+
     try:
-        if settings.STRIPE_WEBHOOK_SECRET:
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-            )
-        else:
-            # Dev mode: parse without signature verification
-            import json
-            event = stripe.Event.construct_from(
-                json.loads(payload), stripe.api_key
-            )
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
     except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid payload")
+        raise HTTPException(status_code=400, detail={"error": "INVALID_PAYLOAD", "detail": "Invalid webhook payload", "code": 400})
     except stripe.SignatureVerificationError:
-        raise HTTPException(status_code=400, detail="Invalid signature")
+        raise HTTPException(status_code=400, detail={"error": "INVALID_SIGNATURE", "detail": "Invalid webhook signature", "code": 400})
 
     event_type = event["type"]
     data = event["data"]["object"]
     logger.info(f"Stripe webhook received: {event_type}")
 
     if event_type == "checkout.session.completed":
-        # Payment successful — activate premium
-        customer_id = data.get("customer")
-        subscription_id = data.get("subscription")
-        lumiqe_user_id = data.get("metadata", {}).get("lumiqe_user_id")
+        metadata = data.get("metadata", {})
+        lumiqe_user_id = metadata.get("lumiqe_user_id")
+        checkout_type = metadata.get("type", "subscription")
 
-        if lumiqe_user_id and customer_id and subscription_id:
-            await user_repo.upgrade_to_premium(
-                session, int(lumiqe_user_id), customer_id, subscription_id
-            )
-            logger.info(f"User {lumiqe_user_id} activated premium via checkout")
+        if checkout_type == "credit_purchase" and lumiqe_user_id:
+            # One-time credit purchase
+            credits_to_add = int(metadata.get("credits", "1"))
+            await user_repo.add_credits(session, int(lumiqe_user_id), credits_to_add)
+            logger.info(f"User {lumiqe_user_id} purchased {credits_to_add} credits")
+        elif lumiqe_user_id:
+            # Subscription purchase — activate premium
+            customer_id = data.get("customer")
+            subscription_id = data.get("subscription")
+            if customer_id and subscription_id:
+                await user_repo.upgrade_to_premium(
+                    session, int(lumiqe_user_id), customer_id, subscription_id
+                )
+                logger.info(f"User {lumiqe_user_id} activated premium via checkout")
+                user = await user_repo.get_by_id(session, int(lumiqe_user_id))
+                if user:
+                    plan_name = metadata.get("plan", "Premium")
+                    send_subscription_confirmed_email(user["email"], user["name"], plan_name)
 
     elif event_type in (
         "customer.subscription.deleted",
@@ -173,14 +266,15 @@ async def create_portal_session(
     """Create a Stripe Customer Portal session for subscription management."""
     stripe_customer_id = current_user.get("stripe_customer_id")
     if not stripe_customer_id:
-        raise HTTPException(status_code=400, detail="No active subscription found.")
+        raise HTTPException(status_code=400, detail={"error": "NO_SUBSCRIPTION", "detail": "No active subscription found.", "code": 400})
 
     try:
-        portal_session = stripe.billing_portal.Session.create(
+        portal_session = await asyncio.to_thread(
+            stripe.billing_portal.Session.create,
             customer=stripe_customer_id,
             return_url=f"{settings.FRONTEND_URL}/analyze",
         )
         return {"portal_url": portal_session.url}
     except stripe.StripeError as e:
         logger.error(f"Stripe portal error: {e}")
-        raise HTTPException(status_code=500, detail="Unable to open subscription portal.")
+        raise HTTPException(status_code=500, detail={"error": "PORTAL_ERROR", "detail": "Unable to open subscription portal.", "code": 500})

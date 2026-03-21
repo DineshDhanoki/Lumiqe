@@ -15,6 +15,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
+
+# ─── Sentry (error tracking) ─────────────────────────────────
+if settings.SENTRY_DSN:
+    try:
+        import sentry_sdk
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            traces_sample_rate=0.1,
+            profiles_sample_rate=0.1,
+            environment="production" if not settings.DEBUG else "development",
+        )
+    except ImportError:
+        pass  # sentry-sdk not installed — skip silently
 from app.core.dependencies import init_db, close_db
 from app.core.rate_limiter import init_redis, close_redis
 from app.middleware.security import SecurityHeadersMiddleware
@@ -24,6 +37,7 @@ from download_models import ensure_models
 from app.api.health import router as health_router
 from app.api.auth import router as auth_router
 from app.api.analyze import router as analyze_router
+from app.api.analysis import router as analysis_router
 from app.api.products import router as products_router
 from app.api.scan import router as scan_router
 from app.api.palette_card import router as palette_card_router
@@ -31,8 +45,13 @@ from app.api.admin import router as admin_router
 from app.api.shopping_agent import router as shopping_agent_router
 from app.api.styling_tips import router as styling_tips_router
 from app.api.stripe import router as stripe_router
+from app.api.share import router as share_router
+from app.api.profile import router as profile_router
 from app.api.complete_profile import router as complete_profile_router
+from app.api.events import router as events_router
 from app.api.color_chat import router as color_chat_router
+from app.api.referral import router as referral_router
+from app.api.outfit import router as outfit_router
 
 logger = logging.getLogger("lumiqe.main")
 
@@ -53,8 +72,7 @@ async def lifespan(app: FastAPI):
 
     # Download ML model files if missing (needed on Render where *.pth is gitignored)
     import asyncio
-    loop = asyncio.get_event_loop()
-    await loop.run_in_executor(None, ensure_models)
+    await asyncio.to_thread(ensure_models)
 
     await init_db()
     await init_redis()
@@ -108,6 +126,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(health_router)
 app.include_router(auth_router)
 app.include_router(analyze_router)
+app.include_router(analysis_router)
 app.include_router(products_router)
 app.include_router(scan_router)
 app.include_router(palette_card_router)
@@ -115,8 +134,13 @@ app.include_router(admin_router)
 app.include_router(shopping_agent_router)
 app.include_router(styling_tips_router)
 app.include_router(stripe_router)
+app.include_router(share_router)
+app.include_router(profile_router)
 app.include_router(complete_profile_router)
+app.include_router(events_router)
 app.include_router(color_chat_router)
+app.include_router(referral_router)
+app.include_router(outfit_router)
 
 
 # ─── CLI Entry Point ─────────────────────────────────────────

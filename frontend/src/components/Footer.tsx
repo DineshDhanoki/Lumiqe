@@ -35,13 +35,13 @@ export default function Footer() {
                             The world's most precise AI skin tone analysis engine, running directly on your device. Privacy guaranteed.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+                            <a href="#" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
                                 <Twitter className="w-5 h-5" />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+                            <a href="#" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
                                 <Instagram className="w-5 h-5" />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+                            <a href="#" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
                                 <Github className="w-5 h-5" />
                             </a>
                         </div>
@@ -49,11 +49,11 @@ export default function Footer() {
 
                     <div>
                         <h4 className="text-white font-bold mb-6 tracking-wide">Product</h4>
-                        <ul className="space-y-4">
-                            <li><Link href="#how-it-works" className="text-white/50 hover:text-white transition-colors">How It Works</Link></li>
-                            <li><Link href="#features" className="text-white/50 hover:text-white transition-colors">Features</Link></li>
-                            <li><Link href="#demo" className="text-white/50 hover:text-white transition-colors">Live Demo</Link></li>
-                            <li><Link href="/pricing" className="text-white/50 hover:text-white transition-colors">Pricing</Link></li>
+                        <ul className="space-y-1">
+                            <li><Link href="#how-it-works" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">How It Works</Link></li>
+                            <li><Link href="#features" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Features</Link></li>
+                            <li><Link href="#demo" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Live Demo</Link></li>
+                            <li><Link href="/pricing" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Pricing</Link></li>
                         </ul>
                     </div>
 

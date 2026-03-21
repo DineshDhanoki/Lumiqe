@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repositories import product_repo
 from app.core.dependencies import get_db
+from app.services.affiliate import affiliatize_products
 
 logger = logging.getLogger("lumiqe.api.products")
 router = APIRouter(prefix="/api/products", tags=["Products"])
@@ -192,7 +193,7 @@ async def get_products_filtered(
         # DB has items — use smart fetch (Delta-E if palette available)
         products = await _smart_fetch(effective_vibe)
         gated = _apply_gatekeeper(products, effective_vibe, is_teaser_request, "free")
-        return {"products": gated, "total": len(gated)}
+        return {"products": affiliatize_products(gated), "total": len(gated)}
 
     # ── CASE 2: Casual vibe (free or premium user) ───────────
     if not is_premium_vibe:
@@ -216,7 +217,7 @@ async def get_products_filtered(
             background_tasks.add_task(_trigger_casual_scrape, season, gender)
 
         gated = _apply_gatekeeper(products, "Casual", is_teaser_request, user_tier)
-        return {"products": gated, "total": len(gated)}
+        return {"products": affiliatize_products(gated), "total": len(gated)}
 
     # ── CASE 3: Premium user requesting a premium vibe ───────
     products = await _smart_fetch(effective_vibe)
@@ -227,7 +228,7 @@ async def get_products_filtered(
 
     gated = _apply_gatekeeper(products, effective_vibe, is_teaser_request, "premium")
     return {
-        "products": gated,
+        "products": affiliatize_products(gated),
         "total": len(gated),
         "scraping_in_progress": len(products) < product_repo.MIN_PRODUCTS,
     }
@@ -250,7 +251,7 @@ async def match_products_by_color(
         )
 
     products = await product_repo.search_by_color(session, hex, limit, gender, vibe)
-    return {"products": products, "total": len(products)}
+    return {"products": affiliatize_products(products), "total": len(products)}
 
 
 @router.get("/{season}")

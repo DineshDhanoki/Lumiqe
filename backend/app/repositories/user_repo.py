@@ -5,6 +5,8 @@ Pure database queries for user operations. No business logic, no password hashin
 """
 
 import logging
+import secrets
+import string
 from typing import Optional
 
 from sqlalchemy import select, update, delete
@@ -16,12 +18,21 @@ logger = logging.getLogger("lumiqe.repo.user")
 
 
 async def get_by_email(session: AsyncSession, email: str) -> Optional[dict]:
-    """Retrieve a user by their email address."""
+    """Retrieve a user by their email address (safe — no password_hash)."""
     result = await session.execute(
         select(User).where(User.email == email.lower())
     )
     user = result.scalar_one_or_none()
     return user.to_dict() if user else None
+
+
+async def get_by_email_for_auth(session: AsyncSession, email: str) -> Optional[dict]:
+    """Retrieve a user including password_hash — only for the login flow."""
+    result = await session.execute(
+        select(User).where(User.email == email.lower())
+    )
+    user = result.scalar_one_or_none()
+    return user.to_auth_dict() if user else None
 
 
 async def get_by_id(session: AsyncSession, user_id: int) -> Optional[dict]:
@@ -39,15 +50,17 @@ async def create(
     email: str,
     password_hash: str | None = None,
 ) -> dict:
-    """Insert a new user. Password must already be hashed."""
+    """Insert a new user with a 3-day premium trial. Password must already be hashed."""
+    from datetime import datetime, timezone, timedelta
     user = User(
         name=name,
         email=email.lower(),
         password_hash=password_hash,
+        trial_ends_at=datetime.now(timezone.utc) + timedelta(days=3),
     )
     session.add(user)
     await session.flush()
-    logger.info(f"Created user: {email} (id={user.id})")
+    logger.info(f"Created user: {email} (id={user.id}) trial_ends_at={user.trial_ends_at}")
     return user.to_dict()
 
 
@@ -151,4 +164,105 @@ async def set_stripe_customer_id(session: AsyncSession, user_id: int, stripe_cus
         .where(User.id == user_id)
         .values(stripe_customer_id=stripe_customer_id)
     )
+
+
+async def add_credits(session: AsyncSession, user_id: int, amount: int) -> bool:
+    """Add credits to a user's balance."""
+    result = await session.execute(
+        update(User)
+        .where(User.id == user_id)
+        .values(credits=User.credits + amount)
+    )
+    if result.rowcount > 0:
+        logger.info(f"Added {amount} credits to user {user_id}")
+    return result.rowcount > 0
+
+
+async def deduct_credit(session: AsyncSession, user_id: int) -> bool:
+    """Deduct 1 credit from a user. Returns False if no credits available."""
+    result = await session.execute(
+        select(User.credits).where(User.id == user_id)
+    )
+    credits = result.scalar_one_or_none()
+    if credits is None or credits <= 0:
+        return False
+    await session.execute(
+        update(User)
+        .where(User.id == user_id)
+        .values(credits=User.credits - 1)
+    )
+    logger.info(f"Deducted 1 credit from user {user_id} (remaining: {credits - 1})")
+    return True
+
+
+async def update_quiz(
+    session: AsyncSession,
+    user_id: int,
+    body_shape: str | None = None,
+    style_personality: str | None = None,
+) -> bool:
+    """Update the user's quiz results."""
+    from datetime import datetime, timezone
+    values: dict = {"quiz_completed_at": datetime.now(timezone.utc)}
+    if body_shape is not None:
+        values["body_shape"] = body_shape
+    if style_personality is not None:
+        values["style_personality"] = style_personality
+    result = await session.execute(
+        update(User).where(User.id == user_id).values(**values)
+    )
+    return result.rowcount > 0
+
+
+async def get_quiz(session: AsyncSession, user_id: int) -> Optional[dict]:
+    """Retrieve the user's quiz data."""
+    result = await session.execute(
+        select(User.body_shape, User.style_personality, User.quiz_completed_at)
+        .where(User.id == user_id)
+    )
+    row = result.one_or_none()
+    if not row:
+        return None
+    return {
+        "body_shape": row.body_shape,
+        "style_personality": row.style_personality,
+        "quiz_completed_at": row.quiz_completed_at.isoformat() if row.quiz_completed_at else None,
+    }
+
+
+async def generate_referral_code(session: AsyncSession, user_id: int) -> str:
+    """Generate and assign a unique 8-char referral code."""
+    for _ in range(10):
+        code = "".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        existing = await session.execute(select(User).where(User.referral_code == code))
+        if not existing.scalar_one_or_none():
+            await session.execute(
+                update(User).where(User.id == user_id).values(referral_code=code)
+            )
+            return code
+    raise ValueError("Failed to generate unique referral code")
+
+
+async def get_by_referral_code(session: AsyncSession, code: str) -> Optional[dict]:
+    """Look up user by referral code."""
+    result = await session.execute(select(User).where(User.referral_code == code))
+    user = result.scalar_one_or_none()
+    return user.to_dict() if user else None
+
+
+async def apply_referral(session: AsyncSession, new_user_id: int, referrer_id: int) -> bool:
+    """Award both users +1 free scan. Set referred_by on new user."""
+    await session.execute(
+        update(User).where(User.id == new_user_id).values(
+            referred_by=referrer_id,
+            free_scans_left=User.free_scans_left + 1,
+        )
+    )
+    await session.execute(
+        update(User).where(User.id == referrer_id).values(
+            free_scans_left=User.free_scans_left + 1,
+            referral_count=User.referral_count + 1,
+        )
+    )
+    return True
 

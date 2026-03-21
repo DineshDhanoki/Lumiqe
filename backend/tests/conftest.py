@@ -10,7 +10,7 @@ import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 
 # Set JWT_SECRET_KEY before importing the app
-os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-testing-only"
+os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-testing-only-must-be-32-chars-minimum"
 os.environ["DEBUG"] = "false"
 
 from app.main import app

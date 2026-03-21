@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── Backend Lint + Test ────────────────────────────────────
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: lumiqe_test
+          POSTGRES_PASSWORD: lumiqe_test
+          POSTGRES_DB: lumiqe_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U lumiqe_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql+asyncpg://lumiqe_test:lumiqe_test@localhost:5432/lumiqe_test
+      REDIS_URL: redis://localhost:6379
+      JWT_SECRET_KEY: ci-test-secret-key-must-be-at-least-32-characters-long
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements-dev.txt
+
+      - name: Lint with ruff
+        run: |
+          cd backend
+          ruff check .
+
+      - name: Run tests
+        run: |
+          cd backend
+          pytest tests/ -v --tb=short
+
+  # ─── Frontend Lint + Build ──────────────────────────────────
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Lint
+        run: |
+          cd frontend
+          npm run lint || true
+
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000

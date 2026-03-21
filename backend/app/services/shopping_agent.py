@@ -389,17 +389,52 @@ DB_CATEGORY_TO_SLOT: dict[str, dict[str, list[str]]] = {
 }
 
 
+async def _query_slot_products(
+    session,
+    slot: str,
+    gender_key: str,
+    db_categories: list[str],
+    exclude_ids: set[str],
+) -> list[dict]:
+    """Query DB for products matching a single outfit slot."""
+    from sqlalchemy import select
+    from app.models import Product
+
+    stmt = (
+        select(Product)
+        .where(
+            Product.gender == gender_key,
+            Product.category.in_(db_categories),
+            Product.is_active == True,
+        )
+        .limit(10)
+    )
+    result = await session.execute(stmt)
+    rows = result.scalars().all()
+
+    return [
+        {
+            "name": row.name,
+            "price": row.price,
+            "image_url": row.image,
+            "product_url": row.url,
+            "dominant_color": row.color_hex or "",
+            "category": slot,
+            "brand": row.brand,
+        }
+        for row in rows
+        if row.url not in exclude_ids
+    ]
+
+
 async def _fill_from_db(
     gender: str,
     empty_slots: list[str],
     palette_hexes: list[str],
     exclude_ids: set[str] | None = None,
 ) -> list[dict]:
-    """Query PostgreSQL for products to fill empty outfit slots.
-    Searches both gender-specific and unisex products."""
-    from sqlalchemy import select
+    """Query PostgreSQL for products to fill empty outfit slots."""
     from app.core.dependencies import async_session_factory, db_available
-    from app.models import Product
 
     if not db_available:
         logger.warning("DB not available for fallback")
@@ -416,38 +451,12 @@ async def _fill_from_db(
                 db_categories = slot_map.get(slot, [])
                 if not db_categories:
                     continue
-
-                # Strictly gender-specific — no unisex fallback
-                # to avoid feminine items (clutches, bangles) for men
-                stmt = (
-                    select(Product)
-                    .where(
-                        Product.gender == gender_key,
-                        Product.category.in_(db_categories),
-                        Product.is_active == True,
-                    )
-                    .limit(10)
+                products = await _query_slot_products(
+                    session, slot, gender_key, db_categories, exclude_ids,
                 )
-                result = await session.execute(stmt)
-                rows = result.scalars().all()
+                db_products.extend(products)
 
-                for row in rows:
-                    if row.url in exclude_ids:
-                        continue
-                    db_products.append({
-                        "name": row.name,
-                        "price": row.price,
-                        "image_url": row.image,
-                        "product_url": row.url,
-                        "dominant_color": row.color_hex or "",
-                        "category": slot,
-                        "brand": row.brand,
-                    })
-
-        logger.info(
-            f"DB fallback: fetched {len(db_products)} products "
-            f"for {len(empty_slots)} empty slots"
-        )
+        logger.info(f"DB fallback: fetched {len(db_products)} products for {len(empty_slots)} empty slots")
     except Exception as exc:
         logger.error(f"DB fallback failed: {exc}")
 
@@ -456,6 +465,31 @@ async def _fill_from_db(
 
 # ─── Orchestrator ─────────────────────────────────────────────
 
+def _check_empty_slots(outfit: dict) -> list[str]:
+    """Return outfit slot keys that have no product assigned."""
+    return [
+        slot for slot in OUTFIT_SLOTS
+        if outfit.get(slot, {}).get("name", "").startswith("No ")
+    ]
+
+
+def _merge_db_products(
+    outfit: dict,
+    empty_slots: list[str],
+    inventory: list[dict],
+    db_products: list[dict],
+    palette_hexes: list[str],
+    exclude_ids: set[str] | None,
+) -> None:
+    """Re-assemble empty slots using combined inventory + DB products."""
+    combined = inventory + db_products
+    full_outfit = assemble_outfit(combined, palette_hexes, exclude_ids)
+    for slot in empty_slots:
+        filled = full_outfit.get(slot, {})
+        if not filled.get("name", "").startswith("No "):
+            outfit[slot] = filled
+
+
 async def get_curated_outfit(
     gender: str,
     palette_hexes: list[str],
@@ -463,54 +497,22 @@ async def get_curated_outfit(
 ) -> dict:
     """
     Hybrid shopping agent:
-    1. Concurrently scrape 8 categories from targeted brand URLs
-    2. Use Delta-E to pick the best color-matching item per category
-    3. For any empty slots, fall back to DB products
-    4. Exclude previously used product URLs for non-repeating outfits
+    1. Scrape 8 categories concurrently
+    2. Delta-E match best item per category
+    3. Fill empty slots from DB
     """
-    logger.info(
-        f"Shopping agent started: gender={gender}, "
-        f"palette={palette_hexes}, excludes={len(exclude_ids or set())}"
-    )
+    logger.info(f"Shopping agent started: gender={gender}, palette={palette_hexes}, excludes={len(exclude_ids or set())}")
 
     inventory = await gather_inventory(gender)
-    logger.info(f"Scraped {len(inventory)} items from Firecrawl")
-
-    # First pass: assemble outfit from scraped data
     outfit = assemble_outfit(inventory, palette_hexes, exclude_ids)
-
-    # Check for empty slots (name starts with "No ")
-    empty_slots = [
-        slot for slot in OUTFIT_SLOTS
-        if outfit.get(slot, {}).get("name", "").startswith("No ")
-    ]
+    empty_slots = _check_empty_slots(outfit)
 
     if empty_slots:
-        logger.info(
-            f"Empty slots after scrape: {empty_slots} — "
-            f"falling back to DB…"
-        )
-        db_products = await _fill_from_db(
-            gender, empty_slots, palette_hexes, exclude_ids,
-        )
-
+        logger.info(f"Empty slots after scrape: {empty_slots} — falling back to DB…")
+        db_products = await _fill_from_db(gender, empty_slots, palette_hexes, exclude_ids)
         if db_products:
-            # Merge DB products into inventory and re-assemble
-            # only for the empty slots
-            combined = inventory + db_products
-            full_outfit = assemble_outfit(
-                combined, palette_hexes, exclude_ids,
-            )
-            # Overwrite only the previously-empty slots
-            for slot in empty_slots:
-                filled = full_outfit.get(slot, {})
-                if not filled.get("name", "").startswith("No "):
-                    outfit[slot] = filled
+            _merge_db_products(outfit, empty_slots, inventory, db_products, palette_hexes, exclude_ids)
 
-    filled_count = sum(
-        1 for s in OUTFIT_SLOTS
-        if not outfit.get(s, {}).get("name", "").startswith("No ")
-    )
+    filled_count = len(OUTFIT_SLOTS) - len(_check_empty_slots(outfit))
     logger.info(f"Final outfit: {filled_count}/8 slots filled")
-
     return outfit

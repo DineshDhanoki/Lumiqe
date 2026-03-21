@@ -25,6 +25,7 @@ from app.core.security import (
     decode_token,
 )
 from app.core.rate_limiter import check_rate_limit
+from app.services.email import send_welcome_email
 
 logger = logging.getLogger("lumiqe.api.auth")
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
@@ -57,6 +58,10 @@ async def register(user: UserCreate, request: Request, session: AsyncSession = D
     tokens = _build_tokens(new_user)
     logger.info(f"[SECURITY] User registered: {user.email} ip={client_ip} req={request_id}")
 
+    # Fire-and-forget welcome email
+    import asyncio
+    asyncio.get_running_loop().call_soon(send_welcome_email, user.email, user.name)
+
     return AuthResponse(
         user=UserResponse(**new_user),
         **tokens,
@@ -75,7 +80,7 @@ async def login(credentials: UserLogin, request: Request, session: AsyncSession 
     await check_rate_limit(brute_force_key, max_requests=5, window_seconds=900)
     # ────────────────────────────────────────────────────────────────────
 
-    user = await user_repo.get_by_email(session, credentials.email)
+    user = await user_repo.get_by_email_for_auth(session, credentials.email)
     if not user:
         logger.warning(f"[SECURITY] Failed login: {credentials.email} ip={client_ip} req={request_id}")
         raise HTTPException(
@@ -117,6 +122,8 @@ async def google_auth(body: GoogleAuthRequest, request: Request, session: AsyncS
         # Auto-register Google user (no password_hash)
         user = await user_repo.create(session, body.name, body.email, password_hash=None)
         logger.info(f"[SECURITY] Google user registered: {body.email} ip={client_ip} req={request_id}")
+        import asyncio
+        asyncio.get_running_loop().call_soon(send_welcome_email, body.email, body.name)
     else:
         logger.info(f"[SECURITY] Google login: {body.email} ip={client_ip} req={request_id}")
 
@@ -164,7 +171,7 @@ async def get_current_user_profile(
     """Get the full profile of the currently authenticated user."""
     user = await user_repo.get_by_email(session, current_user["email"])
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "detail": "User not found", "code": 404})
     return ProfileResponse(**user)
 
 
