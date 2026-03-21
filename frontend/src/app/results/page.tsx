@@ -7,7 +7,8 @@ import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, ArrowRight, ArrowLeft, Layers, LayoutGrid,
-    CalendarDays, ShoppingBag, Scissors, MessageCircle
+    CalendarDays, ShoppingBag, Scissors, MessageCircle,
+    Share2, Copy, Check
 } from 'lucide-react';
 import SkinProfileCard from '../../components/SkinProfileCard';
 import BestAvoidColors from '../../components/BestAvoidColors';
@@ -32,10 +33,17 @@ const TABS = [
 
 function ResultsContent() {
     const searchParams = useSearchParams();
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [activeTab, setActiveTab] = useState('overview');
     const [completeProfile, setCompleteProfile] = useState<any>(null);
     const [profileLoading, setProfileLoading] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    const copyLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     if (!searchParams.has('season')) {
         return (
@@ -224,6 +232,52 @@ function ResultsContent() {
                                 <StylingTips season={season} contrastLevel={contrastLevel} hexCode={hexColor} staticTip={tips} backendToken={session?.backendToken} />
                                 {celebrities.length > 0 && <CelebrityMatch celebrities={celebrities} />}
                                 <PaletteDownload season={season} backendToken={session?.backendToken} />
+
+                                {/* Share your results */}
+                                <div className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <Share2 className="w-5 h-5 text-red-400" />
+                                        <h3 className="text-lg font-bold text-white">Share Your Results</h3>
+                                    </div>
+                                    <div className="flex flex-wrap gap-3">
+                                        <button
+                                            onClick={copyLink}
+                                            className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-sm font-medium text-white transition-all"
+                                        >
+                                            {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                                            {copied ? 'Copied!' : 'Copy Link'}
+                                        </button>
+                                        <button
+                                            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`I'm a ${season}! Check out my color analysis: ${window.location.href}`)}`, '_blank')}
+                                            className="flex items-center gap-2 px-4 py-2.5 bg-green-600/20 hover:bg-green-600/30 border border-green-500/20 rounded-xl text-sm font-medium text-green-300 transition-all"
+                                        >
+                                            <MessageCircle className="w-4 h-4" /> WhatsApp
+                                        </button>
+                                        <button
+                                            onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just discovered I'm a ${season}! Find your colors too:`)}&url=${encodeURIComponent(window.location.href)}`, '_blank')}
+                                            className="flex items-center gap-2 px-4 py-2.5 bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/20 rounded-xl text-sm font-medium text-sky-300 transition-all"
+                                        >
+                                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                            Twitter/X
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Account creation nudge for anonymous users */}
+                                {status === 'unauthenticated' && (
+                                    <div className="bg-gradient-to-r from-red-950/50 to-zinc-900/50 border border-red-500/30 rounded-3xl p-6 flex flex-col sm:flex-row items-center gap-4">
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-bold text-white mb-1">Save your results forever</h3>
+                                            <p className="text-white/60 text-sm">Create a free account to keep your color analysis, track history across devices, and unlock your full style profile.</p>
+                                        </div>
+                                        <Link
+                                            href="/"
+                                            className="shrink-0 px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-full transition-all hover:scale-105 text-sm whitespace-nowrap"
+                                        >
+                                            Create Free Account
+                                        </Link>
+                                    </div>
+                                )}
 
                                 {/* CTA */}
                                 <div className="bg-red-950/30 border border-red-500/30 rounded-3xl p-8 md:p-12 text-center">
