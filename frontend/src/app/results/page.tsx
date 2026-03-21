@@ -45,19 +45,6 @@ function ResultsContent() {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    if (!searchParams.has('season')) {
-        return (
-            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
-                <Sparkles className="w-12 h-12 text-red-500 mb-6" />
-                <h1 className="text-3xl font-bold text-white mb-4">No Analysis Found</h1>
-                <p className="text-white/60 mb-8">Please start from the home page and upload a photo.</p>
-                <Link href="/" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
-                    Go Back Home
-                </Link>
-            </div>
-        );
-    }
-
     const season       = searchParams.get('season')       || 'Unknown Season';
     const description  = searchParams.get('description')  || '';
     const hexColor     = searchParams.get('hexColor')      || '#000000';
@@ -108,6 +95,19 @@ function ResultsContent() {
                 .finally(() => setProfileLoading(false));
         }
     }, [activeTab]);
+
+    if (!searchParams.has('season')) {
+        return (
+            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
+                <Sparkles className="w-12 h-12 text-red-500 mb-6" />
+                <h1 className="text-3xl font-bold text-white mb-4">No Analysis Found</h1>
+                <p className="text-white/60 mb-8">Please start from the home page and upload a photo.</p>
+                <Link href="/" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
+                    Go Back Home
+                </Link>
+            </div>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-transparent text-white font-sans pb-24">

@@ -10,7 +10,7 @@ function toSlug(name: string) {
     return name.toLowerCase().replace(/\s+/g, '-');
 }
 
-function fromSlug(slug: string): string | null {
+function fromSlug(slug: string): keyof typeof seasonsData | null {
     return allSeasons.find(s => toSlug(s) === slug) || null;
 }
 
