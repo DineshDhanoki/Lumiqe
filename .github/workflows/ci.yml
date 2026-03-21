@@ -23,9 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Type check
-        run: ./node_modules/.bin/tsc --noEmit
+        run: npm run typecheck
       - name: Lint
-        run: ./node_modules/.bin/eslint src --ext .ts,.tsx
+        run: npm run lint
 
   backend:
     name: Backend — Lint & Conflict Check
