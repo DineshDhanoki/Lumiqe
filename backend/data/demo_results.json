@@ -1,0 +1,50 @@
+[
+  {
+    "id": "demo-1",
+    "name": "Priya",
+    "thumbnail": "/demo/priya.webp",
+    "season": "Deep Autumn",
+    "undertone": "warm",
+    "hex_color": "#8B5E3C",
+    "confidence": 0.91,
+    "ita_angle": 5.2,
+    "palette": ["#8B5E3C", "#6B3E1C", "#A87848", "#5C2E10", "#7A4E30", "#B88858"],
+    "description": "You have warm, deep coloring. Rich, saturated warm tones like burgundy and forest green shine."
+  },
+  {
+    "id": "demo-2",
+    "name": "Sarah",
+    "thumbnail": "/demo/sarah.webp",
+    "season": "True Summer",
+    "undertone": "cool",
+    "hex_color": "#C9A0A0",
+    "confidence": 0.88,
+    "ita_angle": 47.3,
+    "palette": ["#C9A0A0", "#B07878", "#E8D0D0", "#A08888", "#D0B8B8", "#E0C8C8"],
+    "description": "You have cool, muted coloring. Dusty blues, soft grays, and cool mauves are ideal."
+  },
+  {
+    "id": "demo-3",
+    "name": "Aisha",
+    "thumbnail": "/demo/aisha.webp",
+    "season": "Deep Winter",
+    "undertone": "cool",
+    "hex_color": "#2C1810",
+    "confidence": 0.93,
+    "ita_angle": -15.8,
+    "palette": ["#2C1810", "#4A2820", "#6B3830", "#1A1018", "#3C2028", "#584038"],
+    "description": "You have cool, deep coloring. Dramatic jewel tones — ruby, emerald, sapphire — are perfect."
+  },
+  {
+    "id": "demo-4",
+    "name": "Emily",
+    "thumbnail": "/demo/emily.webp",
+    "season": "Light Spring",
+    "undertone": "warm",
+    "hex_color": "#FDDBB4",
+    "confidence": 0.89,
+    "ita_angle": 62.1,
+    "palette": ["#FDDBB4", "#F9C784", "#FFF0DC", "#FFE8B0", "#F5DCA0", "#FFF5E6"],
+    "description": "You have warm, light coloring. Soft pastels and warm ivories look beautiful on you."
+  }
+]
