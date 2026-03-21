@@ -196,8 +196,9 @@ export default function AnalyzePage() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="grid grid-cols-2 gap-4"
+                                className="space-y-4"
                             >
+                                <div className="grid grid-cols-2 gap-4">
                                 <button
                                     onClick={() => setMode('camera')}
                                     className="flex flex-col items-center gap-4 p-8 rounded-3xl border-2 border-white/20 bg-white/5 hover:bg-white/10 hover:border-red-500/50 transition-all group"
@@ -226,6 +227,18 @@ export default function AnalyzePage() {
                                         <p className="text-white/40 text-xs mt-1">{t(lang, 'fromDevice')}</p>
                                     </div>
                                 </button>
+                                </div>
+
+                                {/* Image quality guidance */}
+                                <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-3">For accurate results</p>
+                                    <ul className="space-y-1.5">
+                                        <li className="text-xs text-white/60 flex items-center gap-2"><span>☀️</span> Natural or bright indoor lighting — no dark rooms</li>
+                                        <li className="text-xs text-white/60 flex items-center gap-2"><span>👤</span> Face clearly visible, centered, no sunglasses</li>
+                                        <li className="text-xs text-white/60 flex items-center gap-2"><span>🚫</span> No heavy filters, edits, or beauty mode</li>
+                                        <li className="text-xs text-white/60 flex items-center gap-2"><span>📷</span> A well-lit selfie or portrait works best</li>
+                                    </ul>
+                                </div>
                             </motion.div>
                         )}
 
