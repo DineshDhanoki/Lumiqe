@@ -9,12 +9,12 @@
 
 <br/>
 
-# AI-Powered Color Analysis Engine
+# ✨ AI-Powered Color Analysis Engine
 
-### Upload a selfie. Get the exact colors that make you look extraordinary.
+### 📸 Upload a selfie. Get the exact colors that make you look extraordinary.
 
-**Professional seasonal color analysis costs $200-$500.**<br/>
-**Lumiqe does it in 3 seconds, powered by computer vision.**
+**💸 Professional seasonal color analysis costs $200-$500.**<br/>
+**⚡ Lumiqe does it in 3 seconds, powered by computer vision.**
 
 <br/>
 
@@ -45,7 +45,7 @@
 
 <br/>
 
-> **If this project is interesting to you, a star would mean the world.** It helps others discover it and keeps development going.
+> ⭐ **If this project is interesting to you, a star would mean the world.** It helps others discover it and keeps development going.
 
 <br/>
 
@@ -53,7 +53,7 @@
 
 <br/>
 
-## The Problem
+## 🎯 The Problem
 
 Most people wear colors that wash them out, age them, or fight their natural complexion. They don't lack style - they lack *data*.
 
@@ -63,13 +63,13 @@ Professional color consultants charge $200-$500 per session to hold fabric swatc
 
 <br/>
 
-## What You Get
+## 🎁 What You Get
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### Core Analysis
+### 🔬 Core Analysis
 - **12-Season Classification** - Not just "warm" or "cool". You get one of 12 precise seasons (Light Spring through Bright Winter)
 - **Your Exact Skin Hex Code** - The dominant color of your skin, extracted from thousands of pixels
 - **Confidence Score** - Know how reliable the result is based on cluster tightness
@@ -79,7 +79,7 @@ Professional color consultants charge $200-$500 per session to hold fabric swatc
 </td>
 <td width="50%" valign="top">
 
-### Your Color System
+### 🎨 Your Color System
 - **6-Color Core Palette** - The exact hex codes that will make your skin glow
 - **Colors to Avoid** - What's actively fighting your complexion
 - **Best Metal** - Gold or silver, based on your undertone science
@@ -91,7 +91,7 @@ Professional color consultants charge $200-$500 per session to hold fabric swatc
 <tr>
 <td valign="top">
 
-### Professional Depth
+### 👔 Professional Depth
 - **Style Archetype** - Your fashion personality mapped to your colors
 - **7-Occasion Guide** - Work, formal, casual, date night, beach, wedding, athletic
 - **10-Piece Capsule Wardrobe** - Complete wardrobe formula with exact colors
@@ -101,7 +101,7 @@ Professional color consultants charge $200-$500 per session to hold fabric swatc
 </td>
 <td valign="top">
 
-### AI-Powered Tools
+### 🤖 AI-Powered Tools
 - **AI Stylist Chat** - Ask anything about your colors, get personalized advice (Llama 3.3 70B)
 - **Buy or Pass Scanner** - Photograph any clothing item in-store, get an instant palette match score using Delta-E CIE2000
 - **Curated Shopping Feed** - Products filtered to your exact palette
@@ -113,7 +113,7 @@ Professional color consultants charge $200-$500 per session to hold fabric swatc
 
 <br/>
 
-## How It Works
+## ⚙️ How It Works
 
 The analysis pipeline runs 9 steps in under 3 seconds:
 
@@ -166,7 +166,7 @@ The analysis pipeline runs 9 steps in under 3 seconds:
 
 <br/>
 
-## Architecture
+## 🏗️ Architecture
 
 ```
 Browser / Mobile
@@ -206,9 +206,9 @@ Browser / Mobile
 
 <br/>
 
-## Quick Start
+## 🚀 Quick Start
 
-### Prerequisites
+### ✅ Prerequisites
 
 | Tool | Version | Why |
 |------|---------|-----|
@@ -216,7 +216,7 @@ Browser / Mobile
 | Node.js | 18+ | Frontend |
 | Docker | Optional | PostgreSQL + Redis (or install locally) |
 
-### 1. Clone and set up infrastructure
+### 1. 🐳 Clone and set up infrastructure
 
 ```bash
 git clone https://github.com/DineshDhanoki/lumiqe.git
@@ -226,7 +226,7 @@ cd lumiqe
 docker compose up -d
 ```
 
-### 2. Backend
+### 2. 🐍 Backend
 
 ```bash
 cd backend
@@ -244,7 +244,7 @@ uvicorn app.main:app --reload --port 8000
 
 The server will auto-download model weights (~100MB) on first startup.
 
-### 3. Frontend
+### 3. ⚛️ Frontend
 
 ```bash
 cd frontend
@@ -259,13 +259,13 @@ cp .env.example .env.local
 npm run dev
 ```
 
-### 4. Open [localhost:3000](http://localhost:3000)
+### 4. 🌐 Open [localhost:3000](http://localhost:3000)
 
 > **No database?** No problem. The app works fully without PostgreSQL — auth endpoints gracefully return 503, while the entire analysis + results experience works perfectly.
 
 <br/>
 
-## API Reference
+## 📡 API Reference
 
 <details open>
 <summary><strong>Core Endpoints</strong></summary>
@@ -339,7 +339,7 @@ npm run dev
 
 <br/>
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
@@ -359,7 +359,7 @@ npm run dev
 
 <br/>
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 lumiqe/
@@ -391,7 +391,7 @@ lumiqe/
 
 <br/>
 
-## The Color Science
+## 🧪 The Color Science
 
 This isn't a color quiz. It's computational colorimetry.
 
@@ -406,7 +406,7 @@ This isn't a color quiz. It's computational colorimetry.
 
 <br/>
 
-## Roadmap
+## 🗺️ Roadmap
 
 - [x] 9-step CV pipeline (face detection &rarr; 12-season classification)
 - [x] Full-stack web app with 6-tab results experience
@@ -425,7 +425,7 @@ This isn't a color quiz. It's computational colorimetry.
 
 <br/>
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome. See [TASKS.md](TASKS.md) for a prioritized list of open tasks with time estimates.
 
@@ -439,7 +439,7 @@ Read [CLAUDE.md](CLAUDE.md) for engineering principles. Use conventional commits
 
 <br/>
 
-## License
+## 📄 License
 
 MIT License. See [LICENSE](LICENSE) for details.
 
@@ -451,9 +451,9 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 <br/>
 
-**Built by [Dinesh Dhanoki](https://github.com/DineshDhanoki)**
+**🛠️ Built by [Dinesh Dhanoki](https://github.com/DineshDhanoki)**
 
-If Lumiqe helped you discover your colors, a star helps others find it too.
+If Lumiqe helped you discover your colors, a ⭐ helps others find it too.
 
 <br/>
 
