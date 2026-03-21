@@ -3,23 +3,15 @@
 import asyncio
 import logging
 import threading
-<<<<<<< HEAD
-=======
 from concurrent.futures import ThreadPoolExecutor
->>>>>>> kanishk/main
 
 from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.analysis import AnalyzeResponse
-<<<<<<< HEAD
-from app.repositories import user_repo
-from app.core.dependencies import get_optional_user
-=======
 from app.repositories import user_repo, analysis_repo
 from app.core.dependencies import get_optional_user
 from app.services.email import send_analysis_complete_email
->>>>>>> kanishk/main
 from app.core.config import settings
 from app.core.security import validate_image_bytes
 from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
@@ -30,12 +22,9 @@ router = APIRouter(prefix="/api", tags=["Analysis"])
 # Minimum confidence for a scan to count against the user's quota
 _MIN_CONFIDENCE_TO_DEDUCT = 0.5
 
-<<<<<<< HEAD
-=======
 # Bounded thread pool for CV pipeline — prevents OOM under load
 _cv_executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix="cv-pipeline")
 
->>>>>>> kanishk/main
 # ─── Lazy-load CV engine (thread-safe) ───────────────────────
 _engine = None
 _engine_lock = threading.Lock()
@@ -72,18 +61,6 @@ async def analyze_image(
     max_requests = 50 if (current_user or {}).get("is_premium") else 5
     await check_rate_limit(rate_key, max_requests)
 
-<<<<<<< HEAD
-    # Enforce free scan quota only for logged-in users
-    if current_user and current_user["free_scans_left"] <= 0 and not current_user.get("is_premium"):
-        raise HTTPException(
-            status_code=403,
-            detail={
-                "error": "TRIAL_EXPIRED",
-                "detail": "No free scans remaining. Please upgrade to continue.",
-                "code": 403,
-            },
-        )
-=======
     # Enforce scan quota for logged-in non-premium users
     if current_user and not current_user.get("is_premium"):
         # Check active trial
@@ -106,7 +83,6 @@ async def analyze_image(
                     "code": 403,
                 },
             )
->>>>>>> kanishk/main
 
     # Read and validate file
     image_bytes = await image.read()
@@ -140,13 +116,8 @@ async def analyze_image(
     # Run the analysis pipeline in a thread pool to avoid blocking the event loop
     try:
         engine = _get_engine()
-<<<<<<< HEAD
-        loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(None, engine.analyze_bytes, image_bytes)
-=======
         loop = asyncio.get_running_loop()
         result = await loop.run_in_executor(_cv_executor, engine.analyze_bytes, image_bytes)
->>>>>>> kanishk/main
 
     except FileNotFoundError as exc:
         raise HTTPException(
@@ -171,34 +142,17 @@ async def analyze_image(
             detail={"error": error_code, "detail": error_msg, "code": 422},
         )
 
-<<<<<<< HEAD
-    # Post-success: only decrement scan quota if logged in and confidence meets threshold
-    confidence = result.get("confidence", 0.0)
-    season_name = result.get("season", "")
-    palette_list = result.get("palette", [])
-=======
     # Post-success: persist result, decrement scan quota, update user palette
     confidence = result.get("confidence", 0.0)
     season_name = result.get("season", "")
     palette_list = result.get("palette", [])
     analysis_id = None
->>>>>>> kanishk/main
 
     if current_user:
         try:
             from app.core.dependencies import async_session_factory
             async with async_session_factory() as session:
                 if confidence >= _MIN_CONFIDENCE_TO_DEDUCT:
-<<<<<<< HEAD
-                    await user_repo.decrement_scan(session, current_user["id"])
-                if season_name and palette_list:
-                    await user_repo.update_palette(session, current_user["email"], season_name, palette_list)
-                    logger.info(f"Saved palette for {current_user['email']}: {season_name}")
-        except Exception as e:
-            logger.warning(f"Could not update user record: {e}")
-
-    return AnalyzeResponse(**result)
-=======
                     # Deduct from free scans first, then credits
                     if current_user["free_scans_left"] > 0:
                         await user_repo.decrement_scan(session, current_user["id"])
@@ -236,4 +190,3 @@ async def analyze_image(
             logger.warning(f"Could not save analysis result: {e}")
 
     return AnalyzeResponse(analysis_id=analysis_id, **result)
->>>>>>> kanishk/main

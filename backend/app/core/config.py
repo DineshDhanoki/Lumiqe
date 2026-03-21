@@ -22,17 +22,11 @@ class Settings(BaseSettings):
 
     # CORS — all frontend origins that are allowed to call this API
     CORS_ORIGINS: list[str] = [
-        # Local development
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        # Custom domain (production)
         "https://lumiqe.in",
         "https://www.lumiqe.in",
-        # Vercel deployments (production + preview)
         "https://lumiqe.vercel.app",
-        "https://lumiqe-mc3e05hs3-kanishk083s-projects.vercel.app",
-        # Catch-all for any *.vercel.app preview deployments
-        "https://lumiqe-kanishk083s-projects.vercel.app",
     ]
 
     # Rate limiting

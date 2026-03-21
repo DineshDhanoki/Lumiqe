@@ -45,13 +45,11 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                    console.error('[AUTH] Missing credentials');
                     return null;
                 }
 
                 try {
                     const loginUrl = `${API_BASE}/api/auth/login`;
-                    console.log('[AUTH] Attempting login to:', loginUrl, 'email:', credentials.email);
 
                     const res = await fetch(loginUrl, {
                         method: 'POST',
@@ -62,16 +60,11 @@ export const authOptions: AuthOptions = {
                         headers: { 'Content-Type': 'application/json' }
                     });
 
-                    console.log('[AUTH] Login response status:', res.status);
-
                     if (!res.ok) {
-                        const errorText = await res.text();
-                        console.error('[AUTH] Login failed:', res.status, errorText);
                         return null;
                     }
 
                     const data = await res.json();
-                    console.log('[AUTH] Login success, user:', data?.user?.email);
 
                     if (data?.user) {
                         return {
@@ -84,8 +77,7 @@ export const authOptions: AuthOptions = {
                         };
                     }
                     return null;
-                } catch (error) {
-                    console.error('[AUTH] Login error:', error);
+                } catch {
                     return null;
                 }
             }
@@ -107,16 +99,13 @@ export const authOptions: AuthOptions = {
 
                     if (res.ok) {
                         const data = await res.json();
-                        // Stash backend tokens on the user object so jwt callback can read them
                         user.backendToken = data.access_token;
                         user.refreshToken = data.refresh_token;
                         user.isPremium = data.user?.is_premium || false;
                     } else {
-                        console.error('Backend Google auth failed:', await res.text());
-                        return false; // Block sign-in if backend rejects
+                        return false;
                     }
-                } catch (err) {
-                    console.error('Backend Google auth error:', err);
+                } catch {
                     return false;
                 }
             }

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { apiFetch } from '@/lib/api';
 
 const QUESTIONS = [
     {
@@ -189,6 +191,7 @@ function calculatePersonality(answers: Record<string, string>): string {
 }
 
 export default function StyleQuiz() {
+    const { data: session } = useSession();
     const [current, setCurrent] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [result, setResult] = useState<string | null>(null);
@@ -207,6 +210,13 @@ export default function StyleQuiz() {
             try {
                 localStorage.setItem('lumiqe-style-personality', JSON.stringify({ personality, timestamp: Date.now() }));
             } catch { /* ignore */ }
+            if (session) {
+                apiFetch('/api/profile/quiz', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ style_personality: personality }),
+                }, session).catch(() => { /* ignore — localStorage already saved */ });
+            }
         }
     };
 
