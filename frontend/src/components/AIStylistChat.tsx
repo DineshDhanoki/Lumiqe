@@ -17,7 +17,6 @@ interface AIStylistChatProps {
     styleArchetype: string;
     signatureColorName: string;
     metal: string;
-    backendToken?: string;
 }
 
 const STARTER_QUESTIONS = [
@@ -35,7 +34,6 @@ export default function AIStylistChat({
     styleArchetype,
     signatureColorName,
     metal,
-    backendToken,
 }: AIStylistChatProps) {
     const [messages, setMessages] = useState<Message[]>([
         {
@@ -78,7 +76,7 @@ export default function AIStylistChat({
                     metal,
                     history,
                 }),
-            }, { backendToken } as any);
+            }, {});
 
             if (!res.ok) {
                 throw new Error('Stylist unavailable right now. Please try again.');
@@ -86,8 +84,8 @@ export default function AIStylistChat({
 
             const data = await res.json();
             setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
-        } catch (err: any) {
-            setError(err.message ?? 'Something went wrong.');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Something went wrong.');
         } finally {
             setIsLoading(false);
         }

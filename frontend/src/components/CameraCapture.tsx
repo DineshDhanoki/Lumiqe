@@ -24,7 +24,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
 
     const [cameraError, setCameraError] = useState<string | null>(null);
     const [lightingStatus, setLightingStatus] = useState<LightingStatus>('checking');
-    const [_faceStatus, setFaceStatus] = useState<FaceStatus>('checking');
+    const [, setFaceStatus] = useState<FaceStatus>('checking');
     const [countdown, setCountdown] = useState<number | null>(null);
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
     const [isReady, setIsReady] = useState(false);
@@ -54,10 +54,10 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                 await videoRef.current.play();
                 setIsReady(true);
             }
-        } catch (err: any) {
-            if (err.name === 'NotAllowedError') {
+        } catch (err: unknown) {
+            if (err instanceof Error && err.name === 'NotAllowedError') {
                 setCameraError('Camera access denied. Please allow camera access in your browser settings.');
-            } else if (err.name === 'NotFoundError') {
+            } else if (err instanceof Error && err.name === 'NotFoundError') {
                 setCameraError('No camera found on this device.');
             } else {
                 setCameraError('Could not start camera. Please try uploading a photo instead.');
@@ -65,8 +65,9 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
         }
     }, []);
 
-    // Start camera on mount
+    // Start camera on mount, restart when facingMode changes
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         startCamera(facingMode);
         return () => {
             if (streamRef.current) {
@@ -76,7 +77,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                 clearInterval(analysisTimerRef.current);
             }
         };
-    }, []);
+    }, [facingMode, startCamera]);
 
     // Real-time frame analysis for lighting quality
     useEffect(() => {

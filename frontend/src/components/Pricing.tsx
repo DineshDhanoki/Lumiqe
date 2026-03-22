@@ -5,8 +5,7 @@ import { motion } from 'framer-motion';
 import { Check, X, Sparkles, Zap, Crown, ArrowRight, Loader2, CreditCard } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { events } from '@/lib/analytics';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+import { apiFetch } from '@/lib/api';
 
 interface PricingProps {
     onOpenAuth?: () => void;
@@ -29,12 +28,8 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
         events.checkoutStarted(plan);
 
         try {
-            const res = await fetch(`${API_BASE}/api/stripe/checkout`, {
+            const res = await apiFetch('/api/stripe/checkout', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${(session as any)?.backendToken}`,
-                },
                 body: JSON.stringify({ plan }),
             });
 
@@ -44,9 +39,9 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
             }
             const data = await res.json();
             window.location.href = data.checkout_url;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Checkout error:', err);
-            setCheckoutError(err.message || 'Payment service unavailable. Please try again.');
+            setCheckoutError(err instanceof Error ? err.message : 'Payment service unavailable. Please try again.');
             setLoadingPlan(null);
         }
     };
@@ -62,12 +57,8 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
         events.creditsPurchased(1);
 
         try {
-            const res = await fetch(`${API_BASE}/api/stripe/buy-credits`, {
+            const res = await apiFetch('/api/stripe/buy-credits', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${(session as any)?.backendToken}`,
-                },
                 body: JSON.stringify({ pack: 'single' }),
             });
 
@@ -77,9 +68,9 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
             }
             const data = await res.json();
             window.location.href = data.checkout_url;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Credit purchase error:', err);
-            setCheckoutError(err.message || 'Payment service unavailable. Please try again.');
+            setCheckoutError(err instanceof Error ? err.message : 'Payment service unavailable. Please try again.');
             setLoadingPlan(null);
         }
     };

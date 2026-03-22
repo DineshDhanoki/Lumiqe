@@ -9,7 +9,7 @@ import { CheckCircle, Sparkles, ArrowRight, Crown } from 'lucide-react';
 
 function SuccessContent() {
     const searchParams = useSearchParams();
-    const _sessionId = searchParams.get('session_id');
+    void searchParams.get('session_id'); // reserved for Stripe session validation
     const [countdown, setCountdown] = useState(5);
 
     useEffect(() => {

@@ -10,10 +10,9 @@ interface StylingTipsProps {
     contrastLevel: string;
     hexCode: string;
     staticTip?: string;
-    backendToken?: string;
 }
 
-export default function StylingTips({ season, contrastLevel, hexCode, staticTip, backendToken }: StylingTipsProps) {
+export default function StylingTips({ season, contrastLevel, hexCode, staticTip }: StylingTipsProps) {
     const [dynamicTip, setDynamicTip] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -27,12 +26,9 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip,
                     hex_code: hexCode || '#000000',
                 });
 
-                // Build session-like object for apiFetch
-                const sessionObj = backendToken ? { backendToken } as any : null;
                 const res = await apiFetch(
                     `/api/generate-styling-tip?${params}`,
                     {},
-                    sessionObj,
                 );
 
                 if (!res.ok) {

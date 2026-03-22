@@ -497,21 +497,26 @@ async def get_curated_outfit(
 ) -> dict:
     """
     Hybrid shopping agent:
-    1. Scrape 8 categories concurrently
+    1. Query DB first (reliable, always available)
     2. Delta-E match best item per category
-    3. Fill empty slots from DB
+    3. Fill any remaining empty slots via Firecrawl (optional — only when FIRECRAWL_API_KEY is set)
     """
     logger.info(f"Shopping agent started: gender={gender}, palette={palette_hexes}, excludes={len(exclude_ids or set())}")
 
-    inventory = await gather_inventory(gender)
-    outfit = assemble_outfit(inventory, palette_hexes, exclude_ids)
+    # Step 1: DB is primary source — always run first
+    all_slots = list(OUTFIT_SLOTS)
+    db_products = await _fill_from_db(gender, all_slots, palette_hexes, exclude_ids)
+    outfit = assemble_outfit(db_products, palette_hexes, exclude_ids)
     empty_slots = _check_empty_slots(outfit)
 
-    if empty_slots:
-        logger.info(f"Empty slots after scrape: {empty_slots} — falling back to DB…")
-        db_products = await _fill_from_db(gender, empty_slots, palette_hexes, exclude_ids)
-        if db_products:
-            _merge_db_products(outfit, empty_slots, inventory, db_products, palette_hexes, exclude_ids)
+    # Step 2: Firecrawl fills gaps only if configured
+    if empty_slots and settings.FIRECRAWL_API_KEY:
+        logger.info(f"Empty slots after DB: {empty_slots} — enhancing with Firecrawl…")
+        scraped = await gather_inventory(gender)
+        if scraped:
+            _merge_db_products(outfit, empty_slots, db_products, scraped, palette_hexes, exclude_ids)
+    elif empty_slots:
+        logger.info(f"Empty slots after DB: {empty_slots} — FIRECRAWL_API_KEY not set, skipping scrape")
 
     filled_count = len(OUTFIT_SLOTS) - len(_check_empty_slots(outfit))
     logger.info(f"Final outfit: {filled_count}/8 slots filled")

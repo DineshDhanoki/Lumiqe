@@ -6,6 +6,7 @@ if RESEND_API_KEY is not configured, emails are silently skipped.
 """
 
 import logging
+from html import escape
 
 from app.core.config import settings
 
@@ -76,13 +77,14 @@ _FOOTER = """
 
 def send_welcome_email(to: str, name: str) -> bool:
     """Send a welcome email after registration."""
+    safe_name = escape(name)
     html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
     <div class="container">
         <div class="header">
             <div class="logo">LUMI<span class="accent">QE</span></div>
         </div>
         <div class="card">
-            <h2>Welcome, {name}! 🎨</h2>
+            <h2>Welcome, {safe_name}! 🎨</h2>
             <p>You've just unlocked the most accurate AI-powered color analysis on the web.</p>
             <p>Here's what you can do right now:</p>
             <ul style="padding-left: 20px; margin-bottom: 24px;">
@@ -138,6 +140,8 @@ def send_analysis_complete_email(
 
 def send_subscription_confirmed_email(to: str, name: str, plan: str) -> bool:
     """Send an email when a premium subscription is confirmed."""
+    safe_name = escape(name)
+    safe_plan = escape(plan)
     html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
     <div class="container">
         <div class="header">
@@ -145,7 +149,7 @@ def send_subscription_confirmed_email(to: str, name: str, plan: str) -> bool:
         </div>
         <div class="card">
             <h2>You're Premium Now! ✨</h2>
-            <p>Hi {name}, your <strong>{plan}</strong> subscription is active. Here's what's unlocked:</p>
+            <p>Hi {safe_name}, your <strong>{safe_plan}</strong> subscription is active. Here's what's unlocked:</p>
             <ul style="padding-left: 20px; margin-bottom: 24px;">
                 <li style="margin-bottom: 8px;">Unlimited color analyses</li>
                 <li style="margin-bottom: 8px;">AI-powered personal stylist chat</li>

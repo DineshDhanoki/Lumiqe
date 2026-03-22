@@ -38,6 +38,7 @@ export default function AnalysisResultPage() {
 
     useEffect(() => {
         if (!id || !session) return;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoading(true);
         apiFetch(`/api/analysis/${id}`, {}, session)
             .then(async (res) => {

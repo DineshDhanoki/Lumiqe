@@ -21,11 +21,17 @@ const LOADING_STEPS = [
     { text: 'Adding the finishing touches…', icon: '✨' },
 ];
 
+type OutfitSlot = { name: string; price: string; image_url: string; product_url: string };
+type Outfit = Record<string, OutfitSlot | string>;
+
 // ── Helper: extract all product_urls from an outfit ──
-function extractProductUrls(outfit: any): string[] {
+function extractProductUrls(outfit: Outfit): string[] {
     const slots = ['upper', 'layering', 'lower', 'shoes', 'watch', 'bag', 'eyewear', 'jewelry'];
     return slots
-        .map((s) => outfit?.[s]?.product_url || '')
+        .map((s) => {
+            const slot = outfit?.[s];
+            return (slot && typeof slot === 'object') ? (slot as OutfitSlot).product_url || '' : '';
+        })
         .filter((url) => url && url !== '');
 }
 
@@ -37,7 +43,7 @@ function ShoppingAgentContent() {
 
     const [gender, setGender] = useState<string>('male');
     const [loading, setLoading] = useState(false);
-    const [outfit, setOutfit] = useState<any>(null);
+    const [outfit, setOutfit] = useState<Outfit | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [usedProductUrls, setUsedProductUrls] = useState<string[]>([]);
     const [outfitCount, setOutfitCount] = useState(0);
@@ -90,9 +96,9 @@ function ShoppingAgentContent() {
             // Track used product URLs for dedup
             const newUrls = extractProductUrls(data);
             setUsedProductUrls((prev) => [...prev, ...newUrls]);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Shopping agent error:', err);
-            setError(err.message || 'Something went wrong');
+            setError(err instanceof Error ? err.message : 'Something went wrong');
         } finally {
             setLoading(false);
         }

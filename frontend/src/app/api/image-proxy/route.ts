@@ -73,9 +73,9 @@ export async function GET(request: NextRequest) {
                 'Access-Control-Allow-Origin': '*',
             },
         });
-    } catch (err: any) {
+    } catch (err: unknown) {
         return NextResponse.json(
-            { error: 'Failed to fetch image', detail: err.message },
+            { error: 'Failed to fetch image', detail: err instanceof Error ? err.message : 'Unknown error' },
             { status: 502 },
         );
     }

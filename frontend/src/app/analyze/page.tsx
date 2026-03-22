@@ -91,8 +91,8 @@ export default function AnalyzePage() {
                 if (data.contrast_level) params.set('contrastLevel', data.contrast_level);
                 router.push(`/results?${params.toString()}`);
             }
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong. Please try again.');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
             setIsAnalyzing(false);
             setPreviewUrl(null);
         }
@@ -175,6 +175,7 @@ export default function AnalyzePage() {
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-full border-t-4 border-red-500 animate-spin" />
                                     {previewUrl && (
+                                        // eslint-disable-next-line @next/next/no-img-element
                                         <img
                                             src={previewUrl}
                                             alt="Scanning"

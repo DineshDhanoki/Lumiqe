@@ -47,6 +47,7 @@ function ResultsContent() {
             localStorage.setItem('lumiqe-history', JSON.stringify(updated));
             localStorage.setItem('lumiqe-last-analysis', JSON.stringify(entry));
         } catch { /* ignore */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!searchParams.has('season')) {

@@ -81,9 +81,10 @@ class AuthResponse(BaseModel):
 
 
 class GoogleAuthRequest(BaseModel):
-    """Google OAuth sign-in request — no password required."""
+    """Google OAuth sign-in request — ID token must be verified."""
     name: str
     email: EmailStr
+    google_id_token: str
 
 
 class TokenRefreshRequest(BaseModel):

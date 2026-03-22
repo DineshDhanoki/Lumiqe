@@ -56,8 +56,8 @@ async def analyze_image(
     Authentication optional — logged-in users get scan quota tracking.
     """
     # Rate limiting
-    rate_key = get_rate_limit_key(request, current_user or {}, "analyze")
-    max_requests = 50 if (current_user or {}).get("is_premium") else 5
+    rate_key = get_rate_limit_key(request, current_user, "analyze")
+    max_requests = 50 if current_user and current_user.get("is_premium") else 5
     await check_rate_limit(rate_key, max_requests)
 
     # Enforce scan quota for logged-in non-premium users

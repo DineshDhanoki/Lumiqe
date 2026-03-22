@@ -184,14 +184,16 @@ export default async function SeasonPage({ params }: Props) {
                     <section>
                         <h2 className="text-2xl font-bold mb-6">Styling by Occasion</h2>
                         <div className="grid md:grid-cols-2 gap-4">
-                            {Object.entries(occasions).map(([occasion, info]) => (
+                            {Object.entries(occasions).map(([occasion, info]) => {
+                                const occasionInfo = info as { formula?: string; colors?: string[]; key_pieces?: string[] };
+                                return (
                                 <div key={occasion} className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5">
                                     <h3 className="text-white font-bold capitalize mb-2">
                                         {occasion.replace(/_/g, ' ')}
                                     </h3>
-                                    <p className="text-white/50 text-sm mb-3">{(info as any).formula}</p>
+                                    <p className="text-white/50 text-sm mb-3">{occasionInfo.formula}</p>
                                     <div className="flex gap-2 mb-3">
-                                        {((info as any).colors || []).map((hex: string, i: number) => (
+                                        {(occasionInfo.colors || []).map((hex: string, i: number) => (
                                             <div
                                                 key={i}
                                                 className="w-6 h-6 rounded-full border border-white/10"
@@ -200,12 +202,13 @@ export default async function SeasonPage({ params }: Props) {
                                         ))}
                                     </div>
                                     <ul className="space-y-1">
-                                        {((info as any).key_pieces || []).map((piece: string, i: number) => (
+                                        {(occasionInfo.key_pieces || []).map((piece: string, i: number) => (
                                             <li key={i} className="text-white/40 text-xs">- {piece}</li>
                                         ))}
                                     </ul>
                                 </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </section>
                 )}

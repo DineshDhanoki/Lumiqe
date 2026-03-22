@@ -59,7 +59,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                         msg = data.detail;
                     } else if (Array.isArray(data.detail)) {
                         // Pydantic validation errors: [{loc, msg, type}]
-                        msg = data.detail.map((e: any) => e.msg).join('. ');
+                        msg = data.detail.map((e: { msg: string }) => e.msg).join('. ');
                     } else if (typeof data.detail === 'object' && data.detail?.detail) {
                         msg = data.detail.detail;
                     }
@@ -80,8 +80,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                 handleClose();
                 window.location.href = callbackUrl;
             }
-        } catch (err: any) {
-            setError(err.message || 'An error occurred during authentication');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'An error occurred during authentication');
         } finally {
             setIsLoading(false);
         }

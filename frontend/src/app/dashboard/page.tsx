@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
+import { apiFetch } from '@/lib/api';
 import {
     Sparkles, ArrowLeft, Camera, ShoppingBag, MessageCircle,
     User, ChevronRight, Clock,
@@ -10,6 +12,7 @@ import {
 } from 'lucide-react';
 
 interface AnalysisEntry {
+    id?: string;
     season: string;
     hexColor: string;
     undertone: string;
@@ -65,23 +68,69 @@ function timeAgo(timestamp: number): string {
 }
 
 export default function Dashboard() {
+    const { data: session, status } = useSession();
     const [lastAnalysis, setLastAnalysis] = useState<AnalysisEntry | null>(null);
     const [history, setHistory] = useState<AnalysisEntry[]>([]);
     const [bodyShape, setBodyShape] = useState<BodyShapeData | null>(null);
     const [stylePersonality, setStylePersonality] = useState<StylePersonalityData | null>(null);
 
     useEffect(() => {
+        // Always load quiz data from localStorage (not synced to backend)
         try {
-            const last = localStorage.getItem('lumiqe-last-analysis');
-            if (last) setLastAnalysis(JSON.parse(last));
-            const hist = localStorage.getItem('lumiqe-history');
-            if (hist) setHistory(JSON.parse(hist));
             const bs = localStorage.getItem('lumiqe-body-shape');
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             if (bs) setBodyShape(JSON.parse(bs));
             const sp = localStorage.getItem('lumiqe-style-personality');
             if (sp) setStylePersonality(JSON.parse(sp));
         } catch { /* ignore */ }
     }, []);
+
+    const _loadFromLocalStorage = useCallback(() => {
+        try {
+            const last = localStorage.getItem('lumiqe-last-analysis');
+            if (last) setLastAnalysis(JSON.parse(last));
+            const hist = localStorage.getItem('lumiqe-history');
+            if (hist) setHistory(JSON.parse(hist));
+        } catch { /* ignore */ }
+    }, []);
+
+    useEffect(() => {
+        if (status === 'loading') return;
+
+        if (session) {
+            // Logged in — fetch from backend for cross-device sync
+            apiFetch('/api/analysis/?limit=20')
+                .then(res => res.ok ? res.json() : Promise.reject())
+                .then((items: Array<{
+                    id: string; season: string; hex_color: string; undertone: string;
+                    confidence: number; contrast_level: string; palette: string[];
+                    metal: string; created_at: string | null;
+                }>) => {
+                    if (!items.length) return;
+                    const mapped: AnalysisEntry[] = items.map(r => ({
+                        season: r.season,
+                        hexColor: r.hex_color,
+                        undertone: r.undertone,
+                        confidence: r.confidence,
+                        contrastLevel: r.contrast_level,
+                        palette: r.palette,
+                        metal: r.metal,
+                        timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+                        id: r.id,
+                    }));
+                    setHistory(mapped);
+                    setLastAnalysis(mapped[0]);
+                })
+                .catch(() => {
+                    // Fall back to localStorage if API fails
+                    _loadFromLocalStorage();
+                });
+        } else {
+            // Anonymous — use localStorage
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            _loadFromLocalStorage();
+        }
+    }, [session, status, _loadFromLocalStorage]);
 
     const skincare = lastAnalysis ? SKINCARE[lastAnalysis.undertone] ?? SKINCARE.neutral : null;
 
@@ -322,7 +371,7 @@ export default function Dashboard() {
                             {history.map((entry, i) => (
                                 <Link
                                     key={i}
-                                    href={`/results?season=${encodeURIComponent(entry.season)}&hexColor=${encodeURIComponent(entry.hexColor)}&undertone=${entry.undertone}&confidence=${entry.confidence}&contrastLevel=${entry.contrastLevel}&metal=${entry.metal}&palette=${entry.palette.join(',')}`}
+                                    href={entry.id ? `/results/${entry.id}` : `/results?season=${encodeURIComponent(entry.season)}&hexColor=${encodeURIComponent(entry.hexColor)}&undertone=${entry.undertone}&confidence=${entry.confidence}&contrastLevel=${entry.contrastLevel}&metal=${entry.metal}&palette=${entry.palette.join(',')}`}
                                     className="flex items-center gap-4 bg-zinc-900/60 border border-white/10 rounded-2xl p-4 hover:border-white/20 transition-all group"
                                 >
                                     <div className="w-10 h-10 rounded-xl border border-white/20 flex-shrink-0"

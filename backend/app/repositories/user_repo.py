@@ -93,20 +93,13 @@ async def get_palette(session: AsyncSession, email: str) -> Optional[dict]:
 
 
 async def decrement_scan(session: AsyncSession, user_id: int) -> bool:
-    """Decrement the user's free_scans_left by 1."""
+    """Atomically decrement free_scans_left by 1. Returns False if already at 0."""
     result = await session.execute(
-        select(User.free_scans_left).where(User.id == user_id)
-    )
-    scans_left = result.scalar_one_or_none()
-    if scans_left is None or scans_left <= 0:
-        return False
-
-    await session.execute(
         update(User)
-        .where(User.id == user_id)
+        .where(User.id == user_id, User.free_scans_left > 0)
         .values(free_scans_left=User.free_scans_left - 1)
     )
-    return True
+    return result.rowcount > 0
 
 
 async def delete_by_email(session: AsyncSession, email: str) -> bool:
@@ -179,20 +172,15 @@ async def add_credits(session: AsyncSession, user_id: int, amount: int) -> bool:
 
 
 async def deduct_credit(session: AsyncSession, user_id: int) -> bool:
-    """Deduct 1 credit from a user. Returns False if no credits available."""
+    """Atomically deduct 1 credit. Returns False if no credits available."""
     result = await session.execute(
-        select(User.credits).where(User.id == user_id)
-    )
-    credits = result.scalar_one_or_none()
-    if credits is None or credits <= 0:
-        return False
-    await session.execute(
         update(User)
-        .where(User.id == user_id)
+        .where(User.id == user_id, User.credits > 0)
         .values(credits=User.credits - 1)
     )
-    logger.info(f"Deducted 1 credit from user {user_id} (remaining: {credits - 1})")
-    return True
+    if result.rowcount > 0:
+        logger.info(f"Deducted 1 credit from user {user_id}")
+    return result.rowcount > 0
 
 
 async def update_quiz(

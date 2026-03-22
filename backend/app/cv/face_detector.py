@@ -22,53 +22,52 @@ logger = logging.getLogger("lumiqe.cv.face_detector")
 # ════════════════════════════════════════════════════════════════
 # EXIF ROTATION FIX
 # ════════════════════════════════════════════════════════════════
+def _get_exif_orientation(data: bytes) -> int:
+    """
+    Extract EXIF orientation from raw image bytes.
+    Returns the orientation value (1 = no rotation) or 1 if not found.
+    """
+    if data[:2] != b'\xff\xd8':  # Not a JPEG
+        return 1
+
+    idx = data.find(b'\x01\x12')
+    if idx == -1:
+        return 1
+
+    if b'MM' in data[:12]:      # Motorola byte order (big-endian)
+        return int.from_bytes(data[idx + 6:idx + 8], byteorder='big')
+    elif b'II' in data[:12]:    # Intel byte order (little-endian)
+        return int.from_bytes(data[idx + 6:idx + 8], byteorder='little')
+
+    return 1
+
+
+def _apply_exif_rotation(image: np.ndarray, orientation: int) -> np.ndarray:
+    """Apply cv2 rotation based on EXIF orientation tag value."""
+    if orientation == 3:
+        return cv2.rotate(image, cv2.ROTATE_180)
+    elif orientation == 6:
+        return cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    elif orientation == 8:
+        return cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+    return image
+
+
 def _fix_exif_rotation(image: np.ndarray, image_path: str = None) -> np.ndarray:
     """
-    Fix image orientation using EXIF data.
+    Fix image orientation using EXIF data from a file path.
     cv2.imread ignores EXIF, so phone photos often come in sideways.
     """
     if image_path is None:
         return image
 
     try:
-        # Use OpenCV's built-in EXIF reader (available since 4.x)
-        with open(image_path, "rb") as f:
-            header = f.read(32)
-            # Check for JPEG EXIF marker
-            if header[:2] == b'\xff\xd8':
-                # Re-read with EXIF-aware flag
-                img_with_exif = cv2.imread(image_path, cv2.IMREAD_UNCHANGED | cv2.IMREAD_ANYCOLOR)
-                if img_with_exif is not None:
-                    # Try using cv2 rotate based on EXIF
-                    pass  # cv2.imread already handles this in newer versions
-
-        # Fallback: manual EXIF check using binary parsing
         with open(image_path, "rb") as f:
             data = f.read(65536)
-
-        # Find EXIF orientation tag (0x0112)
-        idx = data.find(b'\x01\x12')
-        if idx == -1:
-            return image
-
-        # Determine byte order
-        if b'MM' in data[:12]:  # Motorola byte order (big-endian)
-            orientation = int.from_bytes(data[idx + 6:idx + 8], byteorder='big')
-        elif b'II' in data[:12]:  # Intel byte order (little-endian)
-            orientation = int.from_bytes(data[idx + 6:idx + 8], byteorder='little')
-        else:
-            return image
-
-        # Apply rotation based on EXIF orientation
-        if orientation == 3:
-            image = cv2.rotate(image, cv2.ROTATE_180)
-        elif orientation == 6:
-            image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
-        elif orientation == 8:
-            image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
-
-        logger.debug(f"EXIF orientation={orientation}, rotation applied")
-
+        orientation = _get_exif_orientation(data)
+        if orientation != 1:
+            image = _apply_exif_rotation(image, orientation)
+            logger.debug(f"EXIF orientation={orientation}, rotation applied")
     except Exception as e:
         logger.debug(f"EXIF rotation skipped: {e}")
 
@@ -123,8 +122,16 @@ def decode_image(image_path: str) -> np.ndarray:
 
 def decode_bytes(image_bytes: bytes) -> np.ndarray:
     """Decode image from raw bytes (for API upload via FormData)."""
+    # Extract EXIF orientation before decoding — cv2.imdecode strips EXIF metadata
+    orientation = _get_exif_orientation(image_bytes[:65536])
+
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError("Could not decode image bytes. File may be corrupt or not an image.")
+
+    if orientation != 1:
+        img = _apply_exif_rotation(img, orientation)
+        logger.debug(f"EXIF orientation={orientation}, rotation applied to uploaded bytes")
+
     return img

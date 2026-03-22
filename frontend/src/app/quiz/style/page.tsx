@@ -208,6 +208,7 @@ export default function StyleQuiz() {
             const personality = calculatePersonality(newAnswers);
             setResult(personality);
             try {
+                // eslint-disable-next-line react-hooks/purity
                 localStorage.setItem('lumiqe-style-personality', JSON.stringify({ personality, timestamp: Date.now() }));
             } catch { /* ignore */ }
             if (session) {

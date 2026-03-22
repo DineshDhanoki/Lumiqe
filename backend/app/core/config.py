@@ -53,6 +53,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # Google OAuth (used to verify ID tokens on the /api/auth/google endpoint)
+    GOOGLE_CLIENT_ID: str | None = None
+
     @model_validator(mode="after")
     def _validate_jwt_secret(self) -> "Settings":
         if len(self.JWT_SECRET_KEY) < 32:

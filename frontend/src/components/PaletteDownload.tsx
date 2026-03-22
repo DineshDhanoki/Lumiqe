@@ -6,10 +6,9 @@ import { apiFetch } from '@/lib/api';
 
 interface PaletteDownloadProps {
     season: string;
-    backendToken?: string;
 }
 
-export default function PaletteDownload({ season, backendToken }: PaletteDownloadProps) {
+export default function PaletteDownload({ season }: PaletteDownloadProps) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -19,11 +18,10 @@ export default function PaletteDownload({ season, backendToken }: PaletteDownloa
         setError('');
 
         try {
-            const sessionObj = backendToken ? { backendToken } as any : null;
             const res = await apiFetch('/api/palette-card', {
                 method: 'POST',
                 body: JSON.stringify({ season }),
-            }, sessionObj);
+            });
 
             if (!res.ok) {
                 throw new Error('Failed to generate card');

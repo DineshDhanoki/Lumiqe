@@ -38,8 +38,8 @@ export default function CelebrityMatch({ celebrities }: CelebrityMatchProps) {
                         <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-white/20 mb-3 relative bg-zinc-800">
                             {/* Fallback pattern in case image fails or isn't there yet */}
                             <div className="absolute inset-0 bg-gradient-to-tr from-zinc-800 to-zinc-700 animate-pulse" />
-                            {/* Note: In a real app with next/image, unconfigured domains might throw errors. 
-                  We'll use a standard img tag with an error fallback for resilience here. */}
+                            {/* Using <img> for arbitrary external celeb URLs with error fallback */}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={celeb.image}
                                 alt={celeb.name}

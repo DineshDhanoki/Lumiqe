@@ -30,7 +30,7 @@ function FeedContent() {
     const { data: session } = useSession();
     const season = searchParams.get('season') || 'Deep Autumn';
     const paletteParam = searchParams.get('palette') || '';
-    const isPremiumUser = !!(session as any)?.isPremium;
+    const isPremiumUser = !!session?.isPremium;
 
     // Gender state — user picks before seeing products
     const [gender, setGender] = useState<string | null>(null);
@@ -93,7 +93,8 @@ function FeedContent() {
             }
         }
         fetchProducts();
-    }, [season, gender, vibe]); // Note: We do NOT put `usedPremiumTeaser` in deps to prevent double fetching
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [season, gender, vibe]); // isPremiumUser/paletteParam/usedPremiumTeaser intentionally excluded
 
     const handleVibeSelect = (selectedVibe: string) => {
         if (selectedVibe === 'Casual') {

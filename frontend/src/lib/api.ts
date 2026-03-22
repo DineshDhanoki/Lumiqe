@@ -1,15 +1,13 @@
 /**
  * Lumiqe — Authenticated API Helper.
  *
- * Wraps `fetch()` to automatically inject the JWT Authorization header
- * from the NextAuth session. Use this for all protected backend API calls.
+ * Routes all /api/* calls through the Next.js proxy (/api/proxy/*), which
+ * injects the backend JWT server-side. The token is never exposed to client JS.
  *
  * Usage:
  *   import { apiFetch } from '@/lib/api';
- *   const res = await apiFetch('/api/analyze', { method: 'POST', body: formData }, session);
+ *   const res = await apiFetch('/api/analyze', { method: 'POST', body: formData });
  */
-
-import { Session } from 'next-auth';
 
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -18,22 +16,21 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:800
  *
  * @param path     - API path (e.g., '/api/analyze') or full URL
  * @param options  - Standard fetch options (method, body, headers, etc.)
- * @param session  - NextAuth session object (must contain backendToken)
+ * @param _session - Deprecated: no longer needed, kept for backward compatibility
  * @returns        - Fetch Response
  */
 export async function apiFetch(
     path: string,
     options: RequestInit = {},
-    session?: Session | null
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _session?: unknown
 ): Promise<Response> {
-    const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
+    // Route /api/* through the Next.js proxy so the backend token stays server-side
+    const url = path.startsWith('http')
+        ? path
+        : path.replace(/^\/api\//, '/api/proxy/');
 
-    // Build headers — preserve existing headers and add Authorization
     const headers = new Headers(options.headers);
-
-    if (session?.backendToken) {
-        headers.set('Authorization', `Bearer ${session.backendToken}`);
-    }
 
     // Don't set Content-Type if body is FormData (browser sets boundary automatically)
     if (!(options.body instanceof FormData) && !headers.has('Content-Type')) {
@@ -45,3 +42,4 @@ export async function apiFetch(
         headers,
     });
 }
+

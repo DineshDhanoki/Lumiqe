@@ -55,8 +55,8 @@ export default function ScanPage() {
 
             const data: ScanResult = await res.json();
             setResult(data);
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong.');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Something went wrong.');
         } finally {
             setIsScanning(false);
         }

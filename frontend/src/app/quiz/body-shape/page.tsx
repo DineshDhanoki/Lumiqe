@@ -165,6 +165,7 @@ export default function BodyShapeQuiz() {
             const shape = calculateShape(newAnswers);
             setResult(shape);
             try {
+                // eslint-disable-next-line react-hooks/purity
                 localStorage.setItem('lumiqe-body-shape', JSON.stringify({ shape, timestamp: Date.now() }));
             } catch { /* ignore */ }
             if (session) {

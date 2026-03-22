@@ -117,6 +117,42 @@ async def google_auth(body: GoogleAuthRequest, request: Request, session: AsyncS
     client_ip = request.client.host if request.client else "unknown"
     request_id = getattr(request.state, "request_id", "none")
 
+    # Verify the Google ID token with Google's tokeninfo endpoint
+    import aiohttp
+    try:
+        async with aiohttp.ClientSession() as http:
+            async with http.get(
+                f"https://oauth2.googleapis.com/tokeninfo?id_token={body.google_id_token}"
+            ) as resp:
+                if resp.status != 200:
+                    raise HTTPException(
+                        status_code=401,
+                        detail={"error": "INVALID_GOOGLE_TOKEN", "detail": "Google token verification failed.", "code": 401},
+                    )
+                token_data = await resp.json()
+    except aiohttp.ClientError as exc:
+        logger.warning(f"[SECURITY] Google token verification network error: {exc}")
+        raise HTTPException(
+            status_code=503,
+            detail={"error": "GOOGLE_VERIFY_FAILED", "detail": "Could not reach Google to verify token.", "code": 503},
+        )
+
+    # Verify email matches
+    if token_data.get("email") != body.email:
+        logger.warning(f"[SECURITY] Google token email mismatch: claimed={body.email} actual={token_data.get('email')} ip={client_ip}")
+        raise HTTPException(
+            status_code=401,
+            detail={"error": "INVALID_GOOGLE_TOKEN", "detail": "Token email does not match.", "code": 401},
+        )
+
+    # Verify token audience matches our Google Client ID (if configured)
+    if settings.GOOGLE_CLIENT_ID and token_data.get("aud") != settings.GOOGLE_CLIENT_ID:
+        logger.warning(f"[SECURITY] Google token audience mismatch ip={client_ip}")
+        raise HTTPException(
+            status_code=401,
+            detail={"error": "INVALID_GOOGLE_TOKEN", "detail": "Token audience mismatch.", "code": 401},
+        )
+
     user = await user_repo.get_by_email(session, body.email)
     if not user:
         # Auto-register Google user (no password_hash)

@@ -5,8 +5,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, ExternalLink } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+import { apiFetch } from '@/lib/api';
 
 interface OutfitItem {
     name: string;
@@ -25,9 +24,7 @@ export default function DailyOutfit() {
     useEffect(() => {
         if (!session) return;
 
-        fetch(`${API_BASE}/api/outfit/daily`, {
-            headers: { Authorization: `Bearer ${(session as any)?.backendToken}` },
-        })
+        apiFetch('/api/outfit/daily')
             .then(r => {
                 if (!r.ok) throw new Error('No outfit available');
                 return r.json();

@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Gift, Copy, Check, Users } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+import { apiFetch } from '@/lib/api';
 
 export default function ReferralCard() {
     const { data: session } = useSession();
@@ -20,9 +19,7 @@ export default function ReferralCard() {
     useEffect(() => {
         if (!session) return;
 
-        fetch(`${API_BASE}/api/referral/code`, {
-            headers: { Authorization: `Bearer ${(session as any)?.backendToken}` },
-        })
+        apiFetch('/api/referral/code')
             .then(r => r.ok ? r.json() : null)
             .then(data => { if (data) setReferralData(data); })
             .catch(() => {})

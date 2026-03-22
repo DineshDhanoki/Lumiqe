@@ -7,7 +7,6 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 // ─── Extend NextAuth Types ──────────────────────────────────
 declare module 'next-auth' {
     interface Session {
-        backendToken?: string;
         isPremium?: boolean;
         user: {
             id?: string;
@@ -94,6 +93,7 @@ export const authOptions: AuthOptions = {
                         body: JSON.stringify({
                             name: user.name || user.email.split('@')[0],
                             email: user.email,
+                            google_id_token: account.id_token,
                         }),
                     });
 
@@ -121,8 +121,8 @@ export const authOptions: AuthOptions = {
             return token;
         },
         async session({ session, token }) {
-            // Expose backendToken and isPremium on the client-side session object
-            session.backendToken = token.backendToken;
+            // backendToken stays in the server-side JWT (httpOnly cookie) only.
+            // It is injected by the proxy route — never exposed to client JS.
             session.isPremium = token.isPremium || false;
             return session;
         },

@@ -36,7 +36,7 @@ interface ColorProfileDeepProps {
 }
 
 export default function ColorProfileDeep({
-    season: _season,
+    season: _season, // eslint-disable-line @typescript-eslint/no-unused-vars
     styleArchetype,
     signatureColor,
     value,

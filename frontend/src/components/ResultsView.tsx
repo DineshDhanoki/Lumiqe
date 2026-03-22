@@ -62,7 +62,7 @@ export default function ResultsView({
 }: ResultsViewProps) {
     const { data: session } = useSession();
     const [activeTab, setActiveTab] = useState('overview');
-    const [completeProfile, setCompleteProfile] = useState<any>(null);
+    const [completeProfile, setCompleteProfile] = useState<Record<string, unknown> | null>(null);
     const [profileLoading, setProfileLoading] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -82,6 +82,7 @@ export default function ResultsView({
                 .catch(() => setCompleteProfile(null))
                 .finally(() => setProfileLoading(false));
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab]);
 
     return (

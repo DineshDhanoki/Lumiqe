@@ -7,8 +7,7 @@ import { Crown, Sparkles, LogOut, Loader2, User, CreditCard, Droplets } from 'lu
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { apiFetch } from '@/lib/api';
 
 interface UserProfile {
     id: number;
@@ -32,24 +31,13 @@ export default function AccountPage() {
         async function fetchProfile() {
             if (status !== 'authenticated') return;
 
-            if (!(session as any)?.backendToken) {
-                setError('Session expired. Please log out and back in.');
-                setLoading(false);
-                return;
-            }
-
             try {
-                const res = await fetch(`${API_BASE}/api/auth/me`, {
-                    headers: {
-                        'Authorization': `Bearer ${(session as any).backendToken}`
-                    }
-                });
-
+                const res = await apiFetch('/api/auth/me');
                 if (!res.ok) throw new Error('Failed to fetch profile. Please try logging in again.');
                 const data = await res.json();
                 setProfile(data);
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : 'An error occurred');
             } finally {
                 setLoading(false);
             }
@@ -64,12 +52,7 @@ export default function AccountPage() {
 
     const handleManageSubscription = async () => {
         try {
-            const res = await fetch(`${API_BASE}/api/stripe/portal`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${(session as any)?.backendToken}`
-                }
-            });
+            const res = await apiFetch('/api/stripe/portal', { method: 'POST' });
             const data = await res.json();
             if (data.portal_url) {
                 window.location.href = data.portal_url;
