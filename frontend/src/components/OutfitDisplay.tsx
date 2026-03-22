@@ -12,7 +12,7 @@ interface ProductItem {
     product_url: string;
 }
 
-interface CuratedOutfit {
+export interface CuratedOutfit {
     look_name: string;
     upper: ProductItem;
     layering: ProductItem;

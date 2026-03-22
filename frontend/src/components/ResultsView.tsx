@@ -3,6 +3,23 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+
+interface CompleteProfile {
+    style_archetype: string;
+    signature_color: { hex: string; name: string };
+    value: string;
+    chroma: string;
+    foundation_undertone: string;
+    jewelry_guide: string;
+    color_harmonies: { monochromatic: string; complementary: string; analogous: string; neutral_base: string };
+    patterns: { best: string[]; scale: string; avoid: string[] };
+    occasions: Record<string, { formula: string; colors: string[]; key_pieces: string[] }>;
+    capsule_wardrobe: { piece: string; hex: string; why: string }[];
+    wardrobe_formula: string;
+    hair_colors: { best_natural: string[]; highlights: string[]; avoid: string[] };
+    makeup_extended: { foundation: string; concealer: string; lips_shades: string[]; eyeliner: string; mascara: string; brow_color: string };
+}
+
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, ArrowRight, ArrowLeft, Layers, LayoutGrid,
@@ -62,7 +79,7 @@ export default function ResultsView({
 }: ResultsViewProps) {
     const { data: session } = useSession();
     const [activeTab, setActiveTab] = useState('overview');
-    const [completeProfile, setCompleteProfile] = useState<Record<string, unknown> | null>(null);
+    const [completeProfile, setCompleteProfile] = useState<CompleteProfile | null>(null);
     const [profileLoading, setProfileLoading] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -78,7 +95,7 @@ export default function ResultsView({
             const baseSeason = season.replace(' (Neutral Flow)', '');
             apiFetch(`/api/complete-profile?season=${encodeURIComponent(baseSeason)}`, {}, session)
                 .then(r => r.json())
-                .then(data => setCompleteProfile(data))
+                .then(data => setCompleteProfile(data as CompleteProfile))
                 .catch(() => setCompleteProfile(null))
                 .finally(() => setProfileLoading(false));
         }
@@ -206,9 +223,9 @@ export default function ResultsView({
                                     )}
                                 </div>
 
-                                <StylingTips season={season} contrastLevel={contrastLevel} hexCode={hexColor} staticTip={tips} backendToken={session?.backendToken} />
+                                <StylingTips season={season} contrastLevel={contrastLevel} hexCode={hexColor} staticTip={tips} />
                                 {celebrities.length > 0 && <CelebrityMatch celebrities={celebrities} />}
-                                <PaletteDownload season={season} backendToken={session?.backendToken} />
+                                <PaletteDownload season={season} />
 
                                 {/* Share */}
                                 {analysisId ? (
@@ -343,7 +360,6 @@ export default function ResultsView({
                                 styleArchetype={completeProfile?.style_archetype ?? ''}
                                 signatureColorName={completeProfile?.signature_color?.name ?? ''}
                                 metal={metal}
-                                backendToken={session?.backendToken}
                             />
                         )}
 

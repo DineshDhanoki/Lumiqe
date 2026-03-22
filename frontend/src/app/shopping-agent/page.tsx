@@ -3,13 +3,9 @@
 import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { ArrowLeft, Sparkles, Loader2, AlertCircle, RefreshCcw } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
-import OutfitDisplay from '@/components/OutfitDisplay';
+import OutfitDisplay, { CuratedOutfit } from '@/components/OutfitDisplay';
 
 // Animated loading messages
 const LOADING_STEPS = [
@@ -21,29 +17,23 @@ const LOADING_STEPS = [
     { text: 'Adding the finishing touches…', icon: '✨' },
 ];
 
-type OutfitSlot = { name: string; price: string; image_url: string; product_url: string };
-type Outfit = Record<string, OutfitSlot | string>;
-
 // ── Helper: extract all product_urls from an outfit ──
-function extractProductUrls(outfit: Outfit): string[] {
-    const slots = ['upper', 'layering', 'lower', 'shoes', 'watch', 'bag', 'eyewear', 'jewelry'];
+function extractProductUrls(outfit: CuratedOutfit): string[] {
+    const slots = ['upper', 'layering', 'lower', 'shoes', 'watch', 'bag', 'eyewear', 'jewelry'] as const;
     return slots
-        .map((s) => {
-            const slot = outfit?.[s];
-            return (slot && typeof slot === 'object') ? (slot as OutfitSlot).product_url || '' : '';
-        })
-        .filter((url) => url && url !== '');
+        .map((s) => outfit[s]?.product_url || '')
+        .filter((url) => url !== '');
+
 }
 
 function ShoppingAgentContent() {
     const searchParams = useSearchParams();
-    const { data: session } = useSession();
     const paletteParam = searchParams.get('palette') || '';
     const paletteHexes = paletteParam.split(',').filter((h) => h.trim().startsWith('#'));
 
     const [gender, setGender] = useState<string>('male');
     const [loading, setLoading] = useState(false);
-    const [outfit, setOutfit] = useState<Outfit | null>(null);
+    const [outfit, setOutfit] = useState<CuratedOutfit | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [usedProductUrls, setUsedProductUrls] = useState<string[]>([]);
     const [outfitCount, setOutfitCount] = useState(0);
@@ -74,16 +64,12 @@ function ShoppingAgentContent() {
         setError(null);
         setOutfit(null);
         try {
-            const url = new URL(`${API_BASE}/api/shopping-agent`);
-            url.searchParams.append('gender', gender);
-            url.searchParams.append('palette', paletteHexes.join(','));
-
-            // Send exclude IDs for non-repeating outfits
+            const params = new URLSearchParams({ gender, palette: paletteHexes.join(',') });
             if (usedProductUrls.length > 0) {
-                url.searchParams.append('exclude_ids', usedProductUrls.join(','));
+                params.append('exclude_ids', usedProductUrls.join(','));
             }
 
-            const res = await apiFetch(url.toString(), {}, session);
+            const res = await apiFetch(`/api/shopping-agent?${params.toString()}`);
             if (!res.ok) {
                 const data = await res.json().catch(() => null);
                 const detail = data?.detail?.detail || data?.detail || 'Failed to generate outfit';
