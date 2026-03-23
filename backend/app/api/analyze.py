@@ -175,17 +175,113 @@ async def analyze_image(
                 )
                 analysis_id = saved["id"]
                 logger.info(f"Saved analysis {analysis_id} for {current_user['email']}: {season_name}")
-                await session.commit()
-                # Fire-and-forget analysis complete email
-                send_analysis_complete_email(
-                    to=current_user["email"],
-                    name=current_user.get("name", ""),
-                    season=season_name,
-                    hex_color=result.get("hex_color", ""),
-                    palette=palette_list,
-                    analysis_id=analysis_id,
+                # Fire-and-forget analysis complete email via executor
+                loop = asyncio.get_running_loop()
+                loop.run_in_executor(None, send_analysis_complete_email,
+                    current_user["email"],
+                    current_user.get("name", ""),
+                    season_name,
+                    result.get("hex_color", ""),
+                    palette_list,
+                    analysis_id,
                 )
         except Exception as e:
             logger.warning(f"Could not save analysis result: {e}")
 
     return AnalyzeResponse(analysis_id=analysis_id, **result)
+
+
+@router.post("/analyze/multi")
+async def analyze_multi_image(
+    request: Request,
+    images: list[UploadFile] = File(..., description="2-5 selfie images for averaged analysis"),
+    current_user: dict | None = Depends(get_optional_user),
+):
+    """
+    Upload 2-5 selfies for averaged color analysis.
+
+    Analyzes each image independently, then averages the results
+    for a more accurate season determination.
+    """
+    if len(images) < 2 or len(images) > 5:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "INVALID_IMAGE_COUNT",
+                "detail": "Please upload between 2 and 5 images.",
+                "code": 422,
+            },
+        )
+
+    # Rate limiting
+    rate_key = get_rate_limit_key(request, current_user, "analyze_multi")
+    max_requests = 20 if current_user and current_user.get("is_premium") else 3
+    await check_rate_limit(rate_key, max_requests)
+
+    # Validate and read all images first
+    all_bytes = []
+    for img in images:
+        img_bytes = await img.read()
+        if len(img_bytes) == 0:
+            raise HTTPException(
+                status_code=422,
+                detail={"error": "EMPTY_FILE", "detail": "One of the uploaded files is empty.", "code": 422},
+            )
+        if len(img_bytes) > settings.MAX_UPLOAD_BYTES:
+            raise HTTPException(
+                status_code=413,
+                detail={
+                    "error": "FILE_TOO_LARGE",
+                    "detail": f"Image exceeds {settings.MAX_UPLOAD_BYTES // (1024*1024)}MB limit.",
+                    "code": 413,
+                },
+            )
+        detected_format = validate_image_bytes(img_bytes)
+        if detected_format is None:
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "error": "INVALID_FILE_TYPE",
+                    "detail": "One of the files is not a valid JPEG, PNG, or WebP image.",
+                    "code": 422,
+                },
+            )
+        all_bytes.append(img_bytes)
+
+    # Analyze each image
+    engine = _get_engine()
+    loop = asyncio.get_running_loop()
+    results = []
+    for img_bytes in all_bytes:
+        try:
+            result = await loop.run_in_executor(_cv_executor, engine.analyze_bytes, img_bytes)
+            results.append(result)
+        except Exception as exc:
+            logger.warning(f"Multi-analysis: one image failed: {exc}")
+
+    if not results:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "ALL_IMAGES_FAILED",
+                "detail": "Could not analyze any of the uploaded images.",
+                "code": 422,
+            },
+        )
+
+    # Average the results: pick the most common season, average confidence
+    from collections import Counter
+    season_counts = Counter(r.get("season", "") for r in results)
+    best_season = season_counts.most_common(1)[0][0]
+    avg_confidence = sum(r.get("confidence", 0.0) for r in results) / len(results)
+
+    # Use the result that matches the best season with highest confidence
+    best_result = max(
+        (r for r in results if r.get("season") == best_season),
+        key=lambda r: r.get("confidence", 0.0),
+    )
+    best_result["confidence"] = round(avg_confidence, 4)
+    best_result["images_analyzed"] = len(results)
+    best_result["images_submitted"] = len(all_bytes)
+
+    return best_result

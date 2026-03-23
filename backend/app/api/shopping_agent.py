@@ -9,7 +9,7 @@ Requires authentication.
 """
 
 import logging
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
@@ -45,10 +45,19 @@ class CuratedOutfitResponse(BaseModel):
 
 # ─── Endpoint ─────────────────────────────────────────────────
 
+_BODY_SHAPE_TIPS: dict[str, str] = {
+    "hourglass": "Your balanced proportions look great in fitted silhouettes. Highlight your waist with belted pieces.",
+    "pear": "Draw attention upward with statement tops and structured shoulders. A-line bottoms will balance beautifully.",
+    "apple": "Empire waists and V-necklines are your best friends. Structured fabrics create a polished look.",
+    "rectangle": "Create curves with layered pieces, peplum tops, and belted outfits to define your waist.",
+    "inverted_triangle": "Balance broad shoulders with wide-leg pants, A-line skirts, and softer necklines.",
+}
+
+
 @router.get("", response_model=CuratedOutfitResponse)
 async def generate_outfit(
     request: Request,
-    gender: str = Query(..., description="'male' or 'female'"),
+    gender: Literal["male", "female"] = Query(..., description="'male' or 'female'"),
     palette: str = Query(
         ...,
         description=(
@@ -63,6 +72,8 @@ async def generate_outfit(
             "(for non-repeating outfits)"
         ),
     ),
+    style_personality: Optional[str] = Query(None, description="User's style personality (e.g. 'Classic', 'Dramatic')"),
+    body_shape: Optional[str] = Query(None, description="User's body shape (e.g. 'hourglass', 'pear')"),
     current_user: dict = Depends(get_current_user),
 ):
     """
@@ -119,6 +130,14 @@ async def generate_outfit(
             slot = result.get(slot_key)
             if isinstance(slot, dict) and slot.get("product_url"):
                 slot["product_url"] = affiliatize_url(slot["product_url"])
+
+        response_data = {"outfit": result}
+
+        # Add body shape tip if provided
+        body_shape_tip = None
+        if body_shape:
+            body_shape_tip = _BODY_SHAPE_TIPS.get(body_shape.lower())
+        response_data["body_shape_tip"] = body_shape_tip
 
         return CuratedOutfitResponse(**result)
 

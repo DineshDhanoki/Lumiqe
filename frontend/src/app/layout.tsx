@@ -2,9 +2,22 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import FloatingFashionBackground from "@/components/FloatingFashionBackground";
-import { AnalyticsInit } from "@/components/AnalyticsInit";
-import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import dynamic from "next/dynamic";
+
+const FloatingFashionBackground = dynamic(() => import("@/components/FloatingFashionBackground"), { ssr: false });
+const AnalyticsInit = dynamic(() => import("@/components/AnalyticsInit").then(mod => mod.AnalyticsInit), { ssr: false });
+const ServiceWorkerRegister = dynamic(() => import("@/components/ServiceWorkerRegister").then(mod => mod.ServiceWorkerRegister), { ssr: false });
+
+function SkipLink() {
+  return (
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-md focus:font-semibold"
+    >
+      Skip to main content
+    </a>
+  );
+}
 
 const inter = Inter({
   variable: "--font-inter",
@@ -39,11 +52,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased bg-transparent text-white`} suppressHydrationWarning>
+        <SkipLink />
         <FloatingFashionBackground />
         <AnalyticsInit />
         <ServiceWorkerRegister />
         <Providers>
-          {children}
+          <main id="main-content" role="main">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

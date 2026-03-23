@@ -25,7 +25,7 @@ export default function DemoPreview() {
     useEffect(() => {
         async function fetchDemos() {
             try {
-                const res = await fetch('http://localhost:8000/api/demo-results');
+                const res = await fetch('/api/proxy/demo-results');
                 if (!res.ok) throw new Error('Failed to load demo data');
                 const data = await res.json();
                 setDemos(data);

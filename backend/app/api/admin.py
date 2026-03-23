@@ -98,6 +98,27 @@ async def refresh_all_products(
     }
 
 
+@router.post("/send-weekly-digest")
+async def send_weekly_digest(
+    admin_user: dict = Depends(require_admin),
+):
+    """Manually trigger the weekly digest email for all users. Requires admin privileges."""
+    try:
+        from app.services.email_digest import send_weekly_digest as _send_digest
+        count = await _send_digest()
+        logger.info(f"Weekly digest triggered by admin {admin_user['email']}: {count} emails sent")
+        return {"message": f"Weekly digest sent to {count} users.", "count": count}
+    except ImportError:
+        logger.warning("email_digest service not available")
+        return {"message": "Weekly digest service not yet implemented.", "count": 0}
+    except Exception as exc:
+        logger.error(f"Weekly digest failed: {exc}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail={"error": "DIGEST_FAILED", "detail": str(exc), "code": 500},
+        )
+
+
 @router.get("/products/stats")
 async def catalog_stats(
     session: AsyncSession = Depends(get_db),

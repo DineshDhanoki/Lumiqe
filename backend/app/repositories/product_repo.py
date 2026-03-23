@@ -143,15 +143,27 @@ async def get_with_fallback(
     if len(results) >= min_items:
         return results[:min_items]
 
-    # Level 2 — Sibling seasons
+    # Level 2 — Sibling seasons (single query instead of N+1 loop)
     siblings = SIBLING_SEASONS.get(season, [])
-    for sibling_season in siblings:
-        if len(results) >= min_items:
-            break
+    if siblings and len(results) < min_items:
         remaining = min_items - len(results)
-        sibling_items = await get_by_filters(
-            session, gender=gender, vibe=vibe, season=sibling_season, limit=remaining
+        conditions = [
+            Product.season.in_(siblings),
+            Product.is_active,
+        ]
+        if gender:
+            conditions.append(Product.gender == gender.lower())
+        if vibe:
+            conditions.append(Product.vibe == vibe)
+
+        stmt = (
+            select(Product)
+            .where(and_(*conditions))
+            .order_by(Product.match_score.desc())
+            .limit(remaining + len(seen_ids))
         )
+        sibling_result = await session.execute(stmt)
+        sibling_items = [p.to_dict() for p in sibling_result.scalars().all()]
         _add(sibling_items)
 
     if len(results) >= min_items:

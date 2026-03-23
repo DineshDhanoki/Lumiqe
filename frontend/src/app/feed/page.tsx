@@ -53,7 +53,7 @@ function FeedContent() {
                 const isTeaserRequest = isPremiumVibe && !usedPremiumTeaser;
 
                 // Hit the dynamic catalog endpoint with gatekeeper arguments
-                const url = new URL('http://localhost:8000/api/products');
+                const url = new URL('/api/proxy/products', window.location.origin);
                 url.searchParams.append('season', season);
                 url.searchParams.append('gender', gender || 'male');
                 url.searchParams.append('vibe', vibe);

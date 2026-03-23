@@ -1,17 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
-import HowItWorks from '../components/HowItWorks';
-import DemoPreview from '../components/DemoPreview';
-import Features from '../components/Features';
-import Testimonials from '../components/Testimonials';
-import FreeTrial from '../components/FreeTrial';
-import Footer from '../components/Footer';
-import SignInModal from '../components/SignInModal';
-import Pricing from '../components/Pricing';
-import ScrollReveal from '../components/ScrollReveal';
+
+const HowItWorks = dynamic(() => import('../components/HowItWorks'));
+const DemoPreview = dynamic(() => import('../components/DemoPreview'));
+const Features = dynamic(() => import('../components/Features'));
+const Testimonials = dynamic(() => import('../components/Testimonials'));
+const FreeTrial = dynamic(() => import('../components/FreeTrial'));
+const Pricing = dynamic(() => import('../components/Pricing'));
+const Footer = dynamic(() => import('../components/Footer'));
+const ScrollReveal = dynamic(() => import('../components/ScrollReveal'));
+const SignInModal = dynamic(() => import('../components/SignInModal'), { ssr: false });
 
 export default function Home() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -78,11 +80,13 @@ export default function Home() {
 
       <Footer />
 
-      <SignInModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        callbackUrl={authCallbackUrl}
-      />
+      {isAuthModalOpen && (
+        <SignInModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          callbackUrl={authCallbackUrl}
+        />
+      )}
     </main>
   );
 }

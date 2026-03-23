@@ -156,8 +156,14 @@ async def get_optional_user(
         return None
 
     from app.repositories import user_repo
-    async with async_session_factory() as session:
-        return await user_repo.get_by_email(session, user_email)
+    try:
+        async with async_session_factory() as session:
+            user = await user_repo.get_by_email(session, user_email)
+            await session.commit()
+            return user
+    except Exception:
+        logger.debug("get_optional_user: session error, returning None")
+        return None
 
 
 # ─── Role-Based Authorization ────────────────────────────────

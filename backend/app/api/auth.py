@@ -26,7 +26,8 @@ from app.core.security import (
     decode_token,
 )
 from app.core.rate_limiter import check_rate_limit
-from app.services.email import send_welcome_email
+from app.services.email import send_welcome_email, send_email_verification
+from app.core.token_utils import generate_token
 
 logger = logging.getLogger("lumiqe.api.auth")
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
@@ -62,6 +63,11 @@ async def register(user: UserCreate, request: Request, session: AsyncSession = D
     # Fire-and-forget welcome email
     import asyncio
     asyncio.get_running_loop().call_soon(send_welcome_email, user.email, user.name)
+
+    # Send email verification
+    verify_token = generate_token(user.email, "email_verify")
+    verify_url = f"{settings.FRONTEND_URL}/verify-email?token={verify_token}"
+    send_email_verification(user.email, user.name, verify_url)
 
     return AuthResponse(
         user=UserResponse(**new_user),
@@ -146,8 +152,15 @@ async def google_auth(body: GoogleAuthRequest, request: Request, session: AsyncS
             detail={"error": "INVALID_GOOGLE_TOKEN", "detail": "Token email does not match.", "code": 401},
         )
 
-    # Verify token audience matches our Google Client ID (if configured)
-    if settings.GOOGLE_CLIENT_ID and token_data.get("aud") != settings.GOOGLE_CLIENT_ID:
+    # REQUIRE GOOGLE_CLIENT_ID to be configured for Google OAuth
+    if not settings.GOOGLE_CLIENT_ID:
+        raise HTTPException(
+            status_code=503,
+            detail={"error": "GOOGLE_NOT_CONFIGURED", "detail": "Google OAuth is not configured on this server.", "code": 503},
+        )
+
+    # Verify token audience matches our Google Client ID
+    if token_data.get("aud") != settings.GOOGLE_CLIENT_ID:
         logger.warning(f"[SECURITY] Google token audience mismatch ip={client_ip}")
         raise HTTPException(
             status_code=401,

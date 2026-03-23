@@ -239,11 +239,28 @@ async def get_by_referral_code(session: AsyncSession, code: str) -> Optional[dic
 
 
 async def apply_referral(session: AsyncSession, new_user_id: int, referrer_id: int) -> bool:
-    """Award both users +1 free scan. Set referred_by on new user."""
+    """Award referred user a 7-day premium trial + 1 free scan, and referrer +1 free scan."""
+    from datetime import datetime, timezone, timedelta
+
+    # Fetch the new user to check/extend trial
+    result = await session.execute(select(User).where(User.id == new_user_id))
+    new_user = result.scalar_one_or_none()
+    if not new_user:
+        return False
+
+    # Calculate trial end: extend existing trial or start fresh 7-day trial
+    now = datetime.now(timezone.utc)
+    current_trial_end = new_user.trial_ends_at
+    if current_trial_end and current_trial_end > now:
+        new_trial_end = current_trial_end + timedelta(days=7)
+    else:
+        new_trial_end = now + timedelta(days=7)
+
     await session.execute(
         update(User).where(User.id == new_user_id).values(
             referred_by=referrer_id,
             free_scans_left=User.free_scans_left + 1,
+            trial_ends_at=new_trial_end,
         )
     )
     await session.execute(
@@ -252,5 +269,30 @@ async def apply_referral(session: AsyncSession, new_user_id: int, referrer_id: i
             referral_count=User.referral_count + 1,
         )
     )
+    logger.info(f"Referral applied: user {new_user_id} gets 7-day trial (until {new_trial_end.isoformat()}) + 1 scan, referrer {referrer_id} gets +1 scan")
     return True
+
+
+async def update_password(session: AsyncSession, user_id: int, new_password_hash: str) -> bool:
+    """Update a user's password hash."""
+    result = await session.execute(
+        update(User)
+        .where(User.id == user_id)
+        .values(password_hash=new_password_hash)
+    )
+    if result.rowcount > 0:
+        logger.info(f"Password updated for user {user_id}")
+    return result.rowcount > 0
+
+
+async def verify_email(session: AsyncSession, user_id: int) -> bool:
+    """Set email_verified=True for a user."""
+    result = await session.execute(
+        update(User)
+        .where(User.id == user_id)
+        .values(email_verified=True)
+    )
+    if result.rowcount > 0:
+        logger.info(f"Email verified for user {user_id}")
+    return result.rowcount > 0
 

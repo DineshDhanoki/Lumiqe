@@ -1,30 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Gift, Copy, Check, Users } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { apiFetch } from '@/lib/api';
+import { useFetch } from '@/lib/hooks/useFetch';
+
+interface ReferralData {
+    referral_code: string;
+    referral_url: string;
+    referral_count: number;
+}
 
 export default function ReferralCard() {
     const { data: session } = useSession();
-    const [referralData, setReferralData] = useState<{
-        referral_code: string;
-        referral_url: string;
-        referral_count: number;
-    } | null>(null);
     const [copied, setCopied] = useState(false);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (!session) return;
-
-        apiFetch('/api/referral/code')
-            .then(r => r.ok ? r.json() : null)
-            .then(data => { if (data) setReferralData(data); })
-            .catch(() => {})
-            .finally(() => setLoading(false));
-    }, [session]);
+    const { data: referralData, loading } = useFetch<ReferralData>(
+        '/api/proxy/referral/code',
+        { skip: !session },
+    );
 
     const handleCopy = () => {
         if (!referralData) return;

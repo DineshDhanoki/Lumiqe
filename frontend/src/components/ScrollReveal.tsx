@@ -9,20 +9,20 @@ interface ScrollRevealProps {
     width?: "fit-content" | "100%";
 }
 
-export default function ScrollReveal({
+const scrollRevealVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+};
+
+const ScrollReveal = React.memo(function ScrollReveal({
     children,
     delay = 0,
     width = "100%",
 }: ScrollRevealProps) {
-    const variants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0 },
-    };
-
     return (
         <div style={{ width }} className="overflow-hidden">
             <motion.div
-                variants={variants}
+                variants={scrollRevealVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: false, amount: 0.2 }}
@@ -32,4 +32,6 @@ export default function ScrollReveal({
             </motion.div>
         </div>
     );
-}
+});
+
+export default ScrollReveal;

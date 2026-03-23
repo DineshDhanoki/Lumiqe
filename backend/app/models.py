@@ -39,6 +39,7 @@ class User(Base):
     free_scans_left: Mapped[int] = mapped_column(Integer, default=3, server_default="3")
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     is_premium: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     trial_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     credits: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     referral_code: Mapped[str | None] = mapped_column(String(10), unique=True, index=True, nullable=True)
@@ -59,7 +60,7 @@ class User(Base):
     )
 
     def to_dict(self) -> dict:
-        """Serialize to a safe dictionary — never exposes password_hash."""
+        """Serialize to a safe dictionary — never exposes password_hash or Stripe IDs."""
         return {
             "id": self.id,
             "name": self.name,
@@ -67,19 +68,25 @@ class User(Base):
             "free_scans_left": self.free_scans_left,
             "is_admin": self.is_admin,
             "is_premium": self.is_premium,
+            "email_verified": self.email_verified,
             "credits": self.credits,
             "referral_code": self.referral_code,
             "referral_count": self.referral_count,
-            "stripe_customer_id": self.stripe_customer_id,
             "trial_ends_at": self.trial_ends_at.isoformat() if self.trial_ends_at else None,
             "season": self.season,
             "palette": self.palette,
-            "stripe_subscription_id": self.stripe_subscription_id,
             "body_shape": self.body_shape,
             "style_personality": self.style_personality,
             "quiz_completed_at": self.quiz_completed_at.isoformat() if self.quiz_completed_at else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+    def to_admin_dict(self) -> dict:
+        """Serialize with Stripe IDs — only for admin views."""
+        d = self.to_dict()
+        d["stripe_customer_id"] = self.stripe_customer_id
+        d["stripe_subscription_id"] = self.stripe_subscription_id
+        return d
 
     def to_auth_dict(self) -> dict:
         """Serialize including password_hash — only for the auth login flow."""
@@ -168,6 +175,44 @@ class Event(Base):
         }
 
 
+class WishlistItem(Base):
+    """User's wishlisted product."""
+
+    __tablename__ = "wishlist_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    product_id: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    product_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    product_brand: Mapped[str] = mapped_column(String(255), nullable=False)
+    product_price: Mapped[str] = mapped_column(String(50), nullable=False)
+    product_image: Mapped[str] = mapped_column(String(512), nullable=False)
+    product_url: Mapped[str] = mapped_column(String(512), nullable=False)
+    match_score: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        """Serialize to dictionary for API responses."""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "product_id": self.product_id,
+            "product_name": self.product_name,
+            "product_brand": self.product_brand,
+            "product_price": self.product_price,
+            "product_image": self.product_image,
+            "product_url": self.product_url,
+            "match_score": self.match_score,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
 class Product(Base):
     """Curated product with a pgvector color embedding for similarity search."""
 
@@ -181,13 +226,17 @@ class Product(Base):
     url: Mapped[str] = mapped_column(String(512), nullable=False)
     category: Mapped[str] = mapped_column(String(100), nullable=False)
     season: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
-    gender: Mapped[str] = mapped_column(String(20), nullable=False, default="unisex", server_default="unisex")
-    vibe: Mapped[str] = mapped_column(String(50), nullable=False, default="Casual", server_default="Casual")
+    gender: Mapped[str] = mapped_column(String(20), nullable=False, default="unisex", server_default="unisex", index=True)
+    vibe: Mapped[str] = mapped_column(String(50), nullable=False, default="Casual", server_default="Casual", index=True)
     tier: Mapped[str] = mapped_column(String(20), nullable=False, default="free", server_default="free")
     source: Mapped[str] = mapped_column(String(50), nullable=False, default="manual", server_default="manual")
     source_id: Mapped[str | None] = mapped_column(String(255), nullable=True, unique=True)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", index=True)
     match_score: Mapped[int] = mapped_column(Integer, default=0)
+    price_cents: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    currency: Mapped[str] = mapped_column(String(3), default="INR", server_default="INR")
+    is_sponsored: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    sponsor_label: Mapped[str | None] = mapped_column(String(100), nullable=True)
     color_hex: Mapped[str | None] = mapped_column(String(7), nullable=True)
     color_embedding = mapped_column(Vector(3), nullable=True)
 
@@ -198,16 +247,230 @@ class Product(Base):
             "name": self.name,
             "brand": self.brand,
             "price": self.price,
-            "image": self.image,       # Backend compat
-            "image_url": self.image,   # Frontend compat
-            "url": self.url,           # Backend compat
-            "purchase_link": self.url, # Frontend compat
+            "image": self.image,
+            "url": self.url,
             "category": self.category,
             "season": self.season,
             "gender": self.gender,
             "vibe": self.vibe,
             "tier": self.tier,
             "is_active": self.is_active,
+            "is_sponsored": self.is_sponsored,
+            "sponsor_label": self.sponsor_label,
             "match_score": self.match_score,
             "color_hex": self.color_hex,
+            "price_cents": self.price_cents,
+            "currency": self.currency,
         }
+
+
+class APIKey(Base):
+    """B2B API key for metered partner access."""
+
+    __tablename__ = "api_keys"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    key_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    total_calls: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    created_by: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "key_hash": self.key_hash[:12] + "...",
+            "is_active": self.is_active,
+            "total_calls": self.total_calls,
+            "created_by": self.created_by,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class CreatorProfile(Base):
+    """Influencer/creator profile with tracking and earnings."""
+
+    __tablename__ = "creator_profiles"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False, index=True
+    )
+    tracking_code: Mapped[str] = mapped_column(String(20), unique=True, nullable=False, index=True)
+    display_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    clicks: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    signups: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    conversions: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    earnings_cents: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "tracking_code": self.tracking_code,
+            "display_name": self.display_name,
+            "clicks": self.clicks,
+            "signups": self.signups,
+            "conversions": self.conversions,
+            "earnings_cents": self.earnings_cents,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class PriceAlert(Base):
+    """Price drop alert for a product."""
+
+    __tablename__ = "price_alerts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    product_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    product_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    product_url: Mapped[str] = mapped_column(String(512), nullable=False)
+    original_price_cents: Mapped[int] = mapped_column(Integer, nullable=False)
+    target_drop_percent: Mapped[int] = mapped_column(Integer, default=15, server_default="15")
+    is_triggered: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "product_id": self.product_id,
+            "product_name": self.product_name,
+            "product_url": self.product_url,
+            "original_price_cents": self.original_price_cents,
+            "target_drop_percent": self.target_drop_percent,
+            "is_triggered": self.is_triggered,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class CommunityPost(Base):
+    """User-submitted outfit post in the community gallery."""
+
+    __tablename__ = "community_posts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    image_url: Mapped[str] = mapped_column(String(512), nullable=False)
+    caption: Mapped[str] = mapped_column(String(500), nullable=False)
+    season_tag: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    likes_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "image_url": self.image_url,
+            "caption": self.caption,
+            "season_tag": self.season_tag,
+            "likes_count": self.likes_count,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class WardrobeItem(Base):
+    """Item in a user's virtual wardrobe."""
+
+    __tablename__ = "wardrobe_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    category: Mapped[str] = mapped_column(String(100), nullable=False)
+    color_hex: Mapped[str | None] = mapped_column(String(7), nullable=True)
+    image_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    brand: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "name": self.name,
+            "category": self.category,
+            "color_hex": self.color_hex,
+            "image_url": self.image_url,
+            "brand": self.brand,
+            "notes": self.notes,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class SavedOutfit(Base):
+    """User's saved outfit combination."""
+
+    __tablename__ = "saved_outfits"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    items: Mapped[list] = mapped_column(JSON, nullable=False)
+    occasion: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "name": self.name,
+            "items": self.items,
+            "occasion": self.occasion,
+            "notes": self.notes,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class CommunityLike(Base):
+    """Tracks which users liked which community posts (prevents double-likes)."""
+
+    __tablename__ = "community_likes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    post_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("community_posts.id", ondelete="CASCADE"), nullable=False, index=True
+    )

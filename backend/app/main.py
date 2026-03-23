@@ -34,32 +34,35 @@ from app.middleware.security import SecurityHeadersMiddleware
 from download_models import ensure_models
 
 # ─── Route Modules ───────────────────────────────────────────
-from app.api.health import router as health_router
-from app.api.auth import router as auth_router
-from app.api.analyze import router as analyze_router
-from app.api.analysis import router as analysis_router
-from app.api.products import router as products_router
-from app.api.scan import router as scan_router
-from app.api.palette_card import router as palette_card_router
-from app.api.admin import router as admin_router
-from app.api.shopping_agent import router as shopping_agent_router
-from app.api.styling_tips import router as styling_tips_router
-from app.api.stripe import router as stripe_router
-from app.api.share import router as share_router
-from app.api.profile import router as profile_router
-from app.api.complete_profile import router as complete_profile_router
-from app.api.events import router as events_router
-from app.api.color_chat import router as color_chat_router
-from app.api.referral import router as referral_router
-from app.api.outfit import router as outfit_router
+from app.api.routers import register_all_routers
 
 logger = logging.getLogger("lumiqe.main")
 
-# ─── Logging ─────────────────────────────────────────────────
+# ─── JSON Structured Logging ─────────────────────────────────
+import json as _json
+
+
+class _JSONFormatter(logging.Formatter):
+    """Emit log records as single-line JSON for structured logging."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        log_entry = {
+            "ts": self.formatTime(record, "%Y-%m-%dT%H:%M:%S"),
+            "level": record.levelname,
+            "logger": record.name,
+            "msg": record.getMessage(),
+            "request_id": getattr(record, "request_id", "-"),
+        }
+        if record.exc_info and record.exc_info[1]:
+            log_entry["exception"] = self.formatException(record.exc_info)
+        return _json.dumps(log_entry)
+
+
+_handler = logging.StreamHandler()
+_handler.setFormatter(_JSONFormatter())
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[_handler],
 )
 
 
@@ -76,9 +79,26 @@ async def lifespan(app: FastAPI):
 
     await init_db()
     await init_redis()
+    # Start background scheduler
+    scheduler = None
+    try:
+        from apscheduler.schedulers.asyncio import AsyncIOScheduler
+        scheduler = AsyncIOScheduler()
+        scheduler.start()
+        logger.info("Background scheduler started")
+    except ImportError:
+        logger.info("apscheduler not installed — background scheduler disabled")
+    except Exception as exc:
+        logger.warning(f"Scheduler failed to start: {exc}")
+
     logger.info("All services initialized")
     yield
     logger.info("Shutting down — closing connections...")
+
+    # Stop scheduler
+    if scheduler:
+        scheduler.shutdown(wait=False)
+        logger.info("Background scheduler stopped")
     await close_redis()
     await close_db()
 
@@ -123,24 +143,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # ─── Register Routers ────────────────────────────────────────
 
-app.include_router(health_router)
-app.include_router(auth_router)
-app.include_router(analyze_router)
-app.include_router(analysis_router)
-app.include_router(products_router)
-app.include_router(scan_router)
-app.include_router(palette_card_router)
-app.include_router(admin_router)
-app.include_router(shopping_agent_router)
-app.include_router(styling_tips_router)
-app.include_router(stripe_router)
-app.include_router(share_router)
-app.include_router(profile_router)
-app.include_router(complete_profile_router)
-app.include_router(events_router)
-app.include_router(color_chat_router)
-app.include_router(referral_router)
-app.include_router(outfit_router)
+register_all_routers(app)
 
 
 # ─── CLI Entry Point ─────────────────────────────────────────

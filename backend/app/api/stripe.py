@@ -24,8 +24,8 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # When STRIPE_*_PRICE_ID env vars are set, we use pre-created Prices (recommended).
 # Otherwise falls back to inline price_data.
 PRICE_MAP = {
-    "monthly": {"amount": 14900, "interval": "month", "interval_count": 1, "label": "Lumiqe Premium — Monthly"},
-    "annual":  {"amount": 49900, "interval": "year",  "interval_count": 1, "label": "Lumiqe Premium — Annual"},
+    "monthly": {"amount": 14900, "interval": "month", "interval_count": 1, "label": "Wardrobe Tracker + Daily Outfits + AI Stylist + Unlimited Scans"},
+    "annual":  {"amount": 99900, "interval": "year",  "interval_count": 1, "label": "Lumiqe Premium — Annual (44% off)"},
 }
 
 PLAN_TO_PRICE_ID = {
@@ -49,6 +49,10 @@ class PortalRequest(BaseModel):
 # ─── Credit Pack Prices (one-time payments) ──────────────────
 CREDIT_PACKS = {
     "single": {"amount": 4900, "credits": 1, "label": "Single Analysis — 1 credit"},
+    "scan": {"amount": 2900, "credits": 1, "label": "Quick Scan — 1 credit"},
+    "analysis": {"amount": 9900, "credits": 3, "label": "Analysis Pack — 3 credits"},
+    "analysis_report": {"amount": 19900, "credits": 5, "label": "Analysis Report — 5 credits"},
+    "bundle_5": {"amount": 39900, "credits": 10, "label": "Bundle — 10 credits"},
 }
 
 
@@ -201,6 +205,21 @@ async def stripe_webhook(
         raise HTTPException(status_code=400, detail={"error": "INVALID_PAYLOAD", "detail": "Invalid webhook payload", "code": 400})
     except stripe.SignatureVerificationError:
         raise HTTPException(status_code=400, detail={"error": "INVALID_SIGNATURE", "detail": "Invalid webhook signature", "code": 400})
+
+    # ── Webhook idempotency: deduplicate by event ID ─────────────
+    event_id = event.get("id", "")
+    if event_id:
+        try:
+            from app.core.rate_limiter import _redis_client, _redis_available
+            if _redis_available and _redis_client:
+                already_processed = await _redis_client.set(
+                    f"lumiqe:webhook:seen:{event_id}", "1", nx=True, ex=86400
+                )
+                if not already_processed:
+                    logger.info(f"Duplicate webhook event skipped: {event_id}")
+                    return {"status": "ok", "duplicate": True}
+        except Exception as exc:
+            logger.warning(f"Webhook dedup check failed (proceeding): {exc}")
 
     event_type = event["type"]
     data = event["data"]["object"]

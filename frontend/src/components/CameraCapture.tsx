@@ -12,7 +12,7 @@ interface CameraCaptureProps {
 }
 
 type LightingStatus = 'good' | 'too_dark' | 'too_bright' | 'checking';
-type FaceStatus = 'good' | 'too_close' | 'too_far' | 'off_center' | 'checking';
+type FaceStatus = 'good' | 'no_face' | 'too_close' | 'too_far' | 'off_center' | 'checking';
 
 const CAPTURE_COUNTDOWN = 3;
 
@@ -124,9 +124,20 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                 setLightingStatus('good');
             }
 
-            // Simple face presence heuristic: check center region has skin-like variance
-            // (If center is uniform/dark, face is likely not centered)
-            setFaceStatus('good'); // Simplified — face detection requires ML on-device
+            // Face presence heuristic: compute pixel variance in center region
+            // High variance suggests a face with features; low variance suggests empty/uniform area
+            let sumSquaredDiff = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const brightness = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                const diff = brightness - avgBrightness;
+                sumSquaredDiff += diff * diff;
+            }
+            const variance = sumSquaredDiff / pixelCount;
+            if (variance > 200) {
+                setFaceStatus('good');
+            } else {
+                setFaceStatus('no_face');
+            }
         }, 500);
 
         return () => {

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 interface SignInModalProps {
@@ -12,6 +13,7 @@ interface SignInModalProps {
 }
 
 export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' }: SignInModalProps) {
+    const router = useRouter();
     const [isSignUp, setIsSignUp] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -45,7 +47,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
         try {
             if (isSignUp) {
                 // Register user via backend
-                const res = await fetch('http://127.0.0.1:8000/api/auth/register', {
+                const res = await fetch('/api/proxy/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })
@@ -78,7 +80,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                 throw new Error('Invalid email or password');
             } else {
                 handleClose();
-                window.location.href = callbackUrl;
+                router.push(callbackUrl);
             }
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'An error occurred during authentication');
@@ -238,7 +240,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                 <button
                                     onClick={() => {
                                         onClose();
-                                        window.location.href = '/analyze';
+                                        router.push('/analyze');
                                     }}
                                     className="text-white/60 hover:text-white text-sm font-medium transition-colors"
                                 >

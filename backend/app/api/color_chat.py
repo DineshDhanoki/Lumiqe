@@ -9,7 +9,7 @@ shopping guidance, and professional styling advice.
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 from app.core.config import settings
 from app.core.dependencies import get_current_user
@@ -18,6 +18,18 @@ from app.core.security import sanitize_llm_input
 
 logger = logging.getLogger("lumiqe.api.color_chat")
 router = APIRouter(prefix="/api", tags=["AI Stylist Chat"])
+
+# ─── Lazy Groq Singleton ────────────────────────────────────
+_groq_client = None
+
+
+def _get_groq_client():
+    """Return a lazily-initialized Groq client (singleton)."""
+    global _groq_client
+    if _groq_client is None and settings.GROQ_API_KEY:
+        from groq import Groq
+        _groq_client = Groq(api_key=settings.GROQ_API_KEY)
+    return _groq_client
 
 STYLIST_SYSTEM_PROMPT = """You are Lumiqe's elite personal color stylist — the equivalent of a high-end professional \
 color consultant combined with a celebrity wardrobe stylist.
@@ -45,6 +57,11 @@ class ChatMessage(BaseModel):
     role: str  # "user" or "assistant"
     content: str
 
+    @property
+    def safe_content(self) -> str:
+        """Truncate content to 500 characters for safety."""
+        return self.content[:500] if self.content else ""
+
 
 class ChatRequest(BaseModel):
     message: str
@@ -55,6 +72,14 @@ class ChatRequest(BaseModel):
     signature_color: str = ""
     metal: str = "Gold"
     history: list[ChatMessage] = []
+
+    @property
+    def safe_history(self) -> list[ChatMessage]:
+        """Return at most 20 messages with validated roles."""
+        return [
+            msg for msg in self.history[-20:]
+            if msg.role in ("user", "assistant")
+        ]
 
 
 @router.post("/color-chat")
@@ -88,9 +113,12 @@ async def color_chat(
         )
 
     try:
-        from groq import Groq
-
-        client = Groq(api_key=settings.GROQ_API_KEY)
+        client = _get_groq_client()
+        if not client:
+            raise HTTPException(
+                status_code=503,
+                detail={"error": "SERVICE_UNAVAILABLE", "detail": "AI stylist is not configured.", "code": 503},
+            )
 
         system_prompt = STYLIST_SYSTEM_PROMPT.format(
             season=season,
@@ -101,10 +129,10 @@ async def color_chat(
             metal=body.metal,
         )
 
-        # Build message history (keep last 10 exchanges for context)
+        # Build message history (keep last 20 validated messages for context)
         messages = [{"role": "system", "content": system_prompt}]
-        for msg in body.history[-10:]:
-            messages.append({"role": msg.role, "content": msg.content})
+        for msg in body.safe_history:
+            messages.append({"role": msg.role, "content": msg.safe_content})
         messages.append({"role": "user", "content": user_message})
 
         chat = client.chat.completions.create(

@@ -138,6 +138,53 @@ def send_analysis_complete_email(
     return _send(to, f"Your Color Season: {season} — Lumiqe Results Ready", html)
 
 
+def send_password_reset_email(to: str, name: str, reset_url: str) -> bool:
+    """Send a password reset email with a one-time link."""
+    safe_name = escape(name)
+    safe_url = escape(reset_url)
+    html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LUMI<span class="accent">QE</span></div>
+        </div>
+        <div class="card">
+            <h2>Reset Your Password</h2>
+            <p>Hi {safe_name}, we received a request to reset your password. Click the button below to choose a new one.</p>
+            <p style="color: #71717a; font-size: 13px;">This link expires in 30 minutes and can only be used once.</p>
+            <div style="text-align: center; margin-top: 24px;">
+                <a href="{safe_url}" class="btn">Reset Password</a>
+            </div>
+            <p style="color: #71717a; font-size: 12px; margin-top: 24px;">If you didn't request this, you can safely ignore this email.</p>
+        </div>
+        {_FOOTER}
+    </div>
+    </body></html>"""
+    return _send(to, "Reset Your Lumiqe Password", html)
+
+
+def send_email_verification(to: str, name: str, verify_url: str) -> bool:
+    """Send an email verification link after registration."""
+    safe_name = escape(name)
+    safe_url = escape(verify_url)
+    html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LUMI<span class="accent">QE</span></div>
+        </div>
+        <div class="card">
+            <h2>Verify Your Email</h2>
+            <p>Hi {safe_name}, please confirm your email address to unlock all Lumiqe features.</p>
+            <p style="color: #71717a; font-size: 13px;">This link expires in 30 minutes.</p>
+            <div style="text-align: center; margin-top: 24px;">
+                <a href="{safe_url}" class="btn">Verify Email</a>
+            </div>
+        </div>
+        {_FOOTER}
+    </div>
+    </body></html>"""
+    return _send(to, "Verify Your Email — Lumiqe", html)
+
+
 def send_subscription_confirmed_email(to: str, name: str, plan: str) -> bool:
     """Send an email when a premium subscription is confirmed."""
     safe_name = escape(name)

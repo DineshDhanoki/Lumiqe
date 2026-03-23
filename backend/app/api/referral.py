@@ -69,4 +69,8 @@ async def apply_referral_code(
     await user_repo.apply_referral(session, current_user["id"], referrer["id"])
     await session.commit()
 
-    return {"message": "Referral applied! You both earned +1 free scan.", "bonus_scans": 1}
+    return {
+        "message": "Referral applied! You earned a 7-day Premium trial + 1 free scan.",
+        "bonus_scans": 1,
+        "bonus_trial_days": 7,
+    }

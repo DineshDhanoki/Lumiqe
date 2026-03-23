@@ -6,6 +6,7 @@ if Redis is not available (development mode).
 """
 
 import logging
+import threading
 import time
 from collections import defaultdict
 
@@ -18,6 +19,7 @@ logger = logging.getLogger("lumiqe.rate_limiter")
 # ─── In-Memory Fallback (dev only) ───────────────────────────
 _memory_store: dict[str, list[float]] = defaultdict(list)
 _MEMORY_MAX_KEYS = 10_000  # prevent unbounded growth under bot traffic
+_memory_lock = threading.Lock()
 
 
 # ─── Redis Connection ────────────────────────────────────────
@@ -103,34 +105,44 @@ async def _check_redis(key: str, max_requests: int, window_seconds: int) -> None
 
 def _check_memory(key: str, max_requests: int, window_seconds: int) -> None:
     """In-memory fallback for development."""
-    now = time.time()
-    window_start = now - window_seconds
+    with _memory_lock:
+        now = time.time()
+        window_start = now - window_seconds
 
-    # Drop oldest keys if store is too large (bot protection)
-    if len(_memory_store) >= _MEMORY_MAX_KEYS and key not in _memory_store:
-        oldest_key = next(iter(_memory_store))
-        del _memory_store[oldest_key]
+        # Drop oldest keys if store is too large (bot protection)
+        if len(_memory_store) >= _MEMORY_MAX_KEYS and key not in _memory_store:
+            oldest_key = next(iter(_memory_store))
+            del _memory_store[oldest_key]
 
-    # Prune old entries for this key
-    _memory_store[key] = [ts for ts in _memory_store[key] if ts > window_start]
+        # Prune old entries for this key
+        _memory_store[key] = [ts for ts in _memory_store[key] if ts > window_start]
 
-    if len(_memory_store[key]) >= max_requests:
-        raise HTTPException(
-            status_code=429,
-            detail={
-                "error": "RATE_LIMIT_EXCEEDED",
-                "detail": "Too many requests. Please try again later.",
-                "code": 429,
-            },
-            headers={"Retry-After": str(window_seconds)},
-        )
+        if len(_memory_store[key]) >= max_requests:
+            raise HTTPException(
+                status_code=429,
+                detail={
+                    "error": "RATE_LIMIT_EXCEEDED",
+                    "detail": "Too many requests. Please try again later.",
+                    "code": 429,
+                },
+                headers={"Retry-After": str(window_seconds)},
+            )
 
-    _memory_store[key].append(now)
+        _memory_store[key].append(now)
+
+
+def _get_real_ip(request: Request) -> str:
+    """Extract the real client IP from X-Forwarded-For header or fallback to client.host."""
+    forwarded_for = request.headers.get("x-forwarded-for")
+    if forwarded_for:
+        # X-Forwarded-For is comma-separated; first IP is the original client
+        return forwarded_for.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 
 def get_rate_limit_key(request: Request, user: dict | None, endpoint: str) -> str:
     """Build a rate limit key from user or IP."""
     if user:
         return f"{endpoint}:user:{user['email']}"
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = _get_real_ip(request)
     return f"{endpoint}:ip:{client_ip}"

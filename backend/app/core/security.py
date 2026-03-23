@@ -142,8 +142,8 @@ def sanitize_llm_input(value: str, max_length: int = 100) -> str:
     """
     import re
 
-    # Strip control characters (keep printable + spaces)
-    cleaned = re.sub(r"[^\x20-\x7E]", "", value).strip()
+    # Strip control characters (keep Unicode letters, allow Hindi/Arabic/Korean)
+    cleaned = re.sub(r"[\x00-\x1f\x7f]", "", value).strip()
 
     # Enforce length
     if len(cleaned) > max_length:

@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/lumiqe_dev"
+    DATABASE_READ_URL: str | None = None
 
     # CORS — all frontend origins that are allowed to call this API
     CORS_ORIGINS: list[str] = [
@@ -27,6 +28,7 @@ class Settings(BaseSettings):
         "https://lumiqe.in",
         "https://www.lumiqe.in",
         "https://lumiqe.vercel.app",
+        "https://staging.lumiqe.in",
     ]
 
     # Rate limiting
