@@ -204,7 +204,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
         }, 'image/jpeg', 0.95);
     }, [facingMode, onCapture]);
 
-    const startCountdown = useCallback(() => {
+    const startCountdown = () => {
         if (!canCapture) return;
         let remaining = CAPTURE_COUNTDOWN;
         setCountdown(remaining);
@@ -219,7 +219,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                 setCountdown(remaining);
             }
         }, 1000);
-    }, [captureFrame]);
+    };
 
     const lightingConfig = {
         good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <CheckCircle2 className="w-4 h-4" />, label: t(lang, 'goodLighting') },
