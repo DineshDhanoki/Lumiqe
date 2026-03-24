@@ -87,10 +87,10 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
     ];
 
     const singlePackFeatures = [
-        { text: '1 additional analysis scan', included: true },
-        { text: 'Full 6-color palette', included: true },
-        { text: 'Celebrity color match', included: true },
-        { text: 'Palette card download', included: true },
+        { text: 'Scan credit — ₹29', included: true },
+        { text: 'Analysis credit — ₹99', included: true },
+        { text: 'Report credit — ₹199', included: true },
+        { text: 'Bundle (all 3) — ₹399', included: true },
         { text: 'No subscription needed', included: true },
     ];
 
@@ -148,7 +148,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="text-xs font-bold bg-green-500/20 text-green-400 px-3 py-1 rounded-full border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse"
                             >
-                                Save 72%
+                                Save 44%
                             </motion.span>
                         )}
                     </div>
@@ -223,10 +223,10 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-extrabold text-white">₹49</span>
-                                <span className="text-white/40 text-sm">/one-time</span>
+                                <span className="text-4xl font-extrabold text-white">₹29</span>
+                                <span className="text-white/40 text-sm">– ₹399</span>
                             </div>
-                            <p className="text-white/50 text-sm mt-2">Pay per scan, no commitment</p>
+                            <p className="text-white/50 text-sm mt-2">Credit packs — pay per use, no commitment</p>
                         </div>
 
                         <ul className="space-y-2.5 mb-6 flex-1">
@@ -279,7 +279,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
                                 <span className="text-4xl font-extrabold text-white">
-                                    ₹{isAnnual ? '499' : '149'}
+                                    ₹{isAnnual ? '999' : '149'}
                                 </span>
                                 <span className="text-white/40 text-sm">
                                     /{isAnnual ? 'year' : 'month'}
@@ -287,8 +287,8 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             </div>
                             <p className="text-white/50 text-sm mt-2">
                                 {isAnnual
-                                    ? 'Just ₹41/month — best value!'
-                                    : 'Cancel anytime, no lock-in'}
+                                    ? 'Just ₹83/month — best value!'
+                                    : 'Wardrobe Tracker + Daily Outfits + AI Stylist + Unlimited Scans'}
                             </p>
                         </div>
 

@@ -19,9 +19,10 @@ def register_all_routers(app: FastAPI) -> None:
     Domains:
         Core (9): health, auth, analyze, analysis, products, scan,
                   palette_card, profile, complete_profile
-        Features (13): color_chat, shopping_agent, outfit, styling_tips,
-                       share, wardrobe, wishlist, saved_outfits, community,
-                       virtual_tryon, skin_profiles, before_after, stories
+        Features (14): color_chat, shopping_agent, outfit, styling_tips,
+                       share, makeup, wardrobe, wishlist, saved_outfits,
+                       community, virtual_tryon, skin_profiles, before_after,
+                       stories
         Monetization (4): stripe, referral, gift, price_alerts
         Growth (5): creators, seasonal, affiliate_tracking, password_reset, events
         B2B (1): b2b_api
@@ -51,18 +52,20 @@ def register_all_routers(app: FastAPI) -> None:
 
     logger.info("Registered 9 core routers")
 
-    # ─── Features (13) ───────────────────────────────────────
+    # ─── Features (14) ───────────────────────────────────────
     from app.api.color_chat import router as color_chat_router
     from app.api.shopping_agent import router as shopping_agent_router
     from app.api.outfit import router as outfit_router
     from app.api.styling_tips import router as styling_tips_router
     from app.api.share import router as share_router
+    from app.api.makeup import router as makeup_router
 
     app.include_router(color_chat_router)
     app.include_router(shopping_agent_router)
     app.include_router(outfit_router)
     app.include_router(styling_tips_router)
     app.include_router(share_router)
+    app.include_router(makeup_router)
 
     _register_optional(app, "app.api.wardrobe", "wardrobe")
     _register_optional(app, "app.api.wishlist", "wishlist")
@@ -103,14 +106,17 @@ def register_all_routers(app: FastAPI) -> None:
 
     logger.info("Registered B2B routers")
 
-    # ─── Admin (3) ───────────────────────────────────────────
+    # ─── Admin (4) ───────────────────────────────────────────
     from app.api.admin import router as admin_router
+    from app.api.metrics import router as metrics_router
+
     app.include_router(admin_router)
+    app.include_router(metrics_router)
 
     _register_optional(app, "app.api.admin_dashboard", "admin_dashboard")
     _register_optional(app, "app.api.analytics_dashboard", "analytics_dashboard")
 
-    logger.info("Registered admin routers")
+    logger.info("Registered admin routers (including metrics)")
     logger.info("All routers registered successfully")
 
 

@@ -19,6 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.repositories import product_repo
 from app.core.dependencies import get_db
 from app.services.affiliate import affiliatize_products
+from app.services.social_proof import get_product_social_proof
 
 logger = logging.getLogger("lumiqe.api.products")
 router = APIRouter(prefix="/api/products", tags=["Products"])
@@ -31,6 +32,27 @@ if _PRODUCTS_JSON.exists():
         _PRODUCTS_FALLBACK = json.load(f)
 
 PREMIUM_VIBES = {"Gym", "Party", "Formal"}
+
+
+async def _attach_social_proof(
+    session: AsyncSession,
+    products: list[dict],
+    user_season: str | None,
+) -> list[dict]:
+    """Attach social_proof data to each product dict in-place."""
+    product_ids = [p.get("id") for p in products if p.get("id")]
+    if not product_ids:
+        return products
+
+    proof_map = await get_product_social_proof(session, product_ids, user_season)
+    for product in products:
+        pid = product.get("id")
+        product["social_proof"] = proof_map.get(pid, {
+            "wishlisted_count": 0,
+            "season_match_percent": 0,
+            "trending": False,
+        })
+    return products
 
 
 # ─── PLG Gatekeeper ─────────────────────────────────────────
@@ -193,7 +215,9 @@ async def get_products_filtered(
         # DB has items — use smart fetch (Delta-E if palette available)
         products = await _smart_fetch(effective_vibe)
         gated = _apply_gatekeeper(products, effective_vibe, is_teaser_request, "free")
-        return {"products": affiliatize_products(gated), "total": len(gated)}
+        final = affiliatize_products(gated)
+        final = await _attach_social_proof(session, final, season)
+        return {"products": final, "total": len(gated)}
 
     # ── CASE 2: Casual vibe (free or premium user) ───────────
     if not is_premium_vibe:
@@ -217,7 +241,9 @@ async def get_products_filtered(
             background_tasks.add_task(_trigger_casual_scrape, season, gender)
 
         gated = _apply_gatekeeper(products, "Casual", is_teaser_request, user_tier)
-        return {"products": affiliatize_products(gated), "total": len(gated)}
+        final = affiliatize_products(gated)
+        final = await _attach_social_proof(session, final, season)
+        return {"products": final, "total": len(gated)}
 
     # ── CASE 3: Premium user requesting a premium vibe ───────
     products = await _smart_fetch(effective_vibe)
@@ -227,8 +253,10 @@ async def get_products_filtered(
         background_tasks.add_task(_trigger_premium_scrape, gender, effective_vibe)
 
     gated = _apply_gatekeeper(products, effective_vibe, is_teaser_request, "premium")
+    final = affiliatize_products(gated)
+    final = await _attach_social_proof(session, final, season)
     return {
-        "products": affiliatize_products(gated),
+        "products": final,
         "total": len(gated),
         "scraping_in_progress": len(products) < product_repo.MIN_PRODUCTS,
     }

@@ -2,12 +2,15 @@
 
 import json
 import logging
+import time
 from pathlib import Path
 
 from fastapi import APIRouter
+from sqlalchemy import text
 
-from app.schemas.analysis import HealthResponse
+from app.schemas.analysis import DependencyStatus, HealthResponse
 from app.core.config import settings
+from app.core.metrics import get_uptime_seconds
 
 logger = logging.getLogger("lumiqe.api.health")
 router = APIRouter(prefix="/api", tags=["Health"])
@@ -37,14 +40,75 @@ def mark_cv_loaded():
     _cv_engine_loaded = True
 
 
+async def _check_database() -> DependencyStatus:
+    """Probe PostgreSQL with SELECT 1 and measure latency."""
+    from app.core.dependencies import db_available, async_session_factory
+
+    if not db_available:
+        return DependencyStatus(status="disconnected")
+
+    start = time.perf_counter()
+    try:
+        async with async_session_factory() as session:
+            await session.execute(text("SELECT 1"))
+        latency_ms = round((time.perf_counter() - start) * 1000, 1)
+        return DependencyStatus(status="connected", latency_ms=latency_ms)
+    except Exception as exc:
+        logger.warning(f"Database health check failed: {exc}")
+        return DependencyStatus(status="error")
+
+
+async def _check_redis() -> DependencyStatus:
+    """Probe Redis with PING and measure latency."""
+    try:
+        from app.core.rate_limiter import _redis_client, _redis_available
+    except ImportError:
+        return DependencyStatus(status="unavailable")
+
+    if not _redis_available or _redis_client is None:
+        return DependencyStatus(status="disconnected")
+
+    start = time.perf_counter()
+    try:
+        await _redis_client.ping()
+        latency_ms = round((time.perf_counter() - start) * 1000, 1)
+        return DependencyStatus(status="connected", latency_ms=latency_ms)
+    except Exception as exc:
+        logger.warning(f"Redis health check failed: {exc}")
+        return DependencyStatus(status="error")
+
+
+def _check_cv_engine() -> DependencyStatus:
+    """Report whether the BiSeNet CV model is loaded."""
+    if _cv_engine_loaded:
+        return DependencyStatus(status="loaded", model="BiSeNet")
+    return DependencyStatus(status="not_loaded", model="BiSeNet")
+
+
 @router.get("/health", response_model=HealthResponse)
 async def health_check():
-    """Liveness check — confirms server is running and model status."""
+    """Liveness check with dependency status for DB, Redis, and CV engine."""
+    db_status = await _check_database()
+    redis_status = await _check_redis()
+    cv_status = _check_cv_engine()
+
+    dependencies = {
+        "database": db_status,
+        "redis": redis_status,
+        "cv_engine": cv_status,
+    }
+
+    all_ok = all(
+        dep.status in ("connected", "loaded")
+        for dep in dependencies.values()
+    )
+    overall_status = "healthy" if all_ok else "degraded"
+
     return HealthResponse(
-        status="healthy",
-        model_loaded=_cv_engine_loaded,
+        status=overall_status,
         version=settings.API_VERSION,
-        database="postgresql+pgvector",
+        dependencies=dependencies,
+        uptime_seconds=round(get_uptime_seconds(), 1),
     )
 
 

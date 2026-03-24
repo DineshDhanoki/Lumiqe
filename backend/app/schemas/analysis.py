@@ -66,9 +66,16 @@ class AnalysisDetailResponse(BaseModel):
     created_at: str | None = None
 
 
-class HealthResponse(BaseModel):
-    """Health check response."""
+class DependencyStatus(BaseModel):
+    """Status of a single dependency."""
     status: str
-    model_loaded: bool
+    latency_ms: float | None = None
+    model: str | None = None
+
+
+class HealthResponse(BaseModel):
+    """Health check response with dependency details."""
+    status: str
     version: str
-    database: str
+    dependencies: dict[str, DependencyStatus]
+    uptime_seconds: float

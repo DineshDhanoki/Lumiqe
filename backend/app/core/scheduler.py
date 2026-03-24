@@ -19,6 +19,7 @@ _task: asyncio.Task | None = None
 _CHECK_INTERVAL_SECONDS = 60
 _DIGEST_WEEKDAY = 0  # Monday (datetime.weekday())
 _DIGEST_HOUR = 10    # 10:00 UTC
+_PRICE_CHECK_HOUR = 9  # 09:00 UTC daily
 
 
 # ─── Scheduler Loop ────────────────────────────────────────
@@ -29,7 +30,8 @@ async def _scheduler_loop() -> None:
     Background loop that checks every 60 seconds whether the weekly
     digest should be sent. Fires on Monday at 10:00 UTC.
     """
-    last_fired_date: str | None = None
+    last_digest_date: str | None = None
+    last_price_check_date: str | None = None
 
     logger.info("Scheduler loop started")
 
@@ -40,22 +42,44 @@ async def _scheduler_loop() -> None:
             now = datetime.now(timezone.utc)
             today_str = now.strftime("%Y-%m-%d")
 
+            # ── Weekly digest: Monday at 10:00 UTC ───────────
             is_target_day = now.weekday() == _DIGEST_WEEKDAY
             is_target_hour = now.hour == _DIGEST_HOUR
-            already_fired_today = last_fired_date == today_str
+            already_fired_digest = last_digest_date == today_str
 
-            if is_target_day and is_target_hour and not already_fired_today:
+            if is_target_day and is_target_hour and not already_fired_digest:
                 logger.info(
                     f"Triggering weekly digest at {now.isoformat()}"
                 )
                 try:
                     from app.services.weekly_digest import send_all_digests
                     await send_all_digests()
-                    last_fired_date = today_str
+                    last_digest_date = today_str
                     logger.info("Weekly digest completed successfully")
                 except Exception as exc:
                     logger.error(
                         f"Weekly digest failed: {exc}", exc_info=True
+                    )
+
+            # ── Daily price alert check: every day at 09:00 UTC ──
+            is_price_check_hour = now.hour == _PRICE_CHECK_HOUR
+            already_checked_prices = last_price_check_date == today_str
+
+            if is_price_check_hour and not already_checked_prices:
+                logger.info(
+                    f"Triggering price alert check at {now.isoformat()}"
+                )
+                try:
+                    from app.services.price_checker import check_price_alerts
+                    triggered = await check_price_alerts()
+                    last_price_check_date = today_str
+                    logger.info(
+                        "Price alert check completed: %d alerts triggered",
+                        triggered,
+                    )
+                except Exception as exc:
+                    logger.error(
+                        f"Price alert check failed: {exc}", exc_info=True
                     )
 
         except asyncio.CancelledError:

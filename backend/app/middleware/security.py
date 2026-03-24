@@ -1,16 +1,19 @@
 """
 Lumiqe — Security Middleware.
 
-Adds security headers, request ID tracking, and log correlation
-to all responses.
+Adds security headers, request ID tracking, log correlation,
+and request metrics to all responses.
 """
 
 import logging
+import time
 import uuid
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
+
+from app.core.metrics import increment, observe
 
 # ─── Log Correlation ──────────────────────────────────────────
 _current_request_id: str = ""
@@ -40,7 +43,17 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         request.state.request_id = request_id
         _current_request_id = request_id
 
+        # Track request count and measure response time
+        increment("lumiqe_requests_total")
+        start = time.perf_counter()
+
         response = await call_next(request)
+
+        duration = time.perf_counter() - start
+        observe("lumiqe_response_seconds", duration)
+
+        if response.status_code >= 500:
+            increment("lumiqe_errors_total")
 
         # ─── Security Headers ─────────────────────────────────
         response.headers["X-Request-ID"] = request_id
