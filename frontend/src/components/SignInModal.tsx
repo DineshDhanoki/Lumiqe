@@ -136,6 +136,9 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Sign in to Lumiqe"
                         className="relative w-full max-w-md bg-stone-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
                     >
                         {/* Header */}
@@ -152,7 +155,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                         {/* Body */}
                         <div className="p-6">
                             {error && (
-                                <div className="mb-6 p-4 rounded-xl bg-red-950/50 border border-red-500/20 flex items-start gap-3 text-red-200 text-sm">
+                                <div role="alert" aria-live="polite" className="mb-6 p-4 rounded-xl bg-red-950/50 border border-red-500/20 flex items-start gap-3 text-red-200 text-sm">
                                     <AlertCircle className="w-5 h-5 shrink-0" />
                                     <p>{error}</p>
                                 </div>
@@ -204,6 +207,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                             <input
                                                 type="text"
                                                 placeholder="Full name"
+                                                aria-label="Full name"
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
                                                 className="w-full bg-black/50 border border-white/10 rounded-full py-3 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
@@ -217,6 +221,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                         <input
                                             type="email"
                                             placeholder="Email address"
+                                            aria-label="Email address"
+                                            aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                                             value={email}
                                             onChange={(e) => {
                                                 setEmail(e.target.value);
@@ -237,7 +243,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                         />
                                     </div>
                                     {fieldErrors.email && (
-                                        <p className="mt-1.5 ml-4 text-xs text-red-400">{fieldErrors.email}</p>
+                                        <p id="email-error" aria-live="polite" className="mt-1.5 ml-4 text-xs text-red-400">{fieldErrors.email}</p>
                                     )}
                                 </div>
                                 <div>
@@ -246,6 +252,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                         <input
                                             type="password"
                                             placeholder="Password"
+                                            aria-label="Password"
+                                            aria-describedby={fieldErrors.password ? 'password-error' : undefined}
                                             value={password}
                                             onChange={(e) => {
                                                 setPassword(e.target.value);
@@ -269,7 +277,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                         />
                                     </div>
                                     {fieldErrors.password && (
-                                        <p className="mt-1.5 ml-4 text-xs text-red-400">{fieldErrors.password}</p>
+                                        <p id="password-error" aria-live="polite" className="mt-1.5 ml-4 text-xs text-red-400">{fieldErrors.password}</p>
                                     )}
                                 </div>
 

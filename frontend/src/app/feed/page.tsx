@@ -11,6 +11,7 @@ import { ArrowLeft, Filter, Lock, User } from 'lucide-react';
 import VibeSelector from '@/components/VibeSelector';
 import SubscriptionModal from '@/components/SubscriptionModal';
 import ProductCard from '@/components/ProductCard';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface Product {
     id: string;
@@ -26,6 +27,7 @@ interface Product {
 }
 
 function FeedContent() {
+    const { t } = useTranslation();
     const searchParams = useSearchParams();
     const { data: session } = useSession();
     const season = searchParams.get('season') || 'Deep Autumn';
@@ -126,7 +128,7 @@ function FeedContent() {
                     <ArrowLeft className="w-5 h-5 text-white" />
                 </Link>
                 <div className="flex flex-col items-center">
-                    <h1 className="text-lg font-bold text-white capitalize">Your Catalog</h1>
+                    <h1 className="text-lg font-bold text-white capitalize">{t('yourCatalog')}</h1>
                     <span className="text-xs text-red-400 font-medium tracking-wide">{season}</span>
                 </div>
                 <button className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10">
@@ -140,8 +142,8 @@ function FeedContent() {
                     <div className="w-16 h-16 rounded-full bg-red-500/15 flex items-center justify-center mb-6">
                         <User className="w-8 h-8 text-red-400" />
                     </div>
-                    <h2 className="text-xl font-bold text-white mb-2">Select Your Style</h2>
-                    <p className="text-white/50 text-sm mb-8 text-center">We&apos;ll curate products tailored to your preferences</p>
+                    <h2 className="text-xl font-bold text-white mb-2">{t('selectYourStyle')}</h2>
+                    <p className="text-white/50 text-sm mb-8 text-center">{t('selectYourStyleDesc')}</p>
                     <div className="flex gap-4 w-full">
                         <button
                             onClick={() => setGender('male')}
@@ -219,18 +221,18 @@ function FeedContent() {
                                 transition={{ delay: 0.3 }}
                                 className="mt-8 text-center"
                             >
-                                <p className="text-white/40 text-sm mb-4">This catalog unlocks with Premium</p>
+                                <p className="text-white/40 text-sm mb-4">{t('thisUnlocksWithPremium')}</p>
                                 <button
                                     onClick={() => setIsModalOpen(true)}
                                     className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition-all shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)]"
                                 >
-                                    Unlock Premium Vibes
+                                    {t('unlockPremiumVibes')}
                                 </button>
                             </motion.div>
                         </div>
                     ) : products.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-64 text-center mt-12 w-full max-w-md relative z-20">
-                            <p className="text-white/60 mb-4">Curating your catalog... check back shortly.</p>
+                            <p className="text-white/60 mb-4">{t('curatingCatalog')}</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 gap-4 w-full max-w-md pb-20 z-20 relative">
@@ -263,7 +265,7 @@ export default function FeedPage() {
             <div className="fixed bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent -z-10" />
 
             {/* Suspense Wrapper for SearchParams */}
-            <Suspense fallback={<div className="text-white/50 text-sm mt-10">Loading catalog...</div>}>
+            <Suspense fallback={<div className="text-white/50 text-sm mt-10">Loading...</div>}>
                 <FeedContent />
             </Suspense>
         </main>

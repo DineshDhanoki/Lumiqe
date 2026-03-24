@@ -38,6 +38,7 @@ import HairAndBeautyGuide from './HairAndBeautyGuide';
 import AIStylistChat from './AIStylistChat';
 import ShareButtons from './ShareButtons';
 import { apiFetch } from '@/lib/api';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 const TABS = [
     { id: 'overview',  label: 'Overview',      icon: <LayoutGrid    className="w-4 h-4" /> },
@@ -77,6 +78,7 @@ export default function ResultsView({
     palette, avoidColors, metal, tips, celebrities, makeup,
     backHref, backLabel, analysisId, showAccountNudge,
 }: ResultsViewProps) {
+    const { t } = useTranslation();
     const { data: session } = useSession();
     const [activeTab, setActiveTab] = useState('overview');
     const [completeProfile, setCompleteProfile] = useState<CompleteProfile | null>(null);
@@ -119,7 +121,7 @@ export default function ResultsView({
             <div className="max-w-4xl mx-auto px-4 pt-28">
                 {/* Season Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">Your Analysis Complete</p>
+                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('yourAnalysisComplete')}</p>
                     <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-4">
                         {season}
                     </h1>
@@ -165,14 +167,14 @@ export default function ResultsView({
                                 {contrastLevel && (
                                     <div className="flex items-center gap-3 bg-zinc-900/50 border border-white/10 px-5 py-3 rounded-2xl w-fit">
                                         <Layers className="w-5 h-5 text-red-400" />
-                                        <span className="text-white/50 text-sm font-semibold uppercase tracking-wider">Contrast Level</span>
+                                        <span className="text-white/50 text-sm font-semibold uppercase tracking-wider">{t('contrastLevelLabel')}</span>
                                         <span className="text-white font-bold text-lg">{contrastLevel}</span>
                                     </div>
                                 )}
 
                                 {/* Core Palette */}
                                 <div className="bg-zinc-900/50 border border-white/10 p-6 md:p-8 rounded-3xl">
-                                    <h3 className="text-2xl font-bold text-white mb-6">Your Core Palette</h3>
+                                    <h3 className="text-2xl font-bold text-white mb-6">{t('corePalette')}</h3>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                                         {palette.map((color, i) => (
                                             <div
@@ -202,13 +204,13 @@ export default function ResultsView({
                                         }`}>
                                             <Sparkles className={metal.toLowerCase() === 'gold' ? 'text-yellow-800' : 'text-stone-800'} />
                                         </div>
-                                        <p className="text-white/50 tracking-wider text-sm font-semibold uppercase mb-2">Best Metal</p>
+                                        <p className="text-white/50 tracking-wider text-sm font-semibold uppercase mb-2">{t('bestMetal')}</p>
                                         <h4 className="text-3xl font-bold text-white">{metal}</h4>
                                     </div>
 
                                     {(makeup.lips || makeup.blush || makeup.eyeshadow) && (
                                         <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 p-8 rounded-3xl">
-                                            <p className="text-white/50 tracking-wider text-sm font-semibold uppercase mb-6 text-center">Ideal Makeup Shades</p>
+                                            <p className="text-white/50 tracking-wider text-sm font-semibold uppercase mb-6 text-center">{t('idealMakeupShades')}</p>
                                             <div className="flex items-center justify-around">
                                                 {[{ label: 'Lips', hex: makeup.lips }, { label: 'Blush', hex: makeup.blush }, { label: 'Eyes', hex: makeup.eyeshadow }].map((item, i) =>
                                                     item.hex ? (
@@ -234,7 +236,7 @@ export default function ResultsView({
                                     <div className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl">
                                         <div className="flex items-center gap-2 mb-4">
                                             <Share2 className="w-5 h-5 text-red-400" />
-                                            <h3 className="text-lg font-bold text-white">Share Your Results</h3>
+                                            <h3 className="text-lg font-bold text-white">{t('shareResults')}</h3>
                                         </div>
                                         <div className="flex flex-wrap gap-3">
                                             <button
@@ -242,7 +244,7 @@ export default function ResultsView({
                                                 className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-sm font-medium text-white transition-all"
                                             >
                                                 {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-                                                {copied ? 'Copied!' : 'Copy Link'}
+                                                {copied ? t('copied') : t('copyLink')}
                                             </button>
                                             <button
                                                 onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`I'm a ${season}! Check out my color analysis: ${window.location.href}`)}`, '_blank')}
@@ -280,22 +282,22 @@ export default function ResultsView({
                                 {/* CTA */}
                                 <div className="bg-red-950/30 border border-red-500/30 rounded-3xl p-8 md:p-12 text-center">
                                     <Sparkles className="w-10 h-10 text-red-500 mx-auto mb-4" />
-                                    <h3 className="text-2xl font-bold text-white mb-3">Explore your full professional analysis</h3>
+                                    <h3 className="text-2xl font-bold text-white mb-3">{t('exploreFullAnalysis')}</h3>
                                     <p className="text-white/60 max-w-lg mx-auto mb-6">
-                                        Tap the tabs above to unlock your complete color profile, occasion guide, capsule wardrobe, hair &amp; beauty recommendations, and your personal AI stylist.
+                                        {t('exploreFullAnalysisDesc')}
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                         <Link
                                             href={`/feed?season=${encodeURIComponent(season)}&palette=${encodeURIComponent(palette.join(','))}`}
                                             className="inline-flex items-center justify-center gap-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 px-8 transition-all hover:scale-105"
                                         >
-                                            Shop My Colors <ArrowRight className="w-5 h-5" />
+                                            {t('shopMyColors')} <ArrowRight className="w-5 h-5" />
                                         </Link>
                                         <button
                                             onClick={() => setActiveTab('chat')}
                                             className="inline-flex items-center justify-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-4 px-8 transition-all hover:scale-105"
                                         >
-                                            <MessageCircle className="w-5 h-5" /> Chat with AI Stylist
+                                            <MessageCircle className="w-5 h-5" /> {t('chatWithAIStylist')}
                                         </button>
                                     </div>
                                 </div>

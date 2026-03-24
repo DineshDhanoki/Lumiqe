@@ -73,6 +73,7 @@ export default function OnboardingToast() {
                     className="fixed bottom-6 right-6 z-50 w-80 rounded-xl bg-white p-5 shadow-xl border border-gray-100"
                     role="dialog"
                     aria-label="Onboarding guide"
+                    aria-live="polite"
                 >
                     <AnimatePresence mode="wait">
                         <motion.div

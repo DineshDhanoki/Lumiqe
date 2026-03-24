@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { apiFetch } from '@/lib/api';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface UserProfile {
     id: number;
@@ -22,6 +23,7 @@ interface UserProfile {
 }
 
 export default function AccountPage() {
+    const { t } = useTranslation();
     const { data: session, status } = useSession();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
@@ -73,8 +75,8 @@ export default function AccountPage() {
     if (error || !profile) {
         return (
             <main className="min-h-screen flex items-center justify-center bg-zinc-950 flex-col">
-                <p className="text-red-400 mb-4">{error || 'Could not load profile'}</p>
-                <Link href="/" className="text-white underline">Return Home</Link>
+                <p className="text-red-400 mb-4">{error || t('couldNotLoadProfile')}</p>
+                <Link href="/" className="text-white underline">{t('returnHome')}</Link>
             </main>
         );
     }
@@ -92,14 +94,14 @@ export default function AccountPage() {
                     <div className="flex items-center justify-between mb-12">
                         <h1 className="text-4xl font-extrabold flex items-center gap-3">
                             <User className="w-8 h-8 text-red-500" />
-                            Your Account
+                            {t('yourAccount')}
                         </h1>
                         <button
                             onClick={() => signOut({ callbackUrl: '/' })}
                             className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-red-400 transition border border-white/10"
                         >
                             <LogOut className="w-4 h-4" />
-                            <span className="text-sm font-medium">Log Out</span>
+                            <span className="text-sm font-medium">{t('logOut')}</span>
                         </button>
                     </div>
 
@@ -114,7 +116,7 @@ export default function AccountPage() {
                                 <h2 className="text-xl font-bold text-white mb-1">{profile.name}</h2>
                                 <p className="text-white/50 text-sm mb-6 truncate">{profile.email}</p>
 
-                                <div className="text-xs text-white/30 uppercase tracking-widest font-semibold mb-2">Member Since</div>
+                                <div className="text-xs text-white/30 uppercase tracking-widest font-semibold mb-2">{t('memberSince')}</div>
                                 <p className="text-white/80 text-sm">
                                     {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                 </p>
@@ -135,7 +137,7 @@ export default function AccountPage() {
 
                                 <div className="flex items-center gap-2 mb-4">
                                     <CreditCard className="w-5 h-5 text-white/50" />
-                                    <h3 className="text-lg font-bold text-white">Plan</h3>
+                                    <h3 className="text-lg font-bold text-white">{t('plan')}</h3>
                                 </div>
 
                                 <div className="mb-6">
@@ -152,18 +154,18 @@ export default function AccountPage() {
                                         onClick={handleManageSubscription}
                                         className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white text-sm font-semibold transition border border-white/10"
                                     >
-                                        Manage Subscription
+                                        {t('manageSubscription')}
                                     </button>
                                 ) : (
                                     <div className="space-y-4">
                                         <p className="text-white/50 text-sm">
-                                            {profile.free_scans_left} free scans remaining
+                                            {profile.free_scans_left} {t('freeScansRemaining')}
                                         </p>
                                         <Link
                                             href="/pricing"
                                             className="block w-full text-center py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)]"
                                         >
-                                            Upgrade Full Access
+                                            {t('upgradeFullAccess')}
                                         </Link>
                                     </div>
                                 )}
@@ -178,14 +180,14 @@ export default function AccountPage() {
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">
                                             <Droplets className="w-5 h-5 text-red-400" />
-                                            <h3 className="text-xl font-bold text-white">Your Color Profile</h3>
+                                            <h3 className="text-xl font-bold text-white">{t('yourColorProfile')}</h3>
                                         </div>
-                                        <p className="text-white/50 text-sm">Based on your latest scan analysis</p>
+                                        <p className="text-white/50 text-sm">{t('basedOnLatestScan')}</p>
                                     </div>
 
                                     {profile.season && (
                                         <div className="text-right">
-                                            <div className="text-xs text-red-400 uppercase tracking-widest font-bold mb-1">Season</div>
+                                            <div className="text-xs text-red-400 uppercase tracking-widest font-bold mb-1">{t('season')}</div>
                                             <div className="text-2xl font-extrabold text-white">{profile.season}</div>
                                         </div>
                                     )}
@@ -212,25 +214,25 @@ export default function AccountPage() {
                                                 href="/feed"
                                                 className="flex-1 py-3 px-6 rounded-full bg-white text-black font-bold text-sm text-center hover:bg-gray-200 transition"
                                             >
-                                                Shop My Colors
+                                                {t('shopMyColors')}
                                             </Link>
                                             <Link
                                                 href="/analyze"
                                                 className="py-3 px-6 rounded-full bg-white/5 text-white border border-white/10 text-sm font-semibold hover:bg-white/10 transition"
                                             >
-                                                Retake Scan
+                                                {t('retakeScan')}
                                             </Link>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="text-center py-8 z-10 relative bg-black/20 rounded-2xl border border-white/5">
                                         <Sparkles className="w-8 h-8 text-white/20 mx-auto mb-3" />
-                                        <p className="text-white/60 mb-4">You haven&apos;t analyzed your skin tone yet.</p>
+                                        <p className="text-white/60 mb-4">{t('notAnalyzedYet')}</p>
                                         <Link
                                             href="/analyze"
                                             className="inline-block py-2 px-6 rounded-full bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition"
                                         >
-                                            Start Free Scan
+                                            {t('startFreeScan')}
                                         </Link>
                                     </div>
                                 )}
@@ -248,21 +250,21 @@ export default function AccountPage() {
                             <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/10">
                                 <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
                                     <Sparkles className="w-5 h-5 text-yellow-400" />
-                                    Fashion Insights & Tracker
+                                    {t('fashionInsights')}
                                 </h3>
-                                <p className="text-white/50 text-sm mb-6">Your personal style metrics and recommendations</p>
+                                <p className="text-white/50 text-sm mb-6">{t('fashionInsightsDesc')}</p>
 
                                 {profile.is_premium ? (
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">Style Rating</div>
+                                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">{t('styleRating')}</div>
                                             <div className="text-3xl font-extrabold text-green-400 mb-1">92%</div>
-                                            <div className="text-xs text-white/50">Based on color adherence</div>
+                                            <div className="text-xs text-white/50">{t('basedOnColorAdherence')}</div>
                                         </div>
                                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">Saved Outfits</div>
+                                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">{t('savedOutfits')}</div>
                                             <div className="text-3xl font-extrabold text-white mb-1">14</div>
-                                            <div className="text-xs text-white/50">In your digital wardrobe</div>
+                                            <div className="text-xs text-white/50">{t('inYourDigitalWardrobe')}</div>
                                         </div>
                                         <div className="col-span-2 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
                                             <div className="flex items-start gap-4">
@@ -270,7 +272,7 @@ export default function AccountPage() {
                                                     <Sparkles className="w-5 h-5 text-yellow-400" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-sm font-bold text-white mb-1">AI Stylist Tip</h4>
+                                                    <h4 className="text-sm font-bold text-white mb-1">{t('aiStylistTip')}</h4>
                                                     <p className="text-sm text-yellow-100/70">
                                                         With {profile.season || 'your'} colors, try pairing deep navy trousers with a crisp white shirt for a high-contrast winter look.
                                                     </p>
@@ -289,15 +291,15 @@ export default function AccountPage() {
                                         {/* Paywall Overlay */}
                                         <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-10 flex-col px-6 text-center">
                                             <Crown className="w-8 h-8 text-red-500 mb-3" />
-                                            <h4 className="text-lg font-bold text-white mb-2">Unlock Fashion Insights</h4>
+                                            <h4 className="text-lg font-bold text-white mb-2">{t('unlockFashionInsights')}</h4>
                                             <p className="text-sm text-white/60 mb-4 max-w-sm">
-                                                Upgrade to Premium to track your style improvements, save outfits, and get daily AI stylist tips.
+                                                {t('unlockFashionInsightsDesc')}
                                             </p>
                                             <Link
                                                 href="/pricing"
                                                 className="px-6 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition"
                                             >
-                                                View Plans
+                                                {t('viewPlans')}
                                             </Link>
                                         </div>
                                     </div>

@@ -170,6 +170,8 @@ export default function AnalyzePage() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
+                                role="status"
+                                aria-live="polite"
                                 className="flex flex-col items-center gap-6 py-16"
                             >
                                 <div className="relative">
@@ -269,6 +271,7 @@ export default function AnalyzePage() {
                                 className="space-y-4"
                             >
                                 <div
+                                    aria-label="Upload a selfie"
                                     className={cn(
                                         'relative flex flex-col items-center justify-center w-full min-h-[340px] rounded-3xl border-2 border-dashed transition-all duration-300 overflow-hidden',
                                         isDragging
@@ -291,6 +294,7 @@ export default function AnalyzePage() {
                                         <input
                                             type="file"
                                             accept="image/*"
+                                            aria-label="Choose a photo to upload"
                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                                             onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
                                         />

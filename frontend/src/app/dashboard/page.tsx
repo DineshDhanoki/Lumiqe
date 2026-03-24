@@ -11,6 +11,7 @@ import {
     Droplets, Star, Shirt
 } from 'lucide-react';
 import { useLumiqeStore } from '@/lib/store';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface AnalysisEntry {
     id?: string;
@@ -69,6 +70,7 @@ function timeAgo(timestamp: number): string {
 }
 
 export default function Dashboard() {
+    const { t } = useTranslation();
     const { data: session, status } = useSession();
     const [lastAnalysis, setLastAnalysis] = useState<AnalysisEntry | null>(null);
     const [history, setHistory] = useState<AnalysisEntry[]>([]);
@@ -186,9 +188,9 @@ export default function Dashboard() {
 
                 {/* Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">Your Style Hub</p>
+                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('dashboardSubtitle')}</p>
                     <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white">
-                        Dashboard
+                        {t('dashboardTitle')}
                     </h1>
                 </motion.div>
 
@@ -210,7 +212,7 @@ export default function Dashboard() {
                         )}
                         <div className="flex items-center gap-2 mb-4">
                             <Sparkles className="w-4 h-4 text-red-400" />
-                            <p className="text-white/40 text-xs font-bold uppercase tracking-wider">Color Season</p>
+                            <p className="text-white/40 text-xs font-bold uppercase tracking-wider">{t('colorSeason')}</p>
                         </div>
                         {lastAnalysis ? (
                             <>
@@ -227,14 +229,14 @@ export default function Dashboard() {
                                 </div>
                                 <Link href={`/results?season=${encodeURIComponent(lastAnalysis.season)}&hexColor=${encodeURIComponent(lastAnalysis.hexColor)}&undertone=${lastAnalysis.undertone}&confidence=${lastAnalysis.confidence}&contrastLevel=${lastAnalysis.contrastLevel}&metal=${lastAnalysis.metal}&palette=${lastAnalysis.palette.join(',')}`}
                                     className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors">
-                                    View full results <ChevronRight className="w-3 h-3" />
+                                    {t('viewFullResults')} <ChevronRight className="w-3 h-3" />
                                 </Link>
                             </>
                         ) : (
                             <div className="text-center py-4">
-                                <p className="text-white/40 text-sm mb-3">No analysis yet</p>
+                                <p className="text-white/40 text-sm mb-3">{t('noAnalysisYet')}</p>
                                 <Link href="/analyze" className="text-xs text-red-400 font-semibold hover:text-red-300">
-                                    Start your scan →
+                                    {t('startYourScan')}
                                 </Link>
                             </div>
                         )}
@@ -249,7 +251,7 @@ export default function Dashboard() {
                     >
                         <div className="flex items-center gap-2 mb-4">
                             <User className="w-4 h-4 text-red-400" />
-                            <p className="text-white/40 text-xs font-bold uppercase tracking-wider">Body Shape</p>
+                            <p className="text-white/40 text-xs font-bold uppercase tracking-wider">{t('bodyShape')}</p>
                         </div>
                         {bodyShape ? (
                             <>
@@ -257,14 +259,14 @@ export default function Dashboard() {
                                 <p className="text-xl font-bold text-white">{SHAPE_LABELS[bodyShape.shape] ?? bodyShape.shape}</p>
                                 <p className="text-white/40 text-xs mt-1">{timeAgo(bodyShape.timestamp)}</p>
                                 <Link href="/quiz/body-shape" className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors">
-                                    Retake quiz <ChevronRight className="w-3 h-3" />
+                                    {t('retakeQuiz')} <ChevronRight className="w-3 h-3" />
                                 </Link>
                             </>
                         ) : (
                             <div className="text-center py-4">
-                                <p className="text-white/40 text-sm mb-3">Not taken yet</p>
+                                <p className="text-white/40 text-sm mb-3">{t('notTakenYet')}</p>
                                 <Link href="/quiz/body-shape" className="inline-flex items-center gap-1.5 text-xs bg-red-600/20 text-red-300 border border-red-500/20 px-3 py-1.5 rounded-full font-semibold hover:bg-red-600/30 transition-colors">
-                                    Take quiz →
+                                    {t('takeQuiz')}
                                 </Link>
                             </div>
                         )}
@@ -279,7 +281,7 @@ export default function Dashboard() {
                     >
                         <div className="flex items-center gap-2 mb-4">
                             <Star className="w-4 h-4 text-red-400" />
-                            <p className="text-white/40 text-xs font-bold uppercase tracking-wider">Style Personality</p>
+                            <p className="text-white/40 text-xs font-bold uppercase tracking-wider">{t('stylePersonality')}</p>
                         </div>
                         {stylePersonality ? (
                             <>
@@ -287,14 +289,14 @@ export default function Dashboard() {
                                 <p className="text-xl font-bold text-white">{PERSONALITY_LABELS[stylePersonality.personality] ?? stylePersonality.personality}</p>
                                 <p className="text-white/40 text-xs mt-1">{timeAgo(stylePersonality.timestamp)}</p>
                                 <Link href="/quiz/style" className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors">
-                                    Retake quiz <ChevronRight className="w-3 h-3" />
+                                    {t('retakeQuiz')} <ChevronRight className="w-3 h-3" />
                                 </Link>
                             </>
                         ) : (
                             <div className="text-center py-4">
-                                <p className="text-white/40 text-sm mb-3">Not taken yet</p>
+                                <p className="text-white/40 text-sm mb-3">{t('notTakenYet')}</p>
                                 <Link href="/quiz/style" className="inline-flex items-center gap-1.5 text-xs bg-red-600/20 text-red-300 border border-red-500/20 px-3 py-1.5 rounded-full font-semibold hover:bg-red-600/30 transition-colors">
-                                    Take quiz →
+                                    {t('takeQuiz')}
                                 </Link>
                             </div>
                         )}
@@ -303,13 +305,13 @@ export default function Dashboard() {
 
                 {/* ── QUICK ACTIONS ── */}
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Quick Actions</p>
+                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('quickActions')}</p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[
-                            { label: 'New Scan', icon: <Camera className="w-5 h-5" />, href: '/analyze', color: 'bg-red-600/20 border-red-500/20 hover:bg-red-600/30' },
-                            { label: 'Shop Colors', icon: <ShoppingBag className="w-5 h-5" />, href: '/feed', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
-                            { label: 'AI Stylist', icon: <MessageCircle className="w-5 h-5" />, href: lastAnalysis ? `/results?season=${encodeURIComponent(lastAnalysis.season)}&hexColor=${encodeURIComponent(lastAnalysis.hexColor)}&undertone=${lastAnalysis.undertone}&confidence=${lastAnalysis.confidence}&contrastLevel=${lastAnalysis.contrastLevel}&metal=${lastAnalysis.metal}&palette=${lastAnalysis.palette.join(',')}` : '/analyze', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
-                            { label: 'Buy or Pass', icon: <Shirt className="w-5 h-5" />, href: '/scan', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
+                            { label: t('newScan'), icon: <Camera className="w-5 h-5" />, href: '/analyze', color: 'bg-red-600/20 border-red-500/20 hover:bg-red-600/30' },
+                            { label: t('shopColors'), icon: <ShoppingBag className="w-5 h-5" />, href: '/feed', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
+                            { label: t('aiStylist'), icon: <MessageCircle className="w-5 h-5" />, href: lastAnalysis ? `/results?season=${encodeURIComponent(lastAnalysis.season)}&hexColor=${encodeURIComponent(lastAnalysis.hexColor)}&undertone=${lastAnalysis.undertone}&confidence=${lastAnalysis.confidence}&contrastLevel=${lastAnalysis.contrastLevel}&metal=${lastAnalysis.metal}&palette=${lastAnalysis.palette.join(',')}` : '/analyze', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
+                            { label: t('buyOrPass'), icon: <Shirt className="w-5 h-5" />, href: '/scan', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
                         ].map((action, i) => (
                             <Link key={i} href={action.href}
                                 className={`flex flex-col items-center gap-2 p-5 rounded-2xl border text-white/70 hover:text-white transition-all ${action.color}`}>
@@ -349,7 +351,7 @@ export default function Dashboard() {
                 {/* ── SKINCARE GUIDE ── */}
                 {skincare && (
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                        <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Skincare Guide</p>
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('skincareGuide')}</p>
                         <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 space-y-5">
                             <div className="flex items-center gap-2">
                                 <Droplets className="w-5 h-5 text-red-400" />
@@ -359,7 +361,7 @@ export default function Dashboard() {
                             </div>
 
                             <div>
-                                <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-3">Daily Routine</p>
+                                <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-3">{t('dailyRoutine')}</p>
                                 <ol className="space-y-2">
                                     {skincare.routine.map((step, i) => (
                                         <li key={i} className="flex items-start gap-3 text-sm text-white/70">
@@ -372,7 +374,7 @@ export default function Dashboard() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-2">Key Ingredients</p>
+                                    <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-2">{t('keyIngredients')}</p>
                                     <div className="flex flex-wrap gap-1.5">
                                         {skincare.ingredients.map((ing, i) => (
                                             <span key={i} className="text-xs bg-green-500/15 text-green-300 border border-green-500/25 px-2.5 py-1 rounded-full">
@@ -382,7 +384,7 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                                 <div>
-                                    <p className="text-red-400 text-xs font-bold uppercase tracking-wider mb-2">Avoid</p>
+                                    <p className="text-red-400 text-xs font-bold uppercase tracking-wider mb-2">{t('avoid')}</p>
                                     <ul className="space-y-1">
                                         {skincare.avoid.map((item, i) => (
                                             <li key={i} className="text-xs text-white/50 flex items-start gap-1.5">
@@ -399,7 +401,7 @@ export default function Dashboard() {
                 {/* ── ANALYSIS HISTORY ── */}
                 {history.length > 0 && (
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
-                        <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Analysis History</p>
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('analysisHistory')}</p>
                         <div className="space-y-3">
                             {history.map((entry, i) => (
                                 <Link
@@ -435,13 +437,13 @@ export default function Dashboard() {
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                         className="bg-red-950/30 border border-red-500/30 rounded-3xl p-8 text-center">
                         <Sparkles className="w-10 h-10 text-red-500 mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-white mb-3">Start your color journey</h3>
+                        <h3 className="text-2xl font-bold text-white mb-3">{t('startColorJourney')}</h3>
                         <p className="text-white/60 max-w-sm mx-auto mb-6">
-                            Take your first color analysis to unlock your full dashboard — season, skincare guide, history, and more.
+                            {t('startColorJourneyDesc')}
                         </p>
                         <Link href="/analyze"
                             className="inline-flex items-center gap-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-8 transition-all hover:scale-105">
-                            <Camera className="w-5 h-5" /> Scan My Colors
+                            <Camera className="w-5 h-5" /> {t('scanMyColors')}
                         </Link>
                     </motion.div>
                 )}

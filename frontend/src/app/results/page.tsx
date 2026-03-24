@@ -7,8 +7,10 @@ import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 import ResultsView from '@/components/ResultsView';
 import { useLumiqeStore } from '@/lib/store';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 function ResultsContent() {
+    const { t } = useTranslation();
     const searchParams = useSearchParams();
     const { status } = useSession();
     const setCurrentAnalysis = useLumiqeStore((s) => s.setCurrentAnalysis);
@@ -77,10 +79,10 @@ function ResultsContent() {
         return (
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
                 <Sparkles className="w-12 h-12 text-red-500 mb-6" />
-                <h1 className="text-3xl font-bold text-white mb-4">No Analysis Found</h1>
-                <p className="text-white/60 mb-8">Please start from the home page and upload a photo.</p>
+                <h1 className="text-3xl font-bold text-white mb-4">{t('noAnalysisFound')}</h1>
+                <p className="text-white/60 mb-8">{t('noAnalysisFoundDesc')}</p>
                 <Link href="/" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
-                    Go Back Home
+                    {t('goBackHome')}
                 </Link>
             </div>
         );
@@ -112,7 +114,7 @@ export default function Results() {
         <Suspense fallback={
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 text-white/50">
                 <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
-                <p>Loading your results...</p>
+                <p>Loading results...</p>
             </div>
         }>
             <ResultsContent />

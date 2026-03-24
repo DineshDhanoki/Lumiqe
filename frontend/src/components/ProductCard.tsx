@@ -43,6 +43,8 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
     return (
         <motion.div
             key={product.id || idx}
+            role="article"
+            aria-label={product.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
@@ -139,7 +141,7 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                     /* ── Next.js Image with unoptimized bypass ── */
                     <Image
                         src={imgSrc}
-                        alt={product.name}
+                        alt={`${product.name} by ${product.brand}`}
                         fill
                         unoptimized={true}
                         className={`object-cover transition-transform duration-500
@@ -187,9 +189,10 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                     href={product.purchase_link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Buy ${product.name}`}
                     className="absolute inset-0 z-10"
                 >
-                    <span className="sr-only">View {product.name}</span>
+                    <span className="sr-only">Buy {product.name}</span>
                 </a>
             )}
 

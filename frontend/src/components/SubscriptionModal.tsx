@@ -28,6 +28,9 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Subscription plans"
                         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md z-[101]"
                     >
                         <div className="relative bg-[#1A1A1A] border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl">
@@ -59,6 +62,7 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
                                     <Link
                                         href="/upgrade"
                                         onClick={onClose}
+                                        aria-label="Upgrade to premium"
                                         className="group relative w-full flex items-center justify-center gap-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 px-8 shadow-[0_0_20px_-5px_rgba(220,38,38,0.5)] transition-all"
                                     >
                                         <Sparkles className="w-5 h-5" />
@@ -67,6 +71,7 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
 
                                     <button
                                         onClick={onClose}
+                                        aria-label="Stay on free plan"
                                         className="w-full rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white py-4 px-8 transition-colors font-medium"
                                     >
                                         Back to Casual

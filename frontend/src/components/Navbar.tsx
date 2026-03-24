@@ -31,6 +31,8 @@ export default function Navbar() {
     return (
         <>
             <motion.nav
+                role="navigation"
+                aria-label="Main navigation"
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
                     ? 'bg-black/80 backdrop-blur-lg border-b border-white/10 py-3'
                     : 'bg-transparent py-5'
@@ -97,6 +99,8 @@ export default function Navbar() {
                     <button
                         className="md:hidden text-white/80 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={isMobileMenuOpen}
                     >
                         {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>

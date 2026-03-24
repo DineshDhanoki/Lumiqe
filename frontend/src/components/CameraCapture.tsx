@@ -230,6 +230,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                             autoPlay
                             playsInline
                             muted
+                            aria-label="Camera viewfinder"
                             className="absolute inset-0 w-full h-full object-cover"
                             style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
                         />
@@ -285,6 +286,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                         {/* Flip camera button */}
                         <button
                             onClick={flipCamera}
+                            aria-label="Flip camera"
                             className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
                         >
                             <RotateCcw className="w-4 h-4" />
@@ -292,7 +294,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
 
                         {/* Lighting indicator */}
                         {isReady && (
-                            <div className={`absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold backdrop-blur-sm ${lightingConfig[lightingStatus].bg} ${lightingConfig[lightingStatus].color}`}>
+                            <div aria-live="polite" role="status" className={`absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold backdrop-blur-sm ${lightingConfig[lightingStatus].bg} ${lightingConfig[lightingStatus].color}`}>
                                 {lightingConfig[lightingStatus].icon}
                                 {lightingConfig[lightingStatus].label}
                             </div>
@@ -334,6 +336,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                     <button
                         onClick={startCountdown}
                         disabled={!canCapture}
+                        aria-label="Capture photo"
                         className={`flex-1 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
                             canCapture
                                 ? 'bg-red-600 hover:bg-red-500 text-white shadow-lg hover:scale-105'
