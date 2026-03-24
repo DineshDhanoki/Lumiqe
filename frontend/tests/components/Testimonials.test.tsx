@@ -11,6 +11,6 @@ describe('Testimonials Component', () => {
     it('renders testimonials content', () => {
         render(<Testimonials />);
         expect(screen.getByText(/Sarah M./i)).toBeInTheDocument();
-        expect(screen.getByText(/Deep Winter/i)).toBeInTheDocument();
+        expect(screen.getAllByText(/Deep Winter/i).length).toBeGreaterThan(0);
     });
 });

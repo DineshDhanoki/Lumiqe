@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\schemas\user.py
+# hypothesis_version: 6.151.9
+
+[100, 128, '[0-9]', '[A-Z]', '[a-z]', "^[a-zA-Z0-9\\s\\-'.]+$", 'bearer', 'name', 'password']

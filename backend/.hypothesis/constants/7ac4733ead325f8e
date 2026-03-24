@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\repositories\wishlist_repo.py
+# hypothesis_version: 6.151.9
+
+['lumiqe.repo.wishlist', 'match_score', 'product_brand', 'product_id', 'product_image', 'product_name', 'product_price', 'product_url']

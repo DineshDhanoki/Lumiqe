@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\core\rate_limiter.py
+# hypothesis_version: 6.151.9
+
+[429, 3600, 10000, ',', 'RATE_LIMIT_EXCEEDED', 'Retry-After', 'code', 'detail', 'error', 'lumiqe.rate_limiter', 'unknown', 'x-forwarded-for']

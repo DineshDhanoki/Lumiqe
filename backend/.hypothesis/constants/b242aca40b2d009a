@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\referral.py
+# hypothesis_version: 6.151.9
+
+[400, 404, '/api/referral', '/apply', '/code', 'ALREADY_REFERRED', 'INVALID_CODE', 'Referral', 'Referral Used', 'SELF_REFERRAL', 'bonus_scans', 'bonus_trial_days', 'code', 'detail', 'error', 'id', 'lumiqe.api.referral', 'message', 'referral_code', 'referral_count', 'referred_by', 'success']

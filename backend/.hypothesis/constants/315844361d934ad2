@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\b2b_api.py
+# hypothesis_version: 6.151.9
+
+[100, 255, 401, 403, 404, 429, 500, 3600, 10000, '...', '/analyze', '/api/b2b', '/keys', '/keys/{key_id}', '/usage', 'ANALYSIS_FAILED', 'B2B API', 'INVALID_API_KEY', 'KEY_DEACTIVATED', 'KEY_NOT_FOUND', 'MISSING_API_KEY', 'RATE_LIMIT_EXCEEDED', 'X-API-Key', 'analysis_queued', 'calls_this_hour', 'code', 'detail', 'error', 'id', 'image_url', 'lumiqe.api.b2b', 'message', 'rate_limit', 'result', 'status', 'total_calls', 'usage', 'utf-8']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\gift.py
+# hypothesis_version: 6.151.9
+
+[400, 402, 404, 410, 3600, 5000, '/api/gift', '/check/{code}', '/create', '/redeem', 'CODE_EXPIRED', 'Code has expired.', 'Gift', 'Gift Code Redeemed', 'INSUFFICIENT_CREDITS', 'INVALID_CODE', 'SELF_REDEEM', 'bonus_scans', 'code', 'created_at', 'detail', 'email', 'error', 'expires_at', 'expires_in_hours', 'gift_check', 'gift_created', 'gift_redeem', 'gift_redeemed', 'id', 'lumiqe.api.gift', 'lumiqe:gift:', 'message', 'reason', 'sender_email', 'sender_id', 'sender_message', 'success', 'valid']

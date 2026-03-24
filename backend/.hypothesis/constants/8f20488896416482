@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\price_alerts.py
+# hypothesis_version: 6.151.9
+
+[201, 255, 403, 404, 512, '/api/price-alerts', '/{alert_id}', 'ALERT_NOT_FOUND', 'NOT_OWNER', 'Price Alerts', 'code', 'detail', 'error', 'id', 'message']

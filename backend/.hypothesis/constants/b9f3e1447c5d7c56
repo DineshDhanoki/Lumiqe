@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\services\seasonal_rescan.py
+# hypothesis_version: 6.151.9
+
+['%B', 'Spring', 'current_climate', 'last_analysis_at', 'last_rescan_email_at', 'old_season', 'scan_month', 'seasonal_rescan_sent']

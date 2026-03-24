@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\community.py
+# hypothesis_version: 6.151.9
+
+[100, 201, 400, 404, 422, 500, 512, 3600, '.,!?;:\'"()-', '/api/community', '/feed', '/my-season', '/{post_id}/like', 'CONTENT_VIOLATION', 'Community', 'Filter by season tag', 'NO_SEASON', 'POST_NOT_FOUND', 'action', 'ass', 'asshole', 'bastard', 'bitch', 'bullshit', 'cock', 'code', 'community_post', 'crap', 'cunt', 'damn', 'detail', 'dick', 'error', 'fuck', 'fucker', 'fucking', 'hell', 'id', 'liked', 'likes_count', 'lumiqe.api.community', 'motherfucker', 'nigger', 'piss', 'pussy', 'season', 'shit', 'slut', 'unliked', 'whore']

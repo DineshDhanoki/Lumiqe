@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\notifications.py
+# hypothesis_version: 6.151.9
+
+[404, '/api/notifications', '/read-all', '/unread-count', 'Notifications', 'code', 'created_at', 'detail', 'error', 'id', 'info', 'is_read', 'message', 'title', 'type', 'user_id']

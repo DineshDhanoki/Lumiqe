@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\services\social_proof.py
+# hypothesis_version: 6.151.9
+
+[100, 'all_users', 'recent_count', 'season_match_percent', 'season_users', 'total', 'trending', 'wishlisted_count']

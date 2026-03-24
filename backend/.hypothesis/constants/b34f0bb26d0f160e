@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\color_chat.py
+# hypothesis_version: 6.151.9
+
+[0.75, 400, 422, 500, 502, 503, '/api', '/color-chat', 'AI Stylist Chat', 'CHAT_FAILED', 'Gold', 'INVALID_INPUT', 'Medium', 'Natural', 'SERVICE_UNAVAILABLE', 'assistant', 'chat', 'code', 'content', 'detail', 'error', 'neutral', 'reply', 'role', 'season', 'system', 'user']

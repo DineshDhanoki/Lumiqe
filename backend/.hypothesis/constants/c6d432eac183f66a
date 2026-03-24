@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\core\dependencies.py
+# hypothesis_version: 6.151.9
+
+[401, 403, 503, 'ADMIN_REQUIRED', 'DATABASE_UNAVAILABLE', 'INVALID_TOKEN', 'NOT_AUTHENTICATED', 'PREMIUM_REQUIRED', 'USER_NOT_FOUND', 'access', 'code', 'detail', 'error', 'is_admin', 'is_premium', 'lumiqe.dependencies', 'sub', 'trial_ends_at', 'type']

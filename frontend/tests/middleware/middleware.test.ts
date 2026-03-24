@@ -44,8 +44,12 @@ describe('middleware config', () => {
         expect(isProtected('/dashboard/')).toBe(true);
     });
 
-    it('/scan is protected', () => {
-        expect(isProtected('/scan/')).toBe(true);
+    it('/scan is not protected (removed from matcher)', () => {
+        expect(isProtected('/scan/')).toBe(false);
+    });
+
+    it('/admin is protected', () => {
+        expect(isProtected('/admin/')).toBe(true);
     });
 
     it('/shopping-agent is protected', () => {

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\makeup.py
+# hypothesis_version: 6.151.9
+
+[400, 3600, '#', "'", '-', '/api/makeup', '/recommendations', '/shades', 'Makeup Matching', 'autumn', 'blush', 'blush_families', 'blush_picks', 'brand', 'concealer', 'cool', 'delta_e_score', 'eyeshadow_palettes', 'foundation', 'foundation_tip', 'hex', 'hex_color', 'lipstick', 'lipstick_families', 'lipstick_picks', 'lumiqe.api.makeup', 'makeup_shades', 'name', 'neutral', 'purchase_url', 'shade_name', 'spring', 'summer', 'undertone', 'undertone_guidance', 'warm', 'winter']

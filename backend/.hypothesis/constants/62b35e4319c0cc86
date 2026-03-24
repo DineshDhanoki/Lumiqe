@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\celebrity.py
+# hypothesis_version: 6.151.9
+
+[404, '/api/celebrity', '/match', 'Celebrity Match', 'NO_MATCHES', 'code', 'detail', 'error', 'lumiqe.api.celebrity']

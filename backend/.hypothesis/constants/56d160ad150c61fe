@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\skin_profiles.py
+# hypothesis_version: 6.151.9
+
+['%Y-%m', '/api/skin-profiles', 'Skin Profiles', 'from_month', 'from_season', 'id', 'to_month', 'to_season']

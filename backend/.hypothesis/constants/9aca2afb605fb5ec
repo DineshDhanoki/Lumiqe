@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\saved_outfits.py
+# hypothesis_version: 6.151.9
+
+[400, 403, 404, '/api/outfits', '/saved', '/saved/{outfit_id}', 'FORBIDDEN', 'NOT_FOUND', 'OUTFIT_LIMIT_REACHED', 'Outfit deleted.', 'Outfit not found.', 'Outfit saved.', 'Saved Outfits', 'code', 'created_at', 'detail', 'error', 'id', 'look_name', 'message', 'outfit', 'outfit_data', 'outfits', 'total']

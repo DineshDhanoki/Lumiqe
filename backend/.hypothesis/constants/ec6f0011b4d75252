@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\api\wishlist.py
+# hypothesis_version: 6.151.9
+
+[404, 409, '/api/wishlist', '/check/{product_id}', '/{product_id}', 'ALREADY_WISHLISTED', 'NOT_FOUND', 'Wishlist', 'code', 'detail', 'error', 'id', 'item', 'items', 'lumiqe.api.wishlist', 'message', 'total', 'wishlisted']

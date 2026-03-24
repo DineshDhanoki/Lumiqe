@@ -5,7 +5,7 @@ import Footer from '../../src/components/Footer';
 describe('Footer Component', () => {
     it('renders Lumiqe brand name', () => {
         render(<Footer />);
-        expect(screen.getByText(/LUMIQE/i)).toBeInTheDocument();
+        expect(screen.getAllByText(/LUMIQE/i).length).toBeGreaterThan(0);
     });
 
     it('renders footer links', () => {

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\Desktop\Lumiqe\backend\app\core\feature_flags.py
+# hypothesis_version: 6.151.9
+
+[100, 'description', 'gift_analysis', 'lumiqe.feature_flags', 'multi_photo_analysis', 'name', 'new_pricing_tiers', 'rollout_percent', 'seasonal_guide', 'stories_card', 'wardrobe_tracker', 'weekly_digest']
