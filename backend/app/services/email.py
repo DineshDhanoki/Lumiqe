@@ -185,6 +185,91 @@ def send_email_verification(to: str, name: str, verify_url: str) -> bool:
     return _send(to, "Verify Your Email — Lumiqe", html)
 
 
+def send_seasonal_rescan_email(
+    to: str,
+    name: str,
+    old_season: str,
+    current_climate: str,
+    rescan_url: str,
+    palette: list[str],
+    scan_month: str = "",
+) -> bool:
+    """Send a seasonal re-scan reminder email."""
+    safe_name = escape(name)
+    safe_season = escape(old_season)
+    safe_climate = escape(current_climate)
+    safe_url = escape(rescan_url)
+    safe_month = escape(scan_month) if scan_month else "a previous month"
+
+    palette_swatches = "".join(
+        f'<span class="swatch" style="background:{c};"></span>'
+        for c in palette[:6]
+    )
+
+    html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LUMI<span class="accent">QE</span></div>
+        </div>
+        <div class="card">
+            <h2>Your skin tone may have changed this season</h2>
+            <p>Hi {safe_name}, you were scanned as
+            <strong style="color:#ef4444;">{safe_season}</strong> back in
+            <strong>{safe_month}</strong>. As we move into
+            <strong style="color:#ef4444;">{safe_climate}</strong>, your
+            undertone may have shifted. Rescan to update your palette!</p>
+            <p style="color:#71717a; font-size:13px; margin-bottom:20px;">
+                Your current palette:
+            </p>
+            <p style="margin-bottom:24px;">{palette_swatches}</p>
+            <div style="text-align: center;">
+                <a href="{safe_url}" class="btn">Rescan Now &rarr;</a>
+            </div>
+        </div>
+        {_FOOTER}
+    </div>
+    </body></html>"""
+    return _send(to, "Your skin tone may have changed this season", html)
+
+
+def send_trial_reminder_email(
+    to: str,
+    name: str,
+    season: str,
+    upgrade_url: str,
+) -> bool:
+    """Send a reminder email when a user's trial ends within 24 hours."""
+    safe_name = escape(name)
+    safe_season = escape(season)
+    safe_url = escape(upgrade_url)
+    html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LUMI<span class="accent">QE</span></div>
+        </div>
+        <div class="card">
+            <h2>Your Trial Ends Tomorrow</h2>
+            <p>Hi {safe_name}, your 3-day Lumiqe premium trial is ending soon.</p>
+            <p>As a <strong>{safe_season}</strong>, here's what you'll lose access to:</p>
+            <ul style="padding-left: 20px; margin-bottom: 24px;">
+                <li style="margin-bottom: 8px;">Unlimited color analyses &amp; re-scans</li>
+                <li style="margin-bottom: 8px;">AI-powered personal stylist chat</li>
+                <li style="margin-bottom: 8px;">Full wardrobe tracker &amp; capsule planner</li>
+                <li style="margin-bottom: 8px;">Premium curated shopping feed</li>
+            </ul>
+            <div style="text-align: center; margin-bottom: 16px;">
+                <a href="{safe_url}" class="btn">Upgrade Now &#8212; just &#8377;149/month</a>
+            </div>
+            <p style="text-align: center; color: #71717a; font-size: 13px;">
+                Or keep using the free plan with 3 scans included.
+            </p>
+        </div>
+        {_FOOTER}
+    </div>
+    </body></html>"""
+    return _send(to, "Your Lumiqe trial ends tomorrow", html)
+
+
 def send_subscription_confirmed_email(to: str, name: str, plan: str) -> bool:
     """Send an email when a premium subscription is confirmed."""
     safe_name = escape(name)

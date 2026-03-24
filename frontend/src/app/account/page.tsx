@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Crown, Sparkles, LogOut, Loader2, User, CreditCard, Droplets } from 'lucide-react';
+import { Crown, Sparkles, LogOut, Loader2, User, CreditCard, Droplets, Clock } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -16,6 +16,8 @@ interface UserProfile {
     email: string;
     is_premium: boolean;
     free_scans_left: number;
+    credits: number;
+    trial_ends_at: string | null;
     season: string | null;
     palette: string[] | null;
     stripe_subscription_id: string | null;
@@ -122,54 +124,68 @@ export default function AccountPage() {
                                 </p>
                             </div>
 
-                            {/* Subscription Card */}
-                            <div className={`p-6 rounded-3xl border relative overflow-hidden ${profile.is_premium
-                                ? 'bg-gradient-to-br from-red-950/40 to-black border-red-500/30'
-                                : 'bg-white/[0.02] border-white/10'
-                                }`}
-                            >
-                                {profile.is_premium && (
-                                    <div className="absolute top-0 right-0 p-4">
-                                        <div className="w-12 h-12 bg-red-500/20 rounded-full blur-xl absolute" />
-                                        <Crown className="w-6 h-6 text-red-400 relative z-10" />
+                            {/* Subscription & Plan */}
+                            {profile.is_premium ? (
+                                <div className="bg-green-900/20 border border-green-500/30 rounded-2xl p-6">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Crown className="w-5 h-5 text-green-400" />
+                                        <span className="text-green-400 font-semibold">Premium Active</span>
                                     </div>
-                                )}
-
-                                <div className="flex items-center gap-2 mb-4">
-                                    <CreditCard className="w-5 h-5 text-white/50" />
-                                    <h3 className="text-lg font-bold text-white">{t('plan')}</h3>
-                                </div>
-
-                                <div className="mb-6">
-                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${profile.is_premium
-                                        ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                                        : 'bg-white/10 text-white/60 border border-white/10'
-                                        }`}>
-                                        {profile.is_premium ? 'Lumiqe Premium' : 'Free Tier'}
-                                    </span>
-                                </div>
-
-                                {profile.is_premium ? (
+                                    <p className="text-white/60 text-sm mb-4">You have access to all features</p>
+                                    <ul className="text-white/70 text-sm space-y-1 mb-4">
+                                        <li>&#10003; Unlimited scans</li>
+                                        <li>&#10003; AI Stylist chat</li>
+                                        <li>&#10003; Wardrobe tracker</li>
+                                        <li>&#10003; All product vibes</li>
+                                        <li>&#10003; Daily outfit suggestions</li>
+                                    </ul>
                                     <button
                                         onClick={handleManageSubscription}
                                         className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white text-sm font-semibold transition border border-white/10"
                                     >
-                                        {t('manageSubscription')}
+                                        Manage Subscription
                                     </button>
-                                ) : (
-                                    <div className="space-y-4">
-                                        <p className="text-white/50 text-sm">
-                                            {profile.free_scans_left} {t('freeScansRemaining')}
-                                        </p>
-                                        <Link
-                                            href="/pricing"
-                                            className="block w-full text-center py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)]"
-                                        >
-                                            {t('upgradeFullAccess')}
-                                        </Link>
+                                </div>
+                            ) : profile.trial_ends_at && new Date(profile.trial_ends_at) > new Date() ? (
+                                (() => {
+                                    const trialEnd = new Date(profile.trial_ends_at as string);
+                                    const daysLeft = Math.max(0, Math.ceil((trialEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+                                    const trialEndDate = trialEnd.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                                    return (
+                                        <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-2xl p-6">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <Clock className="w-5 h-5 text-yellow-400" />
+                                                <span className="text-yellow-400 font-semibold">Trial &mdash; {daysLeft} days remaining</span>
+                                            </div>
+                                            <p className="text-white/60 text-sm mb-2">Your trial ends on {trialEndDate}</p>
+                                            <p className="text-white/50 text-sm mb-4">After trial: 3 free scans, no AI Stylist</p>
+                                            <Link
+                                                href="/pricing"
+                                                className="block w-full text-center py-3 rounded-xl bg-yellow-600 hover:bg-yellow-500 text-white text-sm font-bold transition"
+                                            >
+                                                Upgrade to Premium &mdash; &#8377;149/mo
+                                            </Link>
+                                        </div>
+                                    );
+                                })()
+                            ) : (
+                                <div className="bg-zinc-800/50 border border-white/10 rounded-2xl p-6">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <CreditCard className="w-5 h-5 text-white/50" />
+                                        <span className="text-white/80 font-semibold">Free Plan</span>
                                     </div>
-                                )}
-                            </div>
+                                    <p className="text-white/60 text-sm mb-2">{profile.free_scans_left} free scans remaining</p>
+                                    {profile.credits > 0 && (
+                                        <p className="text-white/60 text-sm mb-2">{profile.credits} credits</p>
+                                    )}
+                                    <Link
+                                        href="/pricing"
+                                        className="block w-full text-center py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)] mt-4"
+                                    >
+                                        Upgrade for unlimited access
+                                    </Link>
+                                </div>
+                            )}
                         </div>
 
                         {/* Right Column - Color Profile & Improvements */}
@@ -211,7 +227,7 @@ export default function AccountPage() {
                                         </div>
                                         <div className="mt-8 flex gap-4">
                                             <Link
-                                                href="/feed"
+                                                href="/shopping-agent"
                                                 className="flex-1 py-3 px-6 rounded-full bg-white text-black font-bold text-sm text-center hover:bg-gray-200 transition"
                                             >
                                                 {t('shopMyColors')}

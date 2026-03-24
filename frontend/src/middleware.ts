@@ -20,7 +20,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/dashboard/:path*',
-        '/scan/:path*',
         '/shopping-agent/:path*',
         '/account/:path*',
         '/quiz/:path*',

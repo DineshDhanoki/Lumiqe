@@ -73,6 +73,16 @@ interface ResultsViewProps extends ResultsData {
     showAccountNudge?: boolean;
 }
 
+interface ShopProduct {
+    id: string;
+    name: string;
+    brand: string;
+    price: string;
+    image_url: string;
+    match_score: number;
+    purchase_link: string;
+}
+
 export default function ResultsView({
     season, description, hexColor, undertone, confidence, contrastLevel,
     palette, avoidColors, metal, tips, celebrities, makeup,
@@ -84,6 +94,36 @@ export default function ResultsView({
     const [completeProfile, setCompleteProfile] = useState<CompleteProfile | null>(null);
     const [profileLoading, setProfileLoading] = useState(false);
     const [copied, setCopied] = useState(false);
+
+    // ── Shop Your Colors state ─────────────────────────────
+    const [topProducts, setTopProducts] = useState<ShopProduct[]>([]);
+    const [shopLoading, setShopLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchTopProducts() {
+            setShopLoading(true);
+            try {
+                const url = new URL('/api/proxy/products', window.location.origin);
+                url.searchParams.append('season', season);
+                if (palette.length > 0) {
+                    url.searchParams.append('palette', palette.join(','));
+                }
+                url.searchParams.append('limit', '3');
+                url.searchParams.append('vibe', 'Casual');
+                url.searchParams.append('user_tier', 'free');
+                const res = await fetch(url.toString());
+                if (!res.ok) throw new Error('fetch failed');
+                const data: ShopProduct[] = await res.json();
+                setTopProducts(data.filter(p => !('is_locked' in p && (p as Record<string, unknown>).is_locked)));
+            } catch {
+                setTopProducts([]);
+            } finally {
+                setShopLoading(false);
+            }
+        }
+        fetchTopProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [season]);
 
     const copyLink = () => {
         navigator.clipboard.writeText(window.location.href);
@@ -119,6 +159,26 @@ export default function ResultsView({
             </nav>
 
             <div className="max-w-4xl mx-auto px-4 pt-28">
+                {/* Account nudge banner for anonymous users */}
+                {showAccountNudge && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 bg-gradient-to-r from-red-950/60 to-zinc-900/60 border border-red-500/30 rounded-2xl px-5 py-3 flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left"
+                    >
+                        <Sparkles className="w-5 h-5 text-red-400 shrink-0" />
+                        <p className="flex-1 text-sm text-white/80">
+                            Create a free account to save your results and get personalized recommendations
+                        </p>
+                        <Link
+                            href="/"
+                            className="shrink-0 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-full transition-all text-sm whitespace-nowrap"
+                        >
+                            Sign Up Free
+                        </Link>
+                    </motion.div>
+                )}
+
                 {/* Season Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
                     <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('yourAnalysisComplete')}</p>
@@ -194,6 +254,94 @@ export default function ResultsView({
                                     <BestAvoidColors bestColors={palette} avoidColors={avoidColors} />
                                 )}
 
+                                {/* ── Shop Your Colors ── */}
+                                <section className="bg-zinc-900/50 border border-white/10 p-6 md:p-8 rounded-3xl">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <ShoppingBag className="w-5 h-5 text-red-400" />
+                                        <h3 className="text-xl font-bold text-white">Shop Your Colors</h3>
+                                    </div>
+                                    <p className="text-white/60 mb-6 text-sm">Products that match your {season} palette</p>
+
+                                    {shopLoading ? (
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                            {[0, 1, 2].map(i => (
+                                                <div key={i} className="animate-pulse rounded-2xl bg-white/5 border border-white/10">
+                                                    <div className="aspect-[4/5] rounded-t-2xl bg-white/10" />
+                                                    <div className="p-3 space-y-2">
+                                                        <div className="h-4 bg-white/10 rounded w-3/4" />
+                                                        <div className="h-3 bg-white/10 rounded w-1/2" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : topProducts.length > 0 ? (
+                                        <>
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                {topProducts.slice(0, 3).map((product, idx) => {
+                                                    const proxyImg = product.image_url && !product.image_url.startsWith('/')
+                                                        ? `/api/image-proxy?url=${encodeURIComponent(product.image_url)}`
+                                                        : product.image_url;
+                                                    return (
+                                                        <a
+                                                            key={product.id || idx}
+                                                            href={product.purchase_link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="group relative flex flex-col rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors overflow-hidden"
+                                                        >
+                                                            <div className="relative aspect-[4/5] w-full bg-white/5 overflow-hidden">
+                                                                {proxyImg ? (
+                                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                                    <img
+                                                                        src={proxyImg}
+                                                                        alt={product.name}
+                                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-full h-full flex items-center justify-center">
+                                                                        <ShoppingBag className="w-8 h-8 text-white/20" />
+                                                                    </div>
+                                                                )}
+                                                                {product.match_score > 0 && (
+                                                                    <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[10px] font-bold text-white border border-white/10">
+                                                                        {Math.round(product.match_score)}% Match
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <div className="p-3 space-y-1">
+                                                                <h4 className="text-sm font-semibold text-white leading-tight line-clamp-2">{product.name}</h4>
+                                                                <div className="flex justify-between items-center text-xs">
+                                                                    <span className="text-white/50">{product.brand}</span>
+                                                                    <span className="text-white font-medium">{product.price}</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    );
+                                                })}
+                                            </div>
+                                            <div className="mt-5 text-center">
+                                                <Link
+                                                    href={`/feed?season=${encodeURIComponent(season)}&palette=${encodeURIComponent(palette.join(','))}`}
+                                                    className="inline-flex items-center gap-2 text-sm font-semibold text-red-400 hover:text-red-300 transition-colors"
+                                                >
+                                                    Browse all matches <ArrowRight className="w-4 h-4" />
+                                                </Link>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="text-center py-8">
+                                            <ShoppingBag className="w-10 h-10 text-white/20 mx-auto mb-3" />
+                                            <p className="text-white/50 text-sm mb-4">Products coming soon for your season</p>
+                                            <Link
+                                                href={`/feed?season=${encodeURIComponent(season)}&palette=${encodeURIComponent(palette.join(','))}`}
+                                                className="inline-flex items-center gap-2 text-sm font-semibold text-red-400 hover:text-red-300 transition-colors"
+                                            >
+                                                Save palette &amp; browse later <ArrowRight className="w-4 h-4" />
+                                            </Link>
+                                        </div>
+                                    )}
+                                </section>
+
                                 {/* Metal + Makeup */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 p-8 rounded-3xl flex flex-col items-center justify-center text-center">
@@ -226,7 +374,7 @@ export default function ResultsView({
                                 </div>
 
                                 <StylingTips season={season} contrastLevel={contrastLevel} hexCode={hexColor} staticTip={tips} />
-                                {celebrities.length > 0 && <CelebrityMatch celebrities={celebrities} />}
+                                <CelebrityMatch celebrities={celebrities} season={season} />
                                 <PaletteDownload season={season} />
 
                                 {/* Share */}
@@ -240,17 +388,18 @@ export default function ResultsView({
                                         </div>
                                         <div className="flex flex-wrap gap-3">
                                             <button
+                                                onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`I just discovered I'm a ${season}! \u{1F3A8} Find your color season at ${window.location.href}`)}`, '_blank')}
+                                                className="flex items-center gap-2 px-5 py-3 bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/30 rounded-xl text-sm font-semibold text-[#25D366] transition-all"
+                                            >
+                                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                                Share on WhatsApp
+                                            </button>
+                                            <button
                                                 onClick={copyLink}
                                                 className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-sm font-medium text-white transition-all"
                                             >
                                                 {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                                                 {copied ? t('copied') : t('copyLink')}
-                                            </button>
-                                            <button
-                                                onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`I'm a ${season}! Check out my color analysis: ${window.location.href}`)}`, '_blank')}
-                                                className="flex items-center gap-2 px-4 py-2.5 bg-green-600/20 hover:bg-green-600/30 border border-green-500/20 rounded-xl text-sm font-medium text-green-300 transition-all"
-                                            >
-                                                <MessageCircle className="w-4 h-4" /> WhatsApp
                                             </button>
                                             <button
                                                 onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just discovered I'm a ${season}! Find your colors too:`)}&url=${encodeURIComponent(window.location.href)}`, '_blank')}
@@ -263,22 +412,6 @@ export default function ResultsView({
                                     </div>
                                 )}
 
-                                {/* Account nudge for anonymous users */}
-                                {showAccountNudge && (
-                                    <div className="bg-gradient-to-r from-red-950/50 to-zinc-900/50 border border-red-500/30 rounded-3xl p-6 flex flex-col sm:flex-row items-center gap-4">
-                                        <div className="flex-1">
-                                            <h3 className="text-lg font-bold text-white mb-1">Save your results forever</h3>
-                                            <p className="text-white/60 text-sm">Create a free account to keep your color analysis, track history across devices, and unlock your full style profile.</p>
-                                        </div>
-                                        <Link
-                                            href="/"
-                                            className="shrink-0 px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-full transition-all hover:scale-105 text-sm whitespace-nowrap"
-                                        >
-                                            Create Free Account
-                                        </Link>
-                                    </div>
-                                )}
-
                                 {/* CTA */}
                                 <div className="bg-red-950/30 border border-red-500/30 rounded-3xl p-8 md:p-12 text-center">
                                     <Sparkles className="w-10 h-10 text-red-500 mx-auto mb-4" />
@@ -288,7 +421,7 @@ export default function ResultsView({
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                         <Link
-                                            href={`/feed?season=${encodeURIComponent(season)}&palette=${encodeURIComponent(palette.join(','))}`}
+                                            href="/shopping-agent"
                                             className="inline-flex items-center justify-center gap-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 px-8 transition-all hover:scale-105"
                                         >
                                             {t('shopMyColors')} <ArrowRight className="w-5 h-5" />

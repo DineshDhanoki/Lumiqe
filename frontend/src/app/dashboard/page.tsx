@@ -8,7 +8,7 @@ import { apiFetch } from '@/lib/api';
 import {
     Sparkles, ArrowLeft, Camera, ShoppingBag, MessageCircle,
     User, ChevronRight, Clock,
-    Droplets, Star, Shirt
+    Droplets, Star, Shirt, Sun
 } from 'lucide-react';
 import { useLumiqeStore } from '@/lib/store';
 import { useTranslation } from '@/lib/hooks/useTranslation';
@@ -27,6 +27,21 @@ interface AnalysisEntry {
 
 interface BodyShapeData { shape: string; timestamp: number; }
 interface StylePersonalityData { personality: string; timestamp: number; }
+
+interface DailyOutfitSlotItem {
+    id: string;
+    dominant_color: string;
+    match_score: number;
+    image_filename: string;
+    category: string | null;
+}
+
+interface DailyOutfitData {
+    date: string;
+    slots: Record<string, DailyOutfitSlotItem | null>;
+    filled_count: number;
+    total_slots: number;
+}
 
 const SHAPE_LABELS: Record<string, string> = {
     hourglass: 'Hourglass', pear: 'Pear', apple: 'Apple',
@@ -61,6 +76,12 @@ const SKINCARE: Record<string, { routine: string[]; ingredients: string[]; avoid
     },
 };
 
+const RESCAN_THRESHOLD_DAYS = 60;
+
+function daysAgoFromTimestamp(timestamp: number): number {
+    return Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24));
+}
+
 function timeAgo(timestamp: number): string {
     const seconds = Math.floor((Date.now() - timestamp) / 1000);
     if (seconds < 60) return 'Just now';
@@ -76,6 +97,8 @@ export default function Dashboard() {
     const [history, setHistory] = useState<AnalysisEntry[]>([]);
     const [bodyShape, setBodyShape] = useState<BodyShapeData | null>(null);
     const [stylePersonality, setStylePersonality] = useState<StylePersonalityData | null>(null);
+    const [dailyOutfit, setDailyOutfit] = useState<DailyOutfitData | null>(null);
+    const [dailyOutfitEmpty, setDailyOutfitEmpty] = useState(false);
 
     // Read from Zustand store
     const storeHistory = useLumiqeStore((s) => s.history);
@@ -102,6 +125,22 @@ export default function Dashboard() {
             } catch { /* ignore */ }
         }
     }, [storeQuiz]);
+
+    useEffect(() => {
+        if (status !== 'authenticated') return;
+        apiFetch('/api/daily-outfit')
+            .then(res => {
+                if (res.status === 404) {
+                    setDailyOutfitEmpty(true);
+                    return null;
+                }
+                return res.ok ? res.json() : null;
+            })
+            .then((data: DailyOutfitData | null) => {
+                if (data) setDailyOutfit(data);
+            })
+            .catch(() => { /* ignore — non-critical */ });
+    }, [status]);
 
     const _loadFromLocalStorage = useCallback(() => {
         try {
@@ -193,6 +232,24 @@ export default function Dashboard() {
                         {t('dashboardTitle')}
                     </h1>
                 </motion.div>
+
+                {/* ── SEASONAL RESCAN NUDGE ── */}
+                {lastAnalysis && daysAgoFromTimestamp(lastAnalysis.timestamp) >= RESCAN_THRESHOLD_DAYS && (
+                    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+                        <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <Sun className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                                <div>
+                                    <p className="text-amber-300 font-medium">Time for a seasonal update?</p>
+                                    <p className="text-white/50 text-sm">Your last scan was {daysAgoFromTimestamp(lastAnalysis.timestamp)} days ago. Skin tones shift with seasons.</p>
+                                </div>
+                            </div>
+                            <Link href="/analyze" className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold flex-shrink-0 transition-colors">
+                                Rescan Now
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* ── STYLE IDENTITY CARDS ── */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -303,13 +360,69 @@ export default function Dashboard() {
                     </motion.div>
                 </div>
 
+                {/* ── TODAY'S OUTFIT ── */}
+                {status === 'authenticated' && (
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Today&apos;s Outfit</p>
+                        {dailyOutfit && dailyOutfit.filled_count > 0 ? (
+                            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Sun className="w-5 h-5 text-yellow-400" />
+                                    <p className="text-white font-semibold text-sm">Your outfit for {dailyOutfit.date}</p>
+                                </div>
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                    {(['top', 'bottom', 'shoes', 'accessory'] as const).map((slot) => {
+                                        const item = dailyOutfit.slots[slot];
+                                        return (
+                                            <div key={slot} className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white/5 border border-white/10">
+                                                <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">{slot}</p>
+                                                {item ? (
+                                                    <>
+                                                        <div
+                                                            className="w-10 h-10 rounded-full border-2 border-white/20"
+                                                            style={{ backgroundColor: item.dominant_color }}
+                                                        />
+                                                        <p className="text-white/70 text-xs text-center truncate max-w-full">
+                                                            {item.category || item.image_filename}
+                                                        </p>
+                                                        <p className="text-white/30 text-[10px]">{item.match_score}% match</p>
+                                                    </>
+                                                ) : (
+                                                    <p className="text-white/30 text-xs">No item</p>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <Link
+                                    href="/wardrobe"
+                                    className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors"
+                                >
+                                    View full outfit <ChevronRight className="w-3 h-3" />
+                                </Link>
+                            </div>
+                        ) : dailyOutfitEmpty ? (
+                            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 text-center">
+                                <Shirt className="w-8 h-8 text-white/20 mx-auto mb-3" />
+                                <p className="text-white/50 text-sm mb-3">Add items to your wardrobe to get daily outfits</p>
+                                <Link
+                                    href="/wardrobe"
+                                    className="inline-flex items-center gap-1.5 text-xs bg-red-600/20 text-red-300 border border-red-500/20 px-3 py-1.5 rounded-full font-semibold hover:bg-red-600/30 transition-colors"
+                                >
+                                    Go to Wardrobe
+                                </Link>
+                            </div>
+                        ) : null}
+                    </motion.div>
+                )}
+
                 {/* ── QUICK ACTIONS ── */}
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                     <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('quickActions')}</p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[
                             { label: t('newScan'), icon: <Camera className="w-5 h-5" />, href: '/analyze', color: 'bg-red-600/20 border-red-500/20 hover:bg-red-600/30' },
-                            { label: t('shopColors'), icon: <ShoppingBag className="w-5 h-5" />, href: '/feed', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
+                            { label: t('shopColors'), icon: <ShoppingBag className="w-5 h-5" />, href: '/shopping-agent', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
                             { label: t('aiStylist'), icon: <MessageCircle className="w-5 h-5" />, href: lastAnalysis ? `/results?season=${encodeURIComponent(lastAnalysis.season)}&hexColor=${encodeURIComponent(lastAnalysis.hexColor)}&undertone=${lastAnalysis.undertone}&confidence=${lastAnalysis.confidence}&contrastLevel=${lastAnalysis.contrastLevel}&metal=${lastAnalysis.metal}&palette=${lastAnalysis.palette.join(',')}` : '/analyze', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
                             { label: t('buyOrPass'), icon: <Shirt className="w-5 h-5" />, href: '/scan', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
                         ].map((action, i) => (

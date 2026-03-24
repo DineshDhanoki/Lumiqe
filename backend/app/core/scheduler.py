@@ -20,6 +20,10 @@ _CHECK_INTERVAL_SECONDS = 60
 _DIGEST_WEEKDAY = 0  # Monday (datetime.weekday())
 _DIGEST_HOUR = 10    # 10:00 UTC
 _PRICE_CHECK_HOUR = 9  # 09:00 UTC daily
+_DAILY_OUTFIT_HOUR = 7  # 07:00 UTC daily
+_RESCAN_WEEKDAY = 2    # Wednesday (datetime.weekday())
+_RESCAN_HOUR = 10      # 10:00 UTC
+_TRIAL_REMINDER_HOUR = 8  # 08:00 UTC daily
 
 
 # ─── Scheduler Loop ────────────────────────────────────────
@@ -32,6 +36,9 @@ async def _scheduler_loop() -> None:
     """
     last_digest_date: str | None = None
     last_price_check_date: str | None = None
+    last_daily_outfit_date: str | None = None
+    last_rescan_check_date: str | None = None
+    last_trial_check_date: str | None = None
 
     logger.info("Scheduler loop started")
 
@@ -80,6 +87,79 @@ async def _scheduler_loop() -> None:
                 except Exception as exc:
                     logger.error(
                         f"Price alert check failed: {exc}", exc_info=True
+                    )
+
+            # ── Daily outfit notification: every day at 07:00 UTC ──
+            is_outfit_hour = now.hour == _DAILY_OUTFIT_HOUR
+            already_sent_outfit = last_daily_outfit_date == today_str
+
+            if is_outfit_hour and not already_sent_outfit:
+                logger.info(
+                    f"Triggering daily outfit notifications at {now.isoformat()}"
+                )
+                try:
+                    from app.services.daily_outfit_notifier import (
+                        send_daily_outfit_notifications,
+                    )
+                    sent = await send_daily_outfit_notifications()
+                    last_daily_outfit_date = today_str
+                    logger.info(
+                        "Daily outfit notifications completed: %d users notified",
+                        sent,
+                    )
+                except Exception as exc:
+                    logger.error(
+                        f"Daily outfit notifications failed: {exc}",
+                        exc_info=True,
+                    )
+
+            # ── Weekly seasonal rescan: Wednesday at 10:00 UTC ──
+            is_rescan_day = now.weekday() == _RESCAN_WEEKDAY
+            is_rescan_hour = now.hour == _RESCAN_HOUR
+            already_checked_rescan = last_rescan_check_date == today_str
+
+            if is_rescan_day and is_rescan_hour and not already_checked_rescan:
+                logger.info(
+                    f"Triggering seasonal rescan check at {now.isoformat()}"
+                )
+                try:
+                    from app.services.seasonal_rescan import (
+                        send_seasonal_rescan_reminders,
+                    )
+                    sent = await send_seasonal_rescan_reminders()
+                    last_rescan_check_date = today_str
+                    logger.info(
+                        "Seasonal rescan check completed: %d emails sent",
+                        sent,
+                    )
+                except Exception as exc:
+                    logger.error(
+                        f"Seasonal rescan check failed: {exc}",
+                        exc_info=True,
+                    )
+
+            # ── Daily trial reminder: every day at 08:00 UTC ──
+            is_trial_hour = now.hour == _TRIAL_REMINDER_HOUR
+            already_checked_trials = last_trial_check_date == today_str
+
+            if is_trial_hour and not already_checked_trials:
+                logger.info(
+                    f"Triggering trial reminder check at {now.isoformat()}"
+                )
+                try:
+                    from app.services.trial_reminder import (
+                        send_trial_reminders,
+                    )
+                    sent = await send_trial_reminders()
+                    last_trial_check_date = today_str
+                    logger.info(
+                        "Trial reminder check completed: %d emails sent",
+                        sent,
+                    )
+                except Exception as exc:
+                    logger.error(
+                        f"Trial reminder check failed: {exc}",
+                        exc_info=True,
                     )
 
         except asyncio.CancelledError:

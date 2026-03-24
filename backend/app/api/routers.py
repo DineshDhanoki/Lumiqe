@@ -67,6 +67,7 @@ def register_all_routers(app: FastAPI) -> None:
     app.include_router(share_router)
     app.include_router(makeup_router)
 
+    _register_optional(app, "app.api.daily_outfit", "daily_outfit")
     _register_optional(app, "app.api.wardrobe", "wardrobe")
     _register_optional(app, "app.api.wishlist", "wishlist")
     _register_optional(app, "app.api.saved_outfits", "saved_outfits")
@@ -90,6 +91,12 @@ def register_all_routers(app: FastAPI) -> None:
     _register_optional(app, "app.api.price_alerts", "price_alerts")
 
     logger.info("Registered monetization routers")
+
+    # ─── Celebrity Match (1) ─────────────────────────────────
+    from app.api.celebrity import router as celebrity_router
+    app.include_router(celebrity_router)
+
+    logger.info("Registered celebrity match router")
 
     # ─── Growth (5) ──────────────────────────────────────────
     _register_optional(app, "app.api.creators", "creators")

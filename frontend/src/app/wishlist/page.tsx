@@ -84,10 +84,10 @@ export default function WishlistPage() {
                             Discover products that match your color palette and save your favorites here.
                         </p>
                         <Link
-                            href="/feed"
+                            href="/shopping-agent"
                             className="mt-2 px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors"
                         >
-                            Browse Your Feed
+                            Browse Shopping Agent
                         </Link>
                     </div>
                 ) : (
