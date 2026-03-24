@@ -302,8 +302,8 @@ export default function StyleQuiz() {
                             <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
                                 <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-3">Style Icons</p>
                                 <div className="flex flex-wrap gap-2">
-                                    {data.icons.map((icon, i) => (
-                                        <span key={i} className="text-sm bg-white/10 text-white/70 border border-white/15 px-3 py-1.5 rounded-full">
+                                    {data.icons.map((icon) => (
+                                        <span key={icon} className="text-sm bg-white/10 text-white/70 border border-white/15 px-3 py-1.5 rounded-full">
                                             ✦ {icon}
                                         </span>
                                     ))}
@@ -313,8 +313,8 @@ export default function StyleQuiz() {
                             <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
                                 <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-3">Your Key Pieces</p>
                                 <ul className="space-y-2">
-                                    {data.keyPieces.map((piece, i) => (
-                                        <li key={i} className="flex items-center gap-2 text-sm text-white/80">
+                                    {data.keyPieces.map((piece) => (
+                                        <li key={piece} className="flex items-center gap-2 text-sm text-white/80">
                                             <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />
                                             {piece}
                                         </li>

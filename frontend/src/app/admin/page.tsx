@@ -394,7 +394,7 @@ export default function AdminPage() {
                     {loadingDashboard ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                             {Array.from({ length: 6 }).map((_, i) => (
-                                <SkeletonCard key={i} />
+                                <SkeletonCard key={`skeleton-card-${i}`} />
                             ))}
                         </div>
                     ) : dashboardStats ? (
@@ -422,7 +422,7 @@ export default function AdminPage() {
                         {loadingFunnel ? (
                             <div className="space-y-4">
                                 {Array.from({ length: 5 }).map((_, i) => (
-                                    <SkeletonBar key={i} />
+                                    <SkeletonBar key={`skeleton-funnel-${i}`} />
                                 ))}
                             </div>
                         ) : funnel && funnel.length > 0 ? (
@@ -478,7 +478,7 @@ export default function AdminPage() {
                         {loadingDashboard ? (
                             <div className="space-y-3">
                                 {Array.from({ length: 5 }).map((_, i) => (
-                                    <SkeletonBar key={i} />
+                                    <SkeletonBar key={`skeleton-season-${i}`} />
                                 ))}
                             </div>
                         ) : dashboardStats?.top_seasons &&

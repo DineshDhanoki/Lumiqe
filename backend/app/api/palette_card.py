@@ -40,7 +40,8 @@ async def generate_palette_card(
                 "Content-Disposition": f'attachment; filename="lumiqe-{request.season.lower().replace(" ", "-")}.png"'
             },
         )
-    except ImportError:
+    except ImportError as exc:
+        logger.warning(f"Palette card service import failed: {exc}", exc_info=True)
         raise HTTPException(
             status_code=500,
             detail={

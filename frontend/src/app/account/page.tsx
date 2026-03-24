@@ -213,8 +213,8 @@ export default function AccountPage() {
                                     <div className="z-10 relative">
                                         <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-3">Core Palette</div>
                                         <div className="flex flex-wrap gap-3">
-                                            {profile.palette.map((hex, i) => (
-                                                <div key={i} className="group relative">
+                                            {profile.palette.map((hex) => (
+                                                <div key={hex} className="group relative">
                                                     <div
                                                         className="w-12 h-12 rounded-full border-2 border-white/10 shadow-lg cursor-pointer transition-transform hover:scale-110 hover:border-white/50"
                                                         style={{ backgroundColor: hex }}

@@ -83,8 +83,8 @@ def affiliatize_url(url: str) -> str:
         new_query = urlencode(existing, doseq=True)
         return urlunparse(parsed._replace(query=new_query))
 
-    except Exception:
-        logger.debug(f"Could not affiliatize URL: {url}")
+    except Exception as exc:
+        logger.warning(f"Could not affiliatize URL {url}: {exc}", exc_info=True)
         return url
 
 

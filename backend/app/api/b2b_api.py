@@ -282,7 +282,8 @@ async def b2b_analyze(
     try:
         from app.services.color_matcher import analyze_from_url
         result = await analyze_from_url(body.image_url)
-    except ImportError:
+    except ImportError as exc:
+        logger.warning(f"B2B analysis service import failed: {exc}", exc_info=True)
         # Fallback: return a placeholder if the service isn't available
         result = {
             "status": "analysis_queued",

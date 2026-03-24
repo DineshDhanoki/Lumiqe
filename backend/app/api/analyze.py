@@ -42,6 +42,96 @@ def _get_engine():
     return _engine
 
 
+def _validate_upload(image_bytes: bytes) -> None:
+    """Validate image bytes: check size, file type, and dimensions."""
+    if len(image_bytes) == 0:
+        raise HTTPException(
+            status_code=422,
+            detail={"error": "EMPTY_FILE", "detail": "Uploaded file is empty", "code": 422},
+        )
+    if len(image_bytes) > settings.MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail={
+                "error": "FILE_TOO_LARGE",
+                "detail": f"Image exceeds {settings.MAX_UPLOAD_BYTES // (1024*1024)}MB limit",
+                "code": 413,
+            },
+        )
+
+    detected_format = validate_image_bytes(image_bytes)
+    if detected_format is None:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "INVALID_FILE_TYPE",
+                "detail": "File is not a valid JPEG, PNG, or WebP image.",
+                "code": 422,
+            },
+        )
+
+    if not validate_image_dimensions(image_bytes):
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "IMAGE_TOO_LARGE",
+                "detail": "Image dimensions exceed 8000x8000 pixel limit.",
+                "code": 422,
+            },
+        )
+
+
+async def _persist_analysis_result(
+    current_user: dict, result: dict
+) -> int | None:
+    """Save analysis result, decrement quota, update palette, send email."""
+    confidence = result.get("confidence", 0.0)
+    season_name = result.get("season", "")
+    palette_list = result.get("palette", [])
+
+    try:
+        from app.core.dependencies import async_session_factory
+        async with async_session_factory() as session:
+            if confidence >= _MIN_CONFIDENCE_TO_DEDUCT:
+                if current_user["free_scans_left"] > 0:
+                    await user_repo.decrement_scan(session, current_user["id"])
+                elif current_user.get("credits", 0) > 0:
+                    await user_repo.deduct_credit(session, current_user["id"])
+            if season_name and palette_list:
+                await user_repo.update_palette(session, current_user["email"], season_name, palette_list)
+            saved = await analysis_repo.save_result(
+                session,
+                user_id=current_user["id"],
+                season=season_name,
+                hex_color=result.get("hex_color", ""),
+                undertone=result.get("undertone", ""),
+                confidence=confidence,
+                contrast_level=result.get("contrast_level", ""),
+                palette=palette_list,
+                avoid_colors=result.get("avoid_colors", []),
+                metal=result.get("metal", ""),
+                full_result=result,
+            )
+            analysis_id = saved["id"]
+            logger.info(f"Saved analysis {analysis_id} for {current_user['email']}: {season_name}")
+            loop = asyncio.get_running_loop()
+            loop.run_in_executor(None, send_analysis_complete_email,
+                current_user["email"],
+                current_user.get("name", ""),
+                season_name,
+                result.get("hex_color", ""),
+                palette_list,
+                analysis_id,
+            )
+            return analysis_id
+    except Exception as e:
+        logger.warning(f"Could not save analysis result: {e}")
+        return None
+
+
+# ─── Endpoints ───────────────────────────────────────────────
+
+
 @router.post("/analyze", response_model=AnalyzeResponse)
 async def analyze_image(
     request: Request,
@@ -85,43 +175,7 @@ async def analyze_image(
 
     # Read and validate file
     image_bytes = await image.read()
-    if len(image_bytes) == 0:
-        raise HTTPException(
-            status_code=422,
-            detail={"error": "EMPTY_FILE", "detail": "Uploaded file is empty", "code": 422},
-        )
-    if len(image_bytes) > settings.MAX_UPLOAD_BYTES:
-        raise HTTPException(
-            status_code=413,
-            detail={
-                "error": "FILE_TOO_LARGE",
-                "detail": f"Image exceeds {settings.MAX_UPLOAD_BYTES // (1024*1024)}MB limit",
-                "code": 413,
-            },
-        )
-
-    # Validate actual file signature (magic bytes) — not spoofable
-    detected_format = validate_image_bytes(image_bytes)
-    if detected_format is None:
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "error": "INVALID_FILE_TYPE",
-                "detail": "File is not a valid JPEG, PNG, or WebP image.",
-                "code": 422,
-            },
-        )
-
-    # Decompression bomb protection — reject oversized dimensions
-    if not validate_image_dimensions(image_bytes):
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "error": "IMAGE_TOO_LARGE",
-                "detail": "Image dimensions exceed 8000x8000 pixel limit.",
-                "code": 422,
-            },
-        )
+    _validate_upload(image_bytes)
 
     # Run the analysis pipeline in a thread pool to avoid blocking the event loop
     try:
@@ -153,51 +207,9 @@ async def analyze_image(
         )
 
     # Post-success: persist result, decrement scan quota, update user palette
-    confidence = result.get("confidence", 0.0)
-    season_name = result.get("season", "")
-    palette_list = result.get("palette", [])
     analysis_id = None
-
     if current_user:
-        try:
-            from app.core.dependencies import async_session_factory
-            async with async_session_factory() as session:
-                if confidence >= _MIN_CONFIDENCE_TO_DEDUCT:
-                    # Deduct from free scans first, then credits
-                    if current_user["free_scans_left"] > 0:
-                        await user_repo.decrement_scan(session, current_user["id"])
-                    elif current_user.get("credits", 0) > 0:
-                        await user_repo.deduct_credit(session, current_user["id"])
-                if season_name and palette_list:
-                    await user_repo.update_palette(session, current_user["email"], season_name, palette_list)
-                # Persist the full analysis result
-                saved = await analysis_repo.save_result(
-                    session,
-                    user_id=current_user["id"],
-                    season=season_name,
-                    hex_color=result.get("hex_color", ""),
-                    undertone=result.get("undertone", ""),
-                    confidence=confidence,
-                    contrast_level=result.get("contrast_level", ""),
-                    palette=palette_list,
-                    avoid_colors=result.get("avoid_colors", []),
-                    metal=result.get("metal", ""),
-                    full_result=result,
-                )
-                analysis_id = saved["id"]
-                logger.info(f"Saved analysis {analysis_id} for {current_user['email']}: {season_name}")
-                # Fire-and-forget analysis complete email via executor
-                loop = asyncio.get_running_loop()
-                loop.run_in_executor(None, send_analysis_complete_email,
-                    current_user["email"],
-                    current_user.get("name", ""),
-                    season_name,
-                    result.get("hex_color", ""),
-                    palette_list,
-                    analysis_id,
-                )
-        except Exception as e:
-            logger.warning(f"Could not save analysis result: {e}")
+        analysis_id = await _persist_analysis_result(current_user, result)
 
     return AnalyzeResponse(analysis_id=analysis_id, **result)
 
@@ -233,39 +245,7 @@ async def analyze_multi_image(
     all_bytes = []
     for img in images:
         img_bytes = await img.read()
-        if len(img_bytes) == 0:
-            raise HTTPException(
-                status_code=422,
-                detail={"error": "EMPTY_FILE", "detail": "One of the uploaded files is empty.", "code": 422},
-            )
-        if len(img_bytes) > settings.MAX_UPLOAD_BYTES:
-            raise HTTPException(
-                status_code=413,
-                detail={
-                    "error": "FILE_TOO_LARGE",
-                    "detail": f"Image exceeds {settings.MAX_UPLOAD_BYTES // (1024*1024)}MB limit.",
-                    "code": 413,
-                },
-            )
-        detected_format = validate_image_bytes(img_bytes)
-        if detected_format is None:
-            raise HTTPException(
-                status_code=422,
-                detail={
-                    "error": "INVALID_FILE_TYPE",
-                    "detail": "One of the files is not a valid JPEG, PNG, or WebP image.",
-                    "code": 422,
-                },
-            )
-        if not validate_image_dimensions(img_bytes):
-            raise HTTPException(
-                status_code=422,
-                detail={
-                    "error": "IMAGE_TOO_LARGE",
-                    "detail": "Image dimensions exceed 8000x8000 pixel limit.",
-                    "code": 422,
-                },
-            )
+        _validate_upload(img_bytes)
         all_bytes.append(img_bytes)
 
     # Analyze each image

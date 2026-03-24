@@ -51,6 +51,57 @@ def _get_redis():
         return None, False
 
 
+# ─── Refresh Token Rotation Store ────────────────────────────
+
+_REFRESH_TOKEN_PREFIX = "lumiqe:refresh_jti:"
+_refresh_jti_store: dict[int, str] = {}
+
+
+async def store_refresh_token(user_id: int, token_jti: str) -> None:
+    """Store the JTI of a valid refresh token, replacing any previous one."""
+    redis_client, redis_available = _get_redis()
+    ttl_seconds = 30 * 24 * 60 * 60  # 30 days
+
+    if redis_available and redis_client:
+        await redis_client.set(
+            f"{_REFRESH_TOKEN_PREFIX}{user_id}",
+            token_jti,
+            ex=ttl_seconds,
+        )
+    else:
+        _refresh_jti_store[user_id] = token_jti
+
+    logger.info(f"Stored refresh token JTI for user {user_id}")
+
+
+async def is_refresh_token_valid(user_id: int, token_jti: str) -> bool:
+    """Check if the given JTI matches the currently stored one for the user."""
+    redis_client, redis_available = _get_redis()
+
+    if redis_available and redis_client:
+        stored_jti = await redis_client.get(f"{_REFRESH_TOKEN_PREFIX}{user_id}")
+        if stored_jti is None:
+            return False
+        # Redis returns bytes or str depending on decode_responses setting
+        if isinstance(stored_jti, bytes):
+            stored_jti = stored_jti.decode("utf-8")
+        return stored_jti == token_jti
+    else:
+        return _refresh_jti_store.get(user_id) == token_jti
+
+
+async def revoke_refresh_token(user_id: int) -> None:
+    """Remove the stored JTI, invalidating the current refresh token."""
+    redis_client, redis_available = _get_redis()
+
+    if redis_available and redis_client:
+        await redis_client.delete(f"{_REFRESH_TOKEN_PREFIX}{user_id}")
+    else:
+        _refresh_jti_store.pop(user_id, None)
+
+    logger.info(f"Revoked refresh token for user {user_id}")
+
+
 async def generate_token(email: str, token_type: str) -> str:
     """
     Generate a URL-safe token and store it with an expiry.

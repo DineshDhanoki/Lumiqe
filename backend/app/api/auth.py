@@ -27,18 +27,31 @@ from app.core.security import (
 )
 from app.core.rate_limiter import check_rate_limit
 from app.services.email import send_welcome_email, send_email_verification
-from app.core.token_utils import generate_token
+from app.core.token_utils import (
+    generate_token,
+    store_refresh_token,
+    is_refresh_token_valid,
+    revoke_refresh_token,
+)
 
 logger = logging.getLogger("lumiqe.api.auth")
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 
-def _build_tokens(user: dict) -> dict:
-    """Build access + refresh tokens for a user."""
+async def _build_tokens(user: dict) -> dict:
+    """Build access + refresh tokens for a user and store the refresh JTI."""
     token_data = {"sub": user["email"], "user_id": user["id"]}
+    access_token = create_access_token(token_data)
+    refresh_token_str = create_refresh_token(token_data)
+
+    # Decode the refresh token to extract the JTI and store it
+    refresh_payload = decode_token(refresh_token_str)
+    if refresh_payload and refresh_payload.get("jti"):
+        await store_refresh_token(user["id"], refresh_payload["jti"])
+
     return {
-        "access_token": create_access_token(token_data),
-        "refresh_token": create_refresh_token(token_data),
+        "access_token": access_token,
+        "refresh_token": refresh_token_str,
     }
 
 
@@ -57,7 +70,7 @@ async def register(user: UserCreate, request: Request, session: AsyncSession = D
 
     password_hash = hash_password(user.password)
     new_user = await user_repo.create(session, user.name, user.email, password_hash)
-    tokens = _build_tokens(new_user)
+    tokens = await _build_tokens(new_user)
     logger.info(f"[SECURITY] User registered: {user.email} ip={client_ip} req={request_id}")
 
     # Fire-and-forget welcome email
@@ -109,7 +122,7 @@ async def login(credentials: UserLogin, request: Request, session: AsyncSession 
             detail={"error": "INVALID_CREDENTIALS", "detail": "Invalid email or password", "code": 401},
         )
 
-    tokens = _build_tokens(user)
+    tokens = await _build_tokens(user)
     logger.info(f"[SECURITY] Successful login: {user['email']} ip={client_ip} req={request_id}")
 
     return AuthResponse(
@@ -177,7 +190,7 @@ async def google_auth(body: GoogleAuthRequest, request: Request, session: AsyncS
     else:
         logger.info(f"[SECURITY] Google login: {body.email} ip={client_ip} req={request_id}")
 
-    tokens = _build_tokens(user)
+    tokens = await _build_tokens(user)
     return AuthResponse(
         user=UserResponse(**user),
         **tokens,
@@ -195,10 +208,22 @@ async def refresh_token(body: TokenRefreshRequest, session: AsyncSession = Depen
         )
 
     user_email = payload.get("sub")
-    if not user_email:
+    user_id = payload.get("user_id")
+    token_jti = payload.get("jti")
+    if not user_email or not token_jti:
         raise HTTPException(
             status_code=401,
             detail={"error": "INVALID_REFRESH_TOKEN", "detail": "Token payload is malformed.", "code": 401},
+        )
+
+    # Verify the refresh token JTI is still valid (not revoked/rotated)
+    if not await is_refresh_token_valid(user_id, token_jti):
+        logger.warning(f"[SECURITY] Refresh token reuse detected for user_id={user_id}")
+        # Revoke all refresh tokens for this user as a precaution
+        await revoke_refresh_token(user_id)
+        raise HTTPException(
+            status_code=401,
+            detail={"error": "TOKEN_REUSE", "detail": "Refresh token has been revoked.", "code": 401},
         )
 
     # Verify user still exists
@@ -209,8 +234,20 @@ async def refresh_token(body: TokenRefreshRequest, session: AsyncSession = Depen
             detail={"error": "USER_NOT_FOUND", "detail": "User no longer exists.", "code": 401},
         )
 
-    new_access = create_access_token({"sub": user["email"], "user_id": user["id"]})
-    return TokenRefreshResponse(access_token=new_access)
+    # Revoke the old refresh token
+    await revoke_refresh_token(user_id)
+
+    # Issue new access + refresh tokens (rotation)
+    token_data = {"sub": user["email"], "user_id": user["id"]}
+    new_access = create_access_token(token_data)
+    new_refresh = create_refresh_token(token_data)
+
+    # Store the new refresh token's JTI
+    new_payload = decode_token(new_refresh)
+    if new_payload and new_payload.get("jti"):
+        await store_refresh_token(user["id"], new_payload["jti"])
+
+    return TokenRefreshResponse(access_token=new_access, refresh_token=new_refresh)
 
 
 @router.get("/me", response_model=ProfileResponse)

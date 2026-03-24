@@ -269,8 +269,8 @@ export default function BodyShapeQuiz() {
                             <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
                                 <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-3">Best Styles For You</p>
                                 <div className="flex flex-wrap gap-2">
-                                    {shapeData.bestStyles.map((s, i) => (
-                                        <span key={i} className="flex items-center gap-1.5 text-sm bg-green-500/15 text-green-300 border border-green-500/25 px-3 py-1.5 rounded-full">
+                                    {shapeData.bestStyles.map((s) => (
+                                        <span key={s} className="flex items-center gap-1.5 text-sm bg-green-500/15 text-green-300 border border-green-500/25 px-3 py-1.5 rounded-full">
                                             <CheckCircle2 className="w-3.5 h-3.5" />
                                             {s}
                                         </span>
@@ -282,8 +282,8 @@ export default function BodyShapeQuiz() {
                             <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
                                 <p className="text-red-400 text-xs font-bold uppercase tracking-wider mb-3">Styles to Avoid</p>
                                 <div className="flex flex-wrap gap-2">
-                                    {shapeData.avoidStyles.map((s, i) => (
-                                        <span key={i} className="text-sm bg-red-500/15 text-red-300 border border-red-500/25 px-3 py-1.5 rounded-full">✕ {s}</span>
+                                    {shapeData.avoidStyles.map((s) => (
+                                        <span key={s} className="text-sm bg-red-500/15 text-red-300 border border-red-500/25 px-3 py-1.5 rounded-full">✕ {s}</span>
                                     ))}
                                 </div>
                             </div>

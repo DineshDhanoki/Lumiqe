@@ -193,7 +193,7 @@ function FeedContent() {
                     {loading ? (
                         <div className="grid grid-cols-2 gap-4 w-full max-w-md">
                             {[...Array(6)].map((_, i) => (
-                                <div key={i} className="aspect-[3/4] rounded-3xl bg-white/5 animate-pulse" />
+                                <div key={`skeleton-${i}`} className="aspect-[3/4] rounded-3xl bg-white/5 animate-pulse" />
                             ))}
                         </div>
                     ) : isPlaceholderResponse ? (
@@ -238,7 +238,7 @@ function FeedContent() {
                         <div className="grid grid-cols-2 gap-4 w-full max-w-md pb-20 z-20 relative">
                             {products.map((product, idx) => (
                                 <ProductCard
-                                    key={product.id || idx}
+                                    key={product.id || `product-${idx}`}
                                     product={product}
                                     idx={idx}
                                     onLockedClick={() => setIsModalOpen(true)}

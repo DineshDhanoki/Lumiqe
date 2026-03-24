@@ -15,6 +15,8 @@ from app.models import WardrobeItem
 logger = logging.getLogger("lumiqe.api.wardrobe")
 router = APIRouter(prefix="/api/wardrobe", tags=["Wardrobe"])
 
+# ─── Constants ───────────────────────────────────────────────
+
 _MAX_WARDROBE_ITEMS = 100
 _MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB
 
@@ -127,6 +129,32 @@ def _score_against_palette(item_hex: str, palette: list[str]) -> int:
     return score
 
 
+# ─── Serialization Helpers ───────────────────────────────────
+
+
+def _serialize_wardrobe_item(item: WardrobeItem) -> dict:
+    """Convert a WardrobeItem ORM object to a JSON-serializable dict."""
+    return {
+        "id": item.id,
+        "dominant_color": item.dominant_color,
+        "match_score": item.match_score,
+        "image_filename": item.image_filename,
+        "category": item.category,
+        "created_at": item.created_at.isoformat() if item.created_at else None,
+    }
+
+
+def _generate_compatibility_summary(overall_score: int) -> str:
+    """Return a human-readable summary for a wardrobe compatibility score."""
+    if overall_score >= 80:
+        return "Excellent! Your wardrobe is highly compatible with your color palette."
+    if overall_score >= 60:
+        return "Good. Most of your wardrobe works well with your palette."
+    if overall_score >= 40:
+        return "Fair. Consider replacing some items with colors from your palette."
+    return "Your wardrobe could use some updates to better match your color palette."
+
+
 # ─── Endpoints ──────────────────────────────────────────────
 
 
@@ -143,17 +171,7 @@ async def get_wardrobe(
     )
     items = result.scalars().all()
 
-    serialized_items = [
-        {
-            "id": item.id,
-            "dominant_color": item.dominant_color,
-            "match_score": item.match_score,
-            "image_filename": item.image_filename,
-            "category": item.category,
-            "created_at": item.created_at.isoformat() if item.created_at else None,
-        }
-        for item in items
-    ]
+    serialized_items = [_serialize_wardrobe_item(item) for item in items]
 
     # Compute stats
     count = len(serialized_items)
@@ -389,15 +407,7 @@ async def wardrobe_compatibility(
     )
     compatible_count = sum(1 for i in item_scores if i["match_score"] >= 60)
 
-    # Generate a human-readable summary
-    if overall_score >= 80:
-        summary = "Excellent! Your wardrobe is highly compatible with your color palette."
-    elif overall_score >= 60:
-        summary = "Good. Most of your wardrobe works well with your palette."
-    elif overall_score >= 40:
-        summary = "Fair. Consider replacing some items with colors from your palette."
-    else:
-        summary = "Your wardrobe could use some updates to better match your color palette."
+    summary = _generate_compatibility_summary(overall_score)
 
     return {
         "overall_score": overall_score,

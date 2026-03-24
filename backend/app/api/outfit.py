@@ -50,8 +50,8 @@ async def get_daily_outfit(
             cached = await redis_client.get(cache_key)
             if cached:
                 return json.loads(cached)
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(f"Redis cache lookup failed for daily outfit: {exc}", exc_info=True)
 
     # Deterministic seed from user_id + date
     seed = int(hashlib.md5(f"{user_id}:{today}".encode()).hexdigest()[:8], 16)
@@ -84,8 +84,8 @@ async def get_daily_outfit(
     try:
         from app.services.affiliate import affiliatize_products
         outfit_items = affiliatize_products(outfit_items)
-    except ImportError:
-        pass
+    except ImportError as exc:
+        logger.warning(f"Affiliate service import failed: {exc}", exc_info=True)
 
     result = {
         "date": today,
@@ -98,7 +98,7 @@ async def get_daily_outfit(
     try:
         if redis_client:
             await redis_client.set(cache_key, json.dumps(result, default=str), ex=86400)
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(f"Redis cache write failed for daily outfit: {exc}", exc_info=True)
 
     return result

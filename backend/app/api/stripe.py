@@ -6,6 +6,7 @@ import logging
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -219,7 +220,18 @@ async def stripe_webhook(
                     logger.info(f"Duplicate webhook event skipped: {event_id}")
                     return {"status": "ok", "duplicate": True}
         except Exception as exc:
-            logger.warning(f"Webhook dedup check failed (proceeding): {exc}")
+            logger.warning(f"Webhook dedup Redis check failed, trying DB fallback: {exc}")
+            # DB fallback for idempotency
+            from app.models import Event
+            existing = await session.execute(
+                select(Event).where(
+                    Event.event_name == "stripe_webhook",
+                    Event.properties["event_id"].astext == event_id,
+                )
+            )
+            if existing.scalar_one_or_none():
+                logger.info(f"Duplicate webhook (DB check): {event_id}")
+                return {"status": "ok", "duplicate": True}
 
     event_type = event["type"]
     data = event["data"]["object"]
@@ -271,6 +283,16 @@ async def stripe_webhook(
     elif event_type == "invoice.payment_failed":
         customer_id = data.get("customer")
         logger.warning(f"Payment failed for customer {customer_id}")
+
+    # Record processed webhook for DB-level idempotency
+    if event_id:
+        from app.models import Event
+        webhook_event = Event(
+            event_name="stripe_webhook",
+            properties={"event_id": event_id, "type": event_type},
+        )
+        session.add(webhook_event)
+        await session.flush()
 
     return {"status": "ok"}
 

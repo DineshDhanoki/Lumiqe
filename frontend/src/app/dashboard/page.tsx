@@ -280,8 +280,8 @@ export default function Dashboard() {
                                 <p className="text-xl font-bold text-white">{lastAnalysis.season}</p>
                                 <p className="text-white/40 text-xs mt-1 capitalize">{lastAnalysis.undertone} undertone · {lastAnalysis.contrastLevel} contrast</p>
                                 <div className="flex gap-1.5 mt-3">
-                                    {lastAnalysis.palette.slice(0, 5).map((c, i) => (
-                                        <div key={i} className="w-6 h-6 rounded-full border border-white/20" style={{ backgroundColor: c }} />
+                                    {lastAnalysis.palette.slice(0, 5).map((c) => (
+                                        <div key={`palette-${c}`} className="w-6 h-6 rounded-full border border-white/20" style={{ backgroundColor: c }} />
                                     ))}
                                 </div>
                                 <Link href={`/results?season=${encodeURIComponent(lastAnalysis.season)}&hexColor=${encodeURIComponent(lastAnalysis.hexColor)}&undertone=${lastAnalysis.undertone}&confidence=${lastAnalysis.confidence}&contrastLevel=${lastAnalysis.contrastLevel}&metal=${lastAnalysis.metal}&palette=${lastAnalysis.palette.join(',')}`}
@@ -425,8 +425,8 @@ export default function Dashboard() {
                             { label: t('shopColors'), icon: <ShoppingBag className="w-5 h-5" />, href: '/shopping-agent', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
                             { label: t('aiStylist'), icon: <MessageCircle className="w-5 h-5" />, href: lastAnalysis ? `/results?season=${encodeURIComponent(lastAnalysis.season)}&hexColor=${encodeURIComponent(lastAnalysis.hexColor)}&undertone=${lastAnalysis.undertone}&confidence=${lastAnalysis.confidence}&contrastLevel=${lastAnalysis.contrastLevel}&metal=${lastAnalysis.metal}&palette=${lastAnalysis.palette.join(',')}` : '/analyze', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
                             { label: t('buyOrPass'), icon: <Shirt className="w-5 h-5" />, href: '/scan', color: 'bg-white/5 border-white/10 hover:bg-white/10' },
-                        ].map((action, i) => (
-                            <Link key={i} href={action.href}
+                        ].map((action) => (
+                            <Link key={action.label} href={action.href}
                                 className={`flex flex-col items-center gap-2 p-5 rounded-2xl border text-white/70 hover:text-white transition-all ${action.color}`}>
                                 {action.icon}
                                 <span className="text-xs font-semibold">{action.label}</span>
@@ -477,7 +477,7 @@ export default function Dashboard() {
                                 <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-3">{t('dailyRoutine')}</p>
                                 <ol className="space-y-2">
                                     {skincare.routine.map((step, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-sm text-white/70">
+                                        <li key={step} className="flex items-start gap-3 text-sm text-white/70">
                                             <span className="w-5 h-5 rounded-full bg-red-600/30 text-red-300 text-xs flex items-center justify-center flex-shrink-0 font-bold mt-0.5">{i + 1}</span>
                                             {step}
                                         </li>
@@ -489,8 +489,8 @@ export default function Dashboard() {
                                 <div>
                                     <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-2">{t('keyIngredients')}</p>
                                     <div className="flex flex-wrap gap-1.5">
-                                        {skincare.ingredients.map((ing, i) => (
-                                            <span key={i} className="text-xs bg-green-500/15 text-green-300 border border-green-500/25 px-2.5 py-1 rounded-full">
+                                        {skincare.ingredients.map((ing) => (
+                                            <span key={ing} className="text-xs bg-green-500/15 text-green-300 border border-green-500/25 px-2.5 py-1 rounded-full">
                                                 {ing}
                                             </span>
                                         ))}
@@ -499,8 +499,8 @@ export default function Dashboard() {
                                 <div>
                                     <p className="text-red-400 text-xs font-bold uppercase tracking-wider mb-2">{t('avoid')}</p>
                                     <ul className="space-y-1">
-                                        {skincare.avoid.map((item, i) => (
-                                            <li key={i} className="text-xs text-white/50 flex items-start gap-1.5">
+                                        {skincare.avoid.map((item) => (
+                                            <li key={item} className="text-xs text-white/50 flex items-start gap-1.5">
                                                 <span className="text-red-400 mt-0.5">✕</span>{item}
                                             </li>
                                         ))}
@@ -516,9 +516,9 @@ export default function Dashboard() {
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
                         <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('analysisHistory')}</p>
                         <div className="space-y-3">
-                            {history.map((entry, i) => (
+                            {history.map((entry) => (
                                 <Link
-                                    key={i}
+                                    key={entry.id || entry.timestamp}
                                     href={entry.id ? `/results/${entry.id}` : `/results?season=${encodeURIComponent(entry.season)}&hexColor=${encodeURIComponent(entry.hexColor)}&undertone=${entry.undertone}&confidence=${entry.confidence}&contrastLevel=${entry.contrastLevel}&metal=${entry.metal}&palette=${entry.palette.join(',')}`}
                                     className="flex items-center gap-4 bg-zinc-900/60 border border-white/10 rounded-2xl p-4 hover:border-white/20 transition-all group"
                                 >
@@ -530,8 +530,8 @@ export default function Dashboard() {
                                     </div>
                                     <div className="text-right flex-shrink-0">
                                         <div className="flex gap-1 justify-end mb-1">
-                                            {entry.palette.slice(0, 4).map((c, j) => (
-                                                <div key={j} className="w-4 h-4 rounded-full border border-white/10" style={{ backgroundColor: c }} />
+                                            {entry.palette.slice(0, 4).map((c) => (
+                                                <div key={`history-${c}`} className="w-4 h-4 rounded-full border border-white/10" style={{ backgroundColor: c }} />
                                             ))}
                                         </div>
                                         <p className="text-white/30 text-xs flex items-center gap-1 justify-end">

@@ -62,7 +62,8 @@ async def _check_redis() -> DependencyStatus:
     """Probe Redis with PING and measure latency."""
     try:
         from app.core.rate_limiter import _redis_client, _redis_available
-    except ImportError:
+    except ImportError as exc:
+        logger.warning(f"Redis module import failed: {exc}", exc_info=True)
         return DependencyStatus(status="unavailable")
 
     if not _redis_available or _redis_client is None:

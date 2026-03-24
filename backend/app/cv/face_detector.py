@@ -68,8 +68,8 @@ def _fix_exif_rotation(image: np.ndarray, image_path: str = None) -> np.ndarray:
         if orientation != 1:
             image = _apply_exif_rotation(image, orientation)
             logger.debug(f"EXIF orientation={orientation}, rotation applied")
-    except Exception as e:
-        logger.debug(f"EXIF rotation skipped: {e}")
+    except Exception as exc:
+        logger.warning(f"EXIF rotation skipped: {exc}", exc_info=True)
 
     return image
 

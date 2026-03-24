@@ -4,6 +4,7 @@ Lumiqe — Security Utilities.
 Password hashing, JWT token management, and security helpers.
 """
 
+import secrets
 from datetime import datetime, timedelta, timezone
 from io import BytesIO
 
@@ -56,11 +57,12 @@ def create_access_token(data: dict) -> str:
 
 
 def create_refresh_token(data: dict) -> str:
-    """Create a long-lived refresh token."""
+    """Create a long-lived refresh token with a unique JTI for rotation."""
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(
         days=settings.REFRESH_TOKEN_EXPIRE_DAYS
     )
+    to_encode["jti"] = secrets.token_urlsafe(16)
     to_encode.update({"exp": expire, "type": "refresh"})
     return jwt.encode(to_encode, _get_secret_key(), algorithm=settings.JWT_ALGORITHM)
 

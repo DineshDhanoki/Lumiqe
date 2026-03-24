@@ -72,6 +72,7 @@ def register_all_routers(app: FastAPI) -> None:
     _register_optional(app, "app.api.wishlist", "wishlist")
     _register_optional(app, "app.api.saved_outfits", "saved_outfits")
     _register_optional(app, "app.api.community", "community")
+    _register_optional(app, "app.api.community_moderation", "community_moderation")
     _register_optional(app, "app.api.virtual_tryon", "virtual_tryon")
     _register_optional(app, "app.api.skin_profiles", "skin_profiles")
     _register_optional(app, "app.api.before_after", "before_after")

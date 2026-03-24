@@ -40,6 +40,7 @@ async def track_event(
         properties=body.properties,
     )
     session.add(event)
+    await session.flush()
     return {"status": "accepted"}
 
 

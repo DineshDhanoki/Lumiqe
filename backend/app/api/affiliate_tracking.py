@@ -61,7 +61,8 @@ async def track_affiliate_click(
     # Extract domain for analytics
     try:
         domain = urlparse(url).netloc.lower().removeprefix("www.")
-    except Exception:
+    except Exception as exc:
+        logger.warning(f"URL parsing failed for affiliate click: {exc}", exc_info=True)
         domain = "unknown"
 
     # Log the click event
@@ -75,6 +76,7 @@ async def track_affiliate_click(
         },
     )
     session.add(event)
+    await session.flush()
 
     logger.info(
         f"Affiliate click: domain={domain} product_id={product_id} "
