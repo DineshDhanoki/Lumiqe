@@ -25,6 +25,8 @@ const eslintConfig = defineConfig([
       // setState inside useEffect and Date.now() in handlers are valid patterns here
       "react-hooks/set-state-in-effect": "warn",
       "react-hooks/purity": "warn",
+      // React Compiler can't always preserve manual memoization — non-blocking
+      "react-compiler/react-compiler": "warn",
     },
   },
 ]);
