@@ -41,6 +41,7 @@ class CuratedOutfitResponse(BaseModel):
     bag: OutfitProductItem
     eyewear: OutfitProductItem
     jewelry: OutfitProductItem
+    body_shape_tip: Optional[str] = None
 
 
 # ─── Endpoint ─────────────────────────────────────────────────
@@ -131,13 +132,11 @@ async def generate_outfit(
             if isinstance(slot, dict) and slot.get("product_url"):
                 slot["product_url"] = affiliatize_url(slot["product_url"])
 
-        response_data = {"outfit": result}
-
         # Add body shape tip if provided
         body_shape_tip = None
         if body_shape:
             body_shape_tip = _BODY_SHAPE_TIPS.get(body_shape.lower())
-        response_data["body_shape_tip"] = body_shape_tip
+        result["body_shape_tip"] = body_shape_tip
 
         return CuratedOutfitResponse(**result)
 

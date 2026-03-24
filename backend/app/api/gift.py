@@ -261,6 +261,19 @@ async def redeem_gift(
         f"(from user {entry['sender_id']})"
     )
 
+    # Notify the gift creator that their code was redeemed
+    from app.api.notifications import create_notification
+
+    await create_notification(
+        user_id=entry["sender_id"],
+        title="Gift Code Redeemed",
+        message=(
+            f"Your gift code {code} was redeemed! "
+            "The recipient received 1 free scan."
+        ),
+        notification_type="success",
+    )
+
     return {
         "message": "Gift redeemed! You received 1 free scan.",
         "bonus_scans": 1,

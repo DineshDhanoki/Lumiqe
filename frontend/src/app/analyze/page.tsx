@@ -11,6 +11,7 @@ import { apiFetch } from '@/lib/api';
 import { t } from '@/lib/i18n';
 import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import ScanGuide from '@/components/ScanGuide';
 
 type Mode = 'choose' | 'upload' | 'camera';
 
@@ -138,6 +139,7 @@ export default function AnalyzePage() {
 
             {/* ── Content ── */}
             <div className="flex flex-1 flex-col items-center justify-center p-6 pt-28 pb-12">
+                <ScanGuide />
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

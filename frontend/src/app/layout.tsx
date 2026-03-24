@@ -1,12 +1,13 @@
+// TODO: Production Sentry setup — install @sentry/nextjs and configure:
+//   1. Run: npx @sentry/wizard@latest -i nextjs
+//   2. Add NEXT_PUBLIC_SENTRY_DSN and SENTRY_AUTH_TOKEN to env vars
+//   3. Configure sentry.client.config.ts and sentry.server.config.ts
+//   4. Wrap this layout with Sentry error boundary for client-side error capture
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import dynamic from "next/dynamic";
-
-const FloatingFashionBackground = dynamic(() => import("@/components/FloatingFashionBackground"), { ssr: false });
-const AnalyticsInit = dynamic(() => import("@/components/AnalyticsInit").then(mod => mod.AnalyticsInit), { ssr: false });
-const ServiceWorkerRegister = dynamic(() => import("@/components/ServiceWorkerRegister").then(mod => mod.ServiceWorkerRegister), { ssr: false });
+import { ClientShell } from "@/components/ClientShell";
 
 function SkipLink() {
   return (
@@ -53,9 +54,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased bg-transparent text-white`} suppressHydrationWarning>
         <SkipLink />
-        <FloatingFashionBackground />
-        <AnalyticsInit />
-        <ServiceWorkerRegister />
+        <ClientShell />
         <Providers>
           <main id="main-content" role="main">
             {children}

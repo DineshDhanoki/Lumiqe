@@ -43,6 +43,18 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         request.state.request_id = request_id
         _current_request_id = request_id
 
+        # Set Sentry user context if authenticated (privacy-safe: id only)
+        try:
+            import sentry_sdk
+            auth_header = request.headers.get("authorization", "")
+            if auth_header.startswith("Bearer "):
+                from app.core.security import decode_token
+                payload = decode_token(auth_header[7:])
+                if payload and payload.get("sub"):
+                    sentry_sdk.set_user({"id": str(payload["sub"])})
+        except (ImportError, Exception):
+            pass  # Sentry not installed or token decode failed — skip silently
+
         # Track request count and measure response time
         increment("lumiqe_requests_total")
         start = time.perf_counter()

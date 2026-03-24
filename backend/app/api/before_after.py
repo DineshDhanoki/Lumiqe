@@ -5,9 +5,10 @@ from io import BytesIO
 
 import cv2
 import numpy as np
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
+from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
 from app.services import image_cache
 
 logger = logging.getLogger("lumiqe.api.before_after")
@@ -142,6 +143,7 @@ def _generate_comparison(good_hex: str, bad_hex: str) -> bytes:
 
 @router.get("")
 async def get_before_after(
+    request: Request,
     good_hex: str = Query(..., description="Matching/good hex color"),
     bad_hex: str = Query(..., description="Clashing/bad hex color"),
 ):
@@ -150,6 +152,9 @@ async def get_before_after(
     shown twice: one with a clashing color, one with a matching color.
     Returns StreamingResponse with image/png.
     """
+    rate_key = get_rate_limit_key(request, None, "before_after")
+    await check_rate_limit(rate_key, max_requests=20, window_seconds=3600)
+
     clean_good = _validate_hex(good_hex, "good_hex")
     clean_bad = _validate_hex(bad_hex, "bad_hex")
 

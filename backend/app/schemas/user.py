@@ -48,6 +48,7 @@ class UserResponse(BaseModel):
     name: str
     email: str
     free_scans_left: int
+    is_admin: bool = False
     is_premium: bool = False
     credits: int = 0
     trial_ends_at: str | None = None

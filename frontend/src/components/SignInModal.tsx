@@ -105,7 +105,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                 throw new Error('Invalid email or password');
             } else {
                 handleClose();
-                router.push(callbackUrl);
+                router.push(isSignUp ? '/welcome' : callbackUrl);
             }
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'An error occurred during authentication');

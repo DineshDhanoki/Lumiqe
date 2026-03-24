@@ -5,9 +5,10 @@ from io import BytesIO
 
 import cv2
 import numpy as np
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
+from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
 from app.services import image_cache
 
 logger = logging.getLogger("lumiqe.api.virtual_tryon")
@@ -86,6 +87,7 @@ def _generate_silhouette(hex_color: str, size: int) -> bytes:
 
 @router.get("")
 async def get_tryon_silhouette(
+    request: Request,
     hex_color: str = Query(..., description="Hex color code (e.g., '#A52A2A' or 'A52A2A')"),
     size: int = Query(default=400, ge=100, le=1200, description="Image size in pixels"),
 ):
@@ -94,6 +96,9 @@ async def get_tryon_silhouette(
     Returns a PNG image via StreamingResponse.
     Uses in-memory cache for repeated requests.
     """
+    rate_key = get_rate_limit_key(request, None, "tryon")
+    await check_rate_limit(rate_key, max_requests=20, window_seconds=3600)
+
     # Normalize hex color
     clean_hex = hex_color.lstrip("#")
     if len(clean_hex) != 6:

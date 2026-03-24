@@ -5,9 +5,10 @@ from io import BytesIO
 
 import cv2
 import numpy as np
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
+from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
 from app.services import image_cache
 
 logger = logging.getLogger("lumiqe.api.stories")
@@ -141,6 +142,7 @@ def _generate_stories_card(
 
 @router.get("")
 async def get_stories_card(
+    request: Request,
     season: str = Query(..., description="Color season (e.g., 'Deep Autumn')"),
     hex_color: str = Query(..., description="Dominant skin hex color"),
     palette: str = Query(..., description="Comma-separated palette hex colors"),
@@ -150,6 +152,9 @@ async def get_stories_card(
     Generate an Instagram Stories template card as PNG.
     Returns a 1080x1920 image with season, color swatch, palette, and branding.
     """
+    rate_key = get_rate_limit_key(request, None, "stories_card")
+    await check_rate_limit(rate_key, max_requests=20, window_seconds=3600)
+
     # Parse and validate hex color
     clean_hex = hex_color.lstrip("#")
     if len(clean_hex) != 6:

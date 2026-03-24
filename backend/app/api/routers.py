@@ -75,6 +75,7 @@ def register_all_routers(app: FastAPI) -> None:
     _register_optional(app, "app.api.skin_profiles", "skin_profiles")
     _register_optional(app, "app.api.before_after", "before_after")
     _register_optional(app, "app.api.stories", "stories")
+    _register_optional(app, "app.api.notifications", "notifications")
 
     logger.info("Registered feature routers")
 

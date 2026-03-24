@@ -6,6 +6,7 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Sparkles, Menu, X, Crown, User, LogOut } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import SignInModal from './SignInModal';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar() {
     const { data: session, status } = useSession();
@@ -65,6 +66,7 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-4">
                         {status === 'authenticated' ? (
                             <>
+                                <NotificationBell />
                                 <Link
                                     href="/account"
                                     className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all border ${isPremium
@@ -127,6 +129,9 @@ export default function Navbar() {
                         <div className="flex flex-col gap-3">
                             {status === 'authenticated' ? (
                                 <>
+                                    <div className="flex justify-center">
+                                        <NotificationBell />
+                                    </div>
                                     <Link
                                         href="/account"
                                         onClick={() => setIsMobileMenuOpen(false)}

@@ -77,6 +77,19 @@ async def check_price_alerts() -> int:
                         alert.target_drop_percent,
                     )
 
+                    # Notify the user about the price drop
+                    from app.api.notifications import create_notification
+
+                    await create_notification(
+                        user_id=alert.user_id,
+                        title="Price Drop Alert",
+                        message=(
+                            f"{alert.product_name} dropped {drop_percent:.0f}%! "
+                            f"Now available at a lower price."
+                        ),
+                        notification_type="price_alert",
+                    )
+
             await session.commit()
             logger.info(
                 "Price alert check complete: %d/%d alerts triggered",

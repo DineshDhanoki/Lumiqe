@@ -26,6 +26,8 @@ if settings.SENTRY_DSN:
             traces_sample_rate=0.1,
             profiles_sample_rate=0.1,
             environment="production" if not settings.DEBUG else "development",
+            release=settings.API_VERSION,
+            send_default_pii=False,
         )
     except ImportError:
         pass  # sentry-sdk not installed — skip silently

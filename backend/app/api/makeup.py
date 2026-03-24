@@ -12,9 +12,10 @@ imported from the existing color_matcher service.
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel
 
+from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
 from app.services.color_matcher import delta_e_cie2000, hex_to_lab
 from app.services.makeup_database import ALL_SHADES, SEASON_RECOMMENDATIONS
 
@@ -94,6 +95,7 @@ def _build_purchase_url(brand: str, shade_name: str) -> str:
 
 @router.get("/shades", response_model=ShadeMatchResponse)
 async def get_shade_matches(
+    request: Request,
     hex_color: str = Query(
         ...,
         description="User's skin hex color, e.g. '#D4A97A'",
@@ -113,6 +115,9 @@ async def get_shade_matches(
     Returns the top 5 closest shades sorted by Delta-E 2000 perceptual
     distance. Lower delta_e_score means a closer visual match.
     """
+    rate_key = get_rate_limit_key(request, None, "makeup_shades")
+    await check_rate_limit(rate_key, max_requests=30, window_seconds=3600)
+
     normalised_hex = _validate_hex_color(hex_color)
     category_lower = category.strip().lower()
 
@@ -176,6 +181,7 @@ async def get_shade_matches(
 
 @router.get("/recommendations", response_model=MakeupRecommendationResponse)
 async def get_makeup_recommendations(
+    request: Request,
     season: str = Query(
         ...,
         description="Color season: spring, summer, autumn, or winter",
@@ -190,6 +196,9 @@ async def get_makeup_recommendations(
     and undertone. Includes foundation guidance, lipstick picks, blush
     suggestions, and eyeshadow palette ideas.
     """
+    rate_key = get_rate_limit_key(request, None, "makeup_recommendations")
+    await check_rate_limit(rate_key, max_requests=30, window_seconds=3600)
+
     season_lower = season.strip().lower()
     undertone_lower = undertone.strip().lower()
 

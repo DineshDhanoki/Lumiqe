@@ -24,6 +24,7 @@ async function refreshBackendToken(refreshToken: string): Promise<{ access_token
 declare module 'next-auth' {
     interface Session {
         isPremium?: boolean;
+        isAdmin?: boolean;
         user: {
             id?: string;
             name?: string | null;
@@ -34,6 +35,7 @@ declare module 'next-auth' {
         backendToken?: string;
         refreshToken?: string;
         isPremium?: boolean;
+        isAdmin?: boolean;
     }
 }
 
@@ -42,6 +44,7 @@ declare module 'next-auth/jwt' {
         backendToken?: string;
         refreshToken?: string;
         isPremium?: boolean;
+        isAdmin?: boolean;
         backendTokenExpiresAt?: number;
     }
 }
@@ -90,6 +93,7 @@ export const authOptions: AuthOptions = {
                             backendToken: data.access_token,
                             refreshToken: data.refresh_token,
                             isPremium: data.user.is_premium || false,
+                            isAdmin: data.user.is_admin || false,
                         };
                     }
                     return null;
@@ -119,6 +123,7 @@ export const authOptions: AuthOptions = {
                         user.backendToken = data.access_token;
                         user.refreshToken = data.refresh_token;
                         user.isPremium = data.user?.is_premium || false;
+                        user.isAdmin = data.user?.is_admin || false;
                     } else {
                         return false;
                     }
@@ -134,6 +139,7 @@ export const authOptions: AuthOptions = {
                 token.backendToken = user.backendToken;
                 token.refreshToken = user.refreshToken;
                 token.isPremium = user.isPremium || false;
+                token.isAdmin = user.isAdmin || false;
                 token.backendTokenExpiresAt = Date.now() + ACCESS_TOKEN_MAX_AGE_MS;
             }
 
@@ -159,6 +165,7 @@ export const authOptions: AuthOptions = {
             // backendToken stays in the server-side JWT (httpOnly cookie) only.
             // It is injected by the proxy route — never exposed to client JS.
             session.isPremium = token.isPremium || false;
+            session.isAdmin = token.isAdmin || false;
             return session;
         },
     },

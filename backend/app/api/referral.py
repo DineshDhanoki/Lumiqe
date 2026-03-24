@@ -69,6 +69,19 @@ async def apply_referral_code(
     await user_repo.apply_referral(session, current_user["id"], referrer["id"])
     await session.commit()
 
+    # Notify the referrer that their code was used
+    from app.api.notifications import create_notification
+
+    await create_notification(
+        user_id=referrer["id"],
+        title="Referral Used",
+        message=(
+            "Someone used your referral code! "
+            "You both earned a free scan and premium trial."
+        ),
+        notification_type="success",
+    )
+
     return {
         "message": "Referral applied! You earned a 7-day Premium trial + 1 free scan.",
         "bonus_scans": 1,
