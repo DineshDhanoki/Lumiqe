@@ -1,11 +1,9 @@
 """Tests for app.services.seasonal_guide — climate-based wardrobe guide."""
 
-import pytest
 
 from app.services.seasonal_guide import (
     get_guide_for_month,
     get_current_guide,
-    MONTH_TO_SEASON,
     TRANSITION_GUIDES,
 )
 

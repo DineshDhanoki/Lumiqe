@@ -116,11 +116,6 @@ def test_cleanup_expired():
         tok = generate_token(f"old{i}@test.com", "reset")
         _token_store[tok]["expires_at"] = past
 
-    valid_before = len([
-        v for v in _token_store.values()
-        if v["expires_at"] > datetime.now(timezone.utc)
-    ])
-
     # Trigger eviction by filling to limit
     for i in range(_MAX_TOKENS):
         generate_token(f"new{i}@test.com", "reset")

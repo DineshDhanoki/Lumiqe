@@ -14,7 +14,7 @@ describe('useFetch', () => {
     });
 
     it('starts with loading=true', () => {
-        globalThis.fetch = vi.fn(() => new Promise(() => {})); // never resolves
+        globalThis.fetch = vi.fn(() => new Promise(() => {})) as unknown as typeof fetch; // never resolves
         const { result } = renderHook(() => useFetch<{ ok: boolean }>('/api/test'));
         expect(result.current.loading).toBe(true);
         expect(result.current.data).toBeNull();
@@ -53,7 +53,7 @@ describe('useFetch', () => {
     });
 
     it('does not fetch when skip=true', async () => {
-        const fetchSpy = vi.fn();
+        const fetchSpy = vi.fn() as unknown as typeof fetch;
         globalThis.fetch = fetchSpy;
 
         const { result } = renderHook(() =>

@@ -9,7 +9,7 @@ shopping guidance, and professional styling advice.
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel
 
 from app.core.config import settings
 from app.core.dependencies import get_current_user

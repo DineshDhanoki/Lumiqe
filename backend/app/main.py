@@ -7,6 +7,7 @@ adds middleware, and handles startup/shutdown lifecycle.
 Run with: uvicorn app.main:app --reload --port 8000
 """
 
+import json as _json
 import logging
 from contextlib import asynccontextmanager
 
@@ -39,7 +40,6 @@ from app.api.routers import register_all_routers
 logger = logging.getLogger("lumiqe.main")
 
 # ─── JSON Structured Logging ─────────────────────────────────
-import json as _json
 
 
 class _JSONFormatter(logging.Formatter):

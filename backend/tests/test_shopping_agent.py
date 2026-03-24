@@ -5,7 +5,6 @@ Tests the deterministic color-matching outfit assembly:
 outfit slot routing, deduplication prevention, and palette validation.
 """
 
-import pytest
 
 
 # ─── Imports ────────────────────────────────────────────────

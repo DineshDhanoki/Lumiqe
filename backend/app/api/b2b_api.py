@@ -3,9 +3,9 @@
 import hashlib
 import logging
 import secrets
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Header, Query
+from fastapi import APIRouter, Depends, HTTPException, Header
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

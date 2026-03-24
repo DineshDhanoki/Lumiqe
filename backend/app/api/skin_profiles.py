@@ -1,9 +1,8 @@
 """API — Seasonal skin adaptation tracking over time."""
 
 import logging
-from collections import defaultdict
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

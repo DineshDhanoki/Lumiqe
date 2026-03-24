@@ -12,7 +12,7 @@ from sqlalchemy import select
 
 from app.core.config import settings
 from app.core.dependencies import async_session_factory
-from app.models import User, Product
+from app.models import User
 from app.repositories import product_repo
 from app.services.color_matcher import hex_to_lab, delta_e_cie2000
 

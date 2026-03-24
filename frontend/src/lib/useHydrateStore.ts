@@ -50,8 +50,8 @@ export function useHydrateStore(): void {
         fetchProfile();
 
         const isPremium = Boolean(
-            (session as Record<string, unknown>)?.user &&
-            ((session as Record<string, unknown>).user as Record<string, unknown>)?.is_premium,
+            (session as unknown as Record<string, unknown>)?.user &&
+            ((session as unknown as Record<string, unknown>).user as Record<string, unknown>)?.is_premium,
         );
         updateUser({ is_premium: isPremium });
 

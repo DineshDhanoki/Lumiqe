@@ -8,13 +8,11 @@ pipeline: round-trips, symmetry, boundary behavior, and scoring.
 import math
 
 import pytest
-from hypothesis import given, assume, settings as h_settings
-from hypothesis.strategies import floats, integers, text, lists
+from hypothesis import given, settings as h_settings
+from hypothesis.strategies import floats, integers, text
 
 from app.services.color_matcher import (
     hex_to_lab,
-    hex_to_rgb,
-    rgb_to_lab,
     delta_e_cie2000,
     score_match,
 )

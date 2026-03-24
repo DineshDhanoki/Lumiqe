@@ -7,7 +7,6 @@ invariants. These run without loading BiSeNet or MediaPipe models.
 
 import math
 import numpy as np
-import pytest
 
 from app.cv.color_analysis import (
     apply_grey_world,

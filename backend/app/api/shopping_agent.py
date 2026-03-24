@@ -1,4 +1,4 @@
- """
+"""
 API — Shopping Agent: 8-Category Outfit Assembly.
 
 Endpoint:

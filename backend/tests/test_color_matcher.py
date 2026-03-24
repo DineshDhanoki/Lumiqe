@@ -5,8 +5,6 @@ Tests hex conversion, Delta-E calculation, score_match verdicts,
 and edge cases in the color science pipeline.
 """
 
-import math
-import pytest
 from app.services.color_matcher import (
     hex_to_rgb,
     hex_to_lab,

@@ -2,7 +2,6 @@
 
 import threading
 import time
-from collections import defaultdict
 from unittest.mock import MagicMock
 
 import pytest
@@ -13,7 +12,6 @@ from app.core.rate_limiter import (
     _memory_store,
     get_rate_limit_key,
     _get_real_ip,
-    _memory_lock,
 )
 
 

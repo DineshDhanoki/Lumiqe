@@ -10,7 +10,6 @@ from app.api.gift import (
     _generate_gift_code,
     _evict_expired_gifts,
     _MAX_GIFT_CODES,
-    _GIFT_CODE_TTL_HOURS,
 )
 
 
