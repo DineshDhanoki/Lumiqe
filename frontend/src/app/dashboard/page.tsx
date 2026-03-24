@@ -10,6 +10,7 @@ import {
     User, ChevronRight, Clock,
     Droplets, Star, Shirt
 } from 'lucide-react';
+import { useLumiqeStore } from '@/lib/store';
 
 interface AnalysisEntry {
     id?: string;
@@ -74,16 +75,31 @@ export default function Dashboard() {
     const [bodyShape, setBodyShape] = useState<BodyShapeData | null>(null);
     const [stylePersonality, setStylePersonality] = useState<StylePersonalityData | null>(null);
 
+    // Read from Zustand store
+    const storeHistory = useLumiqeStore((s) => s.history);
+    const storeQuiz = useLumiqeStore((s) => s.quiz);
+    const storeHydrated = useLumiqeStore((s) => s.hydrated);
+
     useEffect(() => {
-        // Always load quiz data from localStorage (not synced to backend)
-        try {
-            const bs = localStorage.getItem('lumiqe-body-shape');
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            if (bs) setBodyShape(JSON.parse(bs));
-            const sp = localStorage.getItem('lumiqe-style-personality');
-            if (sp) setStylePersonality(JSON.parse(sp));
-        } catch { /* ignore */ }
-    }, []);
+        // Load quiz data from store first, fall back to localStorage
+        if (storeQuiz.body_shape) {
+            setBodyShape({ shape: storeQuiz.body_shape, timestamp: storeQuiz.completed_at ? new Date(storeQuiz.completed_at).getTime() : Date.now() });
+        } else {
+            try {
+                const bs = localStorage.getItem('lumiqe-body-shape');
+                if (bs) setBodyShape(JSON.parse(bs));
+            } catch { /* ignore */ }
+        }
+
+        if (storeQuiz.style_personality) {
+            setStylePersonality({ personality: storeQuiz.style_personality, timestamp: storeQuiz.completed_at ? new Date(storeQuiz.completed_at).getTime() : Date.now() });
+        } else {
+            try {
+                const sp = localStorage.getItem('lumiqe-style-personality');
+                if (sp) setStylePersonality(JSON.parse(sp));
+            } catch { /* ignore */ }
+        }
+    }, [storeQuiz]);
 
     const _loadFromLocalStorage = useCallback(() => {
         try {
@@ -96,6 +112,24 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (status === 'loading') return;
+
+        // If store has data, use it directly
+        if (storeHydrated && storeHistory.length > 0) {
+            const mapped: AnalysisEntry[] = storeHistory.map((r) => ({
+                id: r.id,
+                season: r.season,
+                hexColor: r.hex_color,
+                undertone: r.undertone,
+                confidence: r.confidence,
+                contrastLevel: 'Medium',
+                palette: r.palette,
+                metal: r.metal || 'Gold',
+                timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+            }));
+            setHistory(mapped);
+            setLastAnalysis(mapped[0]);
+            return;
+        }
 
         if (session) {
             // Logged in — fetch from backend for cross-device sync
@@ -126,11 +160,10 @@ export default function Dashboard() {
                     _loadFromLocalStorage();
                 });
         } else {
-            // Anonymous — use localStorage
-            // eslint-disable-next-line react-hooks/set-state-in-effect
+            // Anonymous — use localStorage as final fallback
             _loadFromLocalStorage();
         }
-    }, [session, status, _loadFromLocalStorage]);
+    }, [session, status, _loadFromLocalStorage, storeHydrated, storeHistory]);
 
     const skincare = lastAnalysis ? SKINCARE[lastAnalysis.undertone] ?? SKINCARE.neutral : null;
 

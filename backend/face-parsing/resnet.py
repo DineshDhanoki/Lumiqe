@@ -88,7 +88,7 @@ class Resnet18(nn.Module):
         for name, module in self.named_modules():
             if isinstance(module, (nn.Linear, nn.Conv2d)):
                 wd_params.append(module.weight)
-                if not module.bias is None:
+                if module.bias is not None:
                     nowd_params.append(module.bias)
             elif isinstance(module, nn.BatchNorm2d):
                 nowd_params += list(module.parameters())

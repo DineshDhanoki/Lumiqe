@@ -12,7 +12,7 @@ from app.repositories import user_repo, analysis_repo
 from app.core.dependencies import get_optional_user
 from app.services.email import send_analysis_complete_email
 from app.core.config import settings
-from app.core.security import validate_image_bytes
+from app.core.security import validate_image_bytes, validate_image_dimensions
 from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
 
 logger = logging.getLogger("lumiqe.api.analyze")
@@ -108,6 +108,17 @@ async def analyze_image(
             detail={
                 "error": "INVALID_FILE_TYPE",
                 "detail": "File is not a valid JPEG, PNG, or WebP image.",
+                "code": 422,
+            },
+        )
+
+    # Decompression bomb protection — reject oversized dimensions
+    if not validate_image_dimensions(image_bytes):
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "IMAGE_TOO_LARGE",
+                "detail": "Image dimensions exceed 8000x8000 pixel limit.",
                 "code": 422,
             },
         )
@@ -243,6 +254,15 @@ async def analyze_multi_image(
                 detail={
                     "error": "INVALID_FILE_TYPE",
                     "detail": "One of the files is not a valid JPEG, PNG, or WebP image.",
+                    "code": 422,
+                },
+            )
+        if not validate_image_dimensions(img_bytes):
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "error": "IMAGE_TOO_LARGE",
+                    "detail": "Image dimensions exceed 8000x8000 pixel limit.",
                     "code": 422,
                 },
             )

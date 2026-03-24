@@ -261,6 +261,8 @@ class Product(Base):
             "color_hex": self.color_hex,
             "price_cents": self.price_cents,
             "currency": self.currency,
+            "image_url": self.image,      # Frontend compat
+            "purchase_link": self.url,    # Frontend compat
         }
 
 

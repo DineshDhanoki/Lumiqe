@@ -1,15 +1,22 @@
 """API — Gift code creation, redemption, and validation."""
 
+import json
 import logging
 import secrets
 import string
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, get_current_user
+from app.core.rate_limiter import (
+    check_rate_limit,
+    get_rate_limit_key,
+    _redis_client,
+    _redis_available,
+)
 from app.models import Event, User
 from app.repositories import user_repo
 
@@ -17,11 +24,12 @@ logger = logging.getLogger("lumiqe.api.gift")
 router = APIRouter(prefix="/api/gift", tags=["Gift"])
 
 
-# ─── In-Memory Gift Code Store ──────────────────────────────
+# ─── In-Memory Gift Code Store (fallback) ───────────────────
 
 _gift_codes: dict = {}
 _MAX_GIFT_CODES = 5000
 _GIFT_CODE_TTL_HOURS = 72
+_GIFT_REDIS_PREFIX = "lumiqe:gift:"
 
 
 def _evict_expired_gifts() -> int:
@@ -38,6 +46,58 @@ def _evict_expired_gifts() -> int:
         logger.info(f"Evicted {len(expired_keys)} expired gift codes")
 
     return len(expired_keys)
+
+
+async def _store_gift_code(code: str, entry: dict) -> None:
+    """Store a gift code in Redis (with TTL) or fall back to in-memory."""
+    if _redis_available and _redis_client:
+        ttl_seconds = int(
+            (entry["expires_at"] - datetime.now(timezone.utc)).total_seconds()
+        )
+        if ttl_seconds <= 0:
+            return
+        serializable = {
+            **entry,
+            "created_at": entry["created_at"].isoformat(),
+            "expires_at": entry["expires_at"].isoformat(),
+        }
+        await _redis_client.set(
+            f"{_GIFT_REDIS_PREFIX}{code}",
+            json.dumps(serializable),
+            ex=ttl_seconds,
+        )
+    else:
+        # In-memory fallback with capacity management
+        if len(_gift_codes) >= _MAX_GIFT_CODES:
+            evicted = _evict_expired_gifts()
+            if evicted == 0 and len(_gift_codes) >= _MAX_GIFT_CODES:
+                oldest_key = next(iter(_gift_codes))
+                del _gift_codes[oldest_key]
+                logger.warning("Gift code store at capacity — evicted oldest code")
+        _gift_codes[code] = entry
+
+
+async def _get_gift_code(code: str) -> dict | None:
+    """Retrieve a gift code from Redis or in-memory fallback."""
+    if _redis_available and _redis_client:
+        raw = await _redis_client.get(f"{_GIFT_REDIS_PREFIX}{code}")
+        if raw is None:
+            return None
+        entry = json.loads(raw)
+        entry["created_at"] = datetime.fromisoformat(entry["created_at"])
+        entry["expires_at"] = datetime.fromisoformat(entry["expires_at"])
+        return entry
+    else:
+        _evict_expired_gifts()
+        return _gift_codes.get(code)
+
+
+async def _delete_gift_code(code: str) -> None:
+    """Delete a gift code from Redis or in-memory fallback."""
+    if _redis_available and _redis_client:
+        await _redis_client.delete(f"{_GIFT_REDIS_PREFIX}{code}")
+    else:
+        _gift_codes.pop(code, None)
 
 
 def _generate_gift_code() -> str:
@@ -89,26 +149,18 @@ async def create_gift(
             },
         )
 
-    # Evict expired codes if store is at capacity
-    if len(_gift_codes) >= _MAX_GIFT_CODES:
-        evicted = _evict_expired_gifts()
-        if evicted == 0 and len(_gift_codes) >= _MAX_GIFT_CODES:
-            # Store is full — evict the oldest entry
-            oldest_key = next(iter(_gift_codes))
-            del _gift_codes[oldest_key]
-            logger.warning("Gift code store at capacity — evicted oldest code")
-
     code = _generate_gift_code()
     now = datetime.now(timezone.utc)
     expires_at = now + timedelta(hours=_GIFT_CODE_TTL_HOURS)
 
-    _gift_codes[code] = {
+    entry = {
         "sender_id": current_user["id"],
         "sender_email": current_user["email"],
         "message": body.message,
         "created_at": now,
         "expires_at": expires_at,
     }
+    await _store_gift_code(code, entry)
 
     # Log the gift creation event
     event = Event(
@@ -131,6 +183,7 @@ async def create_gift(
 @router.post("/redeem")
 async def redeem_gift(
     body: GiftRedeemRequest,
+    request: Request,
     current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
 ):
@@ -139,12 +192,13 @@ async def redeem_gift(
 
     The code is consumed on use (single-use).
     """
+    # Rate limit: 5 requests per minute per user
+    rate_key = get_rate_limit_key(request, current_user, "gift_redeem")
+    await check_rate_limit(rate_key, max_requests=5, window_seconds=60)
+
     code = body.code.strip().upper()
 
-    # Evict expired codes before validation
-    _evict_expired_gifts()
-
-    entry = _gift_codes.get(code)
+    entry = await _get_gift_code(code)
     if entry is None:
         raise HTTPException(
             status_code=404,
@@ -158,7 +212,7 @@ async def redeem_gift(
     # Check expiry (belt-and-suspenders with eviction)
     now = datetime.now(timezone.utc)
     if entry["expires_at"] <= now:
-        del _gift_codes[code]
+        await _delete_gift_code(code)
         raise HTTPException(
             status_code=410,
             detail={
@@ -180,7 +234,7 @@ async def redeem_gift(
         )
 
     # Consume the code
-    del _gift_codes[code]
+    await _delete_gift_code(code)
 
     # Add 1 free scan to the redeemer
     from sqlalchemy import update
@@ -215,24 +269,25 @@ async def redeem_gift(
 
 
 @router.get("/check/{code}")
-async def check_gift_code(code: str):
+async def check_gift_code(code: str, request: Request):
     """
     Check if a gift code is valid. No authentication required.
 
     Returns validity status without consuming the code.
     """
+    # Rate limit: 10 requests per minute per IP
+    rate_key = get_rate_limit_key(request, None, "gift_check")
+    await check_rate_limit(rate_key, max_requests=10, window_seconds=60)
+
     normalized_code = code.strip().upper()
 
-    # Evict expired codes
-    _evict_expired_gifts()
-
-    entry = _gift_codes.get(normalized_code)
+    entry = await _get_gift_code(normalized_code)
     if entry is None:
         return {"valid": False, "reason": "Code not found or expired."}
 
     now = datetime.now(timezone.utc)
     if entry["expires_at"] <= now:
-        del _gift_codes[normalized_code]
+        await _delete_gift_code(normalized_code)
         return {"valid": False, "reason": "Code has expired."}
 
     remaining_hours = int((entry["expires_at"] - now).total_seconds() / 3600)

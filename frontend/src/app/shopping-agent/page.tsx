@@ -38,6 +38,17 @@ function ShoppingAgentContent() {
     const [usedProductUrls, setUsedProductUrls] = useState<string[]>([]);
     const [outfitCount, setOutfitCount] = useState(0);
 
+    // Restore cached outfit from sessionStorage on mount
+    useEffect(() => {
+        try {
+            const cached = sessionStorage.getItem('lumiqe-outfit');
+            if (cached) {
+                const parsed = JSON.parse(cached) as CuratedOutfit;
+                setOutfit(parsed);
+            }
+        } catch { /* ignore */ }
+    }, []);
+
     // No palette → send user back
     if (paletteHexes.length === 0) {
         return (
@@ -78,6 +89,11 @@ function ShoppingAgentContent() {
             const data = await res.json();
             setOutfit(data);
             setOutfitCount((prev) => prev + 1);
+
+            // Persist outfit to sessionStorage so it survives refresh
+            try {
+                sessionStorage.setItem('lumiqe-outfit', JSON.stringify(data));
+            } catch { /* ignore */ }
 
             // Track used product URLs for dedup
             const newUrls = extractProductUrls(data);

@@ -1,0 +1,6 @@
+# Ruff configuration for Lumiqe backend
+# https://docs.astral.sh/ruff/configuration/
+
+exclude = [
+    "face-parsing",
+]

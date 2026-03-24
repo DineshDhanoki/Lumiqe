@@ -118,7 +118,7 @@ async def forgot_password(
 
     user = await user_repo.get_by_email(session, body.email)
     if user:
-        token = generate_token(body.email, "password_reset")
+        token = await generate_token(body.email, "password_reset")
         send_password_reset_email(body.email.lower(), token)
         logger.info(
             f"[SECURITY] Password reset requested for {body.email} ip={client_ip}"
@@ -154,7 +154,7 @@ async def reset_password(
             },
         )
 
-    email = validate_token(body.token, "password_reset")
+    email = await validate_token(body.token, "password_reset")
     if not email:
         raise HTTPException(
             status_code=400,
@@ -221,7 +221,7 @@ async def send_verification_email(
             },
         )
 
-    token = generate_token(body.email, "email_verify")
+    token = await generate_token(body.email, "email_verify")
     send_email_verification(body.email.lower(), token)
 
     logger.info(
@@ -239,7 +239,7 @@ async def verify_email(
     """
     Verify a user's email address using the token from the verification email.
     """
-    email = validate_token(body.token, "email_verify")
+    email = await validate_token(body.token, "email_verify")
     if not email:
         raise HTTPException(
             status_code=400,

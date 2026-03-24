@@ -19,6 +19,7 @@ router = APIRouter(prefix="/api/b2b", tags=["B2B API"])
 # ─── In-memory rate limit tracking (per key_hash) ───────────
 _rate_window: dict[str, list[float]] = {}
 _B2B_RATE_LIMIT = 100  # requests per hour
+_MAX_RATE_KEYS = 10000
 
 
 # ─── Request / Response Schemas ──────────────────────────────
@@ -69,6 +70,20 @@ def _hash_key(raw_key: str) -> str:
     return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
 
 
+def _prune_stale_rate_keys() -> None:
+    """Remove all rate window entries older than 1 hour (TTL-based cleanup)."""
+    now = datetime.now(timezone.utc).timestamp()
+    cutoff = now - 3600
+    stale_keys = [
+        k for k, timestamps in _rate_window.items()
+        if not timestamps or max(timestamps) <= cutoff
+    ]
+    for k in stale_keys:
+        del _rate_window[k]
+    if stale_keys:
+        logger.info(f"Pruned {len(stale_keys)} stale B2B rate-limit keys")
+
+
 def _check_b2b_rate_limit(key_hash: str) -> int:
     """
     Check and enforce per-key rate limiting.
@@ -77,6 +92,15 @@ def _check_b2b_rate_limit(key_hash: str) -> int:
     """
     now = datetime.now(timezone.utc).timestamp()
     window_start = now - 3600  # 1 hour window
+
+    # TTL-based cleanup: prune entries older than 1 hour
+    _prune_stale_rate_keys()
+
+    # Evict oldest key if store exceeds max capacity
+    if key_hash not in _rate_window and len(_rate_window) >= _MAX_RATE_KEYS:
+        oldest_key = next(iter(_rate_window))
+        del _rate_window[oldest_key]
+        logger.warning("B2B rate window at capacity — evicted oldest key")
 
     if key_hash not in _rate_window:
         _rate_window[key_hash] = []

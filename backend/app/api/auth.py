@@ -65,7 +65,7 @@ async def register(user: UserCreate, request: Request, session: AsyncSession = D
     asyncio.get_running_loop().call_soon(send_welcome_email, user.email, user.name)
 
     # Send email verification
-    verify_token = generate_token(user.email, "email_verify")
+    verify_token = await generate_token(user.email, "email_verify")
     verify_url = f"{settings.FRONTEND_URL}/verify-email?token={verify_token}"
     send_email_verification(user.email, user.name, verify_url)
 

@@ -5,9 +5,11 @@ Password hashing, JWT token management, and security helpers.
 """
 
 from datetime import datetime, timedelta, timezone
+from io import BytesIO
 
 import bcrypt
 from jose import JWTError, jwt
+from PIL import Image
 
 from app.core.config import settings
 
@@ -108,6 +110,27 @@ def validate_image_bytes(data: bytes) -> str | None:
         return "webp"
 
     return None
+
+
+# ─── Image Decompression Bomb Protection ────────────────────
+
+# Cap Pillow's own pixel limit just above 8000x8000 to catch bombs early
+Image.MAX_IMAGE_PIXELS = 89_000_000
+
+
+def validate_image_dimensions(data: bytes, max_dimension: int = 8000) -> bool:
+    """
+    Check that an image does not exceed *max_dimension* in either axis.
+
+    Returns True if the image is within limits, False if it exceeds them
+    or if the data cannot be decoded (corrupted / malicious file).
+    """
+    try:
+        with Image.open(BytesIO(data)) as img:
+            width, height = img.size
+            return width <= max_dimension and height <= max_dimension
+    except Exception:
+        return False
 
 
 # ─── LLM Prompt Injection Defense ────────────────────────────

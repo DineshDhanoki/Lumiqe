@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 
 interface SignInModalProps {
@@ -12,6 +13,9 @@ interface SignInModalProps {
     callbackUrl?: string;
 }
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 8;
+
 export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' }: SignInModalProps) {
     const router = useRouter();
     const [isSignUp, setIsSignUp] = useState(false);
@@ -19,6 +23,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
     const [isLoading, setIsLoading] = useState(false);
 
     const resetForm = () => {
@@ -26,6 +31,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
         setEmail('');
         setPassword('');
         setError('');
+        setFieldErrors({});
         setIsSignUp(false);
     };
 
@@ -34,10 +40,29 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
         onClose();
     };
 
+    const validateFields = (): boolean => {
+        const errors: { email?: string; password?: string } = {};
+
+        if (email && !EMAIL_REGEX.test(email)) {
+            errors.email = 'Please enter a valid email address.';
+        }
+
+        if (isSignUp && password && password.length < MIN_PASSWORD_LENGTH) {
+            errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email || !password || (isSignUp && !name)) {
             setError('Please fill in all required fields.');
+            return;
+        }
+
+        if (!validateFields()) {
             return;
         }
 
@@ -193,10 +218,27 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                             type="email"
                                             placeholder="Email address"
                                             value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full bg-black/50 border border-white/10 rounded-full py-3 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
+                                            onChange={(e) => {
+                                                setEmail(e.target.value);
+                                                if (fieldErrors.email) {
+                                                    setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                if (email && !EMAIL_REGEX.test(email)) {
+                                                    setFieldErrors((prev) => ({ ...prev, email: 'Please enter a valid email address.' }));
+                                                }
+                                            }}
+                                            className={`w-full bg-black/50 border rounded-full py-3 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:ring-1 transition-all ${
+                                                fieldErrors.email
+                                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                                    : 'border-white/10 focus:border-red-500 focus:ring-red-500'
+                                            }`}
                                         />
                                     </div>
+                                    {fieldErrors.email && (
+                                        <p className="mt-1.5 ml-4 text-xs text-red-400">{fieldErrors.email}</p>
+                                    )}
                                 </div>
                                 <div>
                                     <div className="relative flex items-center">
@@ -205,11 +247,39 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' 
                                             type="password"
                                             placeholder="Password"
                                             value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full bg-black/50 border border-white/10 rounded-full py-3 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
+                                            onChange={(e) => {
+                                                setPassword(e.target.value);
+                                                if (fieldErrors.password) {
+                                                    setFieldErrors((prev) => ({ ...prev, password: undefined }));
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                if (isSignUp && password && password.length < MIN_PASSWORD_LENGTH) {
+                                                    setFieldErrors((prev) => ({
+                                                        ...prev,
+                                                        password: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+                                                    }));
+                                                }
+                                            }}
+                                            className={`w-full bg-black/50 border rounded-full py-3 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:ring-1 transition-all ${
+                                                fieldErrors.password
+                                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                                    : 'border-white/10 focus:border-red-500 focus:ring-red-500'
+                                            }`}
                                         />
                                     </div>
+                                    {fieldErrors.password && (
+                                        <p className="mt-1.5 ml-4 text-xs text-red-400">{fieldErrors.password}</p>
+                                    )}
                                 </div>
+
+                                {!isSignUp && (
+                                    <div className="text-right">
+                                        <Link href="/reset-password" onClick={handleClose} className="text-white/50 hover:text-white text-sm transition-colors">
+                                            Forgot your password?
+                                        </Link>
+                                    </div>
+                                )}
 
                                 <div className="pt-2">
                                     <button

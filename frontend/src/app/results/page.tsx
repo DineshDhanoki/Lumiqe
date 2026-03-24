@@ -6,10 +6,14 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 import ResultsView from '@/components/ResultsView';
+import { useLumiqeStore } from '@/lib/store';
 
 function ResultsContent() {
     const searchParams = useSearchParams();
     const { status } = useSession();
+    const setCurrentAnalysis = useLumiqeStore((s) => s.setCurrentAnalysis);
+    const addToHistory = useLumiqeStore((s) => s.addToHistory);
+    const updateUser = useLumiqeStore((s) => s.updateUser);
 
     const season       = searchParams.get('season')       || 'Unknown Season';
     const description  = searchParams.get('description')  || '';
@@ -34,13 +38,32 @@ function ResultsContent() {
         if (s) makeup = JSON.parse(decodeURIComponent(s));
     } catch { /* ignore */ }
 
-    // Save analysis to localStorage for dashboard history
+    // Save analysis to Zustand store + localStorage (fallback)
     useEffect(() => {
         if (!searchParams.has('season')) return;
         const entry = {
             season, hexColor, undertone, confidence, contrastLevel,
             palette, metal, timestamp: Date.now(),
         };
+
+        // Write to Zustand store
+        const storeResult = {
+            season,
+            hex_color: hexColor,
+            undertone,
+            confidence,
+            palette,
+            avoid_colors: avoidColors,
+            metal,
+            created_at: new Date().toISOString(),
+        };
+        setCurrentAnalysis(storeResult);
+        addToHistory(storeResult);
+        if (status === 'authenticated') {
+            updateUser({ season, palette });
+        }
+
+        // localStorage fallback for backward compat
         try {
             const prev = JSON.parse(localStorage.getItem('lumiqe-history') || '[]');
             const updated = [entry, ...prev].slice(0, 10);
