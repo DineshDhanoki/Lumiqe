@@ -29,6 +29,22 @@ async function handler(
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
     const apiPath = path.join('/');
+
+    // Path allowlist — only forward known API routes to prevent proxy abuse
+    const ALLOWED_PREFIXES = [
+        'auth/', 'analyze', 'scan-item', 'complete-profile', 'color-chat',
+        'styling-tips', 'shopping-agent', 'products', 'outfit', 'palette-card',
+        'stripe/', 'referral/', 'share/', 'profile', 'events', 'health',
+        'analysis/', 'admin/', 'notifications', 'wishlist', 'wardrobe',
+        'saved-outfits', 'community/', 'b2b/',
+    ];
+    if (!ALLOWED_PREFIXES.some(prefix => apiPath.startsWith(prefix))) {
+        return NextResponse.json(
+            { error: 'FORBIDDEN', detail: 'API path not allowed' },
+            { status: 403 }
+        );
+    }
+
     const url = `${API_BASE}/api/${apiPath}${req.nextUrl.search}`;
 
     const headers = new Headers();

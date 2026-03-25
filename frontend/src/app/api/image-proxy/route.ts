@@ -46,14 +46,22 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Domain not allowed' }, { status: 403 });
     }
 
+    const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
+    const TIMEOUT_MS = 10_000; // 10 seconds
+
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
         const response = await fetch(imageUrl, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
                 'Referer': `https://${hostname}/`,
             },
+            signal: controller.signal,
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             return NextResponse.json(
@@ -62,8 +70,18 @@ export async function GET(request: NextRequest) {
             );
         }
 
+        // Reject oversized images before reading the full body
+        const contentLength = response.headers.get('content-length');
+        if (contentLength && parseInt(contentLength, 10) > MAX_IMAGE_BYTES) {
+            return NextResponse.json({ error: 'Image too large (max 10MB)' }, { status: 413 });
+        }
+
         const contentType = response.headers.get('content-type') || 'image/jpeg';
         const buffer = await response.arrayBuffer();
+
+        if (buffer.byteLength > MAX_IMAGE_BYTES) {
+            return NextResponse.json({ error: 'Image too large (max 10MB)' }, { status: 413 });
+        }
 
         return new NextResponse(buffer, {
             status: 200,

@@ -9,7 +9,10 @@ export async function middleware(request: NextRequest) {
     });
 
     if (!token) {
-        const callbackUrl = encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search);
+        // Only allow relative callback URLs to prevent open-redirect attacks
+        const rawCallback = request.nextUrl.pathname + request.nextUrl.search;
+        const safeCallback = rawCallback.startsWith('/') && !rawCallback.startsWith('//') ? rawCallback : '/analyze';
+        const callbackUrl = encodeURIComponent(safeCallback);
         const signInUrl = new URL(`/?callbackUrl=${callbackUrl}`, request.url);
         return NextResponse.redirect(signInUrl);
     }
