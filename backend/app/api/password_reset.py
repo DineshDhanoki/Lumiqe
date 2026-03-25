@@ -262,7 +262,7 @@ async def verify_email(
             },
         )
 
-    await user_repo.verify_email(session, email)
+    await user_repo.verify_email(session, user["id"])
 
     logger.info(f"[SECURITY] Email verified for {email}")
     return {"message": "Email verified successfully."}

@@ -2,10 +2,9 @@
 
 import io
 import logging
-import uuid
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -19,6 +18,11 @@ router = APIRouter(prefix="/api/wardrobe", tags=["Wardrobe"])
 
 _MAX_WARDROBE_ITEMS = 100
 _MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB
+
+_VALID_CATEGORIES = {
+    "tops", "bottoms", "dresses", "outerwear", "shoes",
+    "accessories", "bags", "activewear", "formal", "other",
+}
 
 
 # ─── Color Extraction Helpers ───────────────────────────────
@@ -114,7 +118,7 @@ def _score_against_palette(item_hex: str, palette: list[str]) -> int:
 
     Returns a 0-100 match score (100 = perfect match).
     """
-    if not palette:
+    if not palette or not item_hex:
         return 0
 
     min_delta_e = min(_calculate_delta_e(item_hex, p) for p in palette)
@@ -132,14 +136,21 @@ def _score_against_palette(item_hex: str, palette: list[str]) -> int:
 # ─── Serialization Helpers ───────────────────────────────────
 
 
-def _serialize_wardrobe_item(item: WardrobeItem) -> dict:
+def _serialize_wardrobe_item(
+    item: WardrobeItem,
+    palette: list[str] | None = None,
+) -> dict:
     """Convert a WardrobeItem ORM object to a JSON-serializable dict."""
+    match_score = _score_against_palette(item.color_hex or "", palette or [])
     return {
         "id": item.id,
-        "dominant_color": item.dominant_color,
-        "match_score": item.match_score,
-        "image_filename": item.image_filename,
+        "name": item.name,
         "category": item.category,
+        "color_hex": item.color_hex,
+        "image_url": item.image_url,
+        "brand": item.brand,
+        "notes": item.notes,
+        "match_score": match_score,
         "created_at": item.created_at.isoformat() if item.created_at else None,
     }
 
@@ -171,9 +182,11 @@ async def get_wardrobe(
     )
     items = result.scalars().all()
 
-    serialized_items = [_serialize_wardrobe_item(item) for item in items]
+    user_palette = current_user.get("palette") or []
+    serialized_items = [
+        _serialize_wardrobe_item(item, user_palette) for item in items
+    ]
 
-    # Compute stats
     count = len(serialized_items)
     avg_match_score = 0
     if count > 0:
@@ -192,15 +205,34 @@ async def get_wardrobe(
 
 
 @router.post("")
-async def upload_wardrobe_item(
-    file: UploadFile = File(...),
+async def add_wardrobe_item(
+    name: str = Form(..., min_length=1, max_length=255),
+    category: str = Form(..., min_length=1, max_length=100),
+    brand: str | None = Form(default=None, max_length=255),
+    notes: str | None = Form(default=None, max_length=500),
+    color_hex: str | None = Form(default=None, max_length=7),
+    file: UploadFile | None = File(default=None),
     current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
 ):
     """
-    Upload a clothing photo, extract its dominant color via K-Means,
-    and score it against the user's palette using Delta-E.
+    Add a wardrobe item. Optionally upload a photo to auto-extract color.
+
+    If a photo is provided and no color_hex is given, the dominant color
+    is extracted via K-Means clustering. The image itself is NOT persisted
+    (privacy by design).
     """
+    # Validate category
+    if category.lower() not in _VALID_CATEGORIES:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "INVALID_CATEGORY",
+                "detail": f"Category must be one of: {', '.join(sorted(_VALID_CATEGORIES))}.",
+                "code": 422,
+            },
+        )
+
     # Enforce per-user limit
     count_result = await session.execute(
         select(func.count()).select_from(WardrobeItem).where(
@@ -219,83 +251,68 @@ async def upload_wardrobe_item(
             },
         )
 
-    # Read and validate the upload
-    image_bytes = await file.read()
-    if len(image_bytes) > _MAX_UPLOAD_BYTES:
-        raise HTTPException(
-            status_code=413,
-            detail={
-                "error": "FILE_TOO_LARGE",
-                "detail": "Image must be under 5 MB.",
-                "code": 413,
-            },
-        )
+    extracted_color = color_hex
 
-    if len(image_bytes) == 0:
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "error": "EMPTY_FILE",
-                "detail": "Uploaded file is empty.",
-                "code": 400,
-            },
-        )
+    # If a photo was uploaded, extract its dominant color
+    if file is not None:
+        image_bytes = await file.read()
+        if len(image_bytes) > _MAX_UPLOAD_BYTES:
+            raise HTTPException(
+                status_code=413,
+                detail={
+                    "error": "FILE_TOO_LARGE",
+                    "detail": "Image must be under 5 MB.",
+                    "code": 413,
+                },
+            )
 
-    # Extract dominant color
-    try:
-        dominant_color = _extract_dominant_color(image_bytes)
-    except ImportError as exc:
-        logger.error(f"Missing dependency for color extraction: {exc}")
-        raise HTTPException(
-            status_code=503,
-            detail={
-                "error": "DEPENDENCY_MISSING",
-                "detail": "Color extraction service is temporarily unavailable.",
-                "code": 503,
-            },
-        )
-    except ValueError as exc:
-        logger.warning(f"Invalid image data: {exc}")
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "error": "INVALID_IMAGE",
-                "detail": "Could not process the uploaded image. Please try a different file.",
-                "code": 422,
-            },
-        )
-    except IndexError as exc:
-        logger.error(f"Color extraction index error: {exc}")
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "error": "EXTRACTION_FAILED",
-                "detail": "Failed to extract colors from the image.",
-                "code": 422,
-            },
-        )
-    except RuntimeError as exc:
-        logger.error(f"Color extraction runtime error: {exc}")
-        raise HTTPException(
-            status_code=500,
-            detail={
-                "error": "EXTRACTION_ERROR",
-                "detail": "An error occurred during color extraction.",
-                "code": 500,
-            },
-        )
+        if len(image_bytes) == 0:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "EMPTY_FILE",
+                    "detail": "Uploaded file is empty.",
+                    "code": 400,
+                },
+            )
+
+        # Extract dominant color from the image
+        if not extracted_color:
+            try:
+                extracted_color = _extract_dominant_color(image_bytes)
+            except ImportError as exc:
+                logger.error(f"Missing dependency for color extraction: {exc}")
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "error": "DEPENDENCY_MISSING",
+                        "detail": "Color extraction service is temporarily unavailable.",
+                        "code": 503,
+                    },
+                )
+            except (ValueError, IndexError, RuntimeError) as exc:
+                logger.warning(f"Color extraction failed: {exc}")
+                raise HTTPException(
+                    status_code=422,
+                    detail={
+                        "error": "EXTRACTION_FAILED",
+                        "detail": "Could not extract color from the image. Please try a different photo or enter the color manually.",
+                        "code": 422,
+                    },
+                )
 
     # Score against the user's palette
     user_palette = current_user.get("palette") or []
-    match_score = _score_against_palette(dominant_color, user_palette)
+    match_score = _score_against_palette(extracted_color or "", user_palette)
 
     # Persist the wardrobe item (image is NOT stored — privacy by design)
     item = WardrobeItem(
-        id=str(uuid.uuid4()),
         user_id=current_user["id"],
-        dominant_color=dominant_color,
-        match_score=match_score,
-        image_filename=file.filename or "unknown",
+        name=name,
+        category=category.lower(),
+        color_hex=extracted_color,
+        brand=brand,
+        notes=notes,
         created_at=datetime.now(timezone.utc),
     )
     session.add(item)
@@ -303,24 +320,87 @@ async def upload_wardrobe_item(
 
     logger.info(
         f"User {current_user['id']} added wardrobe item {item.id}: "
-        f"color={dominant_color} score={match_score}"
+        f"name={name} category={category} color={extracted_color} score={match_score}"
     )
 
     return {
         "message": "Wardrobe item added.",
-        "item": {
-            "id": item.id,
-            "dominant_color": dominant_color,
-            "match_score": match_score,
-            "image_filename": item.image_filename,
-            "created_at": item.created_at.isoformat(),
-        },
+        "item": _serialize_wardrobe_item(item, user_palette),
+    }
+
+
+@router.put("/{item_id}")
+async def update_wardrobe_item(
+    item_id: int,
+    name: str | None = Form(default=None, max_length=255),
+    category: str | None = Form(default=None, max_length=100),
+    brand: str | None = Form(default=None, max_length=255),
+    notes: str | None = Form(default=None, max_length=500),
+    color_hex: str | None = Form(default=None, max_length=7),
+    current_user: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db),
+):
+    """Update a wardrobe item. Only the owner can update their items."""
+    result = await session.execute(
+        select(WardrobeItem).where(WardrobeItem.id == item_id)
+    )
+    item = result.scalar_one_or_none()
+
+    if not item:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "NOT_FOUND",
+                "detail": "Wardrobe item not found.",
+                "code": 404,
+            },
+        )
+
+    if item.user_id != current_user["id"]:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "FORBIDDEN",
+                "detail": "You can only update your own wardrobe items.",
+                "code": 403,
+            },
+        )
+
+    if category is not None and category.lower() not in _VALID_CATEGORIES:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "INVALID_CATEGORY",
+                "detail": f"Category must be one of: {', '.join(sorted(_VALID_CATEGORIES))}.",
+                "code": 422,
+            },
+        )
+
+    if name is not None:
+        item.name = name
+    if category is not None:
+        item.category = category.lower()
+    if brand is not None:
+        item.brand = brand
+    if notes is not None:
+        item.notes = notes
+    if color_hex is not None:
+        item.color_hex = color_hex
+
+    await session.flush()
+
+    user_palette = current_user.get("palette") or []
+    logger.info(f"User {current_user['id']} updated wardrobe item {item_id}")
+
+    return {
+        "message": "Wardrobe item updated.",
+        "item": _serialize_wardrobe_item(item, user_palette),
     }
 
 
 @router.delete("/{item_id}")
 async def delete_wardrobe_item(
-    item_id: str,
+    item_id: int,
     current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
 ):
@@ -392,15 +472,9 @@ async def wardrobe_compatibility(
             "summary": "Your wardrobe is empty. Upload some clothing photos to get started.",
         }
 
-    item_scores = []
-    for item in items:
-        score = _score_against_palette(item.dominant_color, user_palette)
-        item_scores.append({
-            "id": item.id,
-            "dominant_color": item.dominant_color,
-            "match_score": score,
-            "image_filename": item.image_filename,
-        })
+    item_scores = [
+        _serialize_wardrobe_item(item, user_palette) for item in items
+    ]
 
     overall_score = round(
         sum(i["match_score"] for i in item_scores) / len(item_scores)
