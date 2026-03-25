@@ -5,6 +5,7 @@ Provides async test client, test database session, and helper functions.
 """
 
 import os
+from unittest.mock import patch
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
@@ -13,7 +14,10 @@ from httpx import AsyncClient, ASGITransport
 os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-testing-only-must-be-32-chars-minimum"
 os.environ["DEBUG"] = "false"
 
-from app.main import app
+# Mock model download so tests don't need ML weights
+with patch("download_models.ensure_models", return_value=None):
+    from app.main import app
+
 from app.core.security import create_access_token, create_refresh_token
 
 
