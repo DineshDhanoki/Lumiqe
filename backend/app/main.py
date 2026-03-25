@@ -34,6 +34,7 @@ if settings.SENTRY_DSN:
 from app.core.dependencies import init_db, close_db
 from app.core.rate_limiter import init_redis, close_redis
 from app.middleware.security import SecurityHeadersMiddleware
+from app.middleware.csrf import CSRFMiddleware
 from download_models import ensure_models
 
 # ─── Route Modules ───────────────────────────────────────────
@@ -116,6 +117,9 @@ app = FastAPI(
 
 # Security Headers (runs on every response)
 app.add_middleware(SecurityHeadersMiddleware)
+
+# CSRF Protection (blocks state-changing requests from unauthorized origins)
+app.add_middleware(CSRFMiddleware)
 
 # CORS
 app.add_middleware(

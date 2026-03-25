@@ -77,19 +77,32 @@ async def check_rate_limit(
 
 
 async def _check_redis(key: str, max_requests: int, window_seconds: int) -> None:
-    """Redis sliding window rate limit check."""
+    """Redis sliding window rate limit check using atomic Lua script."""
     redis_key = f"lumiqe:ratelimit:{key}"
     now = time.time()
     window_start = now - window_seconds
 
-    pipe = _redis_client.pipeline()
-    pipe.zremrangebyscore(redis_key, 0, window_start)
-    pipe.zcard(redis_key)
-    pipe.zadd(redis_key, {str(now): now})
-    pipe.expire(redis_key, window_seconds)
-    results = await pipe.execute()
+    # Atomic Lua script: prune old entries, count current, add new entry, set TTL
+    # All operations execute in a single Redis transaction — no race conditions.
+    lua_script = """
+    redis.call('ZREMRANGEBYSCORE', KEYS[1], 0, ARGV[1])
+    local count = redis.call('ZCARD', KEYS[1])
+    if count < tonumber(ARGV[3]) then
+        redis.call('ZADD', KEYS[1], ARGV[2], ARGV[2])
+        redis.call('EXPIRE', KEYS[1], tonumber(ARGV[4]))
+    end
+    return count
+    """
+    current_count = await _redis_client.eval(
+        lua_script,
+        1,
+        redis_key,
+        str(window_start),
+        str(now),
+        str(max_requests),
+        str(window_seconds),
+    )
 
-    current_count = results[1]
     if current_count >= max_requests:
         retry_after = int(window_seconds - (now - window_start))
         raise HTTPException(

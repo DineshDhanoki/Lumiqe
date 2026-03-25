@@ -45,7 +45,7 @@ class User(Base):
     referral_code: Mapped[str | None] = mapped_column(String(10), unique=True, index=True, nullable=True)
     referred_by: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     referral_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
-    stripe_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    stripe_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
     stripe_subscription_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     season: Mapped[str | None] = mapped_column(String(50), nullable=True)
     palette: Mapped[list | None] = mapped_column(JSON, nullable=True)
@@ -127,6 +127,7 @@ class AnalysisResult(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         default=lambda: datetime.now(timezone.utc),
+        index=True,
     )
 
     def to_dict(self) -> dict:
