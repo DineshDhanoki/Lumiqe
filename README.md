@@ -24,7 +24,7 @@
 
 <br/>
 
-![Python](https://img.shields.io/badge/Python_3.14-3776AB?style=flat-square&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=flat-square&logo=next.js&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
@@ -39,6 +39,8 @@
 [![Stars](https://img.shields.io/github/stars/DineshDhanoki/lumiqe?style=for-the-badge&logo=github&color=EF4444&labelColor=0D1117)](https://github.com/DineshDhanoki/lumiqe/stargazers)
 &nbsp;
 [![Forks](https://img.shields.io/github/forks/DineshDhanoki/lumiqe?style=for-the-badge&logo=github&color=3B82F6&labelColor=0D1117)](https://github.com/DineshDhanoki/lumiqe/fork)
+&nbsp;
+[![CI](https://img.shields.io/github/actions/workflow/status/DineshDhanoki/lumiqe/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI&labelColor=0D1117)](https://github.com/DineshDhanoki/lumiqe/actions)
 &nbsp;
 [![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge&labelColor=0D1117)](LICENSE)
 
@@ -176,6 +178,7 @@ Browser / Mobile
 |                                                   |
 |  Landing | Analyze | Results | Dashboard | Feed   |
 |  Shopping Agent | Scanner | Pricing | Account     |
+|  Wardrobe | Wishlist | Price Alerts                |
 |                                                   |
 |  NextAuth.js  (Google OAuth + Credentials)        |
 |  Server-side JWT proxy (/api/proxy/[...path])     |
@@ -313,6 +316,21 @@ Open [localhost:3000](http://localhost:3000).
 | `/api/auth/refresh` | POST | No | Exchange refresh token for new access token |
 | `/api/auth/me` | GET | Required | Current user profile |
 | `/api/auth/me` | DELETE | Required | GDPR: permanently delete account + all data |
+| `/api/auth/forgot-password` | POST | No | Request password reset email |
+| `/api/auth/reset-password` | POST | No | Reset password with token |
+| `/api/auth/verify-email` | POST | No | Verify email address |
+
+</details>
+
+<details>
+<summary><strong>Wardrobe & Wishlist</strong></summary>
+
+| Endpoint | Method | Auth | Description |
+|---|---|---|---|
+| `/api/wardrobe` | GET | Required | List wardrobe items with palette match scores |
+| `/api/wardrobe` | POST | Required | Add item to wardrobe |
+| `/api/wardrobe/{id}` | PUT | Required | Update wardrobe item |
+| `/api/wardrobe/{id}` | DELETE | Required | Remove wardrobe item |
 
 </details>
 
@@ -380,7 +398,7 @@ Open [localhost:3000](http://localhost:3000).
 | **Frontend** | Next.js 16, React 19, TypeScript 5 | App Router, Turbopack, server-side API proxy |
 | **Styling** | Tailwind CSS 4, Framer Motion 12 | Responsive design, fluid animations |
 | **Auth** | NextAuth.js v4 | Google OAuth + credentials, httpOnly JWT cookies |
-| **Backend** | Python 3.14, FastAPI 0.128, Pydantic v2 | Async API, OpenAPI docs, input validation |
+| **Backend** | Python 3.12, FastAPI 0.128, Pydantic v2 | Async API, OpenAPI docs, input validation |
 | **CV Pipeline** | OpenCV 4.12, MediaPipe 0.10, PyTorch 2.10 | Face detection, skin segmentation, color extraction |
 | **Color Science** | K-Means++, CIE L\*a\*b\*, Delta-E 2000, ITA | Perceptually accurate color matching |
 | **AI / LLM** | Groq (Llama 3.3 70B) | Styling tips, conversational stylist |
@@ -400,7 +418,9 @@ lumiqe/
     app/
       api/                  # 19 FastAPI route modules
         auth.py             #   Register, login, Google OAuth, refresh, GDPR delete
-        analyze.py          #   Image upload → CV pipeline
+        analyze.py          #   Image upload → CV pipeline (single + multi)
+        password_reset.py   #   Forgot password + email verification
+        wardrobe.py         #   Wardrobe CRUD + palette match scoring
         shopping_agent.py   #   8-piece outfit generation
         stripe.py           #   Checkout, portal, webhooks
         color_chat.py       #   AI stylist conversation
@@ -417,7 +437,9 @@ lumiqe/
         config.py           #   Pydantic BaseSettings (all env vars)
         security.py         #   JWT, bcrypt, file validation, prompt injection defense
         dependencies.py     #   DB sessions, auth guards, role checks
-        rate_limiter.py     #   Redis sliding window + in-memory fallback
+        rate_limiter.py     #   Redis sliding window (atomic Lua) + in-memory fallback
+      middleware/            # Request middleware
+        csrf.py             #   CSRF protection (Origin header validation)
       models.py             # SQLAlchemy ORM (User, AnalysisResult, Product, Event)
       repositories/         # Data access layer (user, product, analysis repos)
       schemas/              # Pydantic request/response models
@@ -434,13 +456,16 @@ lumiqe/
     src/
       app/                  # Next.js App Router pages
         page.tsx            #   Landing page
-        analyze/            #   Photo upload + analysis
+        analyze/            #   Photo upload + single/multi analysis
         results/            #   Color profile (6 tabs)
         dashboard/          #   User dashboard with sync
         shopping-agent/     #   8-piece outfit builder
         scan/               #   Camera item scanner
         feed/               #   Product discovery feed
         account/            #   Profile + subscription
+        wardrobe/           #   Wardrobe management (CRUD)
+        wishlist/           #   Saved favorites
+        price-alerts/       #   Price drop notifications
         seasons/[season]/   #   Season detail pages
         api/                #   Server-side route handlers
           proxy/[...path]/  #     JWT proxy to backend
@@ -506,11 +531,14 @@ cd frontend && npx vitest run
 - [x] Server-side JWT proxy (tokens never exposed to client)
 - [x] Redis rate limiting with in-memory fallback
 - [x] i18n support (EN/ES, extensible)
+- [x] Wardrobe management (save owned items, get outfit suggestions)
+- [x] Multi-photo analysis (average across multiple selfies)
+- [x] Price drop alerts on recommended items
+- [x] Password reset with email verification
+- [x] CSRF protection (Origin header validation)
+- [x] CI pipeline (GitHub Actions — lint, type check, tests)
 - [ ] Mobile app (React Native)
 - [ ] Virtual try-on (drape palette colors on photo)
-- [ ] Wardrobe tracker (save owned items, get outfit suggestions)
-- [ ] Multi-photo analysis (average across 3-5 selfies)
-- [ ] Price drop alerts on recommended items
 
 <br/>
 
@@ -540,7 +568,7 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 <br/>
 
-**Built by [Dinesh Dhanoki](https://github.com/DineshDhanoki)**
+**Built by [Dinesh Dhanoki](https://github.com/DineshDhanoki) & Kanishk**
 
 <br/>
 
