@@ -8,7 +8,7 @@ on:
 
 jobs:
   frontend:
-    name: Frontend — Lint & Type Check
+    name: Frontend — Lint, Type Check & Tests
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,21 +26,49 @@ jobs:
         run: npm run typecheck
       - name: Lint
         run: npm run lint
+      - name: Run tests
+        run: npm test
 
   backend:
-    name: Backend — Lint & Conflict Check
+    name: Backend — Lint, Conflict Check & Tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: lumiqe_test
+          POSTGRES_PASSWORD: lumiqe_test
+          POSTGRES_DB: lumiqe_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U lumiqe_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         working-directory: backend
+    env:
+      DATABASE_URL: postgresql+asyncpg://lumiqe_test:lumiqe_test@localhost:5432/lumiqe_test
+      REDIS_URL: redis://localhost:6379/0
+      JWT_SECRET_KEY: ci-test-secret-key-for-testing-only-must-be-32-chars-minimum
+      DEBUG: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
-      - name: Install lint dependencies
-        run: pip install ruff
       - name: Check for unresolved merge conflict markers
         run: |
           if grep -rn "<<<<<<\|>>>>>>\|=======" app/ --include="*.py"; then
@@ -48,4 +76,10 @@ jobs:
             exit 1
           fi
       - name: Lint with ruff
-        run: ruff check app/
+        run: |
+          pip install ruff
+          ruff check app/
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-asyncio httpx
+      - name: Run tests
+        run: pytest tests/ -x -q --tb=short
