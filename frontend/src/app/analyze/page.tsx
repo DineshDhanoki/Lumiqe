@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, Camera, Loader2, AlertCircle, ArrowLeft, Sparkles } from 'lucide-react';
+import { Upload, Camera, Loader2, AlertCircle, ArrowLeft, Sparkles, Images, X, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { apiFetch } from '@/lib/api';
 import { t } from '@/lib/i18n';
@@ -13,7 +13,7 @@ import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ScanGuide from '@/components/ScanGuide';
 
-type Mode = 'choose' | 'upload' | 'camera';
+type Mode = 'choose' | 'upload' | 'camera' | 'multi';
 
 export default function AnalyzePage() {
     const router = useRouter();
@@ -24,6 +24,8 @@ export default function AnalyzePage() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [lang, setLang] = useState('en');
+    const [multiFiles, setMultiFiles] = useState<File[]>([]);
+    const [multiPreviews, setMultiPreviews] = useState<string[]>([]);
 
     // Persist language choice
     useEffect(() => {
@@ -34,6 +36,84 @@ export default function AnalyzePage() {
     const changeLang = (code: string) => {
         setLang(code);
         localStorage.setItem('lumiqe-lang', code);
+    };
+
+    const addMultiFile = (file: File) => {
+        if (!file.type.startsWith('image/')) {
+            setError('Please use a valid image (JPEG, PNG, WebP).');
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            setError('Each file must be under 5MB.');
+            return;
+        }
+        if (multiFiles.length >= 5) {
+            setError('Maximum 5 images allowed.');
+            return;
+        }
+        setError(null);
+        setMultiFiles((prev) => [...prev, file]);
+        setMultiPreviews((prev) => [...prev, URL.createObjectURL(file)]);
+    };
+
+    const removeMultiFile = (index: number) => {
+        URL.revokeObjectURL(multiPreviews[index]);
+        setMultiFiles((prev) => prev.filter((_, i) => i !== index));
+        setMultiPreviews((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleMultiAnalyze = async () => {
+        if (multiFiles.length < 2) {
+            setError('Please add at least 2 images for multi-photo analysis.');
+            return;
+        }
+
+        setError(null);
+        setIsAnalyzing(true);
+
+        const formData = new FormData();
+        multiFiles.forEach((file) => formData.append('images', file));
+
+        try {
+            const res = await apiFetch('/api/analyze/multi', {
+                method: 'POST',
+                body: formData,
+            }, session);
+
+            if (!res.ok) {
+                let errorMsg = 'Multi-photo analysis failed. Please try again.';
+                try {
+                    const errData = await res.json();
+                    if (errData?.detail?.detail) errorMsg = errData.detail.detail;
+                    else if (typeof errData?.detail === 'string') errorMsg = errData.detail;
+                } catch { /* keep generic */ }
+                throw new Error(errorMsg);
+            }
+
+            const data = await res.json();
+
+            if (data.analysis_id) {
+                router.push(`/results/${data.analysis_id}`);
+            } else {
+                const params = new URLSearchParams();
+                params.set('season', data.season);
+                params.set('description', data.description || '');
+                params.set('hexColor', data.hex_color || '');
+                params.set('undertone', data.undertone || '');
+                params.set('confidence', data.confidence?.toString() || '0');
+                params.set('multi', 'true');
+                params.set('imagesAnalyzed', data.images_analyzed?.toString() || '0');
+                if (data.palette) params.set('palette', data.palette.join(','));
+                if (data.avoid_colors) params.set('avoidColors', data.avoid_colors.join(','));
+                if (data.metal) params.set('metal', data.metal);
+                if (data.tips) params.set('tips', data.tips);
+                if (data.contrast_level) params.set('contrastLevel', data.contrast_level);
+                router.push(`/results?${params.toString()}`);
+            }
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+            setIsAnalyzing(false);
+        }
     };
 
     const handleFile = async (selectedFile: File) => {
@@ -234,6 +314,23 @@ export default function AnalyzePage() {
                                 </button>
                                 </div>
 
+                                {/* Multi-Photo Option */}
+                                <button
+                                    onClick={() => setMode('multi')}
+                                    className="w-full flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-red-500/30 transition-all group"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-red-600/10 flex items-center justify-center group-hover:bg-red-600/20 transition-colors flex-shrink-0">
+                                        <Images className="w-6 h-6 text-red-400" />
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="text-white font-semibold text-sm">Multi-Photo Analysis</p>
+                                        <p className="text-white/40 text-xs mt-0.5">Upload 2-5 selfies for higher accuracy</p>
+                                    </div>
+                                    <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full flex-shrink-0">
+                                        Pro
+                                    </span>
+                                </button>
+
                                 {/* Image quality guidance */}
                                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                                     <p className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-3">For accurate results</p>
@@ -312,6 +409,105 @@ export default function AnalyzePage() {
 
                                 <button
                                     onClick={() => { setMode('choose'); setError(null); }}
+                                    className="w-full py-3 rounded-2xl border border-white/15 text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+                                >
+                                    {t(lang, 'back')}
+                                </button>
+                            </motion.div>
+                        )}
+
+                        {/* ── MULTI-PHOTO UPLOAD ── */}
+                        {!isAnalyzing && mode === 'multi' && (
+                            <motion.div
+                                key="multi"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="space-y-4"
+                            >
+                                <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Images className="w-5 h-5 text-red-400" />
+                                        <h3 className="text-sm font-semibold text-white">Multi-Photo Analysis</h3>
+                                    </div>
+                                    <p className="text-xs text-white/50">
+                                        Upload 2-5 selfies in different lighting. We analyze each independently
+                                        and average the results for higher accuracy.
+                                    </p>
+                                </div>
+
+                                {/* Image Grid */}
+                                <div className="grid grid-cols-3 gap-3">
+                                    {multiPreviews.map((url, index) => (
+                                        <div key={index} className="relative aspect-square rounded-2xl overflow-hidden border border-white/10">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img
+                                                src={url}
+                                                alt={`Photo ${index + 1}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <button
+                                                onClick={() => removeMultiFile(index)}
+                                                className="absolute top-1.5 right-1.5 p-1 bg-black/70 rounded-full text-white/70 hover:text-red-400 transition-colors"
+                                            >
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                            <div className="absolute bottom-1.5 left-1.5 bg-black/70 rounded-full px-2 py-0.5 text-[10px] font-medium text-white">
+                                                {index + 1}
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {multiFiles.length < 5 && (
+                                        <label className="relative aspect-square rounded-2xl border-2 border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer hover:border-red-500/50 hover:bg-white/5 transition-all">
+                                            <Plus className="w-6 h-6 text-white/40" />
+                                            <span className="text-[10px] text-white/30 mt-1">Add photo</span>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                                onChange={(e) => {
+                                                    if (e.target.files?.[0]) addMultiFile(e.target.files[0]);
+                                                    e.target.value = '';
+                                                }}
+                                            />
+                                        </label>
+                                    )}
+                                </div>
+
+                                <p className="text-xs text-white/30 text-center">
+                                    {multiFiles.length}/5 photos added · Minimum 2 required
+                                </p>
+
+                                {error && (
+                                    <div className="flex items-center gap-2 text-red-200 bg-red-900/60 px-4 py-2 rounded-xl text-sm">
+                                        <AlertCircle className="w-4 h-4" />
+                                        {error}
+                                    </div>
+                                )}
+
+                                <button
+                                    onClick={handleMultiAnalyze}
+                                    disabled={multiFiles.length < 2}
+                                    className={cn(
+                                        'w-full py-3.5 rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2',
+                                        multiFiles.length >= 2
+                                            ? 'bg-red-600 hover:bg-red-500 text-white'
+                                            : 'bg-white/5 text-white/30 cursor-not-allowed'
+                                    )}
+                                >
+                                    <Images className="w-4 h-4" />
+                                    Analyze {multiFiles.length} {multiFiles.length === 1 ? 'Photo' : 'Photos'}
+                                </button>
+
+                                <button
+                                    onClick={() => {
+                                        setMode('choose');
+                                        setError(null);
+                                        multiPreviews.forEach((url) => URL.revokeObjectURL(url));
+                                        setMultiFiles([]);
+                                        setMultiPreviews([]);
+                                    }}
                                     className="w-full py-3 rounded-2xl border border-white/15 text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
                                 >
                                     {t(lang, 'back')}

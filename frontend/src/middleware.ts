@@ -27,6 +27,7 @@ export const config = {
         '/account/:path*',
         '/quiz/:path*',
         '/wishlist/:path*',
+        '/wardrobe/:path*',
         '/admin/:path*',
     ],
 };
