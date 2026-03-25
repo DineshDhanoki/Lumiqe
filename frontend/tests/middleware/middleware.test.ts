@@ -27,8 +27,8 @@ describe('middleware config', () => {
         expect(config.matcher.length).toBeGreaterThan(0);
     });
 
-    it('matcher contains 6 patterns', () => {
-        expect(config.matcher).toHaveLength(6);
+    it('matcher contains 7 patterns', () => {
+        expect(config.matcher).toHaveLength(7);
     });
 
     it('all matcher entries are strings starting with /', () => {
@@ -66,6 +66,10 @@ describe('middleware config', () => {
 
     it('/wishlist is protected', () => {
         expect(isProtected('/wishlist/')).toBe(true);
+    });
+
+    it('/wardrobe is protected', () => {
+        expect(isProtected('/wardrobe/')).toBe(true);
     });
 
     /* ─── Nested routes ───────────────────────────────────────────── */
