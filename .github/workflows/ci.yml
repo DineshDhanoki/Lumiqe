@@ -80,6 +80,6 @@ jobs:
           pip install ruff
           ruff check app/
       - name: Install dependencies
-        run: pip install -r requirements.txt pytest pytest-asyncio httpx
+        run: pip install -r requirements.txt pytest pytest-asyncio httpx hypothesis
       - name: Run tests
         run: pytest tests/ -x -q --tb=short
