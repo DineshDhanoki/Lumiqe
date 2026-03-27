@@ -137,11 +137,29 @@ async def get_current_user(
     return user
 
 
+async def get_optional_db() -> AsyncGenerator[AsyncSession | None, None]:
+    """Yield a DB session if available, or None if not. Never throws."""
+    if not db_available:
+        yield None
+        return
+    try:
+        async with async_session_factory() as session:
+            try:
+                yield session
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                yield None
+    except Exception:
+        yield None
+
+
 async def get_optional_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    session: AsyncSession | None = Depends(get_optional_db),
 ) -> dict | None:
     """Optionally extract user from JWT. Returns None if no token or DB unavailable."""
-    if credentials is None:
+    if credentials is None or session is None:
         return None
 
     payload = decode_token(credentials.credentials)
@@ -152,17 +170,12 @@ async def get_optional_user(
     if not user_email:
         return None
 
-    if not db_available:
-        return None
-
     from app.repositories import user_repo
     try:
-        async with async_session_factory() as session:
-            user = await user_repo.get_by_email(session, user_email)
-            await session.commit()
-            return user
+        user = await user_repo.get_by_email(session, user_email)
+        return user
     except Exception:
-        logger.debug("get_optional_user: session error, returning None")
+        logger.debug("get_optional_user: query error, returning None")
         return None
 
 
