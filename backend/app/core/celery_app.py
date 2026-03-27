@@ -4,14 +4,15 @@ Lumiqe — Celery Application Configuration.
 Provides a shared Celery app instance for background task processing.
 Falls back to synchronous execution if Celery/Redis is not available.
 
-IMPORTANT: Celery app is created LAZILY on first task dispatch,
-not at import time. This prevents broker connection hangs during tests.
+In test/CI mode (CELERY_ALWAYS_EAGER=true), Celery is completely disabled.
+No broker connection is attempted. All CV work falls back to ThreadPoolExecutor.
 
 Workers are started with:
     celery -A app.core.celery_app:create_celery_app worker --loglevel=info --concurrency=4
 """
 
 import logging
+import os
 
 logger = logging.getLogger("lumiqe.celery")
 
@@ -19,9 +20,19 @@ _celery_app = None
 _celery_available: bool | None = None  # None = not yet checked
 
 
+def _is_test_mode() -> bool:
+    """Check if we're in test/CI mode where Celery should be disabled."""
+    return os.environ.get("CELERY_ALWAYS_EAGER", "").lower() in ("true", "1")
+
+
 def get_celery_app():
     """Lazy-initialize and return the Celery app. Returns None if unavailable."""
     global _celery_app, _celery_available
+
+    # Test mode — never create Celery app
+    if _is_test_mode():
+        _celery_available = False
+        return None
 
     # Already initialized
     if _celery_available is not None:
@@ -52,7 +63,7 @@ def get_celery_app():
             worker_max_tasks_per_child=50,
             worker_prefetch_multiplier=1,
             result_expires=300,
-            broker_connection_retry_on_startup=False,  # Don't block on startup
+            broker_connection_retry_on_startup=False,
         )
         _celery_app = app
         _celery_available = True
@@ -70,20 +81,15 @@ def get_celery_app():
 
 
 def is_celery_available() -> bool:
-    """Check if Celery is configured (does NOT trigger broker connection)."""
-    import os
-    # CELERY_ALWAYS_EAGER=true disables real Celery dispatch (used in CI/tests)
-    if os.environ.get("CELERY_ALWAYS_EAGER", "").lower() in ("true", "1"):
+    """Check if Celery is available. Returns False immediately in test mode."""
+    if _is_test_mode():
         return False
-
     if _celery_available is not None:
         return _celery_available
-
-    # Check prerequisites without creating the Celery app
+    # Don't trigger full init — just check prerequisites
     from app.core.config import settings
     if not settings.REDIS_URL:
         return False
-
     try:
         import celery  # noqa: F401
         return True
