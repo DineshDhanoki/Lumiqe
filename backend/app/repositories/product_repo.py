@@ -3,8 +3,12 @@ Product Repository — Database queries for dynamic catalog.
 
 Supports filtering by season, gender, vibe, tier, pgvector
 cosine similarity search, and Guarantee-6 cascading fallback.
+
+Product queries are cached in Redis (60s TTL) to reduce DB load.
+Cache is automatically bypassed when Redis is unavailable.
 """
 
+import json
 import logging
 from typing import Optional
 
@@ -14,6 +18,42 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Product
 
 logger = logging.getLogger("lumiqe.repo.product")
+
+_CACHE_TTL = 60  # seconds
+
+
+async def _cache_get(key: str) -> list[dict] | None:
+    """Get cached product list from Redis. Returns None on miss/error."""
+    try:
+        from app.core.rate_limiter import _redis_client, _redis_available
+        if not _redis_available or not _redis_client:
+            return None
+        raw = await _redis_client.get(f"lumiqe:products:{key}")
+        if raw:
+            return json.loads(raw)
+    except Exception:
+        pass
+    return None
+
+
+async def _cache_set(key: str, products: list[dict]) -> None:
+    """Cache product list in Redis with TTL."""
+    try:
+        from app.core.rate_limiter import _redis_client, _redis_available
+        if not _redis_available or not _redis_client:
+            return
+        await _redis_client.set(
+            f"lumiqe:products:{key}",
+            json.dumps(products),
+            ex=_CACHE_TTL,
+        )
+    except Exception:
+        pass
+
+
+def _cache_key(*parts: str) -> str:
+    """Build a cache key from query parameters."""
+    return ":".join(str(p).lower() for p in parts if p)
 
 # Sibling season mapping — ordered by color-theory proximity
 SIBLING_SEASONS: dict[str, list[str]] = {
@@ -64,6 +104,12 @@ async def get_by_season(
     limit: int = 50,
 ) -> list[dict]:
     """Get active products for a season, optionally filtered by gender/vibe."""
+    # Check Redis cache first
+    key = _cache_key("season", season, gender or "", vibe or "", str(limit))
+    cached = await _cache_get(key)
+    if cached is not None:
+        return cached
+
     conditions = [
         Product.season == season,
         Product.is_active,
@@ -81,7 +127,11 @@ async def get_by_season(
     )
     result = await session.execute(stmt)
     products = result.scalars().all()
-    return [p.to_dict() for p in products]
+    product_dicts = [p.to_dict() for p in products]
+
+    # Cache the result
+    await _cache_set(key, product_dicts)
+    return product_dicts
 
 
 async def get_by_filters(
@@ -93,6 +143,11 @@ async def get_by_filters(
     limit: int = 50,
 ) -> list[dict]:
     """Get products by any combination of filters."""
+    key = _cache_key("filters", gender or "", vibe or "", season or "", tier or "", str(limit))
+    cached = await _cache_get(key)
+    if cached is not None:
+        return cached
+
     conditions = [Product.is_active]
 
     if gender:
@@ -112,7 +167,10 @@ async def get_by_filters(
     )
     result = await session.execute(stmt)
     products = result.scalars().all()
-    return [p.to_dict() for p in products]
+    product_dicts = [p.to_dict() for p in products]
+
+    await _cache_set(key, product_dicts)
+    return product_dicts
 
 
 async def get_with_fallback(
