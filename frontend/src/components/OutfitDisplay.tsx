@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ExternalLink, ShoppingBag, Sparkles, ArrowUpRight } from 'lucide-react';
@@ -39,7 +39,7 @@ const OUTFIT_SLOTS: { key: keyof Omit<CuratedOutfit, 'look_name'>; label: string
     { key: 'jewelry', label: 'Jewelry', emoji: '💎' },
 ];
 
-function OutfitItemCard({
+const OutfitItemCard = React.memo(function OutfitItemCard({
     item,
     label,
     emoji,
@@ -94,7 +94,7 @@ function OutfitItemCard({
                             src={item.image_url}
                             alt={item.name}
                             fill
-                            unoptimized
+                            sizes="(max-width: 768px) 50vw, 25vw"
                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                             onError={() => setImgFailed(true)}
                         />
@@ -163,7 +163,7 @@ function OutfitItemCard({
             )}
         </motion.a>
     );
-}
+});
 
 export default function OutfitDisplay({ outfit }: OutfitDisplayProps) {
     return (

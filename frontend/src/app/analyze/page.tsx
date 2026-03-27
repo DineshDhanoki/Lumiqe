@@ -370,6 +370,8 @@ export default function AnalyzePage() {
                                 className="space-y-4"
                             >
                                 <div
+                                    role="button"
+                                    tabIndex={0}
                                     aria-label="Upload a selfie"
                                     className={cn(
                                         'relative flex flex-col items-center justify-center w-full min-h-[340px] rounded-3xl border-2 border-dashed transition-all duration-300 overflow-hidden',

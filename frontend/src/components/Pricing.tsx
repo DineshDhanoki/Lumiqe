@@ -133,6 +133,9 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         </span>
                         <button
                             onClick={() => setIsAnnual(!isAnnual)}
+                            role="switch"
+                            aria-checked={isAnnual}
+                            aria-label="Toggle annual billing"
                             className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${isAnnual ? 'bg-red-600' : 'bg-white/20'}`}
                         >
                             <div

@@ -99,6 +99,7 @@ export default function Dashboard() {
     const [stylePersonality, setStylePersonality] = useState<StylePersonalityData | null>(null);
     const [dailyOutfit, setDailyOutfit] = useState<DailyOutfitData | null>(null);
     const [dailyOutfitEmpty, setDailyOutfitEmpty] = useState(false);
+    const [showAllHistory, setShowAllHistory] = useState(false);
 
     // Read from Zustand store
     const storeHistory = useLumiqeStore((s) => s.history);
@@ -516,7 +517,7 @@ export default function Dashboard() {
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
                         <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('analysisHistory')}</p>
                         <div className="space-y-3">
-                            {history.map((entry) => (
+                            {history.slice(0, showAllHistory ? history.length : 10).map((entry) => (
                                 <Link
                                     key={entry.id || entry.timestamp}
                                     href={entry.id ? `/results/${entry.id}` : `/results?season=${encodeURIComponent(entry.season)}&hexColor=${encodeURIComponent(entry.hexColor)}&undertone=${entry.undertone}&confidence=${entry.confidence}&contrastLevel=${entry.contrastLevel}&metal=${entry.metal}&palette=${entry.palette.join(',')}`}
@@ -542,6 +543,14 @@ export default function Dashboard() {
                                 </Link>
                             ))}
                         </div>
+                        {history.length > 10 && !showAllHistory && (
+                            <button
+                                onClick={() => setShowAllHistory(true)}
+                                className="mt-3 w-full py-2 text-center text-sm text-white/40 hover:text-white/60 transition-colors"
+                            >
+                                Show all {history.length} analyses
+                            </button>
+                        )}
                     </motion.div>
                 )}
 
