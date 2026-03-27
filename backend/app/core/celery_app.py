@@ -71,6 +71,11 @@ def get_celery_app():
 
 def is_celery_available() -> bool:
     """Check if Celery is configured (does NOT trigger broker connection)."""
+    import os
+    # CELERY_ALWAYS_EAGER=true disables real Celery dispatch (used in CI/tests)
+    if os.environ.get("CELERY_ALWAYS_EAGER", "").lower() in ("true", "1"):
+        return False
+
     if _celery_available is not None:
         return _celery_available
 

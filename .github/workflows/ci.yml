@@ -65,6 +65,7 @@ jobs:
       REDIS_URL: redis://localhost:6379/0
       JWT_SECRET_KEY: ci-test-secret-key-for-testing-only-must-be-32-chars-minimum
       DEBUG: "false"
+      CELERY_ALWAYS_EAGER: "true"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -88,4 +89,5 @@ jobs:
           pip install pip-audit
           pip-audit --strict --desc || true
       - name: Run tests
-        run: pytest tests/ -x -q --tb=short --timeout=120 --ignore=tests/test_color_science.py --ignore=tests/test_cv_pipeline.py
+        timeout-minutes: 3
+        run: pytest tests/ -x -q --tb=short --timeout=60 --ignore=tests/test_color_science.py --ignore=tests/test_cv_pipeline.py
