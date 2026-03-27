@@ -9,7 +9,6 @@ Workers are started with:
 """
 
 import logging
-import os
 
 from app.core.config import settings
 
