@@ -52,6 +52,9 @@ werkzeug==3.1.6
 # Redis async client (rate limiting)
 redis[asyncio]==7.3.0
 
+# Task queue (horizontal CV pipeline scaling)
+celery[redis]==5.5.3
+
 # Payments
 stripe==14.4.0
 

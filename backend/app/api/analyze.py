@@ -1,4 +1,11 @@
-"""API — Image analysis endpoint."""
+"""API — Image analysis endpoint.
+
+Supports two execution modes:
+- **Celery mode** (production): Dispatches CV work to Celery workers via Redis.
+  Workers scale independently from API pods for true horizontal scaling.
+- **ThreadPool mode** (dev/fallback): Uses a local ThreadPoolExecutor when
+  Celery is not available. Limited to `min(cpu_count, 8)` concurrent analyses.
+"""
 
 import asyncio
 import logging
@@ -15,6 +22,7 @@ from app.services.email import send_analysis_complete_email
 from app.core.config import settings
 from app.core.security import validate_image_bytes, validate_image_dimensions
 from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
+from app.core.celery_app import is_celery_available
 
 logger = logging.getLogger("lumiqe.api.analyze")
 router = APIRouter(prefix="/api", tags=["Analysis"])
@@ -22,13 +30,13 @@ router = APIRouter(prefix="/api", tags=["Analysis"])
 # Minimum confidence for a scan to count against the user's quota
 _MIN_CONFIDENCE_TO_DEDUCT = 0.5
 
-# Bounded thread pool for CV pipeline — scales with CPU, capped at 8
+# Bounded thread pool for CV pipeline — fallback when Celery is unavailable
 _cv_executor = ThreadPoolExecutor(
     max_workers=min(os.cpu_count() or 1, 8),
     thread_name_prefix="cv-pipeline",
 )
 
-# ─── Lazy-load CV engine (thread-safe) ───────────────────────
+# ─── Lazy-load CV engine (thread-safe, used only in ThreadPool mode) ──
 _engine = None
 _engine_lock = threading.Lock()
 
@@ -44,6 +52,22 @@ def _get_engine():
                 _engine = cv_pipeline
                 logger.info("CV engine loaded successfully")
     return _engine
+
+
+async def _run_cv_analysis(image_bytes: bytes) -> dict:
+    """Run the CV pipeline via Celery if available, else ThreadPool fallback."""
+    if is_celery_available():
+        from app.tasks.cv_tasks import analyze_image_task
+        # Celery tasks need JSON-serializable args — hex-encode the bytes
+        async_result = analyze_image_task.delay(image_bytes.hex())
+        # Wait for result with timeout (Celery task has 60s hard limit)
+        loop = asyncio.get_running_loop()
+        result = await loop.run_in_executor(None, async_result.get, 55)
+        return result
+    else:
+        engine = _get_engine()
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(_cv_executor, engine.analyze_bytes, image_bytes)
 
 
 def _validate_upload(image_bytes: bytes) -> None:
@@ -181,11 +205,9 @@ async def analyze_image(
     image_bytes = await image.read()
     _validate_upload(image_bytes)
 
-    # Run the analysis pipeline in a thread pool to avoid blocking the event loop
+    # Run the analysis pipeline (Celery if available, ThreadPool fallback)
     try:
-        engine = _get_engine()
-        loop = asyncio.get_running_loop()
-        result = await loop.run_in_executor(_cv_executor, engine.analyze_bytes, image_bytes)
+        result = await _run_cv_analysis(image_bytes)
 
     except FileNotFoundError as exc:
         raise HTTPException(
@@ -252,13 +274,11 @@ async def analyze_multi_image(
         _validate_upload(img_bytes)
         all_bytes.append(img_bytes)
 
-    # Analyze each image
-    engine = _get_engine()
-    loop = asyncio.get_running_loop()
+    # Analyze each image (Celery or ThreadPool)
     results = []
     for img_bytes in all_bytes:
         try:
-            result = await loop.run_in_executor(_cv_executor, engine.analyze_bytes, img_bytes)
+            result = await _run_cv_analysis(img_bytes)
             results.append(result)
         except Exception as exc:
             logger.warning(f"Multi-analysis: one image failed: {exc}")

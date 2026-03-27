@@ -82,6 +82,17 @@ async def lifespan(app: FastAPI):
 
     await init_db()
     await init_redis()
+
+    # In production, Redis is REQUIRED for rate limiting, push subs, and chat history.
+    # Fail fast if Redis is not available in non-debug mode.
+    if not settings.DEBUG:
+        from app.core.rate_limiter import _redis_available
+        if not _redis_available:
+            logger.warning(
+                "⚠ Redis is NOT connected. Rate limiting, push notifications, and "
+                "chat history will use in-memory fallbacks (not suitable for multi-pod)."
+            )
+
     # Start background scheduler
     scheduler = None
     try:
