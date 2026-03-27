@@ -47,7 +47,7 @@ async def test_health_endpoint(client):
 @pytest.mark.anyio
 async def test_register_missing_body(client):
     """Register with no body should fail 422 (503 if DB unavailable)."""
-    res = await client.post("/api/auth/register", json={})
+    res = await client.post("/api/auth/register", json={}, headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (422, 503)
 
 
@@ -58,7 +58,7 @@ async def test_register_invalid_email(client):
         "name": "Test",
         "email": "not-an-email",
         "password": "StrongP@ss1"
-    })
+    }, headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (422, 503)
 
 
@@ -69,7 +69,7 @@ async def test_register_weak_password(client):
         "name": "Test",
         "email": "test@lumiqe.com",
         "password": "weak"
-    })
+    }, headers={"Origin": "http://localhost:3000"})
     # 422 (pydantic) or 400 (business logic) or 503 (DB unavailable)
     assert res.status_code in (422, 400, 503)
 
@@ -80,7 +80,7 @@ async def test_register_weak_password(client):
 @pytest.mark.anyio
 async def test_login_missing_body(client):
     """Login with no body should return 422 (503 if DB unavailable)."""
-    res = await client.post("/api/auth/login", json={})
+    res = await client.post("/api/auth/login", json={}, headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (422, 503)
 
 
@@ -90,7 +90,7 @@ async def test_login_nonexistent_user(client):
     res = await client.post("/api/auth/login", json={
         "email": "nobody@lumiqe.com",
         "password": "StrongP@ss1"
-    })
+    }, headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (401, 429, 503)
 
 
@@ -98,9 +98,10 @@ async def test_login_nonexistent_user(client):
 async def test_login_brute_force_limit(client):
     """6 rapid login attempts for same email should trigger 429."""
     payload = {"email": "brutetest@example.com", "password": "Wrong!Pass1"}
+    headers = {"Origin": "http://localhost:3000"}
     for _ in range(5):
-        await client.post("/api/auth/login", json=payload)
-    res = await client.post("/api/auth/login", json=payload)
+        await client.post("/api/auth/login", json=payload, headers=headers)
+    res = await client.post("/api/auth/login", json=payload, headers=headers)
     # 429 if Redis connected, 401 if not, 503 if DB unavailable
     assert res.status_code in (429, 401, 503)
 
@@ -111,7 +112,7 @@ async def test_login_brute_force_limit(client):
 @pytest.mark.anyio
 async def test_analyze_requires_auth(client):
     """Analyze without token should return 422 (missing file), 401/403, or 503."""
-    res = await client.post("/api/analyze")
+    res = await client.post("/api/analyze", headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (401, 422, 403, 503)
 
 
@@ -120,7 +121,7 @@ async def test_analyze_with_invalid_token(client):
     """Analyze with a garbage token should return 401 or 422."""
     res = await client.post(
         "/api/analyze",
-        headers={"Authorization": "Bearer invalid.token.here"},
+        headers={"Authorization": "Bearer invalid.token.here", "Origin": "http://localhost:3000"},
         files={"image": ("test.jpg", make_jpeg_bytes(), "image/jpeg")},
     )
     # 401 if auth checked first, 422 if file validation runs first
@@ -132,7 +133,7 @@ async def test_analyze_rejects_text_file(client, auth_headers):
     """Analyze should reject non-image uploads with 422 (503 if DB unavailable)."""
     res = await client.post(
         "/api/analyze",
-        headers=auth_headers,
+        headers={**auth_headers, "Origin": "http://localhost:3000"},
         files={"image": ("test.txt", b"hello world text file", "text/plain")},
     )
     assert res.status_code in (422, 503)
@@ -143,7 +144,7 @@ async def test_analyze_rejects_empty_file(client, auth_headers):
     """Analyze should reject empty file with 422 (503 if DB unavailable)."""
     res = await client.post(
         "/api/analyze",
-        headers=auth_headers,
+        headers={**auth_headers, "Origin": "http://localhost:3000"},
         files={"image": ("empty.jpg", b"", "image/jpeg")},
     )
     assert res.status_code in (422, 503)
@@ -155,7 +156,7 @@ async def test_analyze_rejects_empty_file(client, auth_headers):
 @pytest.mark.anyio
 async def test_scan_requires_auth(client):
     """Scan without token should return 401, 422, 403, or 503."""
-    res = await client.post("/api/scan-item")
+    res = await client.post("/api/scan-item", headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (401, 422, 403, 503)
 
 
@@ -164,7 +165,7 @@ async def test_scan_rejects_non_image(client, auth_headers):
     """Scan with a PDF file should return 422 (503 if DB unavailable)."""
     res = await client.post(
         "/api/scan-item",
-        headers=auth_headers,
+        headers={**auth_headers, "Origin": "http://localhost:3000"},
         files={"image": ("doc.pdf", b"%PDF-1.4 fake", "application/pdf")},
     )
     assert res.status_code in (422, 503)
@@ -176,7 +177,7 @@ async def test_scan_rejects_non_image(client, auth_headers):
 @pytest.mark.anyio
 async def test_stripe_checkout_requires_auth(client):
     """Checkout endpoint must require authentication."""
-    res = await client.post("/api/stripe/checkout", json={"plan": "monthly"})
+    res = await client.post("/api/stripe/checkout", json={"plan": "monthly"}, headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (401, 403, 503)
 
 
@@ -185,7 +186,7 @@ async def test_stripe_checkout_invalid_plan(client, auth_headers):
     """Checkout with unknown plan name should return 400, 401, or 503."""
     res = await client.post(
         "/api/stripe/checkout",
-        headers=auth_headers,
+        headers={**auth_headers, "Origin": "http://localhost:3000"},
         json={"plan": "ultra-mega-plan"},
     )
     assert res.status_code in (400, 401, 503)
@@ -194,7 +195,7 @@ async def test_stripe_checkout_invalid_plan(client, auth_headers):
 @pytest.mark.anyio
 async def test_stripe_portal_requires_auth(client):
     """Portal endpoint must require authentication."""
-    res = await client.post("/api/stripe/portal")
+    res = await client.post("/api/stripe/portal", headers={"Origin": "http://localhost:3000"})
     assert res.status_code in (401, 403, 503)
 
 
@@ -235,7 +236,7 @@ async def test_security_headers_on_all_responses(client):
 @pytest.mark.anyio
 async def test_no_stack_trace_in_error_responses(client):
     """Error responses must never expose Python tracebacks."""
-    res = await client.post("/api/analyze")
+    res = await client.post("/api/analyze", headers={"Origin": "http://localhost:3000"})
     body = res.text
     assert "Traceback" not in body
     assert 'File "' not in body
@@ -244,7 +245,7 @@ async def test_no_stack_trace_in_error_responses(client):
 @pytest.mark.anyio
 async def test_error_response_structure(client):
     """Error responses must follow structured JSON format."""
-    res = await client.post("/api/auth/register", json={})
+    res = await client.post("/api/auth/register", json={}, headers={"Origin": "http://localhost:3000"})
     data = res.json()
     # FastAPI 422 uses "detail" with array of errors; 503 also has "detail"
     assert "detail" in data
