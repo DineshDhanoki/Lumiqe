@@ -73,14 +73,14 @@ async def register(user: UserCreate, request: Request, session: AsyncSession = D
     tokens = await _build_tokens(new_user)
     logger.info(f"[SECURITY] User registered: {user.email} ip={client_ip} req={request_id}")
 
-    # Fire-and-forget welcome email
+    # Fire-and-forget welcome email (non-blocking)
     import asyncio
-    asyncio.get_running_loop().call_soon(send_welcome_email, user.email, user.name)
+    asyncio.get_running_loop().run_in_executor(None, send_welcome_email, user.email, user.name)
 
-    # Send email verification
+    # Send email verification (non-blocking)
     verify_token = await generate_token(user.email, "email_verify")
     verify_url = f"{settings.FRONTEND_URL}/verify-email?token={verify_token}"
-    send_email_verification(user.email, user.name, verify_url)
+    asyncio.get_running_loop().run_in_executor(None, send_email_verification, user.email, user.name, verify_url)
 
     return AuthResponse(
         user=UserResponse(**new_user),
@@ -186,7 +186,7 @@ async def google_auth(body: GoogleAuthRequest, request: Request, session: AsyncS
         user = await user_repo.create(session, body.name, body.email, password_hash=None)
         logger.info(f"[SECURITY] Google user registered: {body.email} ip={client_ip} req={request_id}")
         import asyncio
-        asyncio.get_running_loop().call_soon(send_welcome_email, body.email, body.name)
+        asyncio.get_running_loop().run_in_executor(None, send_welcome_email, body.email, body.name)
     else:
         logger.info(f"[SECURITY] Google login: {body.email} ip={client_ip} req={request_id}")
 

@@ -6,6 +6,7 @@ and manually manage products. All endpoints require admin privileges.
 """
 
 import logging
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,8 +22,8 @@ router = APIRouter(prefix="/api/admin", tags=["Admin"])
 @router.post("/products/refresh")
 async def refresh_products(
     background_tasks: BackgroundTasks,
-    gender: str = Query(..., description="'male' or 'female'"),
-    vibe: str = Query(..., description="'Casual', 'Gym', 'Party', 'Formal'"),
+    gender: Literal["male", "female"] = Query(..., description="'male' or 'female'"),
+    vibe: Literal["Casual", "Gym", "Party", "Formal"] = Query(..., description="'Casual', 'Gym', 'Party', 'Formal'"),
     max_per_brand: int = Query(8, ge=1, le=20),
     admin_user: dict = Depends(require_admin),
 ):

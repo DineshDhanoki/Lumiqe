@@ -243,9 +243,14 @@ async def stripe_webhook(
         checkout_type = metadata.get("type", "subscription")
 
         if checkout_type == "credit_purchase" and lumiqe_user_id:
-            # One-time credit purchase
-            credits_to_add = int(metadata.get("credits", "1"))
-            await user_repo.add_credits(session, int(lumiqe_user_id), credits_to_add)
+            # One-time credit purchase — validate metadata before casting
+            try:
+                credits_to_add = int(metadata.get("credits", "1"))
+                user_id_int = int(lumiqe_user_id)
+            except (ValueError, TypeError):
+                logger.error(f"Invalid credit metadata: credits={metadata.get('credits')}, user_id={lumiqe_user_id}")
+                return {"status": "error", "detail": "Invalid metadata"}
+            await user_repo.add_credits(session, user_id_int, credits_to_add)
             logger.info(f"User {lumiqe_user_id} purchased {credits_to_add} credits")
         elif lumiqe_user_id:
             # Subscription purchase — activate premium

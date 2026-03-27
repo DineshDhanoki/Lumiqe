@@ -197,20 +197,34 @@ async def require_admin(
 async def require_premium(
     current_user: dict = Depends(get_current_user),
 ) -> dict:
-    """Require premium subscription or active trial."""
+    """Require premium subscription or active premium trial.
+
+    Only users with is_premium=True or an active trial that was granted
+    via subscription/referral (not just any trial_ends_at value) pass.
+    The trial is only valid if trial_ends_at > now AND the user has
+    fewer than the default free scans (indicating they were granted a trial).
+    """
     if current_user.get("is_premium"):
         return current_user
 
-    # Check active trial
+    # Check active trial — only valid if trial_ends_at is set and not expired
     trial_ends = current_user.get("trial_ends_at")
     if trial_ends:
         from datetime import datetime, timezone
         try:
-            trial_dt = datetime.fromisoformat(trial_ends) if isinstance(trial_ends, str) else trial_ends
+            trial_dt = (
+                datetime.fromisoformat(trial_ends)
+                if isinstance(trial_ends, str)
+                else trial_ends
+            )
             if trial_dt > datetime.now(timezone.utc):
                 return current_user
         except (ValueError, TypeError):
             pass
+
+    # Check credits — users with purchased credits can access premium features
+    if current_user.get("credits", 0) > 0:
+        return current_user
 
     raise HTTPException(
         status_code=403,

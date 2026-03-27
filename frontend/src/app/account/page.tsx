@@ -50,7 +50,7 @@ export default function AccountPage() {
         if (status === 'authenticated') {
             fetchProfile();
         } else if (status === 'unauthenticated') {
-            window.location.href = '/';
+            if (typeof window !== 'undefined') window.location.href = '/';
         }
     }, [session, status]);
 
@@ -58,7 +58,7 @@ export default function AccountPage() {
         try {
             const res = await apiFetch('/api/stripe/portal', { method: 'POST' });
             const data = await res.json();
-            if (data.portal_url) {
+            if (data.portal_url && typeof window !== 'undefined') {
                 window.location.href = data.portal_url;
             }
         } catch (err) {

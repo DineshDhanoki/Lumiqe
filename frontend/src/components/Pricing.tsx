@@ -38,7 +38,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                 throw new Error(err?.detail || 'Failed to create checkout session');
             }
             const data = await res.json();
-            window.location.href = data.checkout_url;
+            if (typeof window !== 'undefined') window.location.href = data.checkout_url;
         } catch (err: unknown) {
             console.error('Checkout error:', err);
             setCheckoutError(err instanceof Error ? err.message : 'Payment service unavailable. Please try again.');
@@ -67,7 +67,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                 throw new Error(err?.detail || 'Failed to create checkout session');
             }
             const data = await res.json();
-            window.location.href = data.checkout_url;
+            if (typeof window !== 'undefined') window.location.href = data.checkout_url;
         } catch (err: unknown) {
             console.error('Credit purchase error:', err);
             setCheckoutError(err instanceof Error ? err.message : 'Payment service unavailable. Please try again.');

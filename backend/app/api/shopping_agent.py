@@ -88,7 +88,17 @@ async def generate_outfit(
 
     from app.services.shopping_agent import get_curated_outfit
 
+    import re
+    _HEX_PATTERN = re.compile(r'^#[0-9A-Fa-f]{6}$')
     palette_hexes = [h.strip() for h in palette.split(",") if h.strip()]
+
+    # Validate hex color format
+    for hex_code in palette_hexes:
+        if not _HEX_PATTERN.match(hex_code):
+            raise HTTPException(
+                status_code=400,
+                detail={"error": "INVALID_HEX", "detail": f"Invalid hex color: {hex_code}", "code": 400},
+            )
 
     if not palette_hexes:
         raise HTTPException(
