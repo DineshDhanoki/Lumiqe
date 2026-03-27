@@ -12,9 +12,10 @@ import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from unittest.mock import MagicMock
 
-# Set JWT_SECRET_KEY before importing the app
+# Set env vars before importing the app
 os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-testing-only-must-be-32-chars-minimum"
 os.environ["DEBUG"] = "false"
+os.environ["CELERY_ALWAYS_EAGER"] = "true"
 
 # Stub torch if it fails to load (e.g. DLL issues on Windows CI/dev)
 # This must happen BEFORE any app import that transitively imports torch.

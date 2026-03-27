@@ -9,6 +9,7 @@ Run with: uvicorn app.main:app --reload --port 8000
 
 import json as _json
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -93,17 +94,20 @@ async def lifespan(app: FastAPI):
                 "chat history will use in-memory fallbacks (not suitable for multi-pod)."
             )
 
-    # Start background scheduler
+    # Start background scheduler (skip in test/CI environments)
     scheduler = None
-    try:
-        from apscheduler.schedulers.asyncio import AsyncIOScheduler
-        scheduler = AsyncIOScheduler()
-        scheduler.start()
-        logger.info("Background scheduler started")
-    except ImportError:
-        logger.info("apscheduler not installed — background scheduler disabled")
-    except Exception as exc:
-        logger.warning(f"Scheduler failed to start: {exc}")
+    if not os.environ.get("CELERY_ALWAYS_EAGER"):
+        try:
+            from apscheduler.schedulers.asyncio import AsyncIOScheduler
+            scheduler = AsyncIOScheduler()
+            scheduler.start()
+            logger.info("Background scheduler started")
+        except ImportError:
+            logger.info("apscheduler not installed — background scheduler disabled")
+        except Exception as exc:
+            logger.warning(f"Scheduler failed to start: {exc}")
+    else:
+        logger.info("Scheduler skipped (test/CI mode)")
 
     logger.info("All services initialized")
     yield
