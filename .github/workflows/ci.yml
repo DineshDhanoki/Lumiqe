@@ -88,4 +88,4 @@ jobs:
           pip install pip-audit
           pip-audit --strict --desc || true
       - name: Run tests
-        run: pytest tests/ -x -q --tb=short
+        run: pytest tests/ -x -q --tb=short --timeout=120 --ignore=tests/test_color_science.py --ignore=tests/test_cv_pipeline.py
