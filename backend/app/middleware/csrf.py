@@ -50,22 +50,38 @@ class CSRFMiddleware(BaseHTTPMiddleware):
                 except Exception:
                     pass
 
-            # Allow requests with no origin header at all (server-to-server, curl, etc.)
-            # These are not browser-initiated cross-site requests.
-            if effective_origin is not None:
-                allowed = {o.rstrip("/") for o in settings.CORS_ORIGINS}
-                if effective_origin.rstrip("/") not in allowed:
-                    logger.warning(
-                        f"[CSRF] Blocked request from origin={effective_origin} "
-                        f"method={request.method} path={path}"
-                    )
-                    return JSONResponse(
-                        status_code=403,
-                        content={
-                            "error": "CSRF_REJECTED",
-                            "detail": "Request origin is not allowed.",
-                            "code": 403,
-                        },
-                    )
+            # Require an origin for all state-changing requests.
+            # Requests with no Origin AND no Referer are likely non-browser
+            # tools (curl, Postman) in dev, but in production browsers always
+            # send at least one. Block missing-origin requests to prevent
+            # CSRF bypass via stripped headers.
+            if effective_origin is None:
+                logger.warning(
+                    f"[CSRF] Blocked request with no origin/referer "
+                    f"method={request.method} path={path}"
+                )
+                return JSONResponse(
+                    status_code=403,
+                    content={
+                        "error": "CSRF_REJECTED",
+                        "detail": "Origin header is required for state-changing requests.",
+                        "code": 403,
+                    },
+                )
+
+            allowed = {o.rstrip("/") for o in settings.CORS_ORIGINS}
+            if effective_origin.rstrip("/") not in allowed:
+                logger.warning(
+                    f"[CSRF] Blocked request from origin={effective_origin} "
+                    f"method={request.method} path={path}"
+                )
+                return JSONResponse(
+                    status_code=403,
+                    content={
+                        "error": "CSRF_REJECTED",
+                        "detail": "Request origin is not allowed.",
+                        "code": 403,
+                    },
+                )
 
         return await call_next(request)

@@ -234,18 +234,20 @@ async def refresh_token(body: TokenRefreshRequest, session: AsyncSession = Depen
             detail={"error": "USER_NOT_FOUND", "detail": "User no longer exists.", "code": 401},
         )
 
-    # Revoke the old refresh token
-    await revoke_refresh_token(user_id)
-
     # Issue new access + refresh tokens (rotation)
     token_data = {"sub": user["email"], "user_id": user["id"]}
     new_access = create_access_token(token_data)
     new_refresh = create_refresh_token(token_data)
 
-    # Store the new refresh token's JTI
+    # Store the new refresh token BEFORE revoking the old one.
+    # This prevents a window where the user has no valid token
+    # if the store operation fails after revocation.
     new_payload = decode_token(new_refresh)
     if new_payload and new_payload.get("jti"):
         await store_refresh_token(user["id"], new_payload["jti"])
+
+    # Now revoke the old refresh token
+    await revoke_refresh_token(user_id)
 
     return TokenRefreshResponse(access_token=new_access, refresh_token=new_refresh)
 

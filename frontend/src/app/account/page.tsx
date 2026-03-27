@@ -274,13 +274,13 @@ export default function AccountPage() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                                             <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">{t('styleRating')}</div>
-                                            <div className="text-3xl font-extrabold text-green-400 mb-1">92%</div>
-                                            <div className="text-xs text-white/50">{t('basedOnColorAdherence')}</div>
+                                            <div className="text-3xl font-extrabold text-white/30 mb-1">&mdash;</div>
+                                            <div className="text-xs text-white/50">Coming soon</div>
                                         </div>
                                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                                             <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">{t('savedOutfits')}</div>
-                                            <div className="text-3xl font-extrabold text-white mb-1">14</div>
-                                            <div className="text-xs text-white/50">{t('inYourDigitalWardrobe')}</div>
+                                            <div className="text-3xl font-extrabold text-white/30 mb-1">&mdash;</div>
+                                            <div className="text-xs text-white/50">Coming soon</div>
                                         </div>
                                         <div className="col-span-2 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
                                             <div className="flex items-start gap-4">

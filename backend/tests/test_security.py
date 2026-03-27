@@ -188,7 +188,7 @@ async def test_health_is_public(client):
 @pytest.mark.anyio
 async def test_analyze_requires_auth(client):
     """Analyze endpoint should return 401 without token."""
-    response = await client.post("/api/analyze")
+    response = await client.post("/api/analyze", headers={"Origin": "http://localhost:3000"})
     assert response.status_code in (401, 422, 503)  # 401 no auth, 422 missing file, 503 no DB
 
 
