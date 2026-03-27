@@ -12,9 +12,13 @@ spec:
       labels:
         app: lumiqe-backend
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
       - name: backend
-        image: lumiqe/backend:latest
+        image: lumiqe/backend:0.1.0
         ports:
         - containerPort: 8000
         envFrom:
@@ -58,6 +62,12 @@ spec:
       target:
         type: Utilization
         averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 75
 ---
 apiVersion: v1
 kind: Service

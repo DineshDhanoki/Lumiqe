@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "0 2 * * *"  # Daily at 2:00 AM UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          restartPolicy: OnFailure
+          containers:
+          - name: pg-backup
+            image: postgres:16.2
+            command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
+              TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+              BACKUP_FILE="/backups/lumiqe-${TIMESTAMP}.sql.gz"
+
+              echo "[backup] Starting pg_dump at $(date -u)"
+              PGPASSWORD="${POSTGRES_PASSWORD}" pg_dump \
+                -h postgres-primary-headless \
+                -U "${POSTGRES_USER}" \
+                -d lumiqe \
+                --no-owner \
+                --clean \
+                --if-exists \
+                | gzip > "${BACKUP_FILE}"
+
+              SIZE=$(stat -c%s "${BACKUP_FILE}" 2>/dev/null || echo "unknown")
+              echo "[backup] Completed: ${BACKUP_FILE} (${SIZE} bytes)"
+
+              # Prune backups older than 30 days
+              find /backups -name "lumiqe-*.sql.gz" -mtime +30 -delete
+              echo "[backup] Pruned backups older than 30 days"
+            env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            volumeMounts:
+            - name: backup-storage
+              mountPath: /backups
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+          volumes:
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: postgres-backup-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-backup-pvc
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 20Gi
