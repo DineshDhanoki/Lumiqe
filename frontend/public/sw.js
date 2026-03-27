@@ -56,6 +56,42 @@ function offlineJsonResponse() {
     );
 }
 
+// ─── Push Notification Handler ────────────────────────────
+self.addEventListener('push', (event) => {
+    let data = { title: 'Lumiqe', body: 'You have a new notification', url: '/' };
+    try {
+        data = event.data ? event.data.json() : data;
+    } catch {
+        // Use defaults if JSON parsing fails
+    }
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: '/icon-192.png',
+            badge: '/icon-192.png',
+            data: { url: data.url || '/' },
+            vibrate: [100, 50, 100],
+        })
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = event.notification.data?.url || '/';
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window' }).then((clients) => {
+            for (const client of clients) {
+                if (client.url.includes(url) && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            return self.clients.openWindow(url);
+        })
+    );
+});
+
+// ─── Fetch Handler ────────────────────────────────────────
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
