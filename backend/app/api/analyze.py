@@ -57,9 +57,15 @@ def _get_engine():
 async def _run_cv_analysis(image_bytes: bytes) -> dict:
     """Run the CV pipeline via Celery if available, else ThreadPool fallback."""
     if is_celery_available():
-        from app.tasks.cv_tasks import analyze_image_task
+        from app.tasks.cv_tasks import get_analyze_task
+        task = get_analyze_task()
+        if task is None:
+            # Fallback if task registration failed
+            engine = _get_engine()
+            loop = asyncio.get_running_loop()
+            return await loop.run_in_executor(_cv_executor, engine.analyze_bytes, image_bytes)
         # Celery tasks need JSON-serializable args — hex-encode the bytes
-        async_result = analyze_image_task.delay(image_bytes.hex())
+        async_result = task.delay(image_bytes.hex())
         # Wait for result with timeout (Celery task has 60s hard limit)
         loop = asyncio.get_running_loop()
         result = await loop.run_in_executor(None, async_result.get, 55)

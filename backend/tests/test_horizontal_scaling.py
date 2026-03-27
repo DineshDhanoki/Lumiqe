@@ -41,13 +41,13 @@ class TestCeleryIntegration:
         """_run_cv_analysis must have both Celery and ThreadPool code paths."""
         from app.api import analyze as analyze_module
         source = inspect.getsource(analyze_module._run_cv_analysis)
-        assert "analyze_image_task" in source, "Missing Celery task dispatch"
+        assert "get_analyze_task" in source, "Missing Celery task dispatch"
         assert "_cv_executor" in source, "Missing ThreadPool fallback"
 
     def test_celery_task_module_exists(self):
-        """CV Celery task module must exist."""
+        """CV Celery task module must exist with lazy getter."""
         from app.tasks import cv_tasks
-        assert hasattr(cv_tasks, "celery_app")
+        assert hasattr(cv_tasks, "get_analyze_task")
 
     def test_celery_worker_k8s_deployment_exists(self):
         """K8s must have a Celery worker deployment."""
