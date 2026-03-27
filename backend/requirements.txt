@@ -49,8 +49,8 @@ httpx==0.28.1
 aiohttp==3.13.3
 werkzeug==3.1.6
 
-# Redis async client (rate limiting)
-redis[asyncio]==7.3.0
+# Redis async client (rate limiting + Celery broker)
+redis[asyncio]==5.2.1
 
 # Task queue (horizontal CV pipeline scaling)
 celery[redis]==5.5.3

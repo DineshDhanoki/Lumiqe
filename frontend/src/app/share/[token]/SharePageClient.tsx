@@ -33,8 +33,6 @@ export default function SharePageClient({ token }: { token: string }) {
         return url.toString();
     };
 
-    const shareUrl = baseShareUrl;
-
     const copyLink = () => {
         navigator.clipboard.writeText(buildShareUrl('copy_link'));
         setCopied(true);
