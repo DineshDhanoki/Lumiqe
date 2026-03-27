@@ -35,7 +35,7 @@ async def get_or_create_referral_code(
 
     return ReferralCodeResponse(
         referral_code=code,
-        referral_url=f"https://lumiqe.in/?ref={code}",
+        referral_url=f"https://lumiqe.in/?ref={code}&utm_source=referral&utm_medium=invite&utm_campaign=referral_program",
         referral_count=current_user.get("referral_count", 0),
     )
 

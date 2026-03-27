@@ -284,6 +284,13 @@ async def stripe_webhook(
         customer_id = data.get("customer")
         logger.warning(f"Payment failed for customer {customer_id}")
 
+        # Notify the user via email so they can update their payment method
+        if customer_id:
+            user = await user_repo.get_by_stripe_customer_id(session, customer_id)
+            if user:
+                from app.services.email import send_payment_failed_email
+                send_payment_failed_email(user["email"], user.get("name", ""))
+
     # Record processed webhook for DB-level idempotency
     if event_id:
         from app.models import Event

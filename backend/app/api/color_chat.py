@@ -4,8 +4,12 @@ Lumiqe — AI Stylist Chat Endpoint.
 Conversational AI color & style advisor powered by Groq (Llama 3.3 70B).
 Users can ask anything about their season, occasions, outfit combinations,
 shopping guidance, and professional styling advice.
+
+Chat history is persisted server-side in Redis (7-day TTL) so users
+can continue conversations across sessions.
 """
 
+import json
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -19,6 +23,9 @@ from app.core.security import sanitize_llm_input
 logger = logging.getLogger("lumiqe.api.color_chat")
 router = APIRouter(prefix="/api", tags=["AI Stylist Chat"])
 
+_CHAT_HISTORY_TTL = 7 * 24 * 3600  # 7 days
+_CHAT_HISTORY_MAX = 40  # max messages stored per user
+
 # ─── Lazy Groq Singleton ────────────────────────────────────
 _groq_client = None
 
@@ -30,6 +37,35 @@ def _get_groq_client():
         from groq import Groq
         _groq_client = Groq(api_key=settings.GROQ_API_KEY)
     return _groq_client
+
+async def _store_chat_history(user_id: int, messages: list[dict]) -> None:
+    """Store chat history in Redis with TTL. Graceful on failure."""
+    try:
+        from app.core.rate_limiter import _redis_client, _redis_available
+        if not _redis_available or not _redis_client:
+            return
+        key = f"lumiqe:chat_history:{user_id}"
+        # Keep only the last N messages
+        trimmed = messages[-_CHAT_HISTORY_MAX:]
+        await _redis_client.set(key, json.dumps(trimmed), ex=_CHAT_HISTORY_TTL)
+    except Exception as exc:
+        logger.debug(f"Could not store chat history: {exc}")
+
+
+async def _load_chat_history(user_id: int) -> list[dict]:
+    """Load chat history from Redis. Returns empty list on failure."""
+    try:
+        from app.core.rate_limiter import _redis_client, _redis_available
+        if not _redis_available or not _redis_client:
+            return []
+        key = f"lumiqe:chat_history:{user_id}"
+        raw = await _redis_client.get(key)
+        if raw:
+            return json.loads(raw)
+    except Exception as exc:
+        logger.debug(f"Could not load chat history: {exc}")
+    return []
+
 
 STYLIST_SYSTEM_PROMPT = """You are Lumiqe's elite personal color stylist — the equivalent of a high-end professional \
 color consultant combined with a celebrity wardrobe stylist.
@@ -129,9 +165,19 @@ async def color_chat(
             metal=body.metal,
         )
 
+        # Load server-side history (for returning users) and merge with client history
+        server_history = await _load_chat_history(current_user["id"])
+
         # Build message history (keep last 20 validated messages for context)
         messages = [{"role": "system", "content": system_prompt}]
-        for msg in body.safe_history:
+
+        # Prefer client history if provided, fall back to server history
+        chat_history = body.safe_history if body.history else [
+            ChatMessage(role=m["role"], content=m["content"])
+            for m in server_history
+            if m.get("role") in ("user", "assistant")
+        ]
+        for msg in chat_history[-20:]:
             messages.append({"role": msg.role, "content": msg.safe_content})
         messages.append({"role": "user", "content": user_message})
 
@@ -145,6 +191,13 @@ async def color_chat(
         reply = chat.choices[0].message.content.strip()
         logger.info(f"Color chat reply for {season} / {current_user['email']}")
 
+        # Persist the updated conversation server-side
+        updated_history = [
+            {"role": m["role"], "content": m["content"]}
+            for m in messages[1:]  # skip system prompt
+        ] + [{"role": "assistant", "content": reply}]
+        await _store_chat_history(current_user["id"], updated_history)
+
         return {"reply": reply, "season": season}
 
     except Exception as exc:
@@ -153,3 +206,12 @@ async def color_chat(
             status_code=502,
             detail={"error": "CHAT_FAILED", "detail": "AI stylist unavailable. Please try again.", "code": 502},
         )
+
+
+@router.get("/color-chat/history")
+async def get_chat_history(
+    current_user: dict = Depends(get_current_user),
+):
+    """Return server-stored chat history for the current user."""
+    history = await _load_chat_history(current_user["id"])
+    return {"history": history}

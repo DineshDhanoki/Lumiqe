@@ -270,6 +270,31 @@ def send_trial_reminder_email(
     return _send(to, "Your Lumiqe trial ends tomorrow", html)
 
 
+def send_payment_failed_email(to: str, name: str) -> bool:
+    """Send an email when a subscription payment fails."""
+    safe_name = escape(name)
+    html = f"""<!DOCTYPE html><html><head>{_BASE_STYLE}</head><body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LUMI<span class="accent">QE</span></div>
+        </div>
+        <div class="card">
+            <h2>Payment Failed</h2>
+            <p>Hi {safe_name}, we were unable to process your latest subscription payment.</p>
+            <p>Please update your payment method to keep your premium features active. Stripe will automatically retry in a few days.</p>
+            <div style="text-align: center; margin-top: 24px;">
+                <a href="{settings.FRONTEND_URL}/account" class="btn">Update Payment Method</a>
+            </div>
+            <p style="color: #71717a; font-size: 12px; margin-top: 24px;">
+                If you believe this is an error, please contact us at support@lumiqe.in.
+            </p>
+        </div>
+        {_FOOTER}
+    </div>
+    </body></html>"""
+    return _send(to, "Action Required: Payment Failed — Lumiqe", html)
+
+
 def send_subscription_confirmed_email(to: str, name: str, plan: str) -> bool:
     """Send an email when a premium subscription is confirmed."""
     safe_name = escape(name)
