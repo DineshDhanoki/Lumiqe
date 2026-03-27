@@ -139,7 +139,7 @@ export default function Dashboard() {
             .then((data: DailyOutfitData | null) => {
                 if (data) setDailyOutfit(data);
             })
-            .catch(() => { /* ignore — non-critical */ });
+            .catch((err) => { console.error('[dashboard] Daily outfit fetch failed:', err); });
     }, [status]);
 
     const _loadFromLocalStorage = useCallback(() => {

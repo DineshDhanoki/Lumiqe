@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 import threading
 from concurrent.futures import ThreadPoolExecutor
 
@@ -21,8 +22,11 @@ router = APIRouter(prefix="/api", tags=["Analysis"])
 # Minimum confidence for a scan to count against the user's quota
 _MIN_CONFIDENCE_TO_DEDUCT = 0.5
 
-# Bounded thread pool for CV pipeline — prevents OOM under load
-_cv_executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix="cv-pipeline")
+# Bounded thread pool for CV pipeline — scales with CPU, capped at 8
+_cv_executor = ThreadPoolExecutor(
+    max_workers=min(os.cpu_count() or 1, 8),
+    thread_name_prefix="cv-pipeline",
+)
 
 # ─── Lazy-load CV engine (thread-safe) ───────────────────────
 _engine = None
