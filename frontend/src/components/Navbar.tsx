@@ -14,6 +14,10 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalDefaultSignUp, setModalDefaultSignUp] = useState(false);
+
+    const openLogin = () => { setModalDefaultSignUp(false); setIsModalOpen(true); };
+    const openSignUp = () => { setModalDefaultSignUp(true); setIsModalOpen(true); };
 
     const isPremium = !!session?.isPremium;
 
@@ -87,10 +91,10 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <button onClick={() => setIsModalOpen(true)} className="text-sm font-medium text-white/90 hover:text-white px-4 py-2 transition-colors">
+                                <button onClick={openLogin} className="text-sm font-medium text-white/90 hover:text-white px-4 py-2 transition-colors">
                                     Log In
                                 </button>
-                                <button onClick={() => setIsModalOpen(true)} className="text-sm font-medium bg-red-600 hover:bg-red-500 text-white px-5 py-2 rounded-full transition-colors shadow-[0_0_15px_-3px_rgba(220,38,38,0.4)]">
+                                <button onClick={openSignUp} className="text-sm font-medium bg-red-600 hover:bg-red-500 text-white px-5 py-2 rounded-full transition-colors shadow-[0_0_15px_-3px_rgba(220,38,38,0.4)]">
                                     Sign Up
                                 </button>
                             </>
@@ -153,10 +157,10 @@ export default function Navbar() {
                                 </>
                             ) : (
                                 <>
-                                    <button onClick={() => { setIsMobileMenuOpen(false); setIsModalOpen(true); }} className="text-base font-medium text-white w-full py-2 text-left">
+                                    <button onClick={() => { setIsMobileMenuOpen(false); openLogin(); }} className="text-base font-medium text-white w-full py-2 text-left">
                                         Log In
                                     </button>
-                                    <button onClick={() => { setIsMobileMenuOpen(false); setIsModalOpen(true); }} className="text-base font-medium bg-red-600 text-white w-full py-2 rounded-full text-center">
+                                    <button onClick={() => { setIsMobileMenuOpen(false); openSignUp(); }} className="text-base font-medium bg-red-600 text-white w-full py-2 rounded-full text-center">
                                         Sign Up
                                     </button>
                                 </>
@@ -167,7 +171,7 @@ export default function Navbar() {
             </motion.nav>
 
             {/* Sign In / Sign Up Modal */}
-            <SignInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <SignInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} defaultSignUp={modalDefaultSignUp} />
         </>
     );
 }

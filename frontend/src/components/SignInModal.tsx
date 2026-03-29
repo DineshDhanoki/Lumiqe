@@ -11,6 +11,7 @@ interface SignInModalProps {
     isOpen: boolean;
     onClose: () => void;
     callbackUrl?: string;
+    defaultSignUp?: boolean;
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,9 +31,9 @@ function getPasswordStrength(password: string): { score: number; label: string; 
     return { score, label: 'Strong', color: 'bg-green-500' };
 }
 
-export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze' }: SignInModalProps) {
+export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze', defaultSignUp = false }: SignInModalProps) {
     const router = useRouter();
-    const [isSignUp, setIsSignUp] = useState(false);
+    const [isSignUp, setIsSignUp] = useState(defaultSignUp);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
