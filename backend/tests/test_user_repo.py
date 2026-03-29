@@ -73,7 +73,7 @@ def test_create_signature():
 
     sig = inspect.signature(user_repo.create)
     params = list(sig.parameters.keys())
-    assert params == ["session", "name", "email", "password_hash"]
+    assert params == ["session", "name", "email", "password_hash", "phone"]
 
 
 def test_upgrade_to_premium_signature():
