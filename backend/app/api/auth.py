@@ -69,7 +69,7 @@ async def register(user: UserCreate, request: Request, session: AsyncSession = D
         )
 
     password_hash = hash_password(user.password)
-    new_user = await user_repo.create(session, user.name, user.email, password_hash)
+    new_user = await user_repo.create(session, user.name, user.email, password_hash, phone=user.phone)
     tokens = await _build_tokens(new_user)
     logger.info(f"[SECURITY] User registered: {user.email} ip={client_ip} req={request_id}")
 

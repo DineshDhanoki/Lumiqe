@@ -49,6 +49,7 @@ class User(Base):
     stripe_subscription_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     season: Mapped[str | None] = mapped_column(String(50), nullable=True)
     palette: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
     gender: Mapped[str | None] = mapped_column(String(20), nullable=True)
     body_shape: Mapped[str | None] = mapped_column(String(30), nullable=True)
     style_personality: Mapped[str | None] = mapped_column(String(30), nullable=True)
@@ -252,6 +253,7 @@ class Product(Base):
             "url": self.url,
             "category": self.category,
             "season": self.season,
+            "phone": self.phone,
             "gender": self.gender,
             "vibe": self.vibe,
             "tier": self.tier,

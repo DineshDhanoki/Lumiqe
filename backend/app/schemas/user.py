@@ -9,6 +9,20 @@ class UserCreate(BaseModel):
     name: str
     email: EmailStr
     password: str
+    phone: str | None = None
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        v = v.strip()
+        if not v:
+            return None
+        cleaned = re.sub(r'[\s\-\(\)\+]', '', v)
+        if not re.match(r'^\d{7,15}$', cleaned):
+            raise ValueError("Phone number must be 7-15 digits")
+        return v
 
     @field_validator("name")
     @classmethod
@@ -61,6 +75,7 @@ class ProfileResponse(BaseModel):
     id: int
     name: str
     email: str
+    phone: str | None = None
     is_premium: bool = False
     free_scans_left: int = 0
     credits: int = 0

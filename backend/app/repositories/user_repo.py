@@ -49,6 +49,7 @@ async def create(
     name: str,
     email: str,
     password_hash: str | None = None,
+    phone: str | None = None,
 ) -> dict:
     """Insert a new user with a 3-day premium trial. Password must already be hashed."""
     from datetime import datetime, timezone, timedelta
@@ -56,6 +57,7 @@ async def create(
         name=name,
         email=email.lower(),
         password_hash=password_hash,
+        phone=phone,
         trial_ends_at=datetime.now(timezone.utc) + timedelta(days=3),
     )
     session.add(user)
