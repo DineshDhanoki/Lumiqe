@@ -16,42 +16,43 @@ describe('SignInModal Component', () => {
         expect(screen.getByLabelText('Password')).toBeInTheDocument();
     });
 
-    it('shows name field when in sign-up mode', async () => {
+    it('shows name fields when in sign-up mode', async () => {
         const user = userEvent.setup();
         render(<SignInModal {...defaultProps} />);
 
-        // Switch to sign-up mode
-        const toggleButton = screen.getByText(/Don't have an account\? Sign Up/i);
+        // Toggle button text is split across elements — use a role query
+        const toggleButton = screen.getByRole('button', { name: /sign up/i });
         await user.click(toggleButton);
 
-        expect(screen.getByLabelText('Full name')).toBeInTheDocument();
+        expect(screen.getByLabelText('First name')).toBeInTheDocument();
+        expect(screen.getByLabelText('Last name')).toBeInTheDocument();
     });
 
-    it('shows "Forgot your password?" link in login mode', () => {
+    it('shows "Forgot password?" link in login mode', () => {
         render(<SignInModal {...defaultProps} />);
-        expect(screen.getByText('Forgot your password?')).toBeInTheDocument();
+        expect(screen.getByText('Forgot password?')).toBeInTheDocument();
     });
 
     it('hides forgot password link in sign-up mode', async () => {
         const user = userEvent.setup();
         render(<SignInModal {...defaultProps} />);
 
-        const toggleButton = screen.getByText(/Don't have an account\? Sign Up/i);
+        const toggleButton = screen.getByRole('button', { name: /sign up/i });
         await user.click(toggleButton);
 
-        expect(screen.queryByText('Forgot your password?')).not.toBeInTheDocument();
+        expect(screen.queryByText('Forgot password?')).not.toBeInTheDocument();
     });
 
     it('shows error message when error state is set', async () => {
         const user = userEvent.setup();
         render(<SignInModal {...defaultProps} />);
 
-        // Submit the form without filling in fields to trigger the error
         const submitButton = screen.getByRole('button', { name: /Sign In/i });
         await user.click(submitButton);
 
-        expect(screen.getByRole('alert')).toBeInTheDocument();
-        expect(screen.getByText('Please fill in all required fields.')).toBeInTheDocument();
+        // Inline field errors appear instead of a top-level alert
+        expect(screen.getByText('Email is required.')).toBeInTheDocument();
+        expect(screen.getByText('Password is required.')).toBeInTheDocument();
     });
 
     it('email validation shows error for invalid email format', async () => {
@@ -59,8 +60,6 @@ describe('SignInModal Component', () => {
 
         const emailInput = screen.getByLabelText('Email address') as HTMLInputElement;
 
-        // React 19 controlled inputs: call the React onChange handler directly,
-        // then trigger blur after React has re-rendered with the new state.
         const getReactProps = (el: HTMLElement) => {
             const key = Object.keys(el).find(k => k.startsWith('__reactProps'));
             return key ? (el as Record<string, any>)[key] : {};
@@ -70,12 +69,11 @@ describe('SignInModal Component', () => {
             getReactProps(emailInput).onChange({ target: { value: 'invalid-email' } });
         });
 
-        // After re-render, trigger onBlur which reads updated state
         await act(async () => {
             const freshInput = screen.getByLabelText('Email address');
             getReactProps(freshInput).onBlur();
         });
 
-        expect(screen.getByText('Please enter a valid email address.')).toBeInTheDocument();
+        expect(screen.getByText('Enter a valid email address.')).toBeInTheDocument();
     });
 });
