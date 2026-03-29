@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, AlertCircle, Eye, EyeOff, Phone, User } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
@@ -34,6 +34,10 @@ function getPasswordStrength(password: string): { score: number; label: string; 
 export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze', defaultSignUp = false }: SignInModalProps) {
     const router = useRouter();
     const [isSignUp, setIsSignUp] = useState(defaultSignUp);
+
+    useEffect(() => {
+        if (isOpen) setIsSignUp(defaultSignUp);
+    }, [isOpen, defaultSignUp]);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
