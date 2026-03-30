@@ -8,6 +8,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { ClientShell } from "@/components/ClientShell";
+import { Analytics } from "@vercel/analytics/next";
 
 function SkipLink() {
   return (
@@ -60,6 +61,7 @@ export default function RootLayout({
             {children}
           </main>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
