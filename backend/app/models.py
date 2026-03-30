@@ -253,7 +253,6 @@ class Product(Base):
             "url": self.url,
             "category": self.category,
             "season": self.season,
-            "phone": self.phone,
             "gender": self.gender,
             "vibe": self.vibe,
             "tier": self.tier,

@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Audit dependencies for vulnerabilities
-        run: npm audit --audit-level=high || true
+        run: npm audit --audit-level=high
       - name: Type check
         run: npm run typecheck
       - name: Lint
@@ -89,11 +89,9 @@ jobs:
       - name: Audit Python dependencies for vulnerabilities
         run: |
           pip install pip-audit
-          pip-audit --strict --desc || true
+          pip-audit --strict --desc
       - name: Run tests
         timeout-minutes: 3
         run: >-
           pytest tests/ -x -q --tb=short --timeout=30
-          --ignore=tests/test_color_science.py
-          --ignore=tests/test_cv_pipeline.py
           -p no:warnings
