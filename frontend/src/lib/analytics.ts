@@ -44,7 +44,7 @@ export function track(event: string, properties?: EventProperties): void {
 
 // ─── Backend event tracking (fire-and-forget) ──────────────
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { API_BASE } from '@/lib/api';
 
 function trackBackend(eventName: string, properties?: EventProperties): void {
   try {

@@ -1,8 +1,7 @@
 import { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+import { API_BASE } from '@/lib/api';
 
 const ACCESS_TOKEN_MAX_AGE_MS = 28 * 60 * 1000; // 28 minutes
 
@@ -52,10 +51,12 @@ declare module 'next-auth/jwt' {
 // ─── Auth Configuration ─────────────────────────────────────
 export const authOptions: AuthOptions = {
     providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID || '',
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-        }),
+        ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+            ? [GoogleProvider({
+                clientId: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            })]
+            : []),
         CredentialsProvider({
             name: 'Credentials',
             credentials: {

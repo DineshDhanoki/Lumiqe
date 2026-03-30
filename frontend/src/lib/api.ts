@@ -5,9 +5,13 @@
  * injects the backend JWT server-side. The token is never exposed to client JS.
  *
  * Usage:
- *   import { apiFetch } from '@/lib/api';
+ *   import { apiFetch, API_BASE } from '@/lib/api';
  *   const res = await apiFetch('/api/analyze', { method: 'POST', body: formData });
  */
+
+if (!process.env.NEXT_PUBLIC_API_URL && process.env.NODE_ENV === 'production') {
+    throw new Error('NEXT_PUBLIC_API_URL is required in production');
+}
 
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -42,4 +46,3 @@ export async function apiFetch(
         headers,
     });
 }
-

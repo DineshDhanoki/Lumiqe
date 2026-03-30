@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Users } from 'lucide-react';
+import { API_BASE } from '@/lib/api';
 
 interface Celebrity {
     name: string;
@@ -52,7 +53,7 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
         if (!season || fetchedSeason) return;
         setFetchedSeason(true);
 
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        const apiBase = API_BASE;
         fetch(`${apiBase}/api/celebrity/match?season=${encodeURIComponent(season)}`)
             .then(res => (res.ok ? res.json() : null))
             .then(data => {

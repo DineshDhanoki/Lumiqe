@@ -1,7 +1,9 @@
 """API — Stripe payment endpoints for subscription management."""
 
 import asyncio
+import hashlib
 import logging
+import time
 
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -82,6 +84,7 @@ async def create_checkout_session(
                 email=current_user["email"],
                 name=current_user.get("name", ""),
                 metadata={"lumiqe_user_id": str(current_user["id"])},
+                idempotency_key=f"cust:{current_user['id']}",
             )
             stripe_customer_id = customer.id
             await user_repo.set_stripe_customer_id(session, current_user["id"], stripe_customer_id)
@@ -107,6 +110,10 @@ async def create_checkout_session(
                 "quantity": 1,
             }]
 
+        # Idempotency key: same user + plan within a 60s window = same session
+        window = int(time.time()) // 60
+        idem_key = hashlib.sha256(f"checkout:{current_user['id']}:{body.plan}:{window}".encode()).hexdigest()
+
         checkout_session = await asyncio.to_thread(
             stripe.checkout.Session.create,
             customer=stripe_customer_id,
@@ -117,6 +124,7 @@ async def create_checkout_session(
             success_url=f"{settings.FRONTEND_URL}/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=f"{settings.FRONTEND_URL}/pricing",
             metadata={"lumiqe_user_id": str(current_user["id"])},
+            idempotency_key=idem_key,
         )
 
         return {"checkout_url": checkout_session.url}
@@ -147,9 +155,14 @@ async def buy_credits(
                 email=current_user["email"],
                 name=current_user.get("name", ""),
                 metadata={"lumiqe_user_id": str(current_user["id"])},
+                idempotency_key=f"cust:{current_user['id']}",
             )
             stripe_customer_id = customer.id
             await user_repo.set_stripe_customer_id(session, current_user["id"], stripe_customer_id)
+
+        # Idempotency key: same user + pack within a 60s window = same session
+        window = int(time.time()) // 60
+        idem_key = hashlib.sha256(f"credits:{current_user['id']}:{body.pack}:{window}".encode()).hexdigest()
 
         checkout_session = await asyncio.to_thread(
             stripe.checkout.Session.create,
@@ -172,6 +185,7 @@ async def buy_credits(
                 "type": "credit_purchase",
                 "credits": str(pack["credits"]),
             },
+            idempotency_key=idem_key,
         )
 
         return {"checkout_url": checkout_session.url}

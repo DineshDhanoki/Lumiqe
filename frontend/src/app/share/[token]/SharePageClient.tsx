@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight, Copy, Check } from 'lucide-react';
 import CelebrityMatch from '@/components/CelebrityMatch';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { API_BASE } from '@/lib/api';
 
 interface ShareData {
     season: string;

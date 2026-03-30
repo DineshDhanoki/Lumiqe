@@ -7,8 +7,8 @@
 
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+import { API_BASE } from '@/lib/api';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const MAX_BODY_SIZE = 15 * 1024 * 1024; // 15MB
 const REQUEST_TIMEOUT_MS = 30_000; // 30 seconds
 
