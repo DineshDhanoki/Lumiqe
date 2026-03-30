@@ -36,7 +36,8 @@ async function handler(
         'styling-tips', 'shopping-agent', 'products', 'outfit', 'palette-card',
         'stripe/', 'referral/', 'share/', 'profile', 'events', 'health',
         'analysis/', 'admin/', 'notifications', 'wishlist', 'wardrobe',
-        'saved-outfits', 'community/', 'b2b/', 'price-alerts',
+        'saved-outfits', 'community/', 'b2b/', 'price-alerts', 'demo-results',
+        'celebrity/',
     ];
     if (!ALLOWED_PREFIXES.some(prefix => apiPath.startsWith(prefix))) {
         return NextResponse.json(

@@ -10,7 +10,7 @@
  */
 
 if (!process.env.NEXT_PUBLIC_API_URL && process.env.NODE_ENV === 'production') {
-    throw new Error('NEXT_PUBLIC_API_URL is required in production');
+    console.error('[Lumiqe] NEXT_PUBLIC_API_URL is not set — API calls will fail');
 }
 
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
