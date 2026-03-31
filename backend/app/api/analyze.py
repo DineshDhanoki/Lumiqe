@@ -150,6 +150,7 @@ async def _persist_analysis_result(
             logger.info(f"Saved analysis {analysis_id} for {current_user['email']}: {season_name}")
             loop = asyncio.get_running_loop()
             await session.commit()
+            logger.info(f"Committed analysis {analysis_id} to database")
             loop.run_in_executor(None, send_analysis_complete_email,
                 current_user["email"],
                 current_user.get("name", ""),
