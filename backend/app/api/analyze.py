@@ -149,6 +149,7 @@ async def _persist_analysis_result(
             analysis_id = saved["id"]
             logger.info(f"Saved analysis {analysis_id} for {current_user['email']}: {season_name}")
             loop = asyncio.get_running_loop()
+            await session.commit()
             loop.run_in_executor(None, send_analysis_complete_email,
                 current_user["email"],
                 current_user.get("name", ""),
@@ -273,6 +274,28 @@ async def analyze_multi_image(
     max_requests = 20 if current_user and current_user.get("is_premium") else 3
     await check_rate_limit(rate_key, max_requests)
 
+    # Enforce scan quota for logged-in non-premium users
+    if current_user and not current_user.get("is_premium"):
+        has_trial = False
+        trial_ends = current_user.get("trial_ends_at")
+        if trial_ends:
+            from datetime import datetime, timezone
+            try:
+                trial_dt = datetime.fromisoformat(trial_ends) if isinstance(trial_ends, str) else trial_ends
+                has_trial = trial_dt > datetime.now(timezone.utc)
+            except (ValueError, TypeError):
+                pass
+
+        if not has_trial and current_user["free_scans_left"] <= 0 and current_user.get("credits", 0) <= 0:
+            raise HTTPException(
+                status_code=403,
+                detail={
+                    "error": "TRIAL_EXPIRED",
+                    "detail": "No free scans or credits remaining. Please upgrade or buy credits to continue.",
+                    "code": 403,
+                },
+            )
+
     # Validate and read all images first
     all_bytes = []
     for img in images:
@@ -313,5 +336,11 @@ async def analyze_multi_image(
     best_result["confidence"] = round(avg_confidence, 4)
     best_result["images_analyzed"] = len(results)
     best_result["images_submitted"] = len(all_bytes)
+
+    # Persist result for authenticated users
+    analysis_id = None
+    if current_user:
+        analysis_id = await _persist_analysis_result(current_user, best_result)
+    best_result["analysis_id"] = analysis_id
 
     return best_result
