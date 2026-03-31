@@ -1,7 +1,9 @@
 # Lumiqe — Development Services
-# Start: docker compose up -d
-# Stop:  docker compose down
-# Reset: docker compose down -v (deletes data)
+# Start:     docker compose up -d
+# Stop:      docker compose down
+# Reset:     docker compose down -v  (deletes all data)
+# Logs:      docker compose logs -f backend
+# Rebuild:   docker compose up -d --build backend
 
 services:
   postgres:
@@ -35,6 +37,63 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lumiqe-backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/lumiqe_dev
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lumiqe-celery
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/lumiqe_dev
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+    command: celery -A app.core.celery_app worker --loglevel=info --concurrency=2
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lumiqe-frontend
+    restart: unless-stopped
+    env_file: ./frontend/.env.local
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   lumiqe_pgdata:
