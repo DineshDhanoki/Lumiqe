@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+
+# Dependencies — reinstalled during build
+node_modules
+
+# Next.js build output — rebuilt during build
+.next
+
+# Tests
+tests/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Docs
+*.md
+
+# Type checking artifacts
+*.tsbuildinfo

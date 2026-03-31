@@ -1,0 +1,52 @@
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist
+build
+.eggs
+
+# Virtual environments
+.venv
+venv
+env
+
+# Tests & coverage
+tests/
+.hypothesis/
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Development tools
+.ruff_cache/
+.mypy_cache/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Docs & non-runtime files
+*.md
+DEPLOY_CHECKLIST.md
+STRIPE_TESTING.md
+
+# Model weights — downloaded at runtime via model_downloader.py
+*.pth
+*.tflite
