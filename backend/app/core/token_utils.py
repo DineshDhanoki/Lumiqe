@@ -13,8 +13,6 @@ import logging
 import secrets
 from datetime import datetime, timedelta, timezone
 
-from app.core.config import settings
-
 logger = logging.getLogger("lumiqe.token_utils")
 
 # ─── Configuration ──────────────────────────────────────────
@@ -54,10 +52,19 @@ def _get_redis():
 
 
 def _require_redis_in_prod(redis_available: bool) -> None:
-    """Raise if Redis was configured but isn't available (production safety)."""
-    if not redis_available and settings.REDIS_URL:
+    """Raise if Redis was initialized at startup but is now unavailable.
+
+    Checks the canonical _redis_available flag from rate_limiter (set during
+    init_redis at startup).  If Redis was never initialized (tests, local dev
+    without Redis) the in-memory fallback is allowed.
+    """
+    try:
+        from app.core.rate_limiter import _redis_available as started_with_redis
+    except ImportError:
+        return
+    if started_with_redis and not redis_available:
         raise RuntimeError(
-            "Redis is configured (REDIS_URL set) but not available. "
+            "Redis was available at startup but is now unreachable. "
             "Token operations require Redis in production."
         )
 
