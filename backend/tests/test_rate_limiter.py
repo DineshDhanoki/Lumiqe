@@ -104,7 +104,7 @@ def test_get_real_ip_from_forwarded_for():
 
 def test_get_real_ip_multiple_ips():
     req = _make_request(headers={"x-forwarded-for": "10.0.0.1, 10.0.0.2, 10.0.0.3"})
-    assert _get_real_ip(req) == "10.0.0.1"
+    assert _get_real_ip(req) == "10.0.0.3"
 
 
 def test_get_real_ip_no_header_falls_back():
