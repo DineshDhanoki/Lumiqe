@@ -65,15 +65,43 @@ async def check_rate_limit(
     """
     Check rate limit for the given key. Raises 429 if exceeded.
 
+    In production (Redis was available at startup), a Redis failure mid-flight
+    returns 503 rather than silently falling back to per-pod in-memory dicts.
+
     Args:
         key: Unique identifier (e.g., "analyze:user@email.com" or "analyze:ip:1.2.3.4")
         max_requests: Maximum requests allowed in the window
         window_seconds: Sliding window duration in seconds (default 1 hour)
     """
     if _redis_available and _redis_client:
-        await _check_redis(key, max_requests, window_seconds)
-    else:
+        try:
+            await _check_redis(key, max_requests, window_seconds)
+        except HTTPException:
+            raise  # re-raise 429s
+        except Exception as exc:
+            logger.error(f"Redis rate-limit check failed: {exc}")
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "error": "RATE_LIMITER_UNAVAILABLE",
+                    "detail": "Rate limiting service temporarily unavailable. Please retry.",
+                    "code": 503,
+                },
+            )
+    elif not settings.REDIS_URL:
+        # Local dev with no Redis configured — in-memory is fine
         _check_memory(key, max_requests, window_seconds)
+    else:
+        # Redis was configured but never connected — shouldn't happen in prod
+        # (startup would have failed), but be safe
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "error": "RATE_LIMITER_UNAVAILABLE",
+                "detail": "Rate limiting service is not available.",
+                "code": 503,
+            },
+        )
 
 
 async def _check_redis(key: str, max_requests: int, window_seconds: int) -> None:
@@ -145,11 +173,15 @@ def _check_memory(key: str, max_requests: int, window_seconds: int) -> None:
 
 
 def _get_real_ip(request: Request) -> str:
-    """Extract the real client IP from X-Forwarded-For header or fallback to client.host."""
+    """Extract the real client IP from X-Forwarded-For header or fallback to client.host.
+
+    Takes the rightmost IP — this is the one added by your trusted reverse proxy.
+    The leftmost IP is client-supplied and trivially spoofable.
+    """
     forwarded_for = request.headers.get("x-forwarded-for")
     if forwarded_for:
-        # X-Forwarded-For is comma-separated; first IP is the original client
-        return forwarded_for.split(",")[0].strip()
+        # Rightmost entry is set by the nearest trusted proxy
+        return forwarded_for.split(",")[-1].strip()
     return request.client.host if request.client else "unknown"
 
 

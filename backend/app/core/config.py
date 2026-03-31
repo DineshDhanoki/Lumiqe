@@ -64,8 +64,17 @@ class Settings(BaseSettings):
             raise ValueError("JWT_SECRET_KEY must be at least 32 characters long")
         return self
 
-    # Redis (Rate Limiting)
+    # Redis (Rate Limiting, Token Store, Chat History)
     REDIS_URL: str | None = None
+
+    @model_validator(mode="after")
+    def _validate_redis_in_production(self) -> "Settings":
+        if not self.DEBUG and not self.REDIS_URL:
+            raise ValueError(
+                "REDIS_URL is required in production (DEBUG=False). "
+                "In-memory fallbacks are not safe for multi-pod deployments."
+            )
+        return self
 
     # Stripe
     STRIPE_SECRET_KEY: str = ""

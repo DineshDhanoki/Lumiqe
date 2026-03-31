@@ -13,6 +13,8 @@ import logging
 import secrets
 from datetime import datetime, timedelta, timezone
 
+from app.core.config import settings
+
 logger = logging.getLogger("lumiqe.token_utils")
 
 # ─── Configuration ──────────────────────────────────────────
@@ -51,6 +53,15 @@ def _get_redis():
         return None, False
 
 
+def _require_redis_in_prod(redis_available: bool) -> None:
+    """Raise if Redis was configured but isn't available (production safety)."""
+    if not redis_available and settings.REDIS_URL:
+        raise RuntimeError(
+            "Redis is configured (REDIS_URL set) but not available. "
+            "Token operations require Redis in production."
+        )
+
+
 # ─── Refresh Token Rotation Store ────────────────────────────
 
 _REFRESH_TOKEN_PREFIX = "lumiqe:refresh_jti:"
@@ -69,6 +80,7 @@ async def store_refresh_token(user_id: int, token_jti: str) -> None:
             ex=ttl_seconds,
         )
     else:
+        _require_redis_in_prod(redis_available)
         _refresh_jti_store[user_id] = token_jti
 
     logger.info(f"Stored refresh token JTI for user {user_id}")
@@ -87,6 +99,7 @@ async def is_refresh_token_valid(user_id: int, token_jti: str) -> bool:
             stored_jti = stored_jti.decode("utf-8")
         return stored_jti == token_jti
     else:
+        _require_redis_in_prod(redis_available)
         return _refresh_jti_store.get(user_id) == token_jti
 
 
@@ -97,6 +110,7 @@ async def revoke_refresh_token(user_id: int) -> None:
     if redis_available and redis_client:
         await redis_client.delete(f"{_REFRESH_TOKEN_PREFIX}{user_id}")
     else:
+        _require_redis_in_prod(redis_available)
         _refresh_jti_store.pop(user_id, None)
 
     logger.info(f"Revoked refresh token for user {user_id}")
@@ -134,6 +148,7 @@ async def generate_token(email: str, token_type: str) -> str:
             ex=ttl_seconds,
         )
     else:
+        _require_redis_in_prod(redis_available)
         # In-memory fallback with capacity management
         if len(_token_store) >= _MAX_TOKENS:
             evicted = _evict_expired()
@@ -201,6 +216,7 @@ async def validate_token(token: str, token_type: str) -> str | None:
         logger.info(f"Token validated and consumed for {email} ({token_type})")
         return email
     else:
+        _require_redis_in_prod(redis_available)
         entry = _token_store.get(token)
 
         if entry is None:
