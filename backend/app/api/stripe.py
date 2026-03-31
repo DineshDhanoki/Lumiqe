@@ -76,8 +76,9 @@ async def create_checkout_session(
         raise HTTPException(status_code=400, detail={"error": "INVALID_PLAN", "detail": "Invalid plan. Use 'monthly' or 'annual'.", "code": 400})
 
     try:
-        # Get or create Stripe customer
+        # Get or create Stripe customer — external API call first
         stripe_customer_id = current_user.get("stripe_customer_id")
+        newly_created_customer_id: str | None = None
         if not stripe_customer_id:
             customer = await asyncio.to_thread(
                 stripe.Customer.create,
@@ -87,7 +88,7 @@ async def create_checkout_session(
                 idempotency_key=f"cust:{current_user['id']}",
             )
             stripe_customer_id = customer.id
-            await user_repo.set_stripe_customer_id(session, current_user["id"], stripe_customer_id)
+            newly_created_customer_id = stripe_customer_id
 
         # Prefer pre-created Stripe Price IDs; fall back to inline price_data
         price_id = PLAN_TO_PRICE_ID.get(body.plan)
@@ -127,6 +128,12 @@ async def create_checkout_session(
             idempotency_key=idem_key,
         )
 
+        # Persist stripe_customer_id only after all Stripe calls succeed,
+        # so a DB write failure doesn't leave us with a Stripe customer we
+        # can't find next time (the idempotency key makes re-creation safe).
+        if newly_created_customer_id:
+            await user_repo.set_stripe_customer_id(session, current_user["id"], newly_created_customer_id)
+
         return {"checkout_url": checkout_session.url}
 
     except stripe.StripeError as e:
@@ -149,6 +156,7 @@ async def buy_credits(
 
     try:
         stripe_customer_id = current_user.get("stripe_customer_id")
+        newly_created_customer_id: str | None = None
         if not stripe_customer_id:
             customer = await asyncio.to_thread(
                 stripe.Customer.create,
@@ -158,7 +166,7 @@ async def buy_credits(
                 idempotency_key=f"cust:{current_user['id']}",
             )
             stripe_customer_id = customer.id
-            await user_repo.set_stripe_customer_id(session, current_user["id"], stripe_customer_id)
+            newly_created_customer_id = stripe_customer_id
 
         # Idempotency key: same user + pack within a 60s window = same session
         window = int(time.time()) // 60
@@ -187,6 +195,10 @@ async def buy_credits(
             },
             idempotency_key=idem_key,
         )
+
+        # Persist stripe_customer_id only after all Stripe calls succeed
+        if newly_created_customer_id:
+            await user_repo.set_stripe_customer_id(session, current_user["id"], newly_created_customer_id)
 
         return {"checkout_url": checkout_session.url}
 
@@ -318,7 +330,12 @@ async def stripe_webhook(
             properties={"event_id": event_id, "type": event_type},
         )
         session.add(webhook_event)
-        await session.flush()
+
+    # Commit explicitly before responding to Stripe.
+    # The get_db() auto-commit runs after the response is sent, so without
+    # this line Stripe receives 200 OK before the transaction is durable.
+    # A failed commit here returns a 500 → Stripe will retry the event.
+    await session.commit()
 
     return {"status": "ok"}
 
