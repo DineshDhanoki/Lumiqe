@@ -86,19 +86,19 @@ class TestCSRFProtection:
     async def test_csrf_allows_post_with_valid_origin(self, client):
         """POST with a valid allowed Origin header should pass CSRF check."""
         response = await client.post(
-            "/api/auth/login",
-            json={"email": "test@test.com", "password": "Test1234!"},
+            "/api/stripe/checkout",
+            json={"plan": "monthly"},
             headers={"Origin": "http://localhost:3000"},
         )
-        # Should NOT be 403 — may be 401 (bad creds) or 503 (no DB), but not CSRF
+        # Should NOT be 403 — may be 401 (no auth) or 503 (no DB), but not CSRF
         assert response.status_code != 403
 
     @pytest.mark.anyio
     async def test_csrf_blocks_post_with_bad_origin(self, client):
         """POST with an unknown Origin must be blocked."""
         response = await client.post(
-            "/api/auth/login",
-            json={"email": "test@test.com", "password": "Test1234!"},
+            "/api/stripe/checkout",
+            json={"plan": "monthly"},
             headers={"Origin": "https://evil-site.com"},
         )
         assert response.status_code == 403
