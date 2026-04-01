@@ -141,19 +141,17 @@ async def get_current_user(
 
 
 async def get_optional_db() -> AsyncGenerator[AsyncSession | None, None]:
-    """Yield a DB session if available, or None if not. Never throws."""
+    """Yield a DB session if available, or None if not."""
     if not db_available:
         yield None
         return
-    try:
-        async with async_session_factory() as session:
-            try:
-                yield session
-                await session.commit()
-            except Exception:
-                await session.rollback()
-    except Exception:
-        pass
+    async with async_session_factory() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
 
 
 async def get_optional_user(
