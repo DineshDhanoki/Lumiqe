@@ -21,9 +21,10 @@ build/
 # Database
 *.db
 
-# Model weights — tracked in git (files are < 100MB, within GitHub limits)
-# *.pth  ← intentionally NOT ignored so Render gets them on deploy
-# *.tflite
+# Model weights — downloaded at runtime via download_models.py
+# Keeps repo small and prevents CI disk space issues
+*.pth
+*.tflite
 
 # IDE
 .vscode/
