@@ -152,9 +152,8 @@ async def get_optional_db() -> AsyncGenerator[AsyncSession | None, None]:
                 await session.commit()
             except Exception:
                 await session.rollback()
-                yield None
     except Exception:
-        yield None
+        pass
 
 
 async def get_optional_user(
