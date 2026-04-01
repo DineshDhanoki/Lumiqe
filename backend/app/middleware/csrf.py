@@ -21,9 +21,10 @@ logger = logging.getLogger("lumiqe.middleware.csrf")
 # Methods that change state and require CSRF protection
 _UNSAFE_METHODS = {"POST", "PUT", "DELETE", "PATCH"}
 
-# Paths exempt from CSRF (webhooks that originate from external services)
+# Paths exempt from CSRF (webhooks and server-to-server auth calls)
 _EXEMPT_PREFIXES = (
     "/api/stripe/webhook",
+    "/api/auth/",
 )
 
 
