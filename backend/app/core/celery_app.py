@@ -22,7 +22,15 @@ _celery_available: bool | None = None  # None = not yet checked
 
 def _is_test_mode() -> bool:
     """Check if we're in test/CI mode where Celery should be disabled."""
-    return os.environ.get("CELERY_ALWAYS_EAGER", "").lower() in ("true", "1")
+    # Check os.environ first (available before Settings is loaded)
+    eager_env = os.environ.get("CELERY_ALWAYS_EAGER", "").lower()
+    if eager_env in ("true", "1"):
+        return True
+    try:
+        from app.core.config import settings
+        return settings.CELERY_ALWAYS_EAGER
+    except Exception:
+        return False
 
 
 def get_celery_app():

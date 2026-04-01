@@ -99,6 +99,9 @@ class Settings(BaseSettings):
     # Debug
     DEBUG: bool = False
 
+    # Celery — set to true to disable Celery and use ThreadPool fallback
+    CELERY_ALWAYS_EAGER: bool = False
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 
