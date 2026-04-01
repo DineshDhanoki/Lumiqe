@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import seasonsData from '@/data/seasons.json';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://lumiqe.in';
+    const baseUrl = 'https://www.lumiqe.in';
 
     const staticPages: MetadataRoute.Sitemap = [
         { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ['/api/', '/dashboard/', '/account/', '/results/', '/payment/'],
             },
         ],
-        sitemap: 'https://lumiqe.in/sitemap.xml',
+        sitemap: 'https://www.lumiqe.in/sitemap.xml',
     };
 }
