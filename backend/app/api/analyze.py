@@ -324,16 +324,6 @@ async def analyze_multi_image(
         )
 
     # Feature-level ensemble: average ITA + warmth across images, then map once
-    from app.cv.color_analysis import (
-        compute_warmth_score as _ws,
-        map_to_season as _map_season,
-        map_to_season_probabilities as _map_probs,
-        lab_to_hex as _lab_hex,
-        calculate_ita as _calc_ita,
-        SEASON_DESCRIPTIONS as _DESCS,
-    )
-    from app.cv.loader import get_seasons_data as _get_sd
-
     avg_ita = sum(r["ita_angle"] for r in results) / len(results)
     avg_confidence = sum(r.get("confidence", 0.0) for r in results) / len(results)
 

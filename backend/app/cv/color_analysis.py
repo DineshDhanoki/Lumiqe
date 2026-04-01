@@ -309,7 +309,6 @@ def _season_probability(ita_angle: float, warmth_score: float, tone: str,
         tone_penalty = 1.0
 
     # ITA fit: 1.0 inside range, Gaussian falloff outside
-    ita_mid = (ita_min + ita_max) / 2.0
     ita_half = (ita_max - ita_min) / 2.0
     sigma = ita_half * 0.6
 
