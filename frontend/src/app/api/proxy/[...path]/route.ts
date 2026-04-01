@@ -54,6 +54,10 @@ async function handler(
     const contentType = req.headers.get('content-type');
     if (contentType) headers.set('content-type', contentType);
 
+    // Forward Origin so the backend CSRF middleware can validate it
+    const origin = req.headers.get('origin');
+    if (origin) headers.set('origin', origin);
+
     // Inject backend JWT server-side — never touches client JavaScript
     if (token?.backendToken) {
         headers.set('Authorization', `Bearer ${token.backendToken}`);
