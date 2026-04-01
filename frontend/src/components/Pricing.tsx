@@ -107,7 +107,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
     ];
 
     return (
-        <section id="pricing" className="py-24 px-6">
+        <section id="pricing" className="py-16 md:py-24 px-4 sm:px-6">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <motion.div
@@ -119,7 +119,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                     <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-4">
                         Pricing
                     </p>
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4">
                         Simple, transparent pricing
                     </h2>
                     <p className="text-white/60 text-lg max-w-xl mx-auto">

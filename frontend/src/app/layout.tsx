@@ -3,7 +3,7 @@
 //   2. Add NEXT_PUBLIC_SENTRY_DSN and SENTRY_AUTH_TOKEN to env vars
 //   3. Configure sentry.client.config.ts and sentry.server.config.ts
 //   4. Wrap this layout with Sentry error boundary for client-side error capture
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
@@ -31,6 +31,13 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   title: "Lumiqe | Discover Your True Colors",
   description: "AI-Powered Color Analysis Engine. Find your exact season and palette instantly.",
@@ -52,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth overflow-x-hidden" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased bg-transparent text-white`} suppressHydrationWarning>
         <SkipLink />
         <ClientShell />

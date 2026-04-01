@@ -18,14 +18,14 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                 className="flex flex-col items-center gap-6 max-w-4xl w-full z-10"
             >
 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white drop-shadow-2xl">
-                    Discover Your <br className="hidden md:block" />
+                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white drop-shadow-2xl">
+                    Discover Your <br className="hidden sm:block" />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-white">
                         True Colors
                     </span>
                 </h1>
 
-                <p className="max-w-2xl text-lg md:text-xl text-white/70 leading-relaxed drop-shadow-md">
+                <p className="max-w-2xl text-base sm:text-lg md:text-xl text-white/70 leading-relaxed drop-shadow-md px-2">
                     Stop guessing. Let Lumiqe&apos;s AI analyze your skin tone and find the exact colors, metals, and makeup that make you shine.
                 </p>
 

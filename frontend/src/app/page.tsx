@@ -33,22 +33,22 @@ export default function Home() {
       {/* Analytics Counter Banner (Social Proof) */}
       <ScrollReveal delay={0.1}>
         <section className="border-y border-white/10 bg-white/5 backdrop-blur-md py-8">
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <div className="text-center">
-              <h4 className="text-3xl font-bold text-white mb-1">50K+</h4>
-              <p className="text-sm text-white/50 uppercase tracking-wider">Faces Analyzed</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">50K+</h4>
+              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Faces Analyzed</p>
             </div>
             <div className="text-center">
-              <h4 className="text-3xl font-bold text-white mb-1">12</h4>
-              <p className="text-sm text-white/50 uppercase tracking-wider">Color Seasons</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">12</h4>
+              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Color Seasons</p>
             </div>
-            <div className="text-center hidden md:block">
-              <h4 className="text-3xl font-bold text-white mb-1">&lt; 3s</h4>
-              <p className="text-sm text-white/50 uppercase tracking-wider">Speed</p>
+            <div className="text-center">
+              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">&lt; 3s</h4>
+              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Speed</p>
             </div>
-            <div className="text-center hidden md:block">
-              <h4 className="text-3xl font-bold text-white mb-1">100%</h4>
-              <p className="text-sm text-white/50 uppercase tracking-wider">Private</p>
+            <div className="text-center">
+              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">100%</h4>
+              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Private</p>
             </div>
           </div>
         </section>

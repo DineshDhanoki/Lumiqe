@@ -46,7 +46,7 @@ export default function Navbar() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
                         <Sparkles className="w-6 h-6 text-red-400 group-hover:text-red-300 transition-colors" />

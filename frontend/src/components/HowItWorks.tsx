@@ -23,14 +23,14 @@ const steps = [
 
 export default function HowItWorks() {
     return (
-        <section id="how-it-works" className="py-24 px-6 relative bg-black/40 border-y border-white/5">
+        <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 relative bg-black/40 border-y border-white/5">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
-                        className="text-4xl md:text-5xl font-bold text-white mb-6"
+                        className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6"
                     >
                         How It Works
                     </motion.h2>
@@ -45,7 +45,7 @@ export default function HowItWorks() {
                     </motion.p>
                 </div>
 
-                <div className="relative grid grid-cols-1 md:grid-cols-3 gap-12 mt-20">
+                <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-12 md:mt-20">
                     {/* Connector Line (hidden on mobile) */}
                     <div className="hidden md:block absolute top-[40px] left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 

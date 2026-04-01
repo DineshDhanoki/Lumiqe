@@ -212,7 +212,7 @@ export default function Dashboard() {
     return (
         <main className="min-h-screen bg-transparent text-white font-sans pb-24">
             {/* Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-4 flex items-center justify-between safe-top">
                 <Link href="/" className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
                     <ArrowLeft className="w-4 h-4" />
                     Home

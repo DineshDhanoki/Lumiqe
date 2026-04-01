@@ -5,15 +5,15 @@ import { Sparkles, Twitter, Instagram, Github } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="bg-black border-t border-white/10 pt-20 pb-10 px-6 relative overflow-hidden">
+        <footer className="bg-black border-t border-white/10 pt-16 md:pt-20 pb-10 px-4 sm:px-6 relative overflow-hidden safe-bottom">
             {/* Background glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-red-900/10 blur-[100px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto flex flex-col items-center">
                 {/* Call to Action Banner */}
-                <div className="w-full rounded-3xl bg-gradient-to-br from-red-600/20 to-red-950/40 border border-red-500/20 p-10 md:p-16 text-center mb-20 relative overflow-hidden flex flex-col items-center">
-                    <Sparkles className="w-12 h-12 text-red-400 mb-6" />
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+                <div className="w-full rounded-3xl bg-gradient-to-br from-red-600/20 to-red-950/40 border border-red-500/20 p-8 sm:p-10 md:p-16 text-center mb-16 md:mb-20 relative overflow-hidden flex flex-col items-center">
+                    <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-red-400 mb-4 sm:mb-6" />
+                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight">
                         Stop Guessing Your Colors.
                     </h2>
                     <p className="text-white/70 max-w-xl mx-auto mb-10 text-lg">
@@ -59,10 +59,10 @@ export default function Footer() {
 
                     <div>
                         <h4 className="text-white font-bold mb-6 tracking-wide">Legal</h4>
-                        <ul className="space-y-4">
-                            <li><Link href="/privacy" className="text-white/50 hover:text-white transition-colors">Privacy Policy</Link></li>
-                            <li><Link href="/terms" className="text-white/50 hover:text-white transition-colors">Terms of Service</Link></li>
-                            <li><Link href="/contact" className="text-white/50 hover:text-white transition-colors">Contact Support</Link></li>
+                        <ul className="space-y-1">
+                            <li><Link href="/privacy" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Privacy Policy</Link></li>
+                            <li><Link href="/terms" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Terms of Service</Link></li>
+                            <li><Link href="/contact" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Contact Support</Link></li>
                         </ul>
                     </div>
                 </div>

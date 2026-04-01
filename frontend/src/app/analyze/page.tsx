@@ -237,7 +237,7 @@ export default function AnalyzePage() {
             <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
 
             {/* ── Navbar ── */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-4 flex items-center justify-between safe-top">
                 <Link
                     href="/"
                     className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
@@ -255,7 +255,7 @@ export default function AnalyzePage() {
             </nav>
 
             {/* ── Content ── */}
-            <div className="flex flex-1 flex-col items-center justify-center p-6 pt-28 pb-12">
+            <div className="flex flex-1 flex-col items-center justify-center p-4 sm:p-6 pt-24 sm:pt-28 pb-12">
                 <ScanGuide />
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
