@@ -251,7 +251,7 @@ export default function ResultsView({
 
                                 <StylingTips season={season} contrastLevel={contrastLevel} hexCode={hexColor} staticTip={tips} />
                                 <CelebrityMatch celebrities={celebrities} season={season} />
-                                <PaletteDownload season={season} />
+                                <PaletteDownload season={season} palette={palette} hexColor={hexColor} undertone={undertone} metal={metal} confidence={confidence} />
 
                                 {/* Share */}
                                 {analysisId ? (

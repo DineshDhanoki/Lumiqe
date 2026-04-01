@@ -6,9 +6,14 @@ import { apiFetch } from '@/lib/api';
 
 interface PaletteDownloadProps {
     season: string;
+    palette?: string[];
+    hexColor?: string;
+    undertone?: string;
+    metal?: string;
+    confidence?: number;
 }
 
-export default function PaletteDownload({ season }: PaletteDownloadProps) {
+export default function PaletteDownload({ season, palette = [], hexColor = '', undertone = '', metal = '', confidence = 0 }: PaletteDownloadProps) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -20,7 +25,7 @@ export default function PaletteDownload({ season }: PaletteDownloadProps) {
         try {
             const res = await apiFetch('/api/palette-card', {
                 method: 'POST',
-                body: JSON.stringify({ season }),
+                body: JSON.stringify({ season, palette, hex_color: hexColor, undertone, metal, confidence }),
             });
 
             if (!res.ok) {
