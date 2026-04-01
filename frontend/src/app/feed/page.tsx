@@ -124,7 +124,7 @@ function FeedContent() {
     return (
         <>
             <div className="w-full max-w-md flex justify-between items-center mb-6 pt-4 z-20 relative">
-                <Link href="/results" className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10">
+                <Link href={session ? '/dashboard' : '/results'} className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10">
                     <ArrowLeft className="w-5 h-5 text-white" />
                 </Link>
                 <div className="flex flex-col items-center">

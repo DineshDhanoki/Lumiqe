@@ -128,3 +128,132 @@ class TestDeltaECalibration:
         lab1 = hex_to_lab("#FFFFFF")  # White
         lab2 = hex_to_lab("#000000")  # Black
         assert delta_e_cie2000(lab1, lab2) > 50
+
+
+# ─── Gender Validation Filter ──────────────────────────────
+
+
+def get_gender_validator():
+    from app.services.shopping_agent import _is_valid_for_gender
+    return _is_valid_for_gender
+
+
+class TestGenderValidation:
+    """Ensure blocklist filter rejects inappropriate items per gender."""
+
+    # ── Male blocklist ───────────────────────────────────────
+
+    def test_rejects_lipstick_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Maybelline Matte Lipstick Red", "male") is False
+
+    def test_rejects_heels_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Pointed Stiletto Heels Black", "male") is False
+
+    def test_rejects_handbag_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Women's Leather Handbag", "male") is False
+
+    def test_rejects_necklace_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Gold Plated Necklace Set", "male") is False
+
+    def test_rejects_bangle_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Pearl Bangle Bracelet", "male") is False
+
+    def test_rejects_saree_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Silk Saree Blue", "male") is False
+
+    def test_rejects_lehenga_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Bridal Lehenga Red Gold", "male") is False
+
+    def test_rejects_kurti_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Cotton Kurti Printed", "male") is False
+
+    def test_rejects_crop_top_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Ribbed Crop Top White", "male") is False
+
+    def test_rejects_stilettos_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Stilettos Platform Shoes", "male") is False
+
+    # ── Male allowed items ───────────────────────────────────
+
+    def test_allows_tshirt_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Men's Round Neck T-Shirt", "male") is True
+
+    def test_allows_sneakers_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Campus Running Shoes White", "male") is True
+
+    def test_allows_watch_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Casio Digital Watch Silver", "male") is True
+
+    def test_allows_backpack_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Laptop Backpack Black", "male") is True
+
+    def test_allows_jeans_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Slim Fit Blue Jeans", "male") is True
+
+    def test_allows_jacket_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Bomber Jacket Olive Green", "male") is True
+
+    def test_allows_sunglasses_for_male(self):
+        validate = get_gender_validator()
+        assert validate("Aviator Sunglasses Black", "male") is True
+
+    # ── Female blocklist ─────────────────────────────────────
+
+    def test_rejects_boxer_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Men's Boxer Shorts Cotton", "female") is False
+
+    def test_rejects_briefs_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Pack of 3 Briefs", "female") is False
+
+    def test_rejects_lungi_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Cotton Lungi White", "female") is False
+
+    # ── Female allowed items ─────────────────────────────────
+
+    def test_allows_dress_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Floral Print Maxi Dress", "female") is True
+
+    def test_allows_heels_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Block Heels Beige", "female") is True
+
+    def test_allows_lipstick_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Matte Lipstick Nude", "female") is True
+
+    def test_allows_handbag_for_female(self):
+        validate = get_gender_validator()
+        assert validate("Tote Handbag Brown", "female") is True
+
+    # ── Case insensitivity ───────────────────────────────────
+
+    def test_case_insensitive_blocking(self):
+        validate = get_gender_validator()
+        assert validate("LIPSTICK Matte Red", "male") is False
+        assert validate("Heels Platform", "male") is False
+
+    def test_partial_match_in_name(self):
+        """Blocklist terms should match as substrings."""
+        validate = get_gender_validator()
+        assert validate("Beautiful Gold Necklace Set for Women", "male") is False
+        assert validate("Stiletto Heels Black", "male") is False

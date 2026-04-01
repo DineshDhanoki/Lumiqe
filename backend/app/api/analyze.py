@@ -323,18 +323,43 @@ async def analyze_multi_image(
             },
         )
 
-    # Average the results: pick the most common season, average confidence
-    from collections import Counter
-    season_counts = Counter(r.get("season", "") for r in results)
-    best_season = season_counts.most_common(1)[0][0]
+    # Feature-level ensemble: average ITA + warmth across images, then map once
+    from app.cv.color_analysis import (
+        compute_warmth_score as _ws,
+        map_to_season as _map_season,
+        map_to_season_probabilities as _map_probs,
+        lab_to_hex as _lab_hex,
+        calculate_ita as _calc_ita,
+        SEASON_DESCRIPTIONS as _DESCS,
+    )
+    from app.cv.loader import get_seasons_data as _get_sd
+
+    avg_ita = sum(r["ita_angle"] for r in results) / len(results)
     avg_confidence = sum(r.get("confidence", 0.0) for r in results) / len(results)
 
-    # Use the result that matches the best season with highest confidence
+    # Average season probability distributions if available
+    if all("season_probabilities" in r for r in results):
+        from collections import defaultdict
+        prob_sums = defaultdict(float)
+        for r in results:
+            for sp in r["season_probabilities"]:
+                prob_sums[sp["season"]] += sp["probability"]
+        for k in prob_sums:
+            prob_sums[k] /= len(results)
+        ensemble_season = max(prob_sums, key=prob_sums.get)
+    else:
+        from collections import Counter
+        season_counts = Counter(r.get("season", "").replace(" (Neutral Flow)", "") for r in results)
+        ensemble_season = season_counts.most_common(1)[0][0]
+
+    # Use the result closest to the ensemble season with highest confidence
     best_result = max(
-        (r for r in results if r.get("season") == best_season),
+        (r for r in results if r.get("season", "").replace(" (Neutral Flow)", "") == ensemble_season),
         key=lambda r: r.get("confidence", 0.0),
+        default=max(results, key=lambda r: r.get("confidence", 0.0)),
     )
     best_result["confidence"] = round(avg_confidence, 4)
+    best_result["ita_angle"] = round(avg_ita, 2)
     best_result["images_analyzed"] = len(results)
     best_result["images_submitted"] = len(all_bytes)
 

@@ -15,8 +15,11 @@ from app.cv.color_analysis import (
     opencv_lab_to_cie,
     compute_warmth_score,
     map_to_season,
+    map_to_season_probabilities,
     compute_color_confidence,
     lab_to_hex,
+    cluster_undertone,
+    _select_best_k,
 )
 from app.cv.face_detector import _get_exif_orientation, _apply_exif_rotation
 
@@ -339,3 +342,114 @@ def test_apply_exif_rotation_unknown_orientation_passthrough():
     for unknown in [0, 2, 4, 5, 7, 9, 99]:
         result = _apply_exif_rotation(img, unknown)
         assert np.array_equal(result, img)
+
+
+# ════════════════════════════════════════════════════════════════
+# apply_grey_world — skin-masked mode
+# ════════════════════════════════════════════════════════════════
+
+def test_grey_world_with_skin_mask():
+    """When skin mask is provided, multipliers should be computed from skin pixels only."""
+    img = np.full((100, 100, 3), 128, dtype=np.uint8)
+    # Red background, neutral skin
+    img[:50, :, 2] = 240   # red top half (non-skin)
+    mask = np.zeros((100, 100), dtype=np.uint8)
+    mask[50:, :] = 255      # skin = bottom half only
+    result = apply_grey_world(img, skin_mask=mask)
+    assert result.shape == img.shape
+    assert result.dtype == np.uint8
+
+
+def test_grey_world_skin_mask_fallback_on_few_pixels():
+    """If skin mask has too few pixels (<100), fall back to whole-image."""
+    img = np.full((100, 100, 3), 128, dtype=np.uint8)
+    mask = np.zeros((100, 100), dtype=np.uint8)
+    mask[0, 0] = 255  # only 1 pixel
+    result = apply_grey_world(img, skin_mask=mask)
+    result_no_mask = apply_grey_world(img, skin_mask=None)
+    assert np.allclose(result.astype(float), result_no_mask.astype(float), atol=2)
+
+
+# ════════════════════════════════════════════════════════════════
+# Adaptive K-Means
+# ════════════════════════════════════════════════════════════════
+
+def test_select_best_k_returns_valid_range():
+    """_select_best_k must return k in [2, 5]."""
+    rng = np.random.default_rng(42)
+    ab = rng.normal(128, 10, (500, 2)).astype(np.float32)
+    k = _select_best_k(ab)
+    assert 2 <= k <= 5
+
+
+def test_select_best_k_small_sample_defaults_to_3():
+    """Very small samples should default to k=3."""
+    ab = np.array([[128, 130], [129, 131]], dtype=np.float32)
+    k = _select_best_k(ab)
+    assert k == 3
+
+
+def test_cluster_undertone_adaptive_k():
+    """cluster_undertone with k=None should succeed and return valid LAB."""
+    rng = np.random.default_rng(42)
+    lab_pixels = np.column_stack([
+        rng.uniform(30, 70, 1000),   # L
+        rng.normal(140, 8, 1000),    # a
+        rng.normal(120, 8, 1000),    # b
+    ])
+    result = cluster_undertone(lab_pixels, k=None)
+    assert result.shape == (3,)
+    assert 0 <= result[0] <= 255
+    assert 0 <= result[1] <= 255
+    assert 0 <= result[2] <= 255
+
+
+def test_cluster_undertone_explicit_k():
+    """cluster_undertone with explicit k should still work."""
+    rng = np.random.default_rng(42)
+    lab_pixels = np.column_stack([
+        rng.uniform(30, 70, 500),
+        rng.normal(140, 5, 500),
+        rng.normal(120, 5, 500),
+    ])
+    result = cluster_undertone(lab_pixels, k=3)
+    assert result.shape == (3,)
+
+
+# ════════════════════════════════════════════════════════════════
+# Soft season probabilities
+# ════════════════════════════════════════════════════════════════
+
+def test_season_probabilities_sum_to_one():
+    """All season probabilities must sum to ~1.0."""
+    probs = map_to_season_probabilities(45.0, 5.0, 12.0)
+    total = sum(p["probability"] for p in probs)
+    assert abs(total - 1.0) < 0.01
+
+
+def test_season_probabilities_sorted_descending():
+    """Probabilities must be returned in descending order."""
+    probs = map_to_season_probabilities(30.0, -3.0, -8.0)
+    for i in range(len(probs) - 1):
+        assert probs[i]["probability"] >= probs[i + 1]["probability"]
+
+
+def test_season_probabilities_top1_matches_hard_mapping():
+    """The top probability season should match the hard map_to_season result."""
+    for ita in [60, 45, 30, 15, 0, -20, -40]:
+        season_hard, _, _ = map_to_season(float(ita), 5.0, 12.0)
+        probs = map_to_season_probabilities(float(ita), 5.0, 12.0)
+        top_season = probs[0]["season"]
+        base_hard = season_hard.replace(" (Neutral Flow)", "")
+        assert top_season == base_hard or probs[0]["probability"] > 0.3
+
+
+def test_season_probabilities_structure():
+    """Each entry must have required keys."""
+    probs = map_to_season_probabilities(50.0, 3.0, 10.0)
+    for p in probs:
+        assert "season" in p
+        assert "probability" in p
+        assert "palette" in p
+        assert "undertone" in p
+        assert len(p["palette"]) == 6

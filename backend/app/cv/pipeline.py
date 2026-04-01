@@ -24,12 +24,14 @@ from app.cv.color_analysis import (
     calculate_ita,
     lab_to_hex,
     map_to_season,
+    map_to_season_probabilities,
     compute_color_confidence,
     compute_miou,
     load_gt_mask_cached,
     SEASON_DESCRIPTIONS,
 )
 from app.cv.loader import get_bisenet, get_device, get_seasons_data
+from app.cv.season_model import is_model_available, predict_season
 
 logger = logging.getLogger("lumiqe.cv.pipeline")
 
@@ -53,33 +55,45 @@ def _run_pipeline(
     if face_crop is None:
         raise RuntimeError("No face detected — image may be too blurry, rotated, or face is occluded.")
 
-    # FIX 2: Exposure gate
+    # STEP 3: Exposure gate
     passed, reason = check_exposure(face_crop)
     if not passed:
         raise ValueError(reason)
 
-    # FIX 1: Grey World color constancy
-    face_crop = apply_grey_world(face_crop)
-
-    # STEP 3: BiSeNet skin mask
+    # STEP 4: BiSeNet skin mask (run BEFORE Grey World so mask guides color correction)
     skin_mask = generate_skin_mask(face_crop, bisenet, device)
     skin_px = int((skin_mask == 255).sum())
     if skin_px < 500:
         raise RuntimeError(f"Skin mask too small ({skin_px}px) — face may be partially covered.")
 
-    # STEP 4 & 5: CLAHE + pixel extraction
+    # STEP 5: Grey World color constancy (skin-masked — only skin pixels drive correction)
+    face_crop = apply_grey_world(face_crop, skin_mask=skin_mask)
+
+    # STEP 6: CLAHE + pixel extraction
     lab_pixels = extract_masked_lab_pixels(face_crop, skin_mask)
 
-    # STEP 6 & 7: K-Means on a*b*
-    dominant_lab_cv = cluster_undertone(lab_pixels, k=3)
+    # STEP 7: K-Means on a*b* (adaptive k via silhouette score)
+    dominant_lab_cv = cluster_undertone(lab_pixels)
 
     # STEP 8: ITA calculation
     L_cie, a_cie, b_cie = opencv_lab_to_cie(dominant_lab_cv)
     ita_angle = calculate_ita(L_cie, b_cie)
     hex_color = lab_to_hex(L_cie, a_cie, b_cie)
 
-    # STEP 9: Season mapping
-    season, palette, undertone = map_to_season(ita_angle, a_cie, b_cie)
+    # STEP 9: Season mapping — trained model with fallback to lookup table
+    warmth_score = (0.25 * a_cie) + (0.75 * b_cie)
+    model_result = None
+    if is_model_available():
+        model_result = predict_season(ita_angle, a_cie, b_cie, L_cie, warmth_score)
+
+    if model_result is not None:
+        season, palette, undertone, season_probabilities = model_result
+        logger.info("Season mapped via TRAINED MODEL")
+    else:
+        season, palette, undertone = map_to_season(ita_angle, a_cie, b_cie)
+        season_probabilities = map_to_season_probabilities(ita_angle, a_cie, b_cie)
+        logger.info("Season mapped via LOOKUP TABLE (model not available)")
+
     base_season = season.replace(" (Neutral Flow)", "")
     description = SEASON_DESCRIPTIONS.get(base_season, "")
 
@@ -113,9 +127,18 @@ def _run_pipeline(
 
     logger.info(f"Analysis complete: {season} (ITA={ita_angle:.1f}, conf={confidence}, {elapsed_ms}ms)")
 
+    # Top-2 season probabilities for transparency
+    top2 = season_probabilities[:2]
+    primary_prob = top2[0]["probability"] if top2 else 1.0
+    secondary = top2[1] if len(top2) > 1 else None
+
     result = {
         "season": season,
         "description": description,
+        "season_probability": primary_prob,
+        "secondary_season": secondary["season"] if secondary else None,
+        "secondary_probability": secondary["probability"] if secondary else 0.0,
+        "season_probabilities": season_probabilities[:4],
         "ita_angle": round(ita_angle, 2),
         "undertone": undertone,
         "hex_color": hex_color,

@@ -81,8 +81,8 @@ function ResultsContent() {
                 <Sparkles className="w-12 h-12 text-red-500 mb-6" />
                 <h1 className="text-3xl font-bold text-white mb-4">{t('noAnalysisFound')}</h1>
                 <p className="text-white/60 mb-8">{t('noAnalysisFoundDesc')}</p>
-                <Link href="/" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
-                    {t('goBackHome')}
+                <Link href={status === 'authenticated' ? '/dashboard' : '/'} className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
+                    {status === 'authenticated' ? t('backToDashboard') : t('goBackHome')}
                 </Link>
             </div>
         );
@@ -102,8 +102,8 @@ function ResultsContent() {
             tips={tips}
             celebrities={celebrities}
             makeup={makeup}
-            backHref="/"
-            backLabel="Back to Home"
+            backHref={status === 'authenticated' ? '/dashboard' : '/'}
+            backLabel={status === 'authenticated' ? 'Dashboard' : 'Back to Home'}
             showAccountNudge={status === 'unauthenticated'}
         />
     );

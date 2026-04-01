@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useLumiqeStore } from '@/lib/store';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import AppMenu from '@/components/AppMenu';
 
 interface AnalysisEntry {
     id?: string;
@@ -155,26 +156,8 @@ export default function Dashboard() {
     useEffect(() => {
         if (status === 'loading') return;
 
-        // If store has data, use it directly
-        if (storeHydrated && storeHistory.length > 0) {
-            const mapped: AnalysisEntry[] = storeHistory.map((r) => ({
-                id: r.id,
-                season: r.season,
-                hexColor: r.hex_color,
-                undertone: r.undertone,
-                confidence: r.confidence,
-                contrastLevel: 'Medium',
-                palette: r.palette,
-                metal: r.metal || 'Gold',
-                timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
-            }));
-            setHistory(mapped);
-            setLastAnalysis(mapped[0]);
-            return;
-        }
-
         if (session) {
-            // Logged in — fetch from backend for cross-device sync
+            // Always fetch from backend for authenticated users (cross-device sync)
             apiFetch('/api/analysis/?limit=20')
                 .then(res => res.ok ? res.json() : Promise.reject())
                 .then((items: Array<{
@@ -198,9 +181,40 @@ export default function Dashboard() {
                     setLastAnalysis(mapped[0]);
                 })
                 .catch(() => {
-                    // Fall back to localStorage if API fails
-                    _loadFromLocalStorage();
+                    // Fall back to store data, then localStorage if API fails
+                    if (storeHydrated && storeHistory.length > 0) {
+                        const mapped: AnalysisEntry[] = storeHistory.map((r) => ({
+                            id: r.id,
+                            season: r.season,
+                            hexColor: r.hex_color,
+                            undertone: r.undertone,
+                            confidence: r.confidence,
+                            contrastLevel: 'Medium',
+                            palette: r.palette,
+                            metal: r.metal || 'Gold',
+                            timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+                        }));
+                        setHistory(mapped);
+                        setLastAnalysis(mapped[0]);
+                    } else {
+                        _loadFromLocalStorage();
+                    }
                 });
+        } else if (storeHydrated && storeHistory.length > 0) {
+            // Anonymous user with store data
+            const mapped: AnalysisEntry[] = storeHistory.map((r) => ({
+                id: r.id,
+                season: r.season,
+                hexColor: r.hex_color,
+                undertone: r.undertone,
+                confidence: r.confidence,
+                contrastLevel: 'Medium',
+                palette: r.palette,
+                metal: r.metal || 'Gold',
+                timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+            }));
+            setHistory(mapped);
+            setLastAnalysis(mapped[0]);
         } else {
             // Anonymous — use localStorage as final fallback
             _loadFromLocalStorage();
@@ -213,15 +227,15 @@ export default function Dashboard() {
         <main className="min-h-screen bg-transparent text-white font-sans pb-24">
             {/* Nav */}
             <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-4 flex items-center justify-between safe-top">
-                <Link href="/" className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
-                    <ArrowLeft className="w-4 h-4" />
-                    Home
-                </Link>
+                <div className="flex items-center gap-2 text-sm font-medium text-white/60">
+                    <Sparkles className="w-4 h-4 text-red-400" />
+                    <span>Dashboard</span>
+                </div>
                 <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-red-400" />
                     <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
                 </div>
-                <div className="w-20" />
+                <AppMenu />
             </nav>
 
             <div className="max-w-4xl mx-auto px-4 pt-28 space-y-8">

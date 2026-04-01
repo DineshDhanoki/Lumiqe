@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { ArrowLeft, Sparkles, Loader2, AlertCircle, RefreshCcw } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import OutfitDisplay, { CuratedOutfit } from '@/components/OutfitDisplay';
+import AppMenu from '@/components/AppMenu';
 
 // Animated loading messages
 const LOADING_STEPS = [
@@ -111,7 +112,7 @@ function ShoppingAgentContent() {
             {/* Header */}
             <div className="w-full flex justify-between items-center mb-8 pt-4">
                 <Link
-                    href="/results"
+                    href="/dashboard"
                     className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10"
                 >
                     <ArrowLeft className="w-5 h-5 text-white" />
@@ -122,7 +123,7 @@ function ShoppingAgentContent() {
                         8-Piece Outfit Builder
                     </span>
                 </div>
-                <div className="w-9" />
+                <AppMenu />
             </div>
 
             {/* ── Config Form ─────────────────────────────────── */}

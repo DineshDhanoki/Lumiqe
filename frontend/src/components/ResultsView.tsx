@@ -40,6 +40,7 @@ import ShareButtons from './ShareButtons';
 import ShopYourColors from './ShopYourColors';
 import { apiFetch } from '@/lib/api';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import AppMenu from './AppMenu';
 
 const TABS = [
     { id: 'overview',  label: 'Overview',      icon: <LayoutGrid    className="w-4 h-4" /> },
@@ -74,6 +75,39 @@ interface ResultsViewProps extends ResultsData {
     showAccountNudge?: boolean;
 }
 
+/** Map a hex color to clothing suggestions based on hue. */
+function _getClothingSuggestions(hex: string): string[] {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2 / 255;
+    const d = max - min;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1)) / 255;
+    let h = 0;
+    if (d !== 0) {
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+        else if (max === g) h = ((b - r) / d + 2) * 60;
+        else h = ((r - g) / d + 4) * 60;
+    }
+    // Low saturation = neutrals
+    if (s < 0.12) {
+        if (l < 0.25) return ['Black blazer', 'Charcoal trousers', 'Dark knit'];
+        if (l < 0.5) return ['Grey sweater', 'Slate chinos', 'Flannel shirt'];
+        if (l < 0.75) return ['Beige cardigan', 'Khaki pants', 'Linen shirt'];
+        return ['White tee', 'Cream blouse', 'Ivory jacket'];
+    }
+    // Warm reds / oranges
+    if (h < 30) return ['Rust blazer', 'Terracotta shirt', 'Burgundy knit'];
+    if (h < 60) return ['Mustard sweater', 'Camel coat', 'Amber scarf'];
+    if (h < 90) return ['Olive jacket', 'Chartreuse tee', 'Lime accent'];
+    if (h < 150) return ['Forest green shirt', 'Sage trousers', 'Emerald knit'];
+    if (h < 210) return ['Teal blouse', 'Cyan polo', 'Aqua dress'];
+    if (h < 270) return ['Navy blazer', 'Cobalt shirt', 'Denim jacket'];
+    if (h < 330) return ['Plum sweater', 'Lavender shirt', 'Violet scarf'];
+    return ['Rose blouse', 'Magenta top', 'Berry cardigan'];
+}
+
 export default function ResultsView({
     season, description, hexColor, undertone, confidence, contrastLevel,
     palette, avoidColors, metal, tips, celebrities, makeup,
@@ -85,6 +119,18 @@ export default function ResultsView({
     const [completeProfile, setCompleteProfile] = useState<CompleteProfile | null>(null);
     const [profileLoading, setProfileLoading] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+
+    // Read analysis photo from sessionStorage (set by the analyze page)
+    useEffect(() => {
+        try {
+            const stored = sessionStorage.getItem('lumiqe-analysis-photo');
+            if (stored) {
+                setPhotoUrl(stored);
+                sessionStorage.removeItem('lumiqe-analysis-photo');
+            }
+        } catch { /* ignore */ }
+    }, []);
 
     const copyLink = () => {
         navigator.clipboard.writeText(window.location.href);
@@ -117,6 +163,7 @@ export default function ResultsView({
                     <Sparkles className="w-5 h-5 text-red-400" />
                     <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
                 </div>
+                <AppMenu />
             </nav>
 
             <div className="max-w-4xl mx-auto px-4 pt-28">
@@ -142,6 +189,17 @@ export default function ResultsView({
 
                 {/* Season Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+                    {photoUrl && (
+                        <div className="flex justify-center mb-6">
+                            <div
+                                className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 shadow-lg"
+                                style={{ borderColor: hexColor }}
+                            >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={photoUrl} alt="Your photo" className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    )}
                     <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('yourAnalysisComplete')}</p>
                     <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-4">
                         {season}
@@ -208,6 +266,22 @@ export default function ResultsView({
                                                 </span>
                                             </div>
                                         ))}
+                                    </div>
+
+                                    {/* Clothing suggestions per color */}
+                                    <div className="mt-6 pt-5 border-t border-white/10">
+                                        <h4 className="text-sm font-semibold text-white/70 uppercase tracking-widest mb-4">Wear These Colors As</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                            {palette.slice(0, 6).map((color, i) => {
+                                                const suggestions = _getClothingSuggestions(color);
+                                                return (
+                                                    <div key={i} className="flex items-start gap-3 bg-white/[0.03] rounded-xl px-3 py-2.5 border border-white/5">
+                                                        <div className="w-6 h-6 rounded-lg shrink-0 mt-0.5 border border-white/10" style={{ backgroundColor: color }} />
+                                                        <div className="text-xs text-white/60 leading-relaxed">{suggestions.join(', ')}</div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
 

@@ -45,6 +45,15 @@ describe('i18n — translations', () => {
         'yourSeason',
         'accountTitle',
         'productFeed',
+        'howItWorksTitle',
+        'howItWorksSubtitle',
+        'howItWorksStep1Title',
+        'howItWorksStep1Desc',
+        'howItWorksStep2Title',
+        'howItWorksStep2Desc',
+        'howItWorksStep3Title',
+        'howItWorksStep3Desc',
+        'backToDashboard',
     ];
 
     it('"en" has all required keys', () => {
@@ -68,5 +77,40 @@ describe('i18n — translations', () => {
         for (const key of requiredKeys) {
             expect(translations['en'][key].length).toBeGreaterThan(0);
         }
+    });
+
+    const howItWorksKeys = [
+        'howItWorksTitle',
+        'howItWorksSubtitle',
+        'howItWorksStep1Title',
+        'howItWorksStep1Desc',
+        'howItWorksStep2Title',
+        'howItWorksStep2Desc',
+        'howItWorksStep3Title',
+        'howItWorksStep3Desc',
+        'backToDashboard',
+    ];
+
+    it('all 10 languages have howItWorks and backToDashboard keys', () => {
+        for (const { code } of LANGUAGES) {
+            for (const key of howItWorksKeys) {
+                expect(
+                    translations[code],
+                    `Language "${code}" is missing key: "${key}"`,
+                ).toHaveProperty(key);
+                expect(
+                    translations[code][key].length,
+                    `Language "${code}" has empty value for: "${key}"`,
+                ).toBeGreaterThan(0);
+            }
+        }
+    });
+
+    it('howItWorks translations differ across languages', () => {
+        const enTitle = translations['en']['howItWorksTitle'];
+        const esTitle = translations['es']['howItWorksTitle'];
+        const hiTitle = translations['hi']['howItWorksTitle'];
+        expect(esTitle).not.toBe(enTitle);
+        expect(hiTitle).not.toBe(enTitle);
     });
 });

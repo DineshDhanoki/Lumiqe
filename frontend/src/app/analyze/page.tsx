@@ -12,6 +12,7 @@ import { t } from '@/lib/i18n';
 import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ScanGuide from '@/components/ScanGuide';
+import AppMenu from '@/components/AppMenu';
 
 type Mode = 'choose' | 'upload' | 'camera' | 'multi';
 
@@ -106,6 +107,7 @@ export default function AnalyzePage() {
 
         setError(null);
         setIsAnalyzing(true);
+        if (multiFiles[0]) storeThumbnail(multiFiles[0]);
 
         const formData = new FormData();
         const compressed = await Promise.all(multiFiles.map((f) => compressImage(f)));
@@ -153,6 +155,31 @@ export default function AnalyzePage() {
         }
     };
 
+    /** Create a small base64 JPEG thumbnail and store in sessionStorage for the results page. */
+    const storeThumbnail = (file: File) => {
+        const img = new Image();
+        img.onload = () => {
+            const MAX = 400;
+            let { width, height } = img;
+            if (width > MAX || height > MAX) {
+                const scale = MAX / Math.max(width, height);
+                width = Math.round(width * scale);
+                height = Math.round(height * scale);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d')!;
+            ctx.drawImage(img, 0, 0, width, height);
+            try {
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                sessionStorage.setItem('lumiqe-analysis-photo', dataUrl);
+            } catch { /* ignore quota errors */ }
+        };
+        img.onerror = () => { /* ignore */ };
+        img.src = URL.createObjectURL(file);
+    };
+
     const handleFile = async (selectedFile: File) => {
         if (!selectedFile.type.startsWith('image/')) {
             setError('Please use a valid image (JPEG, PNG, WebP).');
@@ -164,6 +191,7 @@ export default function AnalyzePage() {
         }
 
         setPreviewUrl(URL.createObjectURL(selectedFile));
+        storeThumbnail(selectedFile);
         setError(null);
         setIsAnalyzing(true);
 
@@ -239,11 +267,11 @@ export default function AnalyzePage() {
             {/* ── Navbar ── */}
             <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-4 flex items-center justify-between safe-top">
                 <Link
-                    href="/"
+                    href={session ? '/dashboard' : '/'}
                     className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
                 >
                     <ArrowLeft className="w-4 h-4" />
-                    {t(lang, 'backHome')}
+                    {session ? t(lang, 'backToDashboard') : t(lang, 'backHome')}
                 </Link>
 
                 <div className="flex items-center gap-2">
@@ -251,7 +279,10 @@ export default function AnalyzePage() {
                     <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
                 </div>
 
-                <LanguageSwitcher currentLang={lang} onChange={changeLang} />
+                <div className="flex items-center gap-2">
+                    <LanguageSwitcher currentLang={lang} onChange={changeLang} />
+                    <AppMenu />
+                </div>
             </nav>
 
             {/* ── Content ── */}

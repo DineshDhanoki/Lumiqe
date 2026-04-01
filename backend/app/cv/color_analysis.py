@@ -13,6 +13,7 @@ import logging
 import cv2
 import numpy as np
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
 logger = logging.getLogger("lumiqe.cv.color_analysis")
 
@@ -54,17 +55,33 @@ SEASON_DESCRIPTIONS = {
 # ════════════════════════════════════════════════════════════════
 # GREY WORLD COLOR CONSTANCY
 # ════════════════════════════════════════════════════════════════
-def apply_grey_world(face_bgr: np.ndarray) -> np.ndarray:
+def apply_grey_world(face_bgr: np.ndarray, skin_mask: np.ndarray | None = None) -> np.ndarray:
     """
     Normalize color cast using Grey World assumption.
 
+    When a skin_mask is provided, multipliers are computed from skin
+    pixels only — this avoids bias from hair, background, and clothing
+    that dominated the old whole-image approach.
+
     Melanin Protector: multipliers are clamped to [0.85, 1.15] to
-    prevent extreme overcorrection when dark clothing or backgrounds
-    dominate the image (which would otherwise wash out deep skin tones).
+    prevent extreme overcorrection that would wash out deep skin tones.
     """
-    mean_b = np.mean(face_bgr[:, :, 0])
-    mean_g = np.mean(face_bgr[:, :, 1])
-    mean_r = np.mean(face_bgr[:, :, 2])
+    if skin_mask is not None:
+        mask_bool = skin_mask == 255
+        if mask_bool.sum() > 100:
+            skin_pixels = face_bgr[mask_bool]
+            mean_b = np.mean(skin_pixels[:, 0])
+            mean_g = np.mean(skin_pixels[:, 1])
+            mean_r = np.mean(skin_pixels[:, 2])
+        else:
+            mean_b = np.mean(face_bgr[:, :, 0])
+            mean_g = np.mean(face_bgr[:, :, 1])
+            mean_r = np.mean(face_bgr[:, :, 2])
+    else:
+        mean_b = np.mean(face_bgr[:, :, 0])
+        mean_g = np.mean(face_bgr[:, :, 1])
+        mean_r = np.mean(face_bgr[:, :, 2])
+
     mean_gray = (mean_b + mean_g + mean_r) / 3.0
 
     # Compute raw multipliers, then clamp to a safe range
@@ -75,7 +92,7 @@ def apply_grey_world(face_bgr: np.ndarray) -> np.ndarray:
 
     logger.debug(
         f"Grey World multipliers: B={mult_b:.3f} G={mult_g:.3f} R={mult_r:.3f} "
-        f"(clamped to [{CLAMP_LO}, {CLAMP_HI}])"
+        f"(clamped to [{CLAMP_LO}, {CLAMP_HI}], skin_masked={skin_mask is not None})"
     )
 
     face = face_bgr.astype(np.float32)
@@ -104,15 +121,33 @@ def check_exposure(face_bgr: np.ndarray) -> tuple[bool, str]:
 # CLAHE LIGHTING NORMALIZATION
 # ════════════════════════════════════════════════════════════════
 def extract_masked_lab_pixels(face_bgr: np.ndarray, skin_mask: np.ndarray) -> np.ndarray:
-    """Extract skin pixels in LAB with CLAHE-corrected L channel."""
+    """
+    Extract skin pixels in LAB with CLAHE-corrected L channel.
+
+    CLAHE is applied only within the skin mask bounding box to prevent
+    non-skin regions (hair, background) from skewing histogram equalization.
+    """
     lab = cv2.cvtColor(face_bgr, cv2.COLOR_BGR2LAB)
     L, a, b = cv2.split(lab)
 
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    L_eq = clahe.apply(L)
-    lab_eq = cv2.merge([L_eq, a, b])
-
     mask_bool = skin_mask == 255
+
+    # Apply CLAHE only within the skin mask bounding box
+    rows = np.any(mask_bool, axis=1)
+    cols = np.any(mask_bool, axis=0)
+    if rows.any() and cols.any():
+        rmin, rmax = np.where(rows)[0][[0, -1]]
+        cmin, cmax = np.where(cols)[0][[0, -1]]
+        L_roi = L[rmin:rmax + 1, cmin:cmax + 1]
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        L_roi_eq = clahe.apply(L_roi)
+        L_eq = L.copy()
+        L_eq[rmin:rmax + 1, cmin:cmax + 1] = L_roi_eq
+    else:
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        L_eq = clahe.apply(L)
+
+    lab_eq = cv2.merge([L_eq, a, b])
     lab_pixels = lab_eq[mask_bool]
     return lab_pixels
 
@@ -120,16 +155,55 @@ def extract_masked_lab_pixels(face_bgr: np.ndarray, skin_mask: np.ndarray) -> np
 # ════════════════════════════════════════════════════════════════
 # K-MEANS ON a*b* ONLY
 # ════════════════════════════════════════════════════════════════
-def cluster_undertone(lab_pixels: np.ndarray, k: int = 3) -> np.ndarray:
+def _select_best_k(ab_pixels: np.ndarray, k_range: range = range(2, 6)) -> int:
+    """
+    Select optimal k for K-Means using silhouette score.
+    Falls back to k=3 if the sample is too small for evaluation.
+    """
+    n = len(ab_pixels)
+    if n < 60:
+        return 3
+
+    # Subsample for speed if large (silhouette is O(n^2))
+    max_sample = 5000
+    if n > max_sample:
+        rng = np.random.default_rng(42)
+        idx = rng.choice(n, max_sample, replace=False)
+        sample = ab_pixels[idx]
+    else:
+        sample = ab_pixels
+
+    best_k, best_score = 3, -1.0
+    for k in k_range:
+        if k >= n:
+            break
+        km = KMeans(n_clusters=k, init="k-means++", n_init=5, max_iter=200, random_state=42)
+        labels = km.fit_predict(sample)
+        if len(set(labels)) < 2:
+            continue
+        score = silhouette_score(sample, labels, sample_size=min(2000, len(sample)))
+        if score > best_score:
+            best_score = score
+            best_k = k
+
+    logger.info(f"Adaptive k: selected k={best_k} (silhouette={best_score:.3f})")
+    return best_k
+
+
+def cluster_undertone(lab_pixels: np.ndarray, k: int | None = None) -> np.ndarray:
     """
     K-Means on a*b* channels (lighting-invariant).
     Returns the dominant cluster center as [L, a, b] in OpenCV scale.
+
+    When k is None, the optimal k is selected automatically using
+    silhouette score over k=2..5.
 
     Glare & Deep Shadow Filter: drops pixels with L* > 85 (specular
     highlights like forehead glare) or L* < 15 (deep chin shadows)
     before clustering, forcing K-Means to evaluate only mid-tone skin.
     """
-    if len(lab_pixels) < k * 10:
+    min_pixels = 30
+    if len(lab_pixels) < min_pixels:
         raise ValueError(f"Too few skin pixels ({len(lab_pixels)}) — face crop too small.")
 
     # ── Filter out specular highlights and deep shadows ──────
@@ -139,7 +213,7 @@ def cluster_undertone(lab_pixels: np.ndarray, k: int = 3) -> np.ndarray:
     filtered_pixels = lab_pixels[midtone_mask]
 
     # Safety fallback: if the filter is too aggressive, revert
-    if len(filtered_pixels) < k * 10:
+    if len(filtered_pixels) < min_pixels:
         logger.warning(
             f"L* filter dropped too many pixels ({len(lab_pixels)} → {len(filtered_pixels)}), "
             f"reverting to unfiltered array"
@@ -153,17 +227,33 @@ def cluster_undertone(lab_pixels: np.ndarray, k: int = 3) -> np.ndarray:
             f"{len(filtered_pixels)} mid-tone pixels remain"
         )
 
-    # ── K-Means on filtered a*b* only ────────────────────────
+    # ── Adaptive k selection ─────────────────────────────────
     ab_pixels = filtered_pixels[:, 1:].astype(np.float32)
+    if k is None:
+        k = _select_best_k(ab_pixels)
+
+    # ── K-Means on filtered a*b* only ────────────────────────
     km = KMeans(n_clusters=k, init="k-means++", n_init=10, max_iter=300, random_state=42)
     labels = km.fit_predict(ab_pixels)
 
+    # Select dominant cluster weighted by compactness (inverse variance)
     counts = np.bincount(labels)
-    dominant_id = counts.argmax()
+    scores = np.zeros(k)
+    for cid in range(k):
+        cluster_pts = ab_pixels[labels == cid]
+        variance = np.mean(np.var(cluster_pts, axis=0)) + 1e-6
+        scores[cid] = counts[cid] / variance
+    dominant_id = int(scores.argmax())
+
     dominant_ab = km.cluster_centers_[dominant_id]
 
     # Use filtered pixels for L* median (not the original array)
     dominant_L = np.median(filtered_pixels[labels == dominant_id, 0])
+
+    logger.info(
+        f"K-Means: k={k}, dominant cluster={dominant_id} "
+        f"(size={counts[dominant_id]}, score={scores[dominant_id]:.1f})"
+    )
 
     return np.array([dominant_L, dominant_ab[0], dominant_ab[1]])
 
@@ -203,6 +293,35 @@ def compute_warmth_score(a_cie: float, b_cie: float) -> float:
     return (0.25 * a_cie) + (0.75 * b_cie)
 
 
+def _season_probability(ita_angle: float, warmth_score: float, tone: str,
+                        ita_min: float, ita_max: float, req_tone: str | None) -> float:
+    """
+    Compute a soft probability for how well (ita_angle, warmth_score)
+    fits a given season range using Gaussian falloff at boundaries.
+    """
+    # Tone mismatch → zero probability (unless req_tone is None)
+    if req_tone is not None and req_tone != tone:
+        # Allow small bleed for warmth near zero
+        if abs(warmth_score) > 1.5:
+            return 0.0
+        tone_penalty = 0.3
+    else:
+        tone_penalty = 1.0
+
+    # ITA fit: 1.0 inside range, Gaussian falloff outside
+    ita_mid = (ita_min + ita_max) / 2.0
+    ita_half = (ita_max - ita_min) / 2.0
+    sigma = ita_half * 0.6
+
+    if ita_min <= ita_angle < ita_max:
+        ita_fit = 1.0
+    else:
+        dist = min(abs(ita_angle - ita_min), abs(ita_angle - ita_max))
+        ita_fit = float(np.exp(-0.5 * (dist / sigma) ** 2))
+
+    return ita_fit * tone_penalty
+
+
 def map_to_season(ita_angle: float, a_cie: float, b_cie: float) -> tuple[str, list[str], str]:
     """
     Map ITA angle + a*b* warmth score to one of 12 seasons.
@@ -210,8 +329,8 @@ def map_to_season(ita_angle: float, a_cie: float, b_cie: float) -> tuple[str, li
     """
     warmth_score = compute_warmth_score(a_cie, b_cie)
     tone = "warm" if warmth_score > 0 else "cool"
-    BOUNDARY_TOL_ITA = 3.0
-    BOUNDARY_TOL_W = 0.15
+    BOUNDARY_TOL_ITA = 5.0
+    BOUNDARY_TOL_W = 0.5
 
     for ita_min, ita_max, req_tone, season, palette in SEASON_MAP:
         if ita_min <= ita_angle < ita_max:
@@ -229,6 +348,40 @@ def map_to_season(ita_angle: float, a_cie: float, b_cie: float) -> tuple[str, li
     if ita_angle >= 90:
         return "Light Spring", SEASON_MAP[0][4], "warm"
     return "Deep Winter", SEASON_MAP[9][4], "cool"
+
+
+def map_to_season_probabilities(ita_angle: float, a_cie: float, b_cie: float) -> list[dict]:
+    """
+    Compute a probability distribution over all 12 seasons.
+
+    Returns a sorted list of dicts:
+        [{"season": str, "probability": float, "palette": list, "undertone": str}, ...]
+    Probabilities are normalized to sum to 1.0.
+    """
+    warmth_score = compute_warmth_score(a_cie, b_cie)
+    tone = "warm" if warmth_score > 0 else "cool"
+
+    raw_scores = []
+    for ita_min, ita_max, req_tone, season, palette in SEASON_MAP:
+        prob = _season_probability(ita_angle, warmth_score, tone, ita_min, ita_max, req_tone)
+        ut = "neutral" if abs(warmth_score) < 0.5 else (req_tone or tone)
+        raw_scores.append({
+            "season": season,
+            "probability": prob,
+            "palette": palette,
+            "undertone": ut,
+        })
+
+    # Normalize
+    total = sum(s["probability"] for s in raw_scores)
+    if total > 0:
+        for s in raw_scores:
+            s["probability"] = round(s["probability"] / total, 3)
+    else:
+        raw_scores[0]["probability"] = 1.0
+
+    raw_scores.sort(key=lambda s: s["probability"], reverse=True)
+    return raw_scores
 
 
 # ════════════════════════════════════════════════════════════════

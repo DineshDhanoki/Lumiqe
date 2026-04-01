@@ -2,26 +2,28 @@
 
 import { motion } from 'framer-motion';
 import { Camera, Cpu, Palette } from 'lucide-react';
-
-const steps = [
-    {
-        icon: Camera,
-        title: 'Upload a Selfie',
-        description: 'Snap a well-lit, makeup-free photo facing natural light. We run privacy-first, analyzing the image directly in-memory.',
-    },
-    {
-        icon: Cpu,
-        title: 'AI Analyzes 100K+ Pixels',
-        description: 'Our custom vision engine extracts your true skin chromaticity, isolating it from shadows and lighting bias.',
-    },
-    {
-        icon: Palette,
-        title: 'Get Your Palette',
-        description: 'Discover your color season, metallic matches, and custom shopping recommendations that make you glow.',
-    }
-];
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function HowItWorks() {
+    const { t } = useTranslation();
+
+    const steps = [
+        {
+            icon: Camera,
+            title: t('howItWorksStep1Title'),
+            description: t('howItWorksStep1Desc'),
+        },
+        {
+            icon: Cpu,
+            title: t('howItWorksStep2Title'),
+            description: t('howItWorksStep2Desc'),
+        },
+        {
+            icon: Palette,
+            title: t('howItWorksStep3Title'),
+            description: t('howItWorksStep3Desc'),
+        }
+    ];
     return (
         <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 relative bg-black/40 border-y border-white/5">
             <div className="max-w-6xl mx-auto">
@@ -32,7 +34,7 @@ export default function HowItWorks() {
                         viewport={{ once: true, margin: "-100px" }}
                         className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6"
                     >
-                        How It Works
+                        {t('howItWorksTitle')}
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -41,7 +43,7 @@ export default function HowItWorks() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-white/60 max-w-2xl mx-auto"
                     >
-                        Science meets style. A simple three-step process built on rigorous color theory.
+                        {t('howItWorksSubtitle')}
                     </motion.p>
                 </div>
 

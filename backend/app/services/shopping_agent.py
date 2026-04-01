@@ -125,6 +125,26 @@ class _ExtractionResult(BaseModel):
     products: list[_ExtractedProduct] = []
 
 
+# ─── Gender Validation ───────────────────────────────────────
+
+_MALE_BLOCKLIST = {
+    "lipstick", "heels", "stiletto", "stilettos", "clutch", "handbag",
+    "handbags", "necklace", "bangle", "bangles", "anklet", "saree",
+    "lehenga", "kurti", "mangalsutra", "sindoor", "dupatta", "salwar",
+    "churidar", "palazzo", "crop top", "sports bra", "bikini",
+}
+_FEMALE_BLOCKLIST = {
+    "boxer", "boxers", "briefs", "lungi", "dhoti", "kurta pajama",
+}
+
+
+def _is_valid_for_gender(name: str, gender: str) -> bool:
+    """Check if a product name is appropriate for the given gender."""
+    name_lower = name.lower()
+    blocklist = _MALE_BLOCKLIST if gender.lower() == "male" else _FEMALE_BLOCKLIST
+    return not any(term in name_lower for term in blocklist)
+
+
 # ─── Single-Brand Scraper ────────────────────────────────────
 
 async def _scrape_single_brand(
@@ -145,9 +165,20 @@ async def _scrape_single_brand(
     url = brand_config["url"]
     gender_label = "men's" if gender.lower() == "male" else "women's"
 
+    male_exclusion = (
+        "Do NOT include lipstick, heels, stilettos, clutch bags, handbags, "
+        "necklaces, bangles, anklets, sarees, lehengas, kurtis, crop tops, "
+        "or any women's accessories. "
+    )
+    female_exclusion = (
+        "Do NOT include men's boxers, briefs, lungis, or dhotis. "
+    )
+    exclusion = male_exclusion if gender.lower() == "male" else female_exclusion
+
     prompt = (
         f"Extract the first {max_items} {gender_label} products from the "
         f"main product grid. Only include {gender_label} items. "
+        f"{exclusion}"
         f"For each product, get: name, price (with ₹ or $ symbol), "
         f"the full absolute image URL (starts with http), "
         f"the full absolute product page URL (starts with http), "
@@ -195,6 +226,10 @@ async def _scrape_single_brand(
                 or not image_url.startswith("http")
                 or not product_url.startswith("http")
             ):
+                continue
+
+            if not _is_valid_for_gender(name, gender):
+                logger.info(f"[{category}] Filtered out '{name}' — invalid for {gender}")
                 continue
 
             valid.append({
