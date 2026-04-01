@@ -38,6 +38,42 @@ export default function AnalyzePage() {
         localStorage.setItem('lumiqe-lang', code);
     };
 
+    /** Compress an image to JPEG ≤ maxBytes using canvas. */
+    const compressImage = (file: File, maxBytes = 1.5 * 1024 * 1024): Promise<File> => {
+        return new Promise((resolve) => {
+            if (file.size <= maxBytes) { resolve(file); return; }
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                // Scale down if larger than 2048px on either side
+                const MAX_DIM = 2048;
+                let { width, height } = img;
+                if (width > MAX_DIM || height > MAX_DIM) {
+                    const scale = MAX_DIM / Math.max(width, height);
+                    width = Math.round(width * scale);
+                    height = Math.round(height * scale);
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d')!;
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob) {
+                            resolve(new File([blob], file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' }));
+                        } else {
+                            resolve(file);
+                        }
+                    },
+                    'image/jpeg',
+                    0.8
+                );
+            };
+            img.onerror = () => resolve(file);
+            img.src = URL.createObjectURL(file);
+        });
+    };
+
     const addMultiFile = (file: File) => {
         if (!file.type.startsWith('image/')) {
             setError('Please use a valid image (JPEG, PNG, WebP).');
@@ -72,7 +108,8 @@ export default function AnalyzePage() {
         setIsAnalyzing(true);
 
         const formData = new FormData();
-        multiFiles.forEach((file) => formData.append('images', file));
+        const compressed = await Promise.all(multiFiles.map((f) => compressImage(f)));
+        compressed.forEach((file) => formData.append('images', file));
 
         try {
             const res = await apiFetch('/api/analyze/multi', {
