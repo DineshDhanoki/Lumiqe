@@ -71,8 +71,8 @@ class TestCSRFProtection:
     async def test_csrf_blocks_post_without_origin(self, client):
         """POST with no Origin/Referer header must be blocked by CSRF."""
         response = await client.post(
-            "/api/auth/register",
-            json={"name": "Test", "email": "csrf@test.com", "password": "StrongP@ss1"},
+            "/api/stripe/checkout",
+            json={"plan": "monthly"},
             # No Origin or Referer header — CSRF must reject this
         )
         # Must be 403 CSRF_REJECTED, not pass through to app logic
