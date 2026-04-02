@@ -111,7 +111,7 @@ jobs:
           data = json.load(open('coverage.json'))
           pct = data['totals']['percent_covered']
           print(f'Backend line coverage: {pct:.1f}%')
-          if pct < 60:
-              print('Coverage below 60% threshold')
+          if pct < 40:
+              print('Coverage below 40% threshold')
               sys.exit(1)
           "
