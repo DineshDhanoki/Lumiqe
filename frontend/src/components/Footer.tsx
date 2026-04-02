@@ -2,8 +2,11 @@
 
 import Link from 'next/link';
 import { Sparkles, Twitter, Instagram, Github } from 'lucide-react';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function Footer() {
+    const { t } = useTranslation();
+
     return (
         <footer className="bg-black border-t border-white/10 pt-16 md:pt-20 pb-10 px-4 sm:px-6 relative overflow-hidden safe-bottom">
             {/* Background glow */}
@@ -14,13 +17,13 @@ export default function Footer() {
                 <div className="w-full rounded-3xl bg-gradient-to-br from-red-600/20 to-red-950/40 border border-red-500/20 p-8 sm:p-10 md:p-16 text-center mb-16 md:mb-20 relative overflow-hidden flex flex-col items-center">
                     <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-red-400 mb-4 sm:mb-6" />
                     <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight">
-                        Stop Guessing Your Colors.
+                        {t('footerCTA')}
                     </h2>
                     <p className="text-white/70 max-w-xl mx-auto mb-10 text-lg">
-                        Join thousands of users who discovered their true color season and transformed their wardrobe.
+                        {t('footerCTADesc')}
                     </p>
                     <button className="rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-lg py-4 px-10 shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)] transition-all">
-                        Get Your Palette Now
+                        {t('footerGetPalette')}
                     </button>
                 </div>
 
@@ -32,7 +35,7 @@ export default function Footer() {
                             <span className="text-xl font-bold tracking-wider text-white">LUMIQE</span>
                         </Link>
                         <p className="text-white/50 max-w-sm leading-relaxed mb-6">
-                            The world&apos;s most precise AI skin tone analysis engine, running directly on your device. Privacy guaranteed.
+                            {t('footerBrandDesc')}
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
@@ -48,21 +51,21 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="text-white font-bold mb-6 tracking-wide">Product</h4>
+                        <h4 className="text-white font-bold mb-6 tracking-wide">{t('footerProduct')}</h4>
                         <ul className="space-y-1">
-                            <li><Link href="#how-it-works" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">How It Works</Link></li>
-                            <li><Link href="#features" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Features</Link></li>
-                            <li><Link href="#demo" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Live Demo</Link></li>
-                            <li><Link href="/pricing" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Pricing</Link></li>
+                            <li><Link href="#how-it-works" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerHowItWorks')}</Link></li>
+                            <li><Link href="#features" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerFeatures')}</Link></li>
+                            <li><Link href="#demo" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerLiveDemo')}</Link></li>
+                            <li><Link href="/pricing" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerPricing')}</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h4 className="text-white font-bold mb-6 tracking-wide">Legal</h4>
+                        <h4 className="text-white font-bold mb-6 tracking-wide">{t('footerLegal')}</h4>
                         <ul className="space-y-1">
-                            <li><Link href="/privacy" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Privacy Policy</Link></li>
-                            <li><Link href="/terms" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Terms of Service</Link></li>
-                            <li><Link href="/contact" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">Contact Support</Link></li>
+                            <li><Link href="/privacy" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerPrivacy')}</Link></li>
+                            <li><Link href="/terms" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerTerms')}</Link></li>
+                            <li><Link href="/contact" className="text-white/50 hover:text-white transition-colors block py-2 min-h-[44px] flex items-center">{t('footerContact')}</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -70,11 +73,11 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="w-full flex flex-col md:flex-row items-center justify-between pt-8">
                     <p className="text-white/40 text-sm mb-4 md:mb-0">
-                        © {new Date().getFullYear()} Lumiqe. All rights reserved.
+                        &copy; {new Date().getFullYear()} {t('footerCopyright')}
                     </p>
                     <div className="flex gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse mt-1" />
-                        <p className="text-white/40 text-sm">Servers Operating Normally</p>
+                        <p className="text-white/40 text-sm">{t('footerStatus')}</p>
                     </div>
                 </div>
             </div>

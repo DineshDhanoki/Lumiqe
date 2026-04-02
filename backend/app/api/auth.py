@@ -1,6 +1,7 @@
-"""API — Authentication endpoints (register, login, refresh, delete)."""
+"""API — Authentication endpoints (register, login, refresh, delete, export)."""
 
 import logging
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -273,3 +274,29 @@ async def delete_account(
     await user_repo.delete_by_email(session, current_user["email"])
     logger.info(f"[SECURITY] Account deleted: {current_user['email']} user_id={current_user['id']}")
     return {"message": "Account and all associated data permanently deleted."}
+
+
+@router.get("/me/export")
+async def export_user_data(
+    current_user: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db),
+):
+    """GDPR: export all user data as a single JSON payload."""
+    from app.repositories import analysis_repo
+
+    user = await user_repo.get_by_email(session, current_user["email"])
+    if not user:
+        raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "detail": "User not found", "code": 404})
+
+    analyses = await analysis_repo.get_history(session, current_user["id"], limit=1000)
+    quiz = await user_repo.get_quiz(session, current_user["id"])
+
+    # Strip internal fields
+    safe_user = {k: v for k, v in user.items() if k not in ("password_hash",)}
+
+    return {
+        "profile": safe_user,
+        "quiz": quiz,
+        "analyses": analyses,
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+    }

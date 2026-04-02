@@ -28,8 +28,16 @@ jobs:
         run: npm run typecheck
       - name: Lint
         run: npm run lint
-      - name: Run tests
-        run: npm test
+      - name: Run tests with coverage
+        run: npx vitest run --coverage --coverage.reporter=text --coverage.reporter=json-summary
+      - name: Check frontend coverage threshold
+        run: |
+          node -e "
+            const r = require('./coverage/coverage-summary.json').total;
+            const pct = r.lines.pct;
+            console.log('Frontend line coverage: ' + pct + '%');
+            if (pct < 50) { console.error('Coverage below 50% threshold'); process.exit(1); }
+          "
 
   backend:
     name: Backend — Lint, Conflict Check & Tests
@@ -85,13 +93,25 @@ jobs:
           ruff check app/
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt pytest pytest-asyncio httpx hypothesis pytest-timeout
+          pip install -r requirements.txt pytest pytest-asyncio httpx hypothesis pytest-timeout pytest-cov
       - name: Audit Python dependencies for vulnerabilities
         run: |
           pip install pip-audit
           pip-audit --strict --desc
-      - name: Run tests
-        timeout-minutes: 3
+      - name: Run tests with coverage
+        timeout-minutes: 10
         run: >-
           pytest tests/ -x -q --tb=short --timeout=30
           -p no:warnings
+          --cov=app --cov-report=term --cov-report=json
+      - name: Check backend coverage threshold
+        run: |
+          python -c "
+          import json, sys
+          data = json.load(open('coverage.json'))
+          pct = data['totals']['percent_covered']
+          print(f'Backend line coverage: {pct:.1f}%')
+          if pct < 60:
+              print('Coverage below 60% threshold')
+              sys.exit(1)
+          "

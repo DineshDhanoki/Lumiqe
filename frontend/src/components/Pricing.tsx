@@ -6,12 +6,14 @@ import { Check, X, Sparkles, Zap, Crown, ArrowRight, Loader2, CreditCard } from 
 import { useSession } from 'next-auth/react';
 import { events } from '@/lib/analytics';
 import { apiFetch } from '@/lib/api';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface PricingProps {
     onOpenAuth?: () => void;
 }
 
 export default function Pricing({ onOpenAuth }: PricingProps) {
+    const { t } = useTranslation();
     const [isAnnual, setIsAnnual] = useState(false);
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [checkoutError, setCheckoutError] = useState('');
@@ -41,7 +43,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
             if (typeof window !== 'undefined') window.location.href = data.checkout_url;
         } catch (err: unknown) {
             console.error('Checkout error:', err);
-            setCheckoutError(err instanceof Error ? err.message : 'Payment service unavailable. Please try again.');
+            setCheckoutError(err instanceof Error ? err.message : t('pricingPaymentError'));
             setLoadingPlan(null);
         }
     };
@@ -70,40 +72,40 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
             if (typeof window !== 'undefined') window.location.href = data.checkout_url;
         } catch (err: unknown) {
             console.error('Credit purchase error:', err);
-            setCheckoutError(err instanceof Error ? err.message : 'Payment service unavailable. Please try again.');
+            setCheckoutError(err instanceof Error ? err.message : t('pricingPaymentError'));
             setLoadingPlan(null);
         }
     };
 
     const freeFeatures = [
-        { text: '3 color analysis scans', included: true },
-        { text: '3-day premium trial', included: true },
-        { text: 'Core 6-color palette', included: true },
-        { text: 'Celebrity color match', included: true },
-        { text: 'Palette card download', included: true },
-        { text: 'Standard clothing recommendations', included: true },
-        { text: 'AI Styling Tips', included: false },
-        { text: 'Complete Full-Fit Generation', included: false },
+        { text: t('pricingFreeF1'), included: true },
+        { text: t('pricingFreeF2'), included: true },
+        { text: t('pricingFreeF3'), included: true },
+        { text: t('pricingFreeF4'), included: true },
+        { text: t('pricingFreeF5'), included: true },
+        { text: t('pricingFreeF6'), included: true },
+        { text: t('pricingFreeF7'), included: false },
+        { text: t('pricingFreeF8'), included: false },
     ];
 
     const singlePackFeatures = [
-        { text: 'Scan credit — ₹29', included: true },
-        { text: 'Analysis credit — ₹99', included: true },
-        { text: 'Report credit — ₹199', included: true },
-        { text: 'Bundle (all 3) — ₹399', included: true },
-        { text: 'No subscription needed', included: true },
+        { text: t('pricingSingleF1'), included: true },
+        { text: t('pricingSingleF2'), included: true },
+        { text: t('pricingSingleF3'), included: true },
+        { text: t('pricingSingleF4'), included: true },
+        { text: t('pricingSingleF5'), included: true },
     ];
 
     const premiumFeatures = [
-        { text: '100 AI Scans per month', included: true },
-        { text: 'Core 6-color palette', included: true },
-        { text: 'Celebrity color match', included: true },
-        { text: 'Palette card download', included: true },
-        { text: 'Unlock all aesthetics (Gym, Party, Streetwear)', included: true },
-        { text: 'AI Styling Tips (Daily)', included: true },
-        { text: 'Complete Full-Fit Generation', included: true },
-        { text: 'Live In-Store Tag Scanner (100 tags/mo)', included: true },
-        { text: 'Priority support', included: true },
+        { text: t('pricingPremiumF1'), included: true },
+        { text: t('pricingPremiumF2'), included: true },
+        { text: t('pricingPremiumF3'), included: true },
+        { text: t('pricingPremiumF4'), included: true },
+        { text: t('pricingPremiumF5'), included: true },
+        { text: t('pricingPremiumF6'), included: true },
+        { text: t('pricingPremiumF7'), included: true },
+        { text: t('pricingPremiumF8'), included: true },
+        { text: t('pricingPremiumF9'), included: true },
     ];
 
     return (
@@ -117,25 +119,25 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                     className="text-center mb-16"
                 >
                     <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-4">
-                        Pricing
+                        {t('pricingLabel')}
                     </p>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4">
-                        Simple, transparent pricing
+                        {t('pricingTitle')}
                     </h2>
                     <p className="text-white/60 text-lg max-w-xl mx-auto">
-                        Start free with 3 scans + a 3-day trial. Upgrade when you&apos;re ready.
+                        {t('pricingSubtitle')}
                     </p>
 
                     {/* Billing Toggle */}
                     <div className="flex items-center justify-center gap-4 mt-8">
                         <span className={`text-sm font-medium transition-colors ${!isAnnual ? 'text-white' : 'text-white/40'}`}>
-                            Monthly
+                            {t('pricingMonthly')}
                         </span>
                         <button
                             onClick={() => setIsAnnual(!isAnnual)}
                             role="switch"
                             aria-checked={isAnnual}
-                            aria-label="Toggle annual billing"
+                            aria-label={t('pricingToggle')}
                             className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${isAnnual ? 'bg-red-600' : 'bg-white/20'}`}
                         >
                             <div
@@ -143,7 +145,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             />
                         </button>
                         <span className={`text-sm font-medium transition-colors ${isAnnual ? 'text-white' : 'text-white/40'}`}>
-                            Annual
+                            {t('pricingAnnual')}
                         </span>
                         {isAnnual && (
                             <motion.span
@@ -151,7 +153,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="text-xs font-bold bg-green-500/20 text-green-400 px-3 py-1 rounded-full border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse"
                             >
-                                Save 44%
+                                {t('pricingSave')}
                             </motion.span>
                         )}
                     </div>
@@ -175,15 +177,15 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
                                 <Zap className="w-5 h-5 text-white/70" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">Free</h3>
+                            <h3 className="text-xl font-bold text-white">{t('pricingFree')}</h3>
                         </div>
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-extrabold text-white">₹0</span>
-                                <span className="text-white/40 text-sm">/forever</span>
+                                <span className="text-4xl font-extrabold text-white">{'\u20b9'}0</span>
+                                <span className="text-white/40 text-sm">{t('pricingForever')}</span>
                             </div>
-                            <p className="text-white/50 text-sm mt-2">3 scans + 3-day premium trial</p>
+                            <p className="text-white/50 text-sm mt-2">{t('pricingFreeDesc')}</p>
                         </div>
 
                         <ul className="space-y-2.5 mb-6 flex-1">
@@ -205,7 +207,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             onClick={() => onOpenAuth?.()}
                             className="w-full py-3 rounded-full border border-white/20 text-white font-semibold text-sm hover:bg-white/10 transition-all"
                         >
-                            Get Started Free
+                            {t('pricingGetStarted')}
                         </button>
                     </motion.div>
 
@@ -221,15 +223,15 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
                                 <CreditCard className="w-5 h-5 text-amber-400" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">Single Pack</h3>
+                            <h3 className="text-xl font-bold text-white">{t('pricingSinglePack')}</h3>
                         </div>
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-extrabold text-white">₹29</span>
-                                <span className="text-white/40 text-sm">– ₹399</span>
+                                <span className="text-4xl font-extrabold text-white">{'\u20b9'}29</span>
+                                <span className="text-white/40 text-sm">{t('pricingSingleRange')}</span>
                             </div>
-                            <p className="text-white/50 text-sm mt-2">Credit packs — pay per use, no commitment</p>
+                            <p className="text-white/50 text-sm mt-2">{t('pricingSingleDesc')}</p>
                         </div>
 
                         <ul className="space-y-2.5 mb-6 flex-1">
@@ -249,10 +251,10 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             {loadingPlan === 'credits' ? (
                                 <>
                                     <Loader2 className="w-4 h-4 animate-spin" />
-                                    Opening Stripe...
+                                    {t('pricingOpeningStripe')}
                                 </>
                             ) : (
-                                <>Buy 1 Credit</>
+                                <>{t('pricingBuyCredit')}</>
                             )}
                         </button>
                     </motion.div>
@@ -268,7 +270,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         {/* Popular Badge */}
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                             <span className="bg-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
-                                MOST POPULAR
+                                {t('pricingMostPopular')}
                             </span>
                         </div>
 
@@ -276,22 +278,20 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             <div className="w-10 h-10 rounded-xl bg-red-500/20 border border-red-500/30 flex items-center justify-center">
                                 <Crown className="w-5 h-5 text-red-400" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">Premium</h3>
+                            <h3 className="text-xl font-bold text-white">{t('pricingPremium')}</h3>
                         </div>
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
                                 <span className="text-4xl font-extrabold text-white">
-                                    ₹{isAnnual ? '999' : '149'}
+                                    {'\u20b9'}{isAnnual ? '999' : '149'}
                                 </span>
                                 <span className="text-white/40 text-sm">
-                                    /{isAnnual ? 'year' : 'month'}
+                                    {isAnnual ? t('pricingPerYear') : t('pricingPerMonth')}
                                 </span>
                             </div>
                             <p className="text-white/50 text-sm mt-2">
-                                {isAnnual
-                                    ? 'Just ₹83/month — best value!'
-                                    : 'Wardrobe Tracker + Daily Outfits + AI Stylist + Unlimited Scans'}
+                                {isAnnual ? t('pricingBestValue') : t('pricingPremiumDesc')}
                             </p>
                         </div>
 
@@ -312,12 +312,12 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             {loadingPlan === 'monthly' || loadingPlan === 'annual' ? (
                                 <>
                                     <Loader2 className="w-4 h-4 animate-spin" />
-                                    Opening Stripe...
+                                    {t('pricingOpeningStripe')}
                                 </>
                             ) : (
                                 <>
                                     <Sparkles className="w-4 h-4" />
-                                    Upgrade to Premium
+                                    {t('pricingUpgrade')}
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </>
                             )}

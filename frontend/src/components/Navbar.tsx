@@ -7,8 +7,10 @@ import { Sparkles, Menu, X, Crown, User, LogOut } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import SignInModal from './SignInModal';
 import NotificationBell from './NotificationBell';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function Navbar() {
+    const { t } = useTranslation();
     const { data: session, status } = useSession();
     const { scrollY } = useScroll();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -26,11 +28,11 @@ export default function Navbar() {
     });
 
     const navLinks = [
-        { name: 'How It Works', href: '#how-it-works' },
-        { name: 'Features', href: '#features' },
-        { name: 'Dashboard', href: '/dashboard' },
-        { name: 'Scanner', href: '/scan' },
-        { name: 'Pricing', href: '#pricing' },
+        { name: t('navHowItWorks'), href: '#how-it-works' },
+        { name: t('navFeatures'), href: '#features' },
+        { name: t('navDashboard'), href: '/dashboard' },
+        { name: t('navScanner'), href: '/scan' },
+        { name: t('navPricing'), href: '#pricing' },
     ];
 
     return (
@@ -57,7 +59,7 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-8">
                         {navLinks.map((link) => (
                             <Link
-                                key={link.name}
+                                key={link.href}
                                 href={link.href}
                                 className="text-sm font-medium text-white/70 hover:text-white transition-colors"
                             >
@@ -79,12 +81,12 @@ export default function Navbar() {
                                         }`}
                                 >
                                     {isPremium ? <Crown className="w-4 h-4 text-red-400" /> : <User className="w-4 h-4" />}
-                                    <span className="text-sm font-bold">Account</span>
+                                    <span className="text-sm font-bold">{t('navAccount')}</span>
                                 </Link>
                                 <button
                                     onClick={() => signOut({ callbackUrl: '/' })}
                                     className="text-white/50 hover:text-red-400 p-2 transition-colors rounded-full hover:bg-white/5"
-                                    title="Log Out"
+                                    title={t('logOut')}
                                 >
                                     <LogOut className="w-5 h-5" />
                                 </button>
@@ -92,10 +94,10 @@ export default function Navbar() {
                         ) : (
                             <>
                                 <button onClick={openLogin} className="text-sm font-medium text-white/90 hover:text-white px-4 py-2 transition-colors">
-                                    Log In
+                                    {t('navLogIn')}
                                 </button>
                                 <button onClick={openSignUp} className="text-sm font-medium bg-red-600 hover:bg-red-500 text-white px-5 py-2 rounded-full transition-colors shadow-[0_0_15px_-3px_rgba(220,38,38,0.4)]">
-                                    Sign Up
+                                    {t('navSignUp')}
                                 </button>
                             </>
                         )}
@@ -105,7 +107,7 @@ export default function Navbar() {
                     <button
                         className="md:hidden text-white/80 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                        aria-label={isMobileMenuOpen ? t('navCloseMenu') : t('navOpenMenu')}
                         aria-expanded={isMobileMenuOpen}
                     >
                         {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -121,7 +123,7 @@ export default function Navbar() {
                     >
                         {navLinks.map((link) => (
                             <Link
-                                key={link.name}
+                                key={link.href}
                                 href={link.href}
                                 className="text-base font-medium text-white/80 hover:text-white py-3 min-h-[44px] flex items-center"
                                 onClick={() => setIsMobileMenuOpen(false)}
@@ -145,23 +147,23 @@ export default function Navbar() {
                                             }`}
                                     >
                                         {isPremium ? <Crown className="w-4 h-4 text-red-400" /> : <User className="w-4 h-4" />}
-                                        <span className="text-base font-bold">Account</span>
+                                        <span className="text-base font-bold">{t('navAccount')}</span>
                                     </Link>
                                     <button
                                         onClick={() => signOut({ callbackUrl: '/' })}
                                         className="flex items-center justify-center gap-2 text-base font-medium text-white/50 hover:text-red-400 w-full py-2"
                                     >
                                         <LogOut className="w-4 h-4" />
-                                        Log Out
+                                        {t('logOut')}
                                     </button>
                                 </>
                             ) : (
                                 <>
                                     <button onClick={() => { setIsMobileMenuOpen(false); openLogin(); }} className="text-base font-medium text-white w-full py-2 text-left">
-                                        Log In
+                                        {t('navLogIn')}
                                     </button>
                                     <button onClick={() => { setIsMobileMenuOpen(false); openSignUp(); }} className="text-base font-medium bg-red-600 text-white w-full py-2 rounded-full text-center">
-                                        Sign Up
+                                        {t('navSignUp')}
                                     </button>
                                 </>
                             )}

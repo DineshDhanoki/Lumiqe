@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Crown, Sparkles, LogOut, Loader2, User, CreditCard, Droplets, Clock } from 'lucide-react';
+import { Crown, Sparkles, LogOut, Loader2, User, CreditCard, Droplets, Clock, Download, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -30,7 +30,9 @@ export default function AccountPage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    const [exporting, setExporting] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     useEffect(() => {
         async function fetchProfile() {
             if (status !== 'authenticated') return;
@@ -63,6 +65,41 @@ export default function AccountPage() {
             }
         } catch (err) {
             console.error('Failed to open billing portal', err);
+        }
+    };
+
+    const handleExportData = async () => {
+        setExporting(true);
+        try {
+            const res = await apiFetch('/api/auth/me/export');
+            if (!res.ok) throw new Error('Export failed');
+            const data = await res.json();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lumiqe-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Export failed', err);
+            setError('Failed to export data. Please try again.');
+        } finally {
+            setExporting(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        setDeleting(true);
+        try {
+            const res = await apiFetch('/api/auth/me', { method: 'DELETE' });
+            if (!res.ok) throw new Error('Deletion failed');
+            signOut({ callbackUrl: '/' });
+        } catch (err) {
+            console.error('Account deletion failed', err);
+            setError('Failed to delete account. Please try again.');
+            setDeleting(false);
+            setDeleteConfirm(false);
         }
     };
 
@@ -321,6 +358,50 @@ export default function AccountPage() {
                                     </div>
                                 )}
                             </div>
+                        </div>
+                    </div>
+
+                    {/* GDPR — Data & Privacy */}
+                    <div className="mt-10 p-8 rounded-3xl bg-white/[0.02] border border-white/10">
+                        <h3 className="text-xl font-bold text-white mb-2">Data & Privacy</h3>
+                        <p className="text-white/50 text-sm mb-6">Download all your data or permanently delete your account.</p>
+
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <button
+                                onClick={handleExportData}
+                                disabled={exporting}
+                                className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-semibold transition disabled:opacity-50"
+                            >
+                                {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                                {exporting ? 'Exporting...' : 'Export My Data'}
+                            </button>
+
+                            {!deleteConfirm ? (
+                                <button
+                                    onClick={() => setDeleteConfirm(true)}
+                                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-red-950/30 hover:bg-red-900/40 border border-red-500/20 text-red-400 text-sm font-semibold transition"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                    Delete Account
+                                </button>
+                            ) : (
+                                <div className="flex items-center gap-3">
+                                    <span className="text-red-400 text-sm">Are you sure? This cannot be undone.</span>
+                                    <button
+                                        onClick={handleDeleteAccount}
+                                        disabled={deleting}
+                                        className="px-5 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition disabled:opacity-50"
+                                    >
+                                        {deleting ? 'Deleting...' : 'Yes, Delete'}
+                                    </button>
+                                    <button
+                                        onClick={() => setDeleteConfirm(false)}
+                                        className="px-5 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 text-sm transition"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </motion.div>

@@ -2,39 +2,42 @@
 
 import { motion } from 'framer-motion';
 import { ShieldCheck, Crosshair, ShoppingBag, Layers } from 'lucide-react';
-
-const features = [
-    {
-        icon: Crosshair,
-        title: 'Clinical-Grade Accuracy',
-        description: 'We calculate your Individual Typology Angle (ITA) and dominant K-Means skin cluster, eliminating the guesswork of standard quizzes.',
-        color: 'from-orange-500/20 to-red-500/20',
-        iconColor: 'text-orange-400',
-    },
-    {
-        icon: Layers,
-        title: '12 Season Framework',
-        description: 'Go beyond just warm/cool. We map you to one of 12 distinct color seasons to find the exact saturation and contrast that flatters you.',
-        color: 'from-rose-500/20 to-pink-500/20',
-        iconColor: 'text-rose-400',
-    },
-    {
-        icon: ShoppingBag,
-        title: 'Curated Shopping',
-        description: 'Get an instant feed of clothing, makeup, and jewelry specifically chosen to match your analyzed season. No more buying the wrong shade.',
-        color: 'from-red-500/20 to-rose-600/20',
-        iconColor: 'text-red-400',
-    },
-    {
-        icon: ShieldCheck,
-        title: 'Privacy by Design',
-        description: 'Your photos never leave our temporary server memory. We extract the mathematical hex codes and immediately discard the image.',
-        color: 'from-stone-500/20 to-zinc-500/20',
-        iconColor: 'text-stone-400',
-    }
-];
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function Features() {
+    const { t } = useTranslation();
+
+    const features = [
+        {
+            icon: Crosshair,
+            title: t('featureClinicalTitle'),
+            description: t('featureClinicalDesc'),
+            color: 'from-orange-500/20 to-red-500/20',
+            iconColor: 'text-orange-400',
+        },
+        {
+            icon: Layers,
+            title: t('featureSeasonTitle'),
+            description: t('featureSeasonDesc'),
+            color: 'from-rose-500/20 to-pink-500/20',
+            iconColor: 'text-rose-400',
+        },
+        {
+            icon: ShoppingBag,
+            title: t('featureShoppingTitle'),
+            description: t('featureShoppingDesc'),
+            color: 'from-red-500/20 to-rose-600/20',
+            iconColor: 'text-red-400',
+        },
+        {
+            icon: ShieldCheck,
+            title: t('featurePrivacyTitle'),
+            description: t('featurePrivacyDesc'),
+            color: 'from-stone-500/20 to-zinc-500/20',
+            iconColor: 'text-stone-400',
+        }
+    ];
+
     return (
         <section id="features" className="py-16 md:py-24 px-4 sm:px-6 relative">
             <div className="max-w-7xl mx-auto">
@@ -45,7 +48,7 @@ export default function Features() {
                         viewport={{ once: true, margin: "-100px" }}
                         className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6"
                     >
-                        Why Choose Lumiqe
+                        {t('featuresTitle')}
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -54,7 +57,7 @@ export default function Features() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-white/60 max-w-2xl mx-auto"
                     >
-                        The most advanced color analysis engine ever built for the web.
+                        {t('featuresSubtitle')}
                     </motion.p>
                 </div>
 

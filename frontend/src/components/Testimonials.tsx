@@ -2,26 +2,17 @@
 
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
-
-const testimonials = [
-    {
-        name: "Sarah M.",
-        season: "Deep Winter",
-        text: "I used to wear beige all the time because I thought it was 'safe.' Lumiqe told me I was a Deep Winter and gave me a palette of emeralds and ruby reds. The compliments haven't stopped since.",
-    },
-    {
-        name: "Priya K.",
-        season: "True Autumn",
-        text: "As a woman of color, online color quizzes have never worked for me. The AI engine accurately detected my rich warm undertone and didn't just default to 'dark = winter'. Incredible science.",
-    },
-    {
-        name: "Elena R.",
-        season: "Light Spring",
-        text: "The jewelry recommendation completely changed my look. I switched from silver to gold based on my result and my skin literally looks warmer and brighter in photos now.",
-    }
-];
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function Testimonials() {
+    const { t } = useTranslation();
+
+    const testimonials = [
+        { name: t('testimonial1Name'), season: t('testimonial1Season'), text: t('testimonial1Text') },
+        { name: t('testimonial2Name'), season: t('testimonial2Season'), text: t('testimonial2Text') },
+        { name: t('testimonial3Name'), season: t('testimonial3Season'), text: t('testimonial3Text') },
+    ];
+
     return (
         <section className="py-24 px-6 relative bg-black/40 border-y border-white/5 overflow-hidden">
             <div className="max-w-7xl mx-auto">
@@ -32,12 +23,12 @@ export default function Testimonials() {
                         viewport={{ once: true }}
                         className="text-4xl md:text-5xl font-bold text-white mb-6"
                     >
-                        What People Are Saying
+                        {t('testimonialsTitle')}
                     </motion.h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                    {testimonials.map((t, idx) => (
+                    {testimonials.map((item, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 20 }}
@@ -52,11 +43,11 @@ export default function Testimonials() {
                                 ))}
                             </div>
                             <p className="text-white/80 leading-relaxed max-w-sm mb-8 flex-grow">
-                                &ldquo;{t.text}&rdquo;
+                                &ldquo;{item.text}&rdquo;
                             </p>
                             <div>
-                                <h4 className="text-white font-bold">{t.name}</h4>
-                                <p className="text-sm text-red-300 font-medium">{t.season}</p>
+                                <h4 className="text-white font-bold">{item.name}</h4>
+                                <p className="text-sm text-red-300 font-medium">{item.season}</p>
                             </div>
                         </motion.div>
                     ))}

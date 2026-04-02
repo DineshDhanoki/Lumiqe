@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface SignInModalProps {
     isOpen: boolean;
@@ -17,7 +18,7 @@ interface SignInModalProps {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^[\d\s\-\+\(\)]{7,20}$/;
 
-function getPasswordStrength(password: string): { score: number; label: string; color: string } {
+function getPasswordStrength(password: string, t: (key: string) => string): { score: number; label: string; color: string } {
     if (!password) return { score: 0, label: '', color: '' };
     let score = 0;
     if (password.length >= 8) score++;
@@ -25,14 +26,15 @@ function getPasswordStrength(password: string): { score: number; label: string; 
     if (/[A-Z]/.test(password)) score++;
     if (/[0-9]/.test(password)) score++;
     if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(password)) score++;
-    if (score <= 2) return { score, label: 'Weak', color: 'bg-red-500' };
-    if (score <= 3) return { score, label: 'Fair', color: 'bg-yellow-500' };
-    if (score <= 4) return { score, label: 'Good', color: 'bg-blue-500' };
-    return { score, label: 'Strong', color: 'bg-green-500' };
+    if (score <= 2) return { score, label: t('authPasswordWeak'), color: 'bg-red-500' };
+    if (score <= 3) return { score, label: t('authPasswordFair'), color: 'bg-yellow-500' };
+    if (score <= 4) return { score, label: t('authPasswordGood'), color: 'bg-blue-500' };
+    return { score, label: t('authPasswordStrong'), color: 'bg-green-500' };
 }
 
 export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze', defaultSignUp = false }: SignInModalProps) {
     const router = useRouter();
+    const { t } = useTranslation();
     const [isSignUp, setIsSignUp] = useState(defaultSignUp);
 
     useEffect(() => {
@@ -48,7 +50,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = useState(false);
 
-    const passwordStrength = getPasswordStrength(password);
+    const passwordStrength = getPasswordStrength(password, t);
 
     const resetForm = () => {
         setFirstName('');
@@ -70,19 +72,19 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
     const validate = (): boolean => {
         const errors: Record<string, string> = {};
         if (isSignUp) {
-            if (!firstName.trim()) errors.firstName = 'First name is required.';
-            if (!lastName.trim()) errors.lastName = 'Last name is required.';
-            if (phone && !PHONE_REGEX.test(phone)) errors.phone = 'Enter a valid phone number.';
+            if (!firstName.trim()) errors.firstName = t('authFirstNameRequired');
+            if (!lastName.trim()) errors.lastName = t('authLastNameRequired');
+            if (phone && !PHONE_REGEX.test(phone)) errors.phone = t('authValidPhone');
         }
         if (!email) {
-            errors.email = 'Email is required.';
+            errors.email = t('authEmailRequired');
         } else if (!EMAIL_REGEX.test(email)) {
-            errors.email = 'Enter a valid email address.';
+            errors.email = t('authValidEmail');
         }
         if (!password) {
-            errors.password = 'Password is required.';
+            errors.password = t('authPasswordRequired');
         } else if (isSignUp && password.length < 8) {
-            errors.password = 'Password must be at least 8 characters.';
+            errors.password = t('authPasswordMinLength');
         }
         setFieldErrors(errors);
         return Object.keys(errors).length === 0;
@@ -109,7 +111,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
 
                 if (!res.ok) {
                     const data = await res.json();
-                    let msg = 'Registration failed';
+                    let msg = t('authRegistrationFailed');
                     if (typeof data.detail === 'string') {
                         msg = data.detail;
                     } else if (Array.isArray(data.detail)) {
@@ -128,13 +130,13 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
             });
 
             if (result?.error) {
-                throw new Error('Invalid email or password');
+                throw new Error(t('authInvalidCredentials'));
             } else {
                 handleClose();
                 router.push(isSignUp ? '/welcome' : callbackUrl);
             }
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'An error occurred during authentication');
+            setError(err instanceof Error ? err.message : t('authError'));
         } finally {
             setIsLoading(false);
         }
@@ -169,17 +171,17 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         role="dialog"
                         aria-modal="true"
-                        aria-label={isSignUp ? 'Create your Lumiqe account' : 'Sign in to Lumiqe'}
+                        aria-label={isSignUp ? t('authCreateAccount') : t('authWelcomeBack')}
                         className="relative w-full max-w-md bg-stone-900 border border-white/10 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/5">
                             <div>
                                 <h3 className="text-xl font-bold text-white">
-                                    {isSignUp ? 'Create Account' : 'Welcome back'}
+                                    {isSignUp ? t('authCreateAccount') : t('authWelcomeBack')}
                                 </h3>
                                 <p className="text-white/40 text-sm mt-0.5">
-                                    {isSignUp ? "Join Lumiqe — it's free" : 'Sign in to your account'}
+                                    {isSignUp ? t('authJoinFree') : t('authSignInToAccount')}
                                 </p>
                             </div>
                             <button
@@ -210,12 +212,12 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                     <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                                     <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                                 </svg>
-                                Continue with Google
+                                {t('authContinueWithGoogle')}
                             </button>
 
                             <div className="relative flex items-center mb-5">
                                 <div className="flex-grow border-t border-white/10"></div>
-                                <span className="flex-shrink-0 mx-4 text-white/30 text-xs uppercase tracking-wider">or</span>
+                                <span className="flex-shrink-0 mx-4 text-white/30 text-xs uppercase tracking-wider">{t('authOr')}</span>
                                 <div className="flex-grow border-t border-white/10"></div>
                             </div>
 
@@ -236,8 +238,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                         <User className="absolute left-3.5 w-4 h-4 text-white/40" />
                                                         <input
                                                             type="text"
-                                                            placeholder="First name"
-                                                            aria-label="First name"
+                                                            placeholder={t('authFirstName')}
+                                                            aria-label={t('authFirstName')}
                                                             value={firstName}
                                                             onChange={(e) => { setFirstName(e.target.value); setFieldErrors(p => ({ ...p, firstName: '' })); }}
                                                             className={inputClass('firstName')}
@@ -250,8 +252,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                         <User className="absolute left-3.5 w-4 h-4 text-white/40" />
                                                         <input
                                                             type="text"
-                                                            placeholder="Last name"
-                                                            aria-label="Last name"
+                                                            placeholder={t('authLastName')}
+                                                            aria-label={t('authLastName')}
                                                             value={lastName}
                                                             onChange={(e) => { setLastName(e.target.value); setFieldErrors(p => ({ ...p, lastName: '' })); }}
                                                             className={inputClass('lastName')}
@@ -267,8 +269,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                     <Phone className="absolute left-3.5 w-4 h-4 text-white/40" />
                                                     <input
                                                         type="tel"
-                                                        placeholder="Phone number (optional)"
-                                                        aria-label="Phone number"
+                                                        placeholder={t('authPhone')}
+                                                        aria-label={t('authPhone')}
                                                         value={phone}
                                                         onChange={(e) => { setPhone(e.target.value); setFieldErrors(p => ({ ...p, phone: '' })); }}
                                                         className={inputClass('phone')}
@@ -286,13 +288,13 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                         <Mail className="absolute left-3.5 w-4 h-4 text-white/40" />
                                         <input
                                             type="email"
-                                            placeholder="Email address"
-                                            aria-label="Email address"
+                                            placeholder={t('authEmail')}
+                                            aria-label={t('authEmail')}
                                             value={email}
                                             onChange={(e) => { setEmail(e.target.value); setFieldErrors(p => ({ ...p, email: '' })); }}
                                             onBlur={() => {
                                                 if (email && !EMAIL_REGEX.test(email)) {
-                                                    setFieldErrors(p => ({ ...p, email: 'Enter a valid email address.' }));
+                                                    setFieldErrors(p => ({ ...p, email: t('authValidEmail') }));
                                                 }
                                             }}
                                             className={inputClass('email')}
@@ -307,8 +309,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                         <Lock className="absolute left-3.5 w-4 h-4 text-white/40" />
                                         <input
                                             type={showPassword ? 'text' : 'password'}
-                                            placeholder="Password"
-                                            aria-label="Password"
+                                            placeholder={t('authPassword')}
+                                            aria-label={t('authPassword')}
                                             value={password}
                                             onChange={(e) => { setPassword(e.target.value); setFieldErrors(p => ({ ...p, password: '' })); }}
                                             className={`w-full bg-black/50 border rounded-2xl py-3 pl-10 pr-10 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 transition-all ${
@@ -321,7 +323,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
                                             className="absolute right-3.5 text-white/40 hover:text-white/70 transition-colors"
-                                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                            aria-label={showPassword ? t('authHidePassword') : t('authShowPassword')}
                                         >
                                             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         </button>
@@ -340,7 +342,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                 ))}
                                             </div>
                                             {passwordStrength.label && (
-                                                <p className="text-xs text-white/40">{passwordStrength.label} password</p>
+                                                <p className="text-xs text-white/40">{passwordStrength.label} {t('authPasswordLabel')}</p>
                                             )}
                                         </div>
                                     )}
@@ -349,7 +351,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                 {!isSignUp && (
                                     <div className="text-right">
                                         <Link href="/reset-password" onClick={handleClose} className="text-white/40 hover:text-white/70 text-xs transition-colors">
-                                            Forgot password?
+                                            {t('authForgotPassword')}
                                         </Link>
                                     </div>
                                 )}
@@ -366,18 +368,18 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                                 </svg>
-                                                Processing...
+                                                {t('authProcessing')}
                                             </>
-                                        ) : isSignUp ? 'Create Account' : 'Sign In'}
+                                        ) : isSignUp ? t('authCreateAccount') : t('authSignInLink')}
                                     </button>
                                 </div>
 
                                 {isSignUp && (
                                     <p className="text-center text-white/30 text-xs">
-                                        By creating an account, you agree to our{' '}
-                                        <Link href="/terms" onClick={handleClose} className="text-white/50 hover:text-white underline">Terms</Link>
-                                        {' '}and{' '}
-                                        <Link href="/privacy" onClick={handleClose} className="text-white/50 hover:text-white underline">Privacy Policy</Link>
+                                        {t('authAgreeToTerms')}{' '}
+                                        <Link href="/terms" onClick={handleClose} className="text-white/50 hover:text-white underline">{t('authTerms')}</Link>
+                                        {' '}{t('authAnd')}{' '}
+                                        <Link href="/privacy" onClick={handleClose} className="text-white/50 hover:text-white underline">{t('authPrivacyPolicy')}</Link>
                                     </p>
                                 )}
                             </form>
@@ -387,14 +389,14 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                     onClick={() => { setIsSignUp(!isSignUp); setError(''); setFieldErrors({}); }}
                                     className="text-white/50 hover:text-white text-sm transition-colors"
                                 >
-                                    {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-                                    <span className="text-red-400 font-semibold">{isSignUp ? 'Sign In' : 'Sign Up'}</span>
+                                    {isSignUp ? t('authAlreadyHaveAccount') : t('authDontHaveAccount')}
+                                    <span className="text-red-400 font-semibold">{isSignUp ? t('authSignInLink') : t('authSignUpLink')}</span>
                                 </button>
                                 <button
                                     onClick={() => { onClose(); router.push('/analyze'); }}
                                     className="text-white/30 hover:text-white/60 text-xs transition-colors"
                                 >
-                                    Continue as Guest
+                                    {t('authContinueAsGuest')}
                                 </button>
                             </div>
                         </div>
