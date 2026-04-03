@@ -43,6 +43,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
+    const [age, setAge] = useState('');
+    const [sex, setSex] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +58,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
         setFirstName('');
         setLastName('');
         setPhone('');
+        setAge('');
+        setSex('');
         setEmail('');
         setPassword('');
         setShowPassword(false);
@@ -75,6 +79,13 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
             if (!firstName.trim()) errors.firstName = t('authFirstNameRequired');
             if (!lastName.trim()) errors.lastName = t('authLastNameRequired');
             if (phone && !PHONE_REGEX.test(phone)) errors.phone = t('authValidPhone');
+            const ageNum = parseInt(age, 10);
+            if (!age.trim()) {
+                errors.age = 'Age is required';
+            } else if (isNaN(ageNum) || ageNum < 13 || ageNum > 100) {
+                errors.age = 'Enter a valid age (13–100)';
+            }
+            if (!sex) errors.sex = 'Please select your sex';
         }
         if (!email) {
             errors.email = t('authEmailRequired');
@@ -132,6 +143,18 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
             if (result?.error) {
                 throw new Error(t('authInvalidCredentials'));
             } else {
+                // Save age/sex after successful sign-up
+                if (isSignUp && age && sex) {
+                    try {
+                        await fetch('/api/proxy/profile/quiz', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ age: parseInt(age, 10), sex }),
+                        });
+                    } catch {
+                        // Non-blocking — profile data is supplementary
+                    }
+                }
                 handleClose();
                 router.push(isSignUp ? '/welcome' : callbackUrl);
             }
@@ -277,6 +300,47 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                     />
                                                 </div>
                                                 {fieldErrors.phone && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.phone}</p>}
+                                            </div>
+
+                                            {/* Age */}
+                                            <div>
+                                                <div className="relative flex items-center">
+                                                    <User className="absolute left-3.5 w-4 h-4 text-white/40" />
+                                                    <input
+                                                        type="number"
+                                                        inputMode="numeric"
+                                                        min={13}
+                                                        max={100}
+                                                        placeholder="Age"
+                                                        aria-label="Age"
+                                                        value={age}
+                                                        onChange={(e) => { setAge(e.target.value); setFieldErrors(p => ({ ...p, age: '' })); }}
+                                                        className={inputClass('age')}
+                                                    />
+                                                </div>
+                                                {fieldErrors.age && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.age}</p>}
+                                            </div>
+
+                                            {/* Sex */}
+                                            <div>
+                                                <p className="text-xs text-white/40 mb-2 ml-1">Sex</p>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {['Male', 'Female', 'Other'].map((option) => (
+                                                        <button
+                                                            key={option}
+                                                            type="button"
+                                                            onClick={() => { setSex(option); setFieldErrors(p => ({ ...p, sex: '' })); }}
+                                                            className={`py-2.5 rounded-2xl text-sm font-medium transition-all border ${
+                                                                sex === option
+                                                                    ? 'bg-red-600/20 border-red-500/50 text-red-300'
+                                                                    : 'bg-black/50 border-white/10 text-white/50 hover:bg-white/10 hover:text-white'
+                                                            }`}
+                                                        >
+                                                            {option}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                {fieldErrors.sex && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.sex}</p>}
                                             </div>
                                         </motion.div>
                                     )}
