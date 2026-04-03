@@ -13,7 +13,7 @@ import os
 import threading
 from concurrent.futures import ThreadPoolExecutor
 
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 
 from app.schemas.analysis import AnalyzeResponse
 from app.repositories import user_repo, analysis_repo
@@ -172,6 +172,8 @@ async def _persist_analysis_result(
 async def analyze_image(
     request: Request,
     image: UploadFile = File(..., description="Selfie image (JPEG, PNG, WebP)"),
+    age: int | None = Form(None, description="User's age (13-100)"),
+    sex: str | None = Form(None, description="User's sex (Male, Female, Other)"),
     current_user: dict | None = Depends(get_optional_user),
 ):
     """
@@ -252,6 +254,8 @@ async def analyze_image(
 async def analyze_multi_image(
     request: Request,
     images: list[UploadFile] = File(..., description="2-5 selfie images for averaged analysis"),
+    age: int | None = Form(None, description="User's age (13-100)"),
+    sex: str | None = Form(None, description="User's sex (Male, Female, Other)"),
     current_user: dict | None = Depends(get_optional_user),
 ):
     """

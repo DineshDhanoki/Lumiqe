@@ -50,6 +50,7 @@ class User(Base):
     season: Mapped[str | None] = mapped_column(String(50), nullable=True)
     palette: Mapped[list | None] = mapped_column(JSON, nullable=True)
     phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    age: Mapped[int | None] = mapped_column(Integer, nullable=True)
     gender: Mapped[str | None] = mapped_column(String(20), nullable=True)
     body_shape: Mapped[str | None] = mapped_column(String(30), nullable=True)
     style_personality: Mapped[str | None] = mapped_column(String(30), nullable=True)
@@ -76,6 +77,8 @@ class User(Base):
             "trial_ends_at": self.trial_ends_at.isoformat() if self.trial_ends_at else None,
             "season": self.season,
             "palette": self.palette,
+            "age": self.age,
+            "sex": self.gender,
             "body_shape": self.body_shape,
             "style_personality": self.style_personality,
             "quiz_completed_at": self.quiz_completed_at.isoformat() if self.quiz_completed_at else None,

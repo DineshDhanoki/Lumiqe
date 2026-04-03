@@ -84,6 +84,8 @@ class ProfileResponse(BaseModel):
     referral_count: int = 0
     season: str | None = None
     palette: list | None = None
+    age: int | None = None
+    sex: str | None = None
     stripe_subscription_id: str | None = None
     created_at: str | None = None
 

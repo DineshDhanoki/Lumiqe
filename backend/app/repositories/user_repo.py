@@ -190,14 +190,20 @@ async def update_quiz(
     user_id: int,
     body_shape: str | None = None,
     style_personality: str | None = None,
+    age: int | None = None,
+    sex: str | None = None,
 ) -> bool:
-    """Update the user's quiz results."""
+    """Update the user's quiz results and profile data."""
     from datetime import datetime, timezone
     values: dict = {"quiz_completed_at": datetime.now(timezone.utc)}
     if body_shape is not None:
         values["body_shape"] = body_shape
     if style_personality is not None:
         values["style_personality"] = style_personality
+    if age is not None:
+        values["age"] = age
+    if sex is not None:
+        values["gender"] = sex
     result = await session.execute(
         update(User).where(User.id == user_id).values(**values)
     )
@@ -207,7 +213,7 @@ async def update_quiz(
 async def get_quiz(session: AsyncSession, user_id: int) -> Optional[dict]:
     """Retrieve the user's quiz data."""
     result = await session.execute(
-        select(User.body_shape, User.style_personality, User.quiz_completed_at)
+        select(User.body_shape, User.style_personality, User.age, User.gender, User.quiz_completed_at)
         .where(User.id == user_id)
     )
     row = result.one_or_none()
@@ -216,6 +222,8 @@ async def get_quiz(session: AsyncSession, user_id: int) -> Optional[dict]:
     return {
         "body_shape": row.body_shape,
         "style_personality": row.style_personality,
+        "age": row.age,
+        "sex": row.gender,
         "quiz_completed_at": row.quiz_completed_at.isoformat() if row.quiz_completed_at else None,
     }
 
