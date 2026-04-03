@@ -8,12 +8,28 @@ import { apiFetch } from '@/lib/api';
 // ─── Types ──────────────────────────────────────────────────
 
 interface DashboardStats {
-    total_users: number;
-    premium_users: number;
-    total_analyses: number;
-    wishlist_items: number;
-    wardrobe_items: number;
-    affiliate_clicks: number;
+    users: {
+        total: number;
+        premium: number;
+        verified: number;
+        with_palette: number;
+        recent_7d: number;
+    };
+    analyses: number;
+    catalog: {
+        total_products: number;
+        active_products: number;
+    };
+    engagement: {
+        total_wishlisted: number;
+        total_outfits_generated: number;
+        affiliate_clicks: number;
+    };
+    funnel: {
+        signup_to_analysis: number;
+        analysis_to_wishlist: number;
+        wishlist_to_premium: number;
+    };
     top_seasons: Array<{ season: string; count: number }>;
 }
 
@@ -269,23 +285,18 @@ export default function AdminPage() {
     // ── Fetch Funnel ────────────────────────────────────────
     useEffect(() => {
         if (status === 'loading' || !session?.isAdmin) return;
+        if (!dashboardStats) return;
 
-        setLoadingFunnel(true);
-        apiFetch('/api/admin/analytics/funnel')
-            .then((res) => {
-                if (!res.ok) throw new Error('Failed to fetch funnel');
-                return res.json();
-            })
-            .then((data: FunnelStep[]) => {
-                setFunnel(data);
-            })
-            .catch(() => {
-                addToast('Failed to load funnel data', 'error');
-            })
-            .finally(() => {
-                setLoadingFunnel(false);
-            });
-    }, [session, status, addToast]);
+        // Build funnel from dashboard stats
+        const funnelData: FunnelStep[] = [
+            { step: 'Signup', count: dashboardStats.users.total, conversion_pct: 100 },
+            { step: 'Analyzed', count: Math.round(dashboardStats.users.total * dashboardStats.funnel.signup_to_analysis / 100), conversion_pct: dashboardStats.funnel.signup_to_analysis },
+            { step: 'Wishlisted', count: dashboardStats.engagement.total_wishlisted, conversion_pct: dashboardStats.funnel.analysis_to_wishlist },
+            { step: 'Premium', count: dashboardStats.users.premium, conversion_pct: dashboardStats.funnel.wishlist_to_premium },
+        ];
+        setFunnel(funnelData);
+        setLoadingFunnel(false);
+    }, [session, status, dashboardStats]);
 
     // ── Action Handlers ─────────────────────────────────────
     async function handleTriggerDigest() {
@@ -399,12 +410,12 @@ export default function AdminPage() {
                         </div>
                     ) : dashboardStats ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                            <StatCard label="Total Users" value={dashboardStats.total_users} />
-                            <StatCard label="Premium Users" value={dashboardStats.premium_users} />
-                            <StatCard label="Total Analyses" value={dashboardStats.total_analyses} />
-                            <StatCard label="Wishlist Items" value={dashboardStats.wishlist_items} />
-                            <StatCard label="Wardrobe Items" value={dashboardStats.wardrobe_items} />
-                            <StatCard label="Affiliate Clicks" value={dashboardStats.affiliate_clicks} />
+                            <StatCard label="Total Users" value={dashboardStats.users.total} />
+                            <StatCard label="Premium Users" value={dashboardStats.users.premium} />
+                            <StatCard label="Total Analyses" value={dashboardStats.analyses} />
+                            <StatCard label="Wishlisted" value={dashboardStats.engagement.total_wishlisted} />
+                            <StatCard label="Outfits Generated" value={dashboardStats.engagement.total_outfits_generated} />
+                            <StatCard label="Affiliate Clicks" value={dashboardStats.engagement.affiliate_clicks} />
                         </div>
                     ) : (
                         <p className="text-white/30 text-sm">
