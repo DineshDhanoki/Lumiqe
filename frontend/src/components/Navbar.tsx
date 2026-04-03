@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
-import { Sparkles, Menu, X, Crown, User, LogOut } from 'lucide-react';
+import { Sparkles, Menu, X, Crown, User, LogOut, Shield } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import SignInModal from './SignInModal';
 import NotificationBell from './NotificationBell';
@@ -83,6 +83,15 @@ export default function Navbar() {
                                     {isPremium ? <Crown className="w-4 h-4 text-red-400" /> : <User className="w-4 h-4" />}
                                     <span className="text-sm font-bold">{t('navAccount')}</span>
                                 </Link>
+                                {session?.isAdmin && (
+                                    <Link
+                                        href="/admin"
+                                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-red-600/10 hover:bg-red-600/20 text-red-300 border border-red-500/30 transition-all"
+                                    >
+                                        <Shield className="w-4 h-4" />
+                                        <span className="text-sm font-bold">Admin</span>
+                                    </Link>
+                                )}
                                 <button
                                     onClick={() => signOut({ callbackUrl: '/' })}
                                     className="text-white/50 hover:text-red-400 p-2 transition-colors rounded-full hover:bg-white/5"
@@ -149,6 +158,16 @@ export default function Navbar() {
                                         {isPremium ? <Crown className="w-4 h-4 text-red-400" /> : <User className="w-4 h-4" />}
                                         <span className="text-base font-bold">{t('navAccount')}</span>
                                     </Link>
+                                    {session?.isAdmin && (
+                                        <Link
+                                            href="/admin"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-red-600/10 text-red-300 border border-red-500/30"
+                                        >
+                                            <Shield className="w-4 h-4" />
+                                            <span className="text-base font-bold">Admin</span>
+                                        </Link>
+                                    )}
                                     <button
                                         onClick={() => signOut({ callbackUrl: '/' })}
                                         className="flex items-center justify-center gap-2 text-base font-medium text-white/50 hover:text-red-400 w-full py-2"

@@ -3,12 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, X, LayoutDashboard, ScanLine, ShoppingBag, User, LogOut } from 'lucide-react';
+import { Menu, X, LayoutDashboard, ScanLine, ShoppingBag, User, LogOut, Shield } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function AppMenu() {
     const { t } = useTranslation();
-    const { status } = useSession();
+    const { data: session, status } = useSession();
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -17,6 +17,7 @@ export default function AppMenu() {
         { name: t('menuScanner'), href: '/scan', icon: ScanLine },
         { name: t('menuShopColors'), href: '/feed', icon: ShoppingBag },
         { name: t('menuAccount'), href: '/account', icon: User },
+        ...(session?.isAdmin ? [{ name: 'Admin Panel', href: '/admin', icon: Shield }] : []),
     ];
 
     useEffect(() => {

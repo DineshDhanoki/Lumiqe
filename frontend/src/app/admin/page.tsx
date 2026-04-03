@@ -221,6 +221,19 @@ function TopSeasonsList({
     );
 }
 
+interface AdminUser {
+    id: number;
+    name: string;
+    email: string;
+    is_admin: boolean;
+    is_premium: boolean;
+    free_scans_left: number;
+    credits: number;
+    season: string | null;
+    age: number | null;
+    created_at: string | null;
+}
+
 // ─── Main Admin Page ────────────────────────────────────────
 
 export default function AdminPage() {
@@ -236,6 +249,13 @@ export default function AdminPage() {
     const [loadingDigest, setLoadingDigest] = useState(false);
     const [loadingRefreshCasual, setLoadingRefreshCasual] = useState(false);
     const [loadingRefreshAll, setLoadingRefreshAll] = useState(false);
+
+    // User management state
+    const [users, setUsers] = useState<AdminUser[]>([]);
+    const [loadingUsers, setLoadingUsers] = useState(true);
+    const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
+    const [editForm, setEditForm] = useState({ is_premium: false, is_admin: false, free_scans_left: 0, credits: 0 });
+    const [savingUser, setSavingUser] = useState(false);
 
     // ── Toast Helper ────────────────────────────────────────
     const addToast = useCallback(
@@ -297,6 +317,55 @@ export default function AdminPage() {
         setFunnel(funnelData);
         setLoadingFunnel(false);
     }, [session, status, dashboardStats]);
+
+    // ── Fetch Users ────────────────────────────────────────
+    const fetchUsers = useCallback(async () => {
+        setLoadingUsers(true);
+        try {
+            const res = await apiFetch('/api/admin/users');
+            if (!res.ok) throw new Error('Failed');
+            const data: AdminUser[] = await res.json();
+            setUsers(data);
+        } catch {
+            addToast('Failed to load users', 'error');
+        } finally {
+            setLoadingUsers(false);
+        }
+    }, [addToast]);
+
+    useEffect(() => {
+        if (status === 'loading' || !session?.isAdmin) return;
+        fetchUsers();
+    }, [session, status, fetchUsers]);
+
+    const startEditUser = (user: AdminUser) => {
+        setEditingUser(user);
+        setEditForm({
+            is_premium: user.is_premium,
+            is_admin: user.is_admin,
+            free_scans_left: user.free_scans_left,
+            credits: user.credits,
+        });
+    };
+
+    const saveUser = async () => {
+        if (!editingUser) return;
+        setSavingUser(true);
+        try {
+            const res = await apiFetch(`/api/admin/users/${editingUser.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(editForm),
+            });
+            if (!res.ok) throw new Error('Failed');
+            addToast(`User ${editingUser.name} updated`, 'success');
+            setEditingUser(null);
+            fetchUsers();
+        } catch {
+            addToast('Failed to update user', 'error');
+        } finally {
+            setSavingUser(false);
+        }
+    };
 
     // ── Action Handlers ─────────────────────────────────────
     async function handleTriggerDigest() {
@@ -501,6 +570,147 @@ export default function AdminPage() {
                             </p>
                         )}
                     </div>
+                </section>
+
+                {/* ── Section 5: User Management ──────────────── */}
+                <section>
+                    <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">
+                        User Management
+                    </h2>
+                    <div className="bg-zinc-900/60 border border-white/10 rounded-2xl overflow-hidden">
+                        {loadingUsers ? (
+                            <div className="p-6 space-y-3">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <SkeletonBar key={`skeleton-user-${i}`} />
+                                ))}
+                            </div>
+                        ) : users.length > 0 ? (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="border-b border-white/10 text-white/40 text-xs uppercase tracking-wider">
+                                            <th className="text-left px-4 py-3">ID</th>
+                                            <th className="text-left px-4 py-3">Name</th>
+                                            <th className="text-left px-4 py-3">Email</th>
+                                            <th className="text-left px-4 py-3">Season</th>
+                                            <th className="text-center px-4 py-3">Scans</th>
+                                            <th className="text-center px-4 py-3">Credits</th>
+                                            <th className="text-center px-4 py-3">Premium</th>
+                                            <th className="text-center px-4 py-3">Admin</th>
+                                            <th className="text-left px-4 py-3">Joined</th>
+                                            <th className="text-center px-4 py-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {users.map((user) => (
+                                            <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                                <td className="px-4 py-3 text-white/50 font-mono">{user.id}</td>
+                                                <td className="px-4 py-3 text-white font-medium">{user.name}</td>
+                                                <td className="px-4 py-3 text-white/70">{user.email}</td>
+                                                <td className="px-4 py-3 text-white/60">{user.season || '—'}</td>
+                                                <td className="px-4 py-3 text-center text-white/60">{user.free_scans_left}</td>
+                                                <td className="px-4 py-3 text-center text-white/60">{user.credits}</td>
+                                                <td className="px-4 py-3 text-center">
+                                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${user.is_premium ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-white/30'}`}>
+                                                        {user.is_premium ? 'Yes' : 'No'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 text-center">
+                                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${user.is_admin ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-white/30'}`}>
+                                                        {user.is_admin ? 'Yes' : 'No'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 text-white/40 text-xs">
+                                                    {user.created_at ? new Date(user.created_at).toLocaleDateString() : '—'}
+                                                </td>
+                                                <td className="px-4 py-3 text-center">
+                                                    <button
+                                                        onClick={() => startEditUser(user)}
+                                                        className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <p className="text-white/30 text-sm p-6">No users found.</p>
+                        )}
+                    </div>
+
+                    {/* Edit User Modal */}
+                    {editingUser && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingUser(null)} />
+                            <div className="relative w-full max-w-md bg-zinc-900 border border-white/10 rounded-2xl p-6 space-y-5">
+                                <h3 className="text-lg font-bold text-white">
+                                    Edit User: {editingUser.name}
+                                </h3>
+                                <p className="text-white/40 text-sm">{editingUser.email}</p>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-xs text-white/40 font-bold uppercase tracking-wider">Free Scans</label>
+                                        <input
+                                            type="number"
+                                            value={editForm.free_scans_left}
+                                            onChange={(e) => setEditForm({ ...editForm, free_scans_left: parseInt(e.target.value) || 0 })}
+                                            className="w-full mt-1 px-3 py-2 rounded-xl bg-black/50 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs text-white/40 font-bold uppercase tracking-wider">Credits</label>
+                                        <input
+                                            type="number"
+                                            value={editForm.credits}
+                                            onChange={(e) => setEditForm({ ...editForm, credits: parseInt(e.target.value) || 0 })}
+                                            className="w-full mt-1 px-3 py-2 rounded-xl bg-black/50 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-6">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={editForm.is_premium}
+                                            onChange={(e) => setEditForm({ ...editForm, is_premium: e.target.checked })}
+                                            className="accent-red-500"
+                                        />
+                                        <span className="text-sm text-white/80">Premium</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={editForm.is_admin}
+                                            onChange={(e) => setEditForm({ ...editForm, is_admin: e.target.checked })}
+                                            className="accent-red-500"
+                                        />
+                                        <span className="text-sm text-white/80">Admin</span>
+                                    </label>
+                                </div>
+
+                                <div className="flex gap-3 pt-2">
+                                    <button
+                                        onClick={saveUser}
+                                        disabled={savingUser}
+                                        className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-colors disabled:opacity-50"
+                                    >
+                                        {savingUser ? 'Saving...' : 'Save Changes'}
+                                    </button>
+                                    <button
+                                        onClick={() => setEditingUser(null)}
+                                        className="flex-1 py-2.5 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 font-semibold text-sm transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </section>
             </div>
 

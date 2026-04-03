@@ -3,9 +3,9 @@
 import logging
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, require_admin
@@ -196,3 +196,80 @@ async def get_admin_dashboard(
         funnel=funnel,
         top_seasons=top_seasons,
     )
+
+
+# ─── User Management ────────────────────────────────────────
+
+
+class AdminUserResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    is_admin: bool
+    is_premium: bool
+    free_scans_left: int
+    credits: int
+    season: str | None = None
+    age: int | None = None
+    created_at: str | None = None
+
+
+@router.get("/users", response_model=list[AdminUserResponse])
+async def list_users(
+    admin_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db),
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+):
+    """List all registered users with key fields."""
+    result = await session.execute(
+        select(User).order_by(User.created_at.desc()).limit(limit).offset(offset)
+    )
+    users = result.scalars().all()
+    return [
+        AdminUserResponse(
+            id=u.id,
+            name=u.name,
+            email=u.email,
+            is_admin=u.is_admin,
+            is_premium=u.is_premium,
+            free_scans_left=u.free_scans_left,
+            credits=u.credits,
+            season=u.season,
+            age=u.age,
+            created_at=u.created_at.isoformat() if u.created_at else None,
+        )
+        for u in users
+    ]
+
+
+class AdminUserUpdate(BaseModel):
+    is_premium: bool | None = None
+    is_admin: bool | None = None
+    free_scans_left: int | None = None
+    credits: int | None = None
+
+
+@router.patch("/users/{user_id}")
+async def update_user(
+    user_id: int,
+    body: AdminUserUpdate,
+    admin_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db),
+):
+    """Update a user's admin-editable fields."""
+    values = {k: v for k, v in body.model_dump().items() if v is not None}
+    if not values:
+        return {"message": "No fields to update"}
+
+    result = await session.execute(
+        update(User).where(User.id == user_id).values(**values)
+    )
+    await session.commit()
+
+    if result.rowcount == 0:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="User not found")
+
+    logger.info(f"Admin {admin_user['email']} updated user {user_id}: {values}")
+    return {"message": f"User {user_id} updated", "updated_fields": list(values.keys())}
