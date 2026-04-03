@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Camera, Palette, ShoppingBag, Sun, Sparkles, Eye } from 'lucide-react';
+import { Camera, Palette, ShoppingBag, Sun, Sparkles, Eye, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { apiFetch } from '@/lib/api';
 
 const WELCOME_KEY = 'lumiqe-welcome-seen';
 
@@ -47,12 +49,59 @@ const itemVariants = {
 
 export default function WelcomePage() {
     const router = useRouter();
+    const { data: session } = useSession();
     const [mounted, setMounted] = useState(false);
+    const [age, setAge] = useState('');
+    const [sex, setSex] = useState('');
+    const [ageError, setAgeError] = useState('');
+    const [sexError, setSexError] = useState('');
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setMounted(true);
         localStorage.setItem(WELCOME_KEY, 'true');
     }, []);
+
+    const validateAndProceed = async () => {
+        let valid = true;
+
+        // Validate age
+        const ageNum = parseInt(age, 10);
+        if (!age.trim()) {
+            setAgeError('Age is required');
+            valid = false;
+        } else if (isNaN(ageNum) || ageNum < 13 || ageNum > 100) {
+            setAgeError('Enter a valid age (13–100)');
+            valid = false;
+        } else {
+            setAgeError('');
+        }
+
+        // Validate sex
+        if (!sex) {
+            setSexError('Please select an option');
+            valid = false;
+        } else {
+            setSexError('');
+        }
+
+        if (!valid) return;
+
+        // Save to backend
+        setSaving(true);
+        try {
+            await apiFetch('/api/profile/quiz', {
+                method: 'POST',
+                body: JSON.stringify({ age: ageNum, sex }),
+            }, session);
+        } catch {
+            // Non-blocking — profile data is supplementary
+            console.error('Failed to save profile data');
+        }
+        setSaving(false);
+
+        router.push('/analyze');
+    };
 
     if (!mounted) {
         return (
@@ -117,6 +166,63 @@ export default function WelcomePage() {
                         ))}
                     </motion.div>
 
+                    {/* Profile Setup */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="mb-8 p-5 rounded-2xl bg-white/[0.03] border border-white/10"
+                    >
+                        <p className="text-xs font-bold uppercase tracking-wider text-white/40 mb-5">
+                            Tell us about yourself
+                        </p>
+
+                        {/* Age */}
+                        <div className="mb-5">
+                            <label htmlFor="age" className="block text-sm font-semibold text-white/80 mb-2">
+                                Age
+                            </label>
+                            <input
+                                id="age"
+                                type="number"
+                                inputMode="numeric"
+                                min={13}
+                                max={100}
+                                placeholder="e.g. 25"
+                                value={age}
+                                onChange={(e) => { setAge(e.target.value); setAgeError(''); }}
+                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition text-sm"
+                            />
+                            {ageError && <p className="text-red-400 text-xs mt-1.5">{ageError}</p>}
+                        </div>
+
+                        {/* Sex */}
+                        <div>
+                            <label className="block text-sm font-semibold text-white/80 mb-2">
+                                Sex
+                            </label>
+                            <div className="grid grid-cols-3 gap-3">
+                                {['Male', 'Female', 'Other'].map((option) => (
+                                    <button
+                                        key={option}
+                                        type="button"
+                                        onClick={() => { setSex(option); setSexError(''); }}
+                                        className={`py-3 rounded-xl text-sm font-semibold transition-all border ${
+                                            sex === option
+                                                ? 'bg-red-600/20 border-red-500/50 text-red-300'
+                                                : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
+                                        }`}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                            {sexError && <p className="text-red-400 text-xs mt-1.5">{sexError}</p>}
+                        </div>
+
+                        <p className="text-white/30 text-xs mt-4">
+                            This helps our AI deliver more accurate color analysis for your skin tone.
+                        </p>
+                    </motion.div>
+
                     {/* Tips section */}
                     <motion.div
                         variants={itemVariants}
@@ -145,10 +251,12 @@ export default function WelcomePage() {
                     {/* CTA */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <button
-                            onClick={() => router.push('/analyze')}
-                            className="w-full py-4 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-base transition-colors shadow-[0_0_30px_-5px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_-5px_rgba(220,38,38,0.5)]"
+                            onClick={validateAndProceed}
+                            disabled={saving}
+                            className="w-full py-4 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-base transition-colors shadow-[0_0_30px_-5px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_-5px_rgba(220,38,38,0.5)] disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            Start My Analysis &rarr;
+                            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                            {saving ? 'Saving...' : 'Start My Analysis →'}
                         </button>
                         <div className="text-center">
                             <Link

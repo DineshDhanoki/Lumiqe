@@ -20,6 +20,8 @@ interface UserProfile {
     trial_ends_at: string | null;
     season: string | null;
     palette: string[] | null;
+    age: number | null;
+    sex: string | null;
     stripe_subscription_id: string | null;
     created_at: string;
 }
@@ -33,6 +35,13 @@ export default function AccountPage() {
     const [deleteConfirm, setDeleteConfirm] = useState(false);
     const [exporting, setExporting] = useState(false);
     const [deleting, setDeleting] = useState(false);
+
+    // Age/sex edit state
+    const [editingProfile, setEditingProfile] = useState(false);
+    const [editAge, setEditAge] = useState('');
+    const [editSex, setEditSex] = useState('');
+    const [editError, setEditError] = useState('');
+    const [savingProfile, setSavingProfile] = useState(false);
     useEffect(() => {
         async function fetchProfile() {
             if (status !== 'authenticated') return;
@@ -103,6 +112,33 @@ export default function AccountPage() {
         }
     };
 
+    const handleSaveProfile = async () => {
+        const ageNum = parseInt(editAge, 10);
+        if (editAge && (isNaN(ageNum) || ageNum < 13 || ageNum > 100)) {
+            setEditError('Enter a valid age (13–100)');
+            return;
+        }
+        setEditError('');
+        setSavingProfile(true);
+        try {
+            const body: Record<string, unknown> = {};
+            if (editAge) body.age = ageNum;
+            if (editSex) body.sex = editSex;
+            const res = await apiFetch('/api/profile/quiz', {
+                method: 'POST',
+                body: JSON.stringify(body),
+            });
+            if (!res.ok) throw new Error('Save failed');
+            // Update local profile state
+            setProfile((prev) => prev ? { ...prev, age: ageNum || prev.age, sex: editSex || prev.sex } : prev);
+            setEditingProfile(false);
+        } catch {
+            setEditError('Failed to save. Please try again.');
+        } finally {
+            setSavingProfile(false);
+        }
+    };
+
     if (status === 'loading' || loading) {
         return (
             <main className="min-h-screen flex items-center justify-center bg-zinc-950">
@@ -159,6 +195,92 @@ export default function AccountPage() {
                                 <p className="text-white/80 text-sm">
                                     {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                 </p>
+
+                                {/* Age & Sex */}
+                                <div className="mt-6 pt-5 border-t border-white/10">
+                                    {!editingProfile ? (
+                                        <>
+                                            <div className="flex items-center justify-between mb-3">
+                                                <div className="text-xs text-white/30 uppercase tracking-widest font-semibold">Profile Details</div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setEditAge(profile.age?.toString() || '');
+                                                        setEditSex(profile.sex || '');
+                                                        setEditingProfile(true);
+                                                        setEditError('');
+                                                    }}
+                                                    className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
+                                                >
+                                                    Edit
+                                                </button>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-white/50">Age</span>
+                                                    <span className="text-white/80">{profile.age || '—'}</span>
+                                                </div>
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-white/50">Sex</span>
+                                                    <span className="text-white/80">{profile.sex || '—'}</span>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label htmlFor="edit-age" className="block text-xs text-white/50 mb-1.5">Age</label>
+                                                <input
+                                                    id="edit-age"
+                                                    type="number"
+                                                    inputMode="numeric"
+                                                    min={13}
+                                                    max={100}
+                                                    value={editAge}
+                                                    onChange={(e) => setEditAge(e.target.value)}
+                                                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs text-white/50 mb-1.5">Sex</label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {['Male', 'Female', 'Other'].map((option) => (
+                                                        <button
+                                                            key={option}
+                                                            type="button"
+                                                            onClick={() => setEditSex(option)}
+                                                            className={`py-2 rounded-lg text-xs font-semibold transition-all border ${
+                                                                editSex === option
+                                                                    ? 'bg-red-600/20 border-red-500/50 text-red-300'
+                                                                    : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'
+                                                            }`}
+                                                        >
+                                                            {option}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            {editError && <p className="text-red-400 text-xs">{editError}</p>}
+                                            <div className="flex gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleSaveProfile}
+                                                    disabled={savingProfile}
+                                                    className="flex-1 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition disabled:opacity-50"
+                                                >
+                                                    {savingProfile ? 'Saving...' : 'Save'}
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setEditingProfile(false)}
+                                                    className="flex-1 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 text-xs font-medium transition border border-white/10"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Subscription & Plan */}

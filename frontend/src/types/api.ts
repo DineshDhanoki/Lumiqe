@@ -19,6 +19,8 @@ export interface UserProfile {
     trial_ends_at: string | null;
     season: string | null;
     palette: string[] | null;
+    age: number | null;
+    sex: string | null;
     body_shape: string | null;
     style_personality: string | null;
     quiz_completed_at: string | null;

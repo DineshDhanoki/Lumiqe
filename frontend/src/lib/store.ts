@@ -10,6 +10,8 @@ interface UserProfile {
     is_premium?: boolean;
     free_scans_left?: number;
     credits?: number;
+    age?: number;
+    sex?: string;
     body_shape?: string;
     style_personality?: string;
 }

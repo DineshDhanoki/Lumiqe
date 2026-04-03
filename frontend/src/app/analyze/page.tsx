@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Camera, Loader2, AlertCircle, ArrowLeft, Sparkles, Images, X, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { apiFetch } from '@/lib/api';
+import { useLumiqeStore } from '@/lib/store';
 import { t } from '@/lib/i18n';
 import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -19,6 +20,7 @@ type Mode = 'choose' | 'upload' | 'camera' | 'multi';
 export default function AnalyzePage() {
     const router = useRouter();
     const { data: session, status } = useSession();
+    const user = useLumiqeStore((s) => s.user);
     const [mode, setMode] = useState<Mode>('choose');
     const [isDragging, setIsDragging] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -112,6 +114,8 @@ export default function AnalyzePage() {
         const formData = new FormData();
         const compressed = await Promise.all(multiFiles.map((f) => compressImage(f)));
         compressed.forEach((file) => formData.append('images', file));
+        if (user?.age) formData.append('age', user.age.toString());
+        if (user?.sex) formData.append('sex', user.sex);
 
         try {
             const res = await apiFetch('/api/analyze/multi', {
@@ -197,6 +201,8 @@ export default function AnalyzePage() {
 
         const formData = new FormData();
         formData.append('image', selectedFile);
+        if (user?.age) formData.append('age', user.age.toString());
+        if (user?.sex) formData.append('sex', user.sex);
 
         try {
             const res = await apiFetch('/api/analyze', {
