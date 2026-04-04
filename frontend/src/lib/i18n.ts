@@ -520,6 +520,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'Cuenta',
         menuLogOut: 'Cerrar Sesión',
         menuAdminPanel: 'Panel de administración',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Por Qué Elegir Lumiqe',
         featuresSubtitle: 'El motor de análisis de color más avanzado jamás creado para la web.',
         featureClinicalTitle: 'Precisión Clínica',
         featureClinicalDesc: 'Calculamos tu Ángulo de Tipología Individual (ITA) y el cluster de piel dominante K-Means, eliminando las conjeturas de los cuestionarios estándar.',
@@ -812,6 +814,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'Compte',
         menuLogOut: 'Se Déconnecter',
         menuAdminPanel: "Panneau d'administration",
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Pourquoi Choisir Lumiqe',
         featuresSubtitle: "Le moteur d'analyse de couleurs le plus avancé jamais conçu pour le web.",
         featureClinicalTitle: 'Précision Clinique',
         featureClinicalDesc: "Nous calculons votre Angle de Typologie Individuelle (ITA) et le cluster de peau dominant K-Means, éliminant les approximations des quiz standard.",
@@ -1108,6 +1112,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'खाता',
         menuLogOut: 'लॉग आउट',
         menuAdminPanel: 'एडमिन पैनल',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Lumiqe क्यों चुनें',
         featuresSubtitle: 'वेब के लिए अब तक बना सबसे उन्नत रंग विश्लेषण इंजन।',
         featureClinicalTitle: 'क्लिनिकल-ग्रेड सटीकता',
         featureClinicalDesc: 'हम आपके Individual Typology Angle (ITA) और प्रमुख K-Means स्किन क्लस्टर की गणना करते हैं, मानक प्रश्नोत्तरी के अनुमानों को समाप्त करते हैं।',
@@ -1400,6 +1406,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'Conta',
         menuLogOut: 'Sair',
         menuAdminPanel: 'Painel Administrativo',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Por Que Escolher a Lumiqe',
         featuresSubtitle: 'O motor de análise de cores mais avançado já criado para a web.',
         featureClinicalTitle: 'Precisão Clínica',
         featureClinicalDesc: 'Calculamos seu Ângulo de Tipologia Individual (ITA) e o cluster de pele dominante K-Means, eliminando as suposições dos questionários padrão.',
@@ -1692,6 +1700,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'الحساب',
         menuLogOut: 'تسجيل الخروج',
         menuAdminPanel: 'لوحة الإدارة',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'لماذا تختار Lumiqe',
         featuresSubtitle: 'أقوى محرك تحليل ألوان تم إنشاؤه للويب على الإطلاق.',
         featureClinicalTitle: 'دقة طبية',
         featureClinicalDesc: 'نحسب زاوية التصنيف الفردي (ITA) ومجموعة البشرة المهيمنة K-Means، مما يزيل التخمينات من الاستبيانات القياسية.',
@@ -1984,6 +1994,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: '账户',
         menuLogOut: '退出登录',
         menuAdminPanel: '管理面板',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: '为什么选择Lumiqe',
         featuresSubtitle: '有史以来为网络打造的最先进的色彩分析引擎。',
         featureClinicalTitle: '临床级精度',
         featureClinicalDesc: '我们计算您的个人类型学角度（ITA）和主要K-Means肤色聚类，消除标准测验的猜测。',
@@ -2276,6 +2288,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'アカウント',
         menuLogOut: 'ログアウト',
         menuAdminPanel: '管理パネル',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Lumiqeを選ぶ理由',
         featuresSubtitle: 'ウェブ向けに作られた史上最先端のカラー分析エンジン。',
         featureClinicalTitle: '臨床グレードの精度',
         featureClinicalDesc: '個人類型角度（ITA）と支配的なK-Means肌クラスターを計算し、標準的なクイズの推測を排除します。',
@@ -2568,6 +2582,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'Konto',
         menuLogOut: 'Abmelden',
         menuAdminPanel: 'Admin-Panel',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Warum Lumiqe wählen',
         featuresSubtitle: 'Die fortschrittlichste Farbanalyse-Engine, die je für das Web entwickelt wurde.',
         featureClinicalTitle: 'Klinische Genauigkeit',
         featureClinicalDesc: 'Wir berechnen Ihren Individual Typology Angle (ITA) und den dominanten K-Means-Hautcluster und eliminieren das Rätselraten bei Standard-Quizzen.',
@@ -2860,6 +2876,8 @@ export const translations: Record<string, Record<string, string>> = {
         menuAccount: 'Account',
         menuLogOut: 'Esci',
         menuAdminPanel: 'Pannello Amministrativo',
+        // ── Features ───────────────────────────────────────────
+        featuresTitle: 'Perché Scegliere Lumiqe',
         featuresSubtitle: 'Il motore di analisi del colore più avanzato mai creato per il web.',
         featureClinicalTitle: 'Precisione Clinica',
         featureClinicalDesc: "Calcoliamo il tuo Individual Typology Angle (ITA) e il cluster cutaneo dominante K-Means, eliminando le congetture dei quiz standard.",
