@@ -17,7 +17,7 @@ export default function AppMenu() {
         { name: t('menuScanner'), href: '/scan', icon: ScanLine },
         { name: t('menuShopColors'), href: '/feed', icon: ShoppingBag },
         { name: t('menuAccount'), href: '/account', icon: User },
-        ...(session?.isAdmin ? [{ name: 'Admin Panel', href: '/admin', icon: Shield }] : []),
+        ...(session?.isAdmin ? [{ name: t('menuAdminPanel'), href: '/admin', icon: Shield }] : []),
     ];
 
     useEffect(() => {

@@ -32,13 +32,17 @@ function ResultsContent() {
     try {
         const s = searchParams.get('celebrities');
         if (s) celebrities = JSON.parse(decodeURIComponent(s));
-    } catch { /* ignore */ }
+    } catch (e) {
+        console.error('[results] Failed to parse celebrities param:', e);
+    }
 
     let makeup = { lips: '', blush: '', eyeshadow: '' };
     try {
         const s = searchParams.get('makeup');
         if (s) makeup = JSON.parse(decodeURIComponent(s));
-    } catch { /* ignore */ }
+    } catch (e) {
+        console.error('[results] Failed to parse makeup param:', e);
+    }
 
     // Save analysis to Zustand store + localStorage (fallback)
     useEffect(() => {

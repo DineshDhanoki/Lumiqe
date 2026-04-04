@@ -7,6 +7,15 @@
 
 type EventProperties = Record<string, string | number | boolean | null>;
 
+interface PostHogInstance {
+    init: (key: string, options: Record<string, unknown>) => void;
+    capture: (event: string, properties?: EventProperties) => void;
+}
+
+interface WindowWithPostHog extends Window {
+    posthog?: PostHogInstance;
+}
+
 let posthog: { capture: (event: string, properties?: EventProperties) => void } | null = null;
 
 export async function initAnalytics(): Promise<void> {
@@ -23,8 +32,7 @@ export async function initAnalytics(): Promise<void> {
       script.onerror = () => reject(new Error('PostHog script failed to load'));
       document.head.appendChild(script);
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ph = (window as any).posthog;
+    const ph = (window as WindowWithPostHog).posthog;
     if (ph) {
       ph.init(key, {
         api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",

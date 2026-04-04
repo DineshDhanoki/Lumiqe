@@ -76,8 +76,8 @@ async def _run_cv_analysis(image_bytes: bytes) -> dict:
         return await loop.run_in_executor(_cv_executor, engine.analyze_bytes, image_bytes)
 
 
-def _validate_upload(image_bytes: bytes) -> None:
-    """Validate image bytes: check size, file type, and dimensions."""
+def _check_file_size(image_bytes: bytes) -> None:
+    """Raise HTTPException if image_bytes is empty or exceeds the upload size limit."""
     if len(image_bytes) == 0:
         raise HTTPException(
             status_code=422,
@@ -88,13 +88,15 @@ def _validate_upload(image_bytes: bytes) -> None:
             status_code=413,
             detail={
                 "error": "FILE_TOO_LARGE",
-                "detail": f"Image exceeds {settings.MAX_UPLOAD_BYTES // (1024*1024)}MB limit",
+                "detail": f"Image exceeds {settings.MAX_UPLOAD_BYTES // (1024 * 1024)}MB limit",
                 "code": 413,
             },
         )
 
-    detected_format = validate_image_bytes(image_bytes)
-    if detected_format is None:
+
+def _check_file_format(image_bytes: bytes) -> None:
+    """Raise HTTPException if the image is not a valid format or exceeds dimension limits."""
+    if validate_image_bytes(image_bytes) is None:
         raise HTTPException(
             status_code=422,
             detail={
@@ -103,7 +105,6 @@ def _validate_upload(image_bytes: bytes) -> None:
                 "code": 422,
             },
         )
-
     if not validate_image_dimensions(image_bytes):
         raise HTTPException(
             status_code=422,
@@ -113,6 +114,12 @@ def _validate_upload(image_bytes: bytes) -> None:
                 "code": 422,
             },
         )
+
+
+def _validate_upload(image_bytes: bytes) -> None:
+    """Validate image bytes: check size, file type, and dimensions."""
+    _check_file_size(image_bytes)
+    _check_file_format(image_bytes)
 
 
 async def _persist_analysis_result(
@@ -161,7 +168,11 @@ async def _persist_analysis_result(
             )
             return analysis_id
     except Exception as e:
-        logger.warning(f"Could not save analysis result: {e}")
+        logger.error(
+            f"Failed to persist analysis result for user {current_user['id']} "
+            f"({current_user['email']}): {e}",
+            exc_info=True,
+        )
         return None
 
 

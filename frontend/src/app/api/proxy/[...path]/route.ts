@@ -63,13 +63,11 @@ async function handler(
         headers.set('Authorization', `Bearer ${token.backendToken}`);
     }
 
-    const fetchOptions: RequestInit = { method: req.method, headers };
+    const fetchOptions: RequestInit & { body?: BodyInit | ReadableStream | null; duplex?: string } = { method: req.method, headers };
 
     if (req.method !== 'GET' && req.method !== 'HEAD') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (fetchOptions as any).body = req.body;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (fetchOptions as any).duplex = 'half';
+        fetchOptions.body = req.body;
+        fetchOptions.duplex = 'half';
     }
 
     // AbortController for 30s timeout

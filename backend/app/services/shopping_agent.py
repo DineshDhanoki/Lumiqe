@@ -289,16 +289,33 @@ async def gather_inventory(gender: str) -> list[dict]:
 _HEX_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
+def _compute_min_delta_e(product: dict, palette_labs: list) -> float | None:
+    """
+    Return the minimum Delta-E between a product's dominant_color and any palette color.
+    Returns None if the product has no valid or parseable hex color.
+    """
+    hex_color = product.get("dominant_color", "")
+    if not _HEX_RE.match(hex_color):
+        return None
+    try:
+        product_lab = hex_to_lab(hex_color)
+    except Exception as exc:
+        logger.debug(
+            f"Skipping product {product.get('product_url', '?')}: "
+            f"invalid hex color {hex_color!r} — {exc}"
+        )
+        return None
+    return min(delta_e_cie2000(product_lab, p_lab) for p_lab in palette_labs)
+
+
 def _pick_best_match(
     products: list[dict],
     palette_labs: list,
     exclude_ids: set[str] | None = None,
 ) -> dict | None:
     """
-    Pick the product whose dominant_color is closest
-    (lowest Delta-E) to any color in the user's palette.
-    Skips products whose product_url is in exclude_ids.
-    Falls back to the first non-excluded product.
+    Pick the product whose dominant_color is closest (lowest Delta-E) to any palette color.
+    Skips products in exclude_ids. Falls back to the first non-excluded product.
     """
     if not products:
         return None
@@ -308,37 +325,38 @@ def _pick_best_match(
     best_delta_e = float("inf")
 
     for product in products:
-        # Skip previously used products
         if product.get("product_url", "") in exclude_ids:
             continue
-
-        hex_color = product.get("dominant_color", "")
-
-        if not _HEX_RE.match(hex_color):
-            continue
-
-        try:
-            product_lab = hex_to_lab(hex_color)
-        except Exception:
-            continue
-
-        min_de = min(
-            delta_e_cie2000(product_lab, p_lab)
-            for p_lab in palette_labs
-        )
-
-        if min_de < best_delta_e:
+        min_de = _compute_min_delta_e(product, palette_labs)
+        if min_de is not None and min_de < best_delta_e:
             best_delta_e = min_de
             best_product = product
 
-    # Fallback: first non-excluded product
     if best_product is None:
         for p in products:
             if p.get("product_url", "") not in exclude_ids:
-                best_product = p
-                break
-
+                return p
     return best_product
+
+
+def _build_palette_labs(palette_hexes: list[str]) -> list:
+    """Convert a list of hex color strings to CIE LAB values, skipping invalid entries."""
+    labs = []
+    for hex_code in palette_hexes:
+        try:
+            labs.append(hex_to_lab(hex_code))
+        except Exception as exc:
+            logger.warning(f"Skipping invalid palette hex {hex_code!r}: {exc}")
+    return labs
+
+
+def _group_inventory_by_category(inventory: list[dict]) -> dict[str, list[dict]]:
+    """Group inventory items into a dict keyed by their category field."""
+    by_category: dict[str, list[dict]] = {}
+    for item in inventory:
+        cat = item.get("category", "unknown")
+        by_category.setdefault(cat, []).append(item)
+    return by_category
 
 
 def assemble_outfit(
@@ -350,31 +368,16 @@ def assemble_outfit(
     Pick one item per category (8 slots) using Delta-E matching.
     Items in exclude_ids are skipped to ensure non-repeating outfits.
     """
-    palette_labs = []
-    for hex_code in palette_hexes:
-        try:
-            palette_labs.append(hex_to_lab(hex_code))
-        except Exception:
-            pass
-
+    palette_labs = _build_palette_labs(palette_hexes)
     if not palette_labs:
         return {"error": "No valid hex colors in palette"}
 
-    # Group inventory by category
-    by_category: dict[str, list[dict]] = {}
-    for item in inventory:
-        cat = item.get("category", "unknown")
-        by_category.setdefault(cat, []).append(item)
-
-    # Pick best match per slot — with cross-slot deduplication
-    # Once a product URL is used, it can't appear in another slot
+    by_category = _group_inventory_by_category(inventory)
     outfit: dict = {}
     used_urls: set[str] = set(exclude_ids or set())
 
     for slot in OUTFIT_SLOTS:
-        candidates = by_category.get(slot, [])
-        best = _pick_best_match(candidates, palette_labs, used_urls)
-
+        best = _pick_best_match(by_category.get(slot, []), palette_labs, used_urls)
         if best:
             product_url = best["product_url"]
             outfit[slot] = {
@@ -383,7 +386,6 @@ def assemble_outfit(
                 "image_url": best["image_url"],
                 "product_url": product_url,
             }
-            # Mark as used so no other slot picks the same product
             used_urls.add(product_url)
         else:
             outfit[slot] = {

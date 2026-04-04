@@ -100,6 +100,7 @@ export default function Dashboard() {
     const [stylePersonality, setStylePersonality] = useState<StylePersonalityData | null>(null);
     const [dailyOutfit, setDailyOutfit] = useState<DailyOutfitData | null>(null);
     const [dailyOutfitEmpty, setDailyOutfitEmpty] = useState(false);
+    const [dailyOutfitError, setDailyOutfitError] = useState(false);
     const [showAllHistory, setShowAllHistory] = useState(false);
 
     // Read from Zustand store
@@ -141,7 +142,10 @@ export default function Dashboard() {
             .then((data: DailyOutfitData | null) => {
                 if (data) setDailyOutfit(data);
             })
-            .catch((err) => { console.error('[dashboard] Daily outfit fetch failed:', err); });
+            .catch((err) => {
+                console.error('[dashboard] Daily outfit fetch failed:', err);
+                setDailyOutfitError(true);
+            });
     }, [status]);
 
     const _loadFromLocalStorage = useCallback(() => {
@@ -426,6 +430,16 @@ export default function Dashboard() {
                                 >
                                     Go to Wardrobe
                                 </Link>
+                            </div>
+                        ) : dailyOutfitError ? (
+                            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 text-center">
+                                <p className="text-white/40 text-sm mb-3">Could not load today&apos;s outfit</p>
+                                <button
+                                    onClick={() => { setDailyOutfitError(false); setDailyOutfit(null); }}
+                                    className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                                >
+                                    Retry
+                                </button>
                             </div>
                         ) : null}
                     </motion.div>

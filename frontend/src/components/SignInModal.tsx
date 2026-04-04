@@ -81,11 +81,11 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
             if (phone && !PHONE_REGEX.test(phone)) errors.phone = t('authValidPhone');
             const ageNum = parseInt(age, 10);
             if (!age.trim()) {
-                errors.age = 'Age is required';
+                errors.age = t('authAgeRequired');
             } else if (isNaN(ageNum) || ageNum < 13 || ageNum > 100) {
-                errors.age = 'Enter a valid age (13–100)';
+                errors.age = t('authAgeInvalid');
             }
-            if (!sex) errors.sex = 'Please select your sex';
+            if (!sex) errors.sex = t('authSexRequired');
         }
         if (!email) {
             errors.email = t('authEmailRequired');
@@ -311,8 +311,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                         inputMode="numeric"
                                                         min={13}
                                                         max={100}
-                                                        placeholder="Age"
-                                                        aria-label="Age"
+                                                        placeholder={t('authAge')}
+                                                        aria-label={t('authAge')}
                                                         value={age}
                                                         onChange={(e) => { setAge(e.target.value); setFieldErrors(p => ({ ...p, age: '' })); }}
                                                         className={inputClass('age')}
@@ -323,7 +323,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
 
                                             {/* Sex */}
                                             <div>
-                                                <p className="text-xs text-white/40 mb-2 ml-1">Sex</p>
+                                                <p className="text-xs text-white/40 mb-2 ml-1">{t('authSex')}</p>
                                                 <div className="grid grid-cols-3 gap-2">
                                                     {['Male', 'Female', 'Other'].map((option) => (
                                                         <button

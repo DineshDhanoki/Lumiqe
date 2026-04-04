@@ -55,37 +55,44 @@ SEASON_DESCRIPTIONS = {
 # ════════════════════════════════════════════════════════════════
 # GREY WORLD COLOR CONSTANCY
 # ════════════════════════════════════════════════════════════════
+
+# Melanin Protector: clamp Grey World multipliers to prevent extreme
+# overcorrection that would wash out deep skin tones.
+CLAMP_LO = 0.85
+CLAMP_HI = 1.15
+
+
+def _compute_bgr_means(
+    face_bgr: np.ndarray, skin_mask: np.ndarray | None
+) -> tuple[float, float, float]:
+    """Compute mean BGR values from skin pixels (if mask provided) or full image."""
+    if skin_mask is not None:
+        mask_bool = skin_mask == 255
+        if mask_bool.sum() > 100:
+            skin_pixels = face_bgr[mask_bool]
+            return (
+                float(np.mean(skin_pixels[:, 0])),
+                float(np.mean(skin_pixels[:, 1])),
+                float(np.mean(skin_pixels[:, 2])),
+            )
+    return (
+        float(np.mean(face_bgr[:, :, 0])),
+        float(np.mean(face_bgr[:, :, 1])),
+        float(np.mean(face_bgr[:, :, 2])),
+    )
+
+
 def apply_grey_world(face_bgr: np.ndarray, skin_mask: np.ndarray | None = None) -> np.ndarray:
     """
     Normalize color cast using Grey World assumption.
 
     When a skin_mask is provided, multipliers are computed from skin
-    pixels only — this avoids bias from hair, background, and clothing
-    that dominated the old whole-image approach.
-
-    Melanin Protector: multipliers are clamped to [0.85, 1.15] to
-    prevent extreme overcorrection that would wash out deep skin tones.
+    pixels only — this avoids bias from hair, background, and clothing.
+    Multipliers are clamped to [CLAMP_LO, CLAMP_HI] to protect deep skin tones.
     """
-    if skin_mask is not None:
-        mask_bool = skin_mask == 255
-        if mask_bool.sum() > 100:
-            skin_pixels = face_bgr[mask_bool]
-            mean_b = np.mean(skin_pixels[:, 0])
-            mean_g = np.mean(skin_pixels[:, 1])
-            mean_r = np.mean(skin_pixels[:, 2])
-        else:
-            mean_b = np.mean(face_bgr[:, :, 0])
-            mean_g = np.mean(face_bgr[:, :, 1])
-            mean_r = np.mean(face_bgr[:, :, 2])
-    else:
-        mean_b = np.mean(face_bgr[:, :, 0])
-        mean_g = np.mean(face_bgr[:, :, 1])
-        mean_r = np.mean(face_bgr[:, :, 2])
-
+    mean_b, mean_g, mean_r = _compute_bgr_means(face_bgr, skin_mask)
     mean_gray = (mean_b + mean_g + mean_r) / 3.0
 
-    # Compute raw multipliers, then clamp to a safe range
-    CLAMP_LO, CLAMP_HI = 0.85, 1.15
     mult_b = np.clip(mean_gray / (mean_b + 1e-6), CLAMP_LO, CLAMP_HI)
     mult_g = np.clip(mean_gray / (mean_g + 1e-6), CLAMP_LO, CLAMP_HI)
     mult_r = np.clip(mean_gray / (mean_r + 1e-6), CLAMP_LO, CLAMP_HI)
@@ -190,71 +197,81 @@ def _select_best_k(ab_pixels: np.ndarray, k_range: range = range(2, 6)) -> int:
     return best_k
 
 
-def cluster_undertone(lab_pixels: np.ndarray, k: int | None = None) -> np.ndarray:
+# Thresholds for L* glare/shadow filter (OpenCV scale 0-255).
+# L* > L_CHANNEL_HI: specular highlights (forehead glare).
+# L* < L_CHANNEL_LO: deep chin shadows.
+L_CHANNEL_LO = 15
+L_CHANNEL_HI = 85
+MIN_SKIN_PIXELS = 30
+
+
+def _filter_midtone_pixels(lab_pixels: np.ndarray) -> np.ndarray:
     """
-    K-Means on a*b* channels (lighting-invariant).
-    Returns the dominant cluster center as [L, a, b] in OpenCV scale.
-
-    When k is None, the optimal k is selected automatically using
-    silhouette score over k=2..5.
-
-    Glare & Deep Shadow Filter: drops pixels with L* > 85 (specular
-    highlights like forehead glare) or L* < 15 (deep chin shadows)
-    before clustering, forcing K-Means to evaluate only mid-tone skin.
+    Drop specular highlights (L* > L_CHANNEL_HI) and deep shadows (L* < L_CHANNEL_LO).
+    Falls back to the full array if the filter discards too many pixels.
     """
-    min_pixels = 30
-    if len(lab_pixels) < min_pixels:
-        raise ValueError(f"Too few skin pixels ({len(lab_pixels)}) — face crop too small.")
+    midtone_mask = (lab_pixels[:, 0] >= L_CHANNEL_LO) & (lab_pixels[:, 0] <= L_CHANNEL_HI)
+    filtered = lab_pixels[midtone_mask]
 
-    # ── Filter out specular highlights and deep shadows ──────
-    L_CHANNEL_LO, L_CHANNEL_HI = 15, 85
-    l_values = lab_pixels[:, 0]
-    midtone_mask = (l_values >= L_CHANNEL_LO) & (l_values <= L_CHANNEL_HI)
-    filtered_pixels = lab_pixels[midtone_mask]
-
-    # Safety fallback: if the filter is too aggressive, revert
-    if len(filtered_pixels) < min_pixels:
+    if len(filtered) < MIN_SKIN_PIXELS:
         logger.warning(
-            f"L* filter dropped too many pixels ({len(lab_pixels)} → {len(filtered_pixels)}), "
+            f"L* filter dropped too many pixels ({len(lab_pixels)} → {len(filtered)}), "
             f"reverting to unfiltered array"
         )
-        filtered_pixels = lab_pixels
-    else:
-        dropped = len(lab_pixels) - len(filtered_pixels)
-        logger.info(
-            f"L* filter: dropped {dropped} pixels "
-            f"({dropped / len(lab_pixels) * 100:.1f}% highlights/shadows), "
-            f"{len(filtered_pixels)} mid-tone pixels remain"
-        )
+        return lab_pixels
 
-    # ── Adaptive k selection ─────────────────────────────────
-    ab_pixels = filtered_pixels[:, 1:].astype(np.float32)
-    if k is None:
-        k = _select_best_k(ab_pixels)
+    dropped = len(lab_pixels) - len(filtered)
+    logger.info(
+        f"L* filter: dropped {dropped} pixels "
+        f"({dropped / len(lab_pixels) * 100:.1f}% highlights/shadows), "
+        f"{len(filtered)} mid-tone pixels remain"
+    )
+    return filtered
 
-    # ── K-Means on filtered a*b* only ────────────────────────
-    km = KMeans(n_clusters=k, init="k-means++", n_init=10, max_iter=300, random_state=42)
-    labels = km.fit_predict(ab_pixels)
 
-    # Select dominant cluster weighted by compactness (inverse variance)
+def _score_dominant_cluster(ab_pixels: np.ndarray, labels: np.ndarray, k: int) -> int:
+    """
+    Select the dominant cluster weighted by compactness (count / variance).
+    Returns the cluster ID with the highest score.
+    """
     counts = np.bincount(labels)
     scores = np.zeros(k)
     for cid in range(k):
         cluster_pts = ab_pixels[labels == cid]
         variance = np.mean(np.var(cluster_pts, axis=0)) + 1e-6
         scores[cid] = counts[cid] / variance
-    dominant_id = int(scores.argmax())
+    return int(scores.argmax())
 
+
+def cluster_undertone(lab_pixels: np.ndarray, k: int | None = None) -> np.ndarray:
+    """
+    K-Means on a*b* channels (lighting-invariant).
+    Returns the dominant cluster center as [L, a, b] in OpenCV scale.
+
+    When k is None, the optimal k is selected automatically via silhouette score.
+    Specular highlights and deep shadows are filtered before clustering.
+    """
+    if len(lab_pixels) < MIN_SKIN_PIXELS:
+        raise ValueError(f"Too few skin pixels ({len(lab_pixels)}) — face crop too small.")
+
+    filtered_pixels = _filter_midtone_pixels(lab_pixels)
+    ab_pixels = filtered_pixels[:, 1:].astype(np.float32)
+
+    if k is None:
+        k = _select_best_k(ab_pixels)
+
+    km = KMeans(n_clusters=k, init="k-means++", n_init=10, max_iter=300, random_state=42)
+    labels = km.fit_predict(ab_pixels)
+
+    dominant_id = _score_dominant_cluster(ab_pixels, labels, k)
     dominant_ab = km.cluster_centers_[dominant_id]
-
-    # Use filtered pixels for L* median (not the original array)
     dominant_L = np.median(filtered_pixels[labels == dominant_id, 0])
 
+    counts = np.bincount(labels)
     logger.info(
         f"K-Means: k={k}, dominant cluster={dominant_id} "
-        f"(size={counts[dominant_id]}, score={scores[dominant_id]:.1f})"
+        f"(size={counts[dominant_id]}, score={counts[dominant_id] / (np.mean(np.var(ab_pixels[labels == dominant_id], axis=0)) + 1e-6):.1f})"
     )
-
     return np.array([dominant_L, dominant_ab[0], dominant_ab[1]])
 
 
