@@ -54,7 +54,7 @@ describe('TodaysOutfit', () => {
         const dailyOutfit = {
             date: '2025-04-04',
             slots: { top: null, bottom: null, shoes: null, accessory: null },
-            filled_count: 0,
+            filled_count: 1,
             total_slots: 4,
         };
         render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} onRetry={vi.fn()} />);
@@ -65,7 +65,7 @@ describe('TodaysOutfit', () => {
         const dailyOutfit = {
             date: '2025-04-04',
             slots: { top: null, bottom: null, shoes: null, accessory: null },
-            filled_count: 0,
+            filled_count: 1,
             total_slots: 4,
         };
         render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} onRetry={vi.fn()} />);

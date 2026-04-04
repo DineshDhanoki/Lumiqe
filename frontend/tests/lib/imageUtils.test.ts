@@ -29,7 +29,7 @@ describe('compressImage', () => {
             set src(_: string) { this.onerror?.(); },
             width: 0, height: 0,
         };
-        vi.stubGlobal('Image', vi.fn(() => mockImg));
+        vi.stubGlobal('Image', function() { return mockImg; });
 
         const content = new Uint8Array(2 * 1024 * 1024);
         const large = new File([content], 'large.jpg', { type: 'image/jpeg' });
@@ -58,7 +58,7 @@ describe('compressImage', () => {
             set src(_: string) { setTimeout(() => this.onload?.(), 0); },
             width: 100, height: 100,
         };
-        vi.stubGlobal('Image', vi.fn(() => mockImg));
+        vi.stubGlobal('Image', function() { return mockImg; });
 
         const content = new Uint8Array(2 * 1024 * 1024);
         const large = new File([content], 'large.png', { type: 'image/png' });
