@@ -1,0 +1,34 @@
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
+
+export default function DiscoveryQuizzes() {
+    return (
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+            <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Analysis &amp; Discovery</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Link href="/quiz/body-shape"
+                    className="flex items-center gap-4 bg-zinc-900/60 border border-white/10 rounded-2xl p-5 hover:border-white/20 transition-all group">
+                    <div className="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center flex-shrink-0 text-2xl">⌛</div>
+                    <div className="flex-1">
+                        <p className="text-white font-semibold text-sm">Body Shape Analysis</p>
+                        <p className="text-white/40 text-xs mt-0.5">6 questions · Find your silhouette</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors" />
+                </Link>
+
+                <Link href="/quiz/style"
+                    className="flex items-center gap-4 bg-zinc-900/60 border border-white/10 rounded-2xl p-5 hover:border-white/20 transition-all group">
+                    <div className="w-12 h-12 rounded-2xl bg-rose-500/20 flex items-center justify-center flex-shrink-0 text-2xl">✨</div>
+                    <div className="flex-1">
+                        <p className="text-white font-semibold text-sm">Style Personality Quiz</p>
+                        <p className="text-white/40 text-xs mt-0.5">10 questions · Discover your aesthetic</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors" />
+                </Link>
+            </div>
+        </motion.div>
+    );
+}
