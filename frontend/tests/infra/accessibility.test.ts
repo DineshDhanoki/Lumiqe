@@ -46,10 +46,11 @@ describe('OutfitDisplay — accessibility', () => {
 });
 
 describe('Dashboard history — pagination', () => {
-    const dashboardPath = path.resolve(
-        __dirname, '../../src/app/dashboard/page.tsx'
+    // Pagination logic lives in the extracted AnalysisHistory component
+    const historyPath = path.resolve(
+        __dirname, '../../src/components/dashboard/AnalysisHistory.tsx'
     );
-    const source = fs.readFileSync(dashboardPath, 'utf-8');
+    const source = fs.readFileSync(historyPath, 'utf-8');
 
     it('must limit displayed history items (not render all)', () => {
         // Should have .slice() or a limit on displayed history
@@ -58,8 +59,9 @@ describe('Dashboard history — pagination', () => {
 });
 
 describe('Analyze page — upload area', () => {
+    // Upload dropzone logic lives in the extracted UploadDropzone component
     const analyzePath = path.resolve(
-        __dirname, '../../src/app/analyze/page.tsx'
+        __dirname, '../../src/components/analyze/UploadDropzone.tsx'
     );
     const source = fs.readFileSync(analyzePath, 'utf-8');
 
