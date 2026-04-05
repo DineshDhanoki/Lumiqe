@@ -1,12 +1,14 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, AlertCircle, Eye, EyeOff, Phone, User } from 'lucide-react';
+import { X, Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import PasswordStrengthMeter, { getPasswordStrength } from './PasswordStrengthMeter';
+import SignUpFields from './SignUpFields';
 
 interface SignInModalProps {
     isOpen: boolean;
@@ -17,20 +19,6 @@ interface SignInModalProps {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^[\d\s\-\+\(\)]{7,20}$/;
-
-function getPasswordStrength(password: string, t: (key: string) => string): { score: number; label: string; color: string } {
-    if (!password) return { score: 0, label: '', color: '' };
-    let score = 0;
-    if (password.length >= 8) score++;
-    if (password.length >= 12) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(password)) score++;
-    if (score <= 2) return { score, label: t('authPasswordWeak'), color: 'bg-red-500' };
-    if (score <= 3) return { score, label: t('authPasswordFair'), color: 'bg-yellow-500' };
-    if (score <= 4) return { score, label: t('authPasswordGood'), color: 'bg-blue-500' };
-    return { score, label: t('authPasswordStrong'), color: 'bg-green-500' };
-}
 
 export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze', defaultSignUp = false }: SignInModalProps) {
     const router = useRouter();
@@ -72,6 +60,8 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
         resetForm();
         onClose();
     };
+
+    const clearFieldError = (field: string) => setFieldErrors(p => ({ ...p, [field]: '' }));
 
     const validate = (): boolean => {
         const errors: Record<string, string> = {};
@@ -254,94 +244,21 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             exit={{ opacity: 0, height: 0 }}
                                             className="space-y-3.5 overflow-hidden"
                                         >
-                                            {/* First + Last Name */}
-                                            <div className="grid grid-cols-2 gap-3">
-                                                <div>
-                                                    <div className="relative flex items-center">
-                                                        <User className="absolute left-3.5 w-4 h-4 text-white/40" />
-                                                        <input
-                                                            type="text"
-                                                            placeholder={t('authFirstName')}
-                                                            aria-label={t('authFirstName')}
-                                                            value={firstName}
-                                                            onChange={(e) => { setFirstName(e.target.value); setFieldErrors(p => ({ ...p, firstName: '' })); }}
-                                                            className={inputClass('firstName')}
-                                                        />
-                                                    </div>
-                                                    {fieldErrors.firstName && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.firstName}</p>}
-                                                </div>
-                                                <div>
-                                                    <div className="relative flex items-center">
-                                                        <User className="absolute left-3.5 w-4 h-4 text-white/40" />
-                                                        <input
-                                                            type="text"
-                                                            placeholder={t('authLastName')}
-                                                            aria-label={t('authLastName')}
-                                                            value={lastName}
-                                                            onChange={(e) => { setLastName(e.target.value); setFieldErrors(p => ({ ...p, lastName: '' })); }}
-                                                            className={inputClass('lastName')}
-                                                        />
-                                                    </div>
-                                                    {fieldErrors.lastName && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.lastName}</p>}
-                                                </div>
-                                            </div>
-
-                                            {/* Phone */}
-                                            <div>
-                                                <div className="relative flex items-center">
-                                                    <Phone className="absolute left-3.5 w-4 h-4 text-white/40" />
-                                                    <input
-                                                        type="tel"
-                                                        placeholder={t('authPhone')}
-                                                        aria-label={t('authPhone')}
-                                                        value={phone}
-                                                        onChange={(e) => { setPhone(e.target.value); setFieldErrors(p => ({ ...p, phone: '' })); }}
-                                                        className={inputClass('phone')}
-                                                    />
-                                                </div>
-                                                {fieldErrors.phone && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.phone}</p>}
-                                            </div>
-
-                                            {/* Age */}
-                                            <div>
-                                                <div className="relative flex items-center">
-                                                    <User className="absolute left-3.5 w-4 h-4 text-white/40" />
-                                                    <input
-                                                        type="number"
-                                                        inputMode="numeric"
-                                                        min={13}
-                                                        max={100}
-                                                        placeholder={t('authAge')}
-                                                        aria-label={t('authAge')}
-                                                        value={age}
-                                                        onChange={(e) => { setAge(e.target.value); setFieldErrors(p => ({ ...p, age: '' })); }}
-                                                        className={inputClass('age')}
-                                                    />
-                                                </div>
-                                                {fieldErrors.age && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.age}</p>}
-                                            </div>
-
-                                            {/* Sex */}
-                                            <div>
-                                                <p className="text-xs text-white/40 mb-2 ml-1">{t('authSex')}</p>
-                                                <div className="grid grid-cols-3 gap-2">
-                                                    {['Male', 'Female', 'Other'].map((option) => (
-                                                        <button
-                                                            key={option}
-                                                            type="button"
-                                                            onClick={() => { setSex(option); setFieldErrors(p => ({ ...p, sex: '' })); }}
-                                                            className={`py-2.5 rounded-2xl text-sm font-medium transition-all border ${
-                                                                sex === option
-                                                                    ? 'bg-red-600/20 border-red-500/50 text-red-300'
-                                                                    : 'bg-black/50 border-white/10 text-white/50 hover:bg-white/10 hover:text-white'
-                                                            }`}
-                                                        >
-                                                            {option}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                                {fieldErrors.sex && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.sex}</p>}
-                                            </div>
+                                            <SignUpFields
+                                                firstName={firstName}
+                                                lastName={lastName}
+                                                phone={phone}
+                                                age={age}
+                                                sex={sex}
+                                                fieldErrors={fieldErrors}
+                                                setFirstName={setFirstName}
+                                                setLastName={setLastName}
+                                                setPhone={setPhone}
+                                                setAge={setAge}
+                                                setSex={setSex}
+                                                clearFieldError={clearFieldError}
+                                                inputClass={inputClass}
+                                            />
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -355,7 +272,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             placeholder={t('authEmail')}
                                             aria-label={t('authEmail')}
                                             value={email}
-                                            onChange={(e) => { setEmail(e.target.value); setFieldErrors(p => ({ ...p, email: '' })); }}
+                                            onChange={(e) => { setEmail(e.target.value); clearFieldError('email'); }}
                                             onBlur={() => {
                                                 if (email && !EMAIL_REGEX.test(email)) {
                                                     setFieldErrors(p => ({ ...p, email: t('authValidEmail') }));
@@ -376,7 +293,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             placeholder={t('authPassword')}
                                             aria-label={t('authPassword')}
                                             value={password}
-                                            onChange={(e) => { setPassword(e.target.value); setFieldErrors(p => ({ ...p, password: '' })); }}
+                                            onChange={(e) => { setPassword(e.target.value); clearFieldError('password'); }}
                                             className={`w-full bg-black/50 border rounded-2xl py-3 pl-10 pr-10 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 transition-all ${
                                                 fieldErrors.password
                                                     ? 'border-red-500 focus:ring-red-500'
@@ -394,21 +311,14 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                     </div>
                                     {fieldErrors.password && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.password}</p>}
 
-                                    {/* Password strength meter */}
-                                    {isSignUp && password && (
-                                        <div className="mt-2 px-1">
-                                            <div className="flex gap-1 mb-1">
-                                                {[1, 2, 3, 4, 5].map((i) => (
-                                                    <div
-                                                        key={i}
-                                                        className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= passwordStrength.score ? passwordStrength.color : 'bg-white/10'}`}
-                                                    />
-                                                ))}
-                                            </div>
-                                            {passwordStrength.label && (
-                                                <p className="text-xs text-white/40">{passwordStrength.label} {t('authPasswordLabel')}</p>
-                                            )}
-                                        </div>
+                                    {isSignUp && (
+                                        <PasswordStrengthMeter
+                                            password={password}
+                                            label={passwordStrength.label}
+                                            color={passwordStrength.color}
+                                            score={passwordStrength.score}
+                                            passwordLabel={t('authPasswordLabel')}
+                                        />
                                     )}
                                 </div>
 

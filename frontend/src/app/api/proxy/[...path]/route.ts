@@ -30,16 +30,19 @@ async function handler(
 
     const apiPath = path.join('/');
 
-    // Path allowlist — only forward known API routes to prevent proxy abuse
-    const ALLOWED_PREFIXES = [
-        'auth/', 'analyze', 'scan-item', 'complete-profile', 'color-chat',
+    // Path allowlist — only forward known API routes to prevent proxy abuse.
+    // Uses first-segment matching to prevent prefix attacks (e.g. `analyze-evil`
+    // matching `analyze`, or `admin-backdoor` matching `admin`).
+    const ALLOWED_FIRST_SEGMENTS = new Set([
+        'auth', 'analyze', 'scan-item', 'complete-profile', 'color-chat',
         'styling-tips', 'shopping-agent', 'products', 'outfit', 'palette-card',
-        'stripe/', 'referral/', 'share/', 'profile', 'events', 'health',
-        'analysis/', 'admin/', 'notifications', 'wishlist', 'wardrobe',
-        'saved-outfits', 'community/', 'b2b/', 'price-alerts', 'demo-results',
-        'celebrity/',
-    ];
-    if (!ALLOWED_PREFIXES.some(prefix => apiPath.startsWith(prefix))) {
+        'stripe', 'referral', 'share', 'profile', 'events', 'health',
+        'analysis', 'notifications', 'wishlist', 'wardrobe',
+        'saved-outfits', 'community', 'b2b', 'price-alerts', 'demo-results',
+        'celebrity',
+    ]);
+    const firstSegment = apiPath.split('/')[0];
+    if (!ALLOWED_FIRST_SEGMENTS.has(firstSegment)) {
         return NextResponse.json(
             { error: 'FORBIDDEN', detail: 'API path not allowed' },
             { status: 403 }

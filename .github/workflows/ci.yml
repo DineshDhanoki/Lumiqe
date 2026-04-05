@@ -36,7 +36,7 @@ jobs:
             const r = require('./coverage/coverage-summary.json').total;
             const pct = r.lines.pct;
             console.log('Frontend line coverage: ' + pct + '%');
-            if (pct < 50) { console.error('Coverage below 50% threshold'); process.exit(1); }
+            if (pct < 60) { console.error('Coverage below 60% threshold'); process.exit(1); }
           "
 
   backend:
@@ -111,7 +111,7 @@ jobs:
           data = json.load(open('coverage.json'))
           pct = data['totals']['percent_covered']
           print(f'Backend line coverage: {pct:.1f}%')
-          if pct < 40:
-              print('Coverage below 40% threshold')
+          if pct < 55:
+              print('Coverage below 55% threshold')
               sys.exit(1)
           "

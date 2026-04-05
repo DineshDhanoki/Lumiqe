@@ -11,7 +11,7 @@ Implements:
 import json
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -170,7 +170,7 @@ async def get_products_filtered(
     vibe: Optional[str] = Query("Casual", description="'Casual', 'Gym', 'Party', 'Formal'"),
     palette: Optional[str] = Query(None, description="Comma-separated hex colors from user's palette, e.g. '#2C1810,#4A2820'"),
     is_teaser_request: bool = Query(False, description="True for the first premium peek"),
-    user_tier: str = Query("free", description="'free' or 'premium'"),
+    user_tier: Literal["free", "premium"] = Query("free", description="'free' or 'premium'"),
     limit: int = Query(50, ge=1, le=100),
     session: AsyncSession = Depends(get_db),
 ):

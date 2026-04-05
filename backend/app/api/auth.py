@@ -181,6 +181,14 @@ async def google_auth(body: GoogleAuthRequest, request: Request, session: AsyncS
             detail={"error": "INVALID_GOOGLE_TOKEN", "detail": "Token audience mismatch.", "code": 401},
         )
 
+    # Verify token issuer is Google (prevents tokens from other providers being accepted)
+    if token_data.get("iss") not in ("https://accounts.google.com", "accounts.google.com"):
+        logger.warning(f"[SECURITY] Google token issuer mismatch: iss={token_data.get('iss')} ip={client_ip}")
+        raise HTTPException(
+            status_code=401,
+            detail={"error": "INVALID_GOOGLE_TOKEN", "detail": "Token issuer mismatch.", "code": 401},
+        )
+
     user = await user_repo.get_by_email(session, body.email)
     if not user:
         # Auto-register Google user (no password_hash)
