@@ -18,7 +18,10 @@ spec:
         fsGroup: 1000
       containers:
       - name: backend
+        # Pin this tag to the git SHA before each deploy:
+        #   kubectl set image deployment/lumiqe-backend backend=lumiqe/backend:$(git rev-parse --short HEAD)
         image: lumiqe/backend:0.1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         envFrom:

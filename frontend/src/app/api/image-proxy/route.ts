@@ -76,7 +76,13 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Image too large (max 10MB)' }, { status: 413 });
         }
 
-        const contentType = response.headers.get('content-type') || 'image/jpeg';
+        const rawContentType = response.headers.get('content-type') ?? '';
+        const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
+        const contentType = ALLOWED_IMAGE_TYPES.find(t => rawContentType.startsWith(t)) ?? 'image/jpeg';
+        if (!ALLOWED_IMAGE_TYPES.some(t => rawContentType.startsWith(t))) {
+            return NextResponse.json({ error: 'Upstream returned non-image content type' }, { status: 400 });
+        }
+
         const buffer = await response.arrayBuffer();
 
         if (buffer.byteLength > MAX_IMAGE_BYTES) {

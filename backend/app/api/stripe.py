@@ -275,7 +275,11 @@ async def stripe_webhook(
                 user_id_int = int(lumiqe_user_id)
             except (ValueError, TypeError):
                 logger.error(f"Invalid credit metadata: credits={metadata.get('credits')}, user_id={lumiqe_user_id}")
-                return {"status": "error", "detail": "Invalid metadata"}
+                return {"status": "ok", "detail": "Invalid metadata"}
+            # Guard against misconfigured Stripe products sending bad credit amounts
+            if credits_to_add <= 0 or credits_to_add > 100:
+                logger.error(f"Credit amount out of bounds: {credits_to_add} for user {lumiqe_user_id}")
+                return {"status": "ok", "detail": "Credit amount out of bounds"}
             await user_repo.add_credits(session, user_id_int, credits_to_add)
             logger.info(f"User {lumiqe_user_id} purchased {credits_to_add} credits")
         elif lumiqe_user_id:
