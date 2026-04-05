@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Sparkles, User, Star, ChevronRight } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import { timeAgo } from '@/lib/timeAgo';
 
 const SHAPE_LABELS: Record<string, string> = {
     hourglass: 'Hourglass', pear: 'Pear', apple: 'Apple',
@@ -19,14 +20,6 @@ const PERSONALITY_LABELS: Record<string, string> = {
 const PERSONALITY_EMOJIS: Record<string, string> = {
     classic: '👔', romantic: '🌸', edgy: '⚡', boho: '🌿', minimalist: '◼',
 };
-
-function timeAgo(timestamp: number): string {
-    const seconds = Math.floor((Date.now() - timestamp) / 1000);
-    if (seconds < 60) return 'Just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    return `${Math.floor(seconds / 86400)}d ago`;
-}
 
 interface AnalysisEntry {
     id?: string;

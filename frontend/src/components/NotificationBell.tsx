@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Bell, Info, CheckCircle, AlertTriangle, TrendingDown, Newspaper, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiFetch } from '@/lib/api';
+import { timeAgo } from '@/lib/timeAgo';
 
 interface Notification {
     id: string;
@@ -34,21 +35,6 @@ function getTypeIcon(type: Notification['type']) {
         default:
             return <Info className="w-4 h-4 text-white/60 shrink-0" />;
     }
-}
-
-function timeAgo(dateString: string): string {
-    const now = new Date();
-    const date = new Date(dateString);
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (seconds < 60) return 'just now';
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    const days = Math.floor(hours / 24);
-    if (days < 7) return `${days}d ago`;
-    return date.toLocaleDateString();
 }
 
 export default function NotificationBell() {

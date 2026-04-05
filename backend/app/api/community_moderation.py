@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func, Integer, cast
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, get_current_user, require_admin
@@ -99,15 +99,13 @@ async def _count_reports_for_post(
     session: AsyncSession, post_id: int
 ) -> int:
     """Count total community_report events targeting a specific post."""
-    all_reports_result = await session.execute(
-        select(Event).where(Event.event_name == "community_report")
+    result = await session.execute(
+        select(func.count()).select_from(Event).where(
+            Event.event_name == "community_report",
+            cast(Event.properties["post_id"].astext, Integer) == post_id,
+        )
     )
-    all_reports = all_reports_result.scalars().all()
-    return sum(
-        1
-        for r in all_reports
-        if r.properties and r.properties.get("post_id") == post_id
-    )
+    return result.scalar_one()
 
 
 # ─── Endpoints ───────────────────────────────────────────────

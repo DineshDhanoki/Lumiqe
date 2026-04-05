@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -27,6 +27,7 @@ export default function AnalyzePage() {
     const user = useLumiqeStore((s) => s.user);
     const [mode, setMode] = useState<Mode>('choose');
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const previewUrlRef = useRef<string | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [lang, setLang] = useState('en');
@@ -34,6 +35,13 @@ export default function AnalyzePage() {
     useEffect(() => {
         const saved = localStorage.getItem('lumiqe-lang');
         if (saved) setLang(saved);
+    }, []);
+
+    // Revoke the last preview URL on unmount to free memory
+    useEffect(() => {
+        return () => {
+            if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+        };
     }, []);
 
     const changeLang = (code: string) => {
@@ -105,7 +113,11 @@ export default function AnalyzePage() {
             return;
         }
 
-        setPreviewUrl(URL.createObjectURL(selectedFile));
+        // Revoke previous preview URL to avoid memory leak
+        if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+        const objectUrl = URL.createObjectURL(selectedFile);
+        previewUrlRef.current = objectUrl;
+        setPreviewUrl(objectUrl);
         storeThumbnail(selectedFile);
         setError(null);
         setIsAnalyzing(true);

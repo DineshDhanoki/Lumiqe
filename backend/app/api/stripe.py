@@ -280,6 +280,11 @@ async def stripe_webhook(
             if credits_to_add <= 0 or credits_to_add > 100:
                 logger.error(f"Credit amount out of bounds: {credits_to_add} for user {lumiqe_user_id}")
                 return {"status": "ok", "detail": "Credit amount out of bounds"}
+            # Verify user exists before granting credits
+            user = await user_repo.get_by_id(session, user_id_int)
+            if not user:
+                logger.error(f"User {user_id_int} not found — skipping credit grant")
+                return {"status": "ok", "detail": "User not found"}
             await user_repo.add_credits(session, user_id_int, credits_to_add)
             logger.info(f"User {lumiqe_user_id} purchased {credits_to_add} credits")
         elif lumiqe_user_id:
