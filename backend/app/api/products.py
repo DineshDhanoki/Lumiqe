@@ -10,14 +10,15 @@ Implements:
 
 import json
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repositories import product_repo
-from app.core.dependencies import get_db
+from app.core.dependencies import get_db, get_optional_user
 from app.services.affiliate import affiliatize_products
 from app.services.social_proof import get_product_social_proof
 
@@ -32,6 +33,32 @@ if _PRODUCTS_JSON.exists():
         _PRODUCTS_FALLBACK = json.load(f)
 
 PREMIUM_VIBES = {"Gym", "Party", "Formal"}
+
+
+def _resolve_user_tier(user: dict | None) -> str:
+    """Derive 'premium' or 'free' from the authenticated user record.
+
+    This is the only authoritative source of tier — never trust a client-supplied value.
+    """
+    if not user:
+        return "free"
+    if user.get("is_premium"):
+        return "premium"
+    trial_ends = user.get("trial_ends_at")
+    if trial_ends:
+        try:
+            trial_dt = (
+                datetime.fromisoformat(trial_ends)
+                if isinstance(trial_ends, str)
+                else trial_ends
+            )
+            if trial_dt > datetime.now(timezone.utc):
+                return "premium"
+        except (ValueError, TypeError):
+            pass
+    if user.get("credits", 0) > 0:
+        return "premium"
+    return "free"
 
 
 async def _attach_social_proof(
@@ -170,13 +197,15 @@ async def get_products_filtered(
     vibe: Optional[str] = Query("Casual", description="'Casual', 'Gym', 'Party', 'Formal'"),
     palette: Optional[str] = Query(None, description="Comma-separated hex colors from user's palette, e.g. '#2C1810,#4A2820'"),
     is_teaser_request: bool = Query(False, description="True for the first premium peek"),
-    user_tier: Literal["free", "premium"] = Query("free", description="'free' or 'premium'"),
     limit: int = Query(50, ge=1, le=100),
     session: AsyncSession = Depends(get_db),
+    current_user: dict | None = Depends(get_optional_user),
 ):
     """
     Fetch products with Delta-E scoring, JIT scraping, cascading fallback, and PLG gatekeeper.
     """
+    # Derive tier server-side — never trust a client-supplied value
+    user_tier = _resolve_user_tier(current_user)
     effective_vibe = vibe or "Casual"
     is_premium_vibe = effective_vibe in PREMIUM_VIBES
 

@@ -28,6 +28,13 @@ interface WardrobeStats {
     avg_match_score: number;
 }
 
+interface WardrobeCompatibility {
+    overall_score: number;
+    total_items: number;
+    compatible_items: number;
+    summary: string;
+}
+
 const CATEGORIES = [
     'tops', 'bottoms', 'dresses', 'outerwear', 'shoes',
     'accessories', 'bags', 'activewear', 'formal', 'other',
@@ -64,6 +71,7 @@ export default function WardrobePage() {
     const { status } = useSession();
     const [items, setItems] = useState<WardrobeItem[]>([]);
     const [stats, setStats] = useState<WardrobeStats>({ count: 0, avg_match_score: 0 });
+    const [compatibility, setCompatibility] = useState<WardrobeCompatibility | null>(null);
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingItem, setEditingItem] = useState<WardrobeItem | null>(null);
@@ -73,11 +81,19 @@ export default function WardrobePage() {
 
     const fetchWardrobe = useCallback(async () => {
         try {
-            const response = await fetch('/api/proxy/wardrobe');
-            if (!response.ok) throw new Error('Failed to load wardrobe');
-            const data = await response.json();
+            const [wardrobeRes, compatRes] = await Promise.all([
+                fetch('/api/proxy/wardrobe'),
+                fetch('/api/proxy/wardrobe/compatibility'),
+            ]);
+            if (!wardrobeRes.ok) throw new Error('Failed to load wardrobe');
+            const data = await wardrobeRes.json();
             setItems(data.items || []);
             setStats(data.stats || { count: 0, avg_match_score: 0 });
+            // 400 means no palette yet — not an error, just don't show compatibility
+            if (compatRes.ok) {
+                const compatData = await compatRes.json();
+                setCompatibility(compatData);
+            }
         } catch {
             setError('Failed to load your wardrobe. Please try again.');
         } finally {
@@ -173,6 +189,24 @@ export default function WardrobePage() {
                         <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-4 col-span-2 sm:col-span-1">
                             <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Categories</p>
                             <p className="text-2xl font-bold text-white">{Object.keys(categoryCounts).length}</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Palette Compatibility Banner */}
+                {!loading && compatibility && compatibility.total_items > 0 && (
+                    <div className={`flex items-start gap-4 px-5 py-4 rounded-2xl border mb-6 ${getScoreBg(compatibility.overall_score)}`}>
+                        <div className="flex-shrink-0 text-center">
+                            <p className={`text-3xl font-bold ${getScoreColor(compatibility.overall_score)}`}>
+                                {compatibility.overall_score}%
+                            </p>
+                            <p className="text-xs text-white/40 mt-0.5">palette fit</p>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-white mb-0.5">
+                                {compatibility.compatible_items} of {compatibility.total_items} items match your palette
+                            </p>
+                            <p className="text-xs text-white/50">{compatibility.summary}</p>
                         </div>
                     </div>
                 )}

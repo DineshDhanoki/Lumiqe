@@ -54,6 +54,33 @@ def _get_engine():
     return _engine
 
 
+async def _wait_for_celery_result(async_result, timeout: float = 55.0) -> dict:
+    """Poll a Celery AsyncResult with exponential backoff.
+
+    Replaces `run_in_executor(None, async_result.get, 55)` which held a thread
+    from the default pool for the full duration. This approach polls readiness
+    (each Redis GET takes ~1ms) and yields control to the event loop between checks,
+    so no threads are blocked.
+    """
+    loop = asyncio.get_running_loop()
+    interval = 0.1   # Start polling every 100ms
+    max_interval = 2.0
+    elapsed = 0.0
+
+    while elapsed < timeout:
+        # ready() is a Redis GET — run in executor to avoid blocking the event loop
+        is_ready = await loop.run_in_executor(None, async_result.ready)
+        if is_ready:
+            if async_result.successful():
+                return async_result.result
+            raise RuntimeError(str(async_result.result))
+        await asyncio.sleep(interval)
+        elapsed += interval
+        interval = min(interval * 1.5, max_interval)
+
+    raise TimeoutError(f"CV analysis timed out after {timeout:.0f}s")
+
+
 async def _run_cv_analysis(image_bytes: bytes) -> dict:
     """Run the CV pipeline via Celery if available, else ThreadPool fallback."""
     if is_celery_available():
@@ -66,10 +93,8 @@ async def _run_cv_analysis(image_bytes: bytes) -> dict:
             return await loop.run_in_executor(_cv_executor, engine.analyze_bytes, image_bytes)
         # Celery tasks need JSON-serializable args — hex-encode the bytes
         async_result = task.delay(image_bytes.hex())
-        # Wait for result with timeout (Celery task has 60s hard limit)
-        loop = asyncio.get_running_loop()
-        result = await loop.run_in_executor(None, async_result.get, 55)
-        return result
+        # Poll for result without holding a thread for the full duration
+        return await _wait_for_celery_result(async_result)
     else:
         engine = _get_engine()
         loop = asyncio.get_running_loop()
@@ -251,6 +276,15 @@ async def analyze_image(
         raise HTTPException(
             status_code=422,
             detail={"error": error_code, "detail": error_msg, "code": 422},
+        )
+    except TimeoutError:
+        raise HTTPException(
+            status_code=504,
+            detail={
+                "error": "ANALYSIS_TIMEOUT",
+                "detail": "Image analysis took too long. Please try again.",
+                "code": 504,
+            },
         )
 
     # Post-success: persist result, decrement scan quota, update user palette
