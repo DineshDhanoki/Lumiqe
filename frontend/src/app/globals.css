@@ -45,3 +45,12 @@ body {
     min-height: 44px;
   }
 }
+
+/* Analyze page scanner gradient animation */
+@keyframes scanline {
+  0% { top: -2px; }
+  100% { top: 100%; }
+}
+.scanner-animate {
+  animation: scanline 2s linear infinite;
+}

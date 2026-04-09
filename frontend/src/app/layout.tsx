@@ -4,7 +4,7 @@
 //   3. Configure sentry.client.config.ts and sentry.server.config.ts
 //   4. Wrap this layout with Sentry error boundary for client-side error capture
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
@@ -32,6 +32,12 @@ const inter = Inter({
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
 });
 
 export const viewport: Viewport = {
@@ -66,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth overflow-x-hidden" suppressHydrationWarning>
-      <body className={`${inter.variable} ${outfit.variable} antialiased bg-transparent text-white`} suppressHydrationWarning>
+      <body className={`${inter.variable} ${outfit.variable} ${jakarta.variable} antialiased bg-transparent text-white`} suppressHydrationWarning>
         <SkipLink />
         <ClientShell />
         <Providers>

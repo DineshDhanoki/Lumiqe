@@ -4,22 +4,23 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, AlertCircle, ArrowLeft, Sparkles } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+    Loader2, Upload, Video, Clock, Lightbulb, ArrowRight,
+    UserCircle, AlertCircle, Images, Sparkles,
+} from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { useLumiqeStore } from '@/lib/store';
 import { t } from '@/lib/i18n';
 import { compressImage, storeThumbnail } from '@/lib/imageUtils';
 import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import ScanGuide from '@/components/ScanGuide';
 import AppMenu from '@/components/AppMenu';
 import AnalyzingSpinner from '@/components/analyze/AnalyzingSpinner';
-import ModeChooser from '@/components/analyze/ModeChooser';
-import UploadDropzone from '@/components/analyze/UploadDropzone';
 import MultiPhotoUpload from '@/components/analyze/MultiPhotoUpload';
+import ScanGuide from '@/components/ScanGuide';
 
-type Mode = 'choose' | 'upload' | 'camera' | 'multi';
+type Mode = 'choose' | 'camera' | 'multi';
 
 export default function AnalyzePage() {
     const router = useRouter();
@@ -30,14 +31,15 @@ export default function AnalyzePage() {
     const previewUrlRef = useRef<string | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
     const [lang, setLang] = useState('en');
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const saved = localStorage.getItem('lumiqe-lang');
         if (saved) setLang(saved);
     }, []);
 
-    // Revoke the last preview URL on unmount to free memory
     useEffect(() => {
         return () => {
             if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
@@ -77,7 +79,6 @@ export default function AnalyzePage() {
 
         try {
             const res = await apiFetch('/api/analyze/multi', { method: 'POST', body: formData }, session);
-
             if (!res.ok) {
                 let errorMsg = 'Multi-photo analysis failed. Please try again.';
                 try {
@@ -87,7 +88,6 @@ export default function AnalyzePage() {
                 } catch { /* keep generic */ }
                 throw new Error(errorMsg);
             }
-
             const data = await res.json();
             if (data.analysis_id) {
                 router.push(`/results/${data.analysis_id}`);
@@ -113,7 +113,6 @@ export default function AnalyzePage() {
             return;
         }
 
-        // Revoke previous preview URL to avoid memory leak
         if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
         const objectUrl = URL.createObjectURL(selectedFile);
         previewUrlRef.current = objectUrl;
@@ -129,7 +128,6 @@ export default function AnalyzePage() {
 
         try {
             const res = await apiFetch('/api/analyze', { method: 'POST', body: formData }, session);
-
             if (!res.ok) {
                 let errorMsg = 'Analysis failed. Please try again.';
                 try {
@@ -140,7 +138,6 @@ export default function AnalyzePage() {
                 } catch { /* keep generic */ }
                 throw new Error(errorMsg);
             }
-
             const data = await res.json();
             if (data.analysis_id) {
                 router.push(`/results/${data.analysis_id}`);
@@ -157,124 +154,405 @@ export default function AnalyzePage() {
         }
     };
 
+    const onDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); };
+    const onDragLeave = () => setIsDragging(false);
+    const onDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files?.[0]) handleFile(e.dataTransfer.files[0]);
+    };
+
     if (status === 'loading') {
         return (
-            <div className="min-h-screen bg-transparent flex items-center justify-center">
+            <div className="min-h-screen bg-[#131313] flex items-center justify-center">
                 <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
             </div>
         );
     }
 
     return (
-        <main className="flex min-h-screen flex-col relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="min-h-screen bg-[#131313] text-[#e2e2e2]" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)' }}>
+            <ScanGuide />
 
-            {/* ── Navbar ── */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-4 flex items-center justify-between safe-top">
-                <Link
-                    href={session ? '/dashboard' : '/'}
-                    className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    {session ? t(lang, 'backToDashboard') : t(lang, 'backHome')}
-                </Link>
+            {/* ── Overlays for camera / multi / analyzing ── */}
+            <AnimatePresence>
+                {isAnalyzing && (
+                    <motion.div
+                        key="analyzing"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-[#131313] flex items-center justify-center"
+                    >
+                        <AnalyzingSpinner lang={lang} previewUrl={previewUrl} />
+                    </motion.div>
+                )}
 
-                <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-red-400" />
-                    <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    <LanguageSwitcher currentLang={lang} onChange={changeLang} />
-                    <AppMenu />
-                </div>
-            </nav>
-
-            {/* ── Content ── */}
-            <div className="flex flex-1 flex-col items-center justify-center p-4 sm:p-6 pt-24 sm:pt-28 pb-12">
-                <ScanGuide />
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="w-full max-w-md z-10"
-                >
-                    {session?.user?.name && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="text-center mb-6"
-                        >
-                            <p className="text-lg text-white/80">
-                                {t(lang, 'welcomeBack')} <span className="text-white font-semibold">{session.user.name.split(' ')[0]}</span>
-                            </p>
-                            <p className="text-sm text-white/40 mt-1">{t(lang, 'discoverPalette')}</p>
-                        </motion.div>
-                    )}
-
-                    <h2 className="text-3xl font-bold text-white text-center mb-2">{t(lang, 'scanTitle')}</h2>
-                    <p className="text-white/60 text-center mb-8">{t(lang, 'scanSubtitle')}</p>
-
-                    <AnimatePresence mode="wait">
-                        {isAnalyzing && (
-                            <AnalyzingSpinner lang={lang} previewUrl={previewUrl} />
-                        )}
-
-                        {!isAnalyzing && mode === 'choose' && (
-                            <ModeChooser
+                {!isAnalyzing && mode === 'camera' && (
+                    <motion.div
+                        key="camera"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-black flex flex-col"
+                    >
+                        <div className="flex-1 overflow-auto p-4 pt-16">
+                            <CameraCapture
                                 lang={lang}
-                                onSelectCamera={() => setMode('camera')}
-                                onSelectUpload={() => setMode('upload')}
-                                onSelectMulti={() => setMode('multi')}
+                                onCapture={(file) => { setMode('choose'); handleFile(file); }}
+                                onCancel={() => setMode('choose')}
                             />
-                        )}
+                        </div>
+                    </motion.div>
+                )}
 
-                        {!isAnalyzing && mode === 'camera' && (
-                            <motion.div
-                                key="camera"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
+                {!isAnalyzing && mode === 'multi' && (
+                    <motion.div
+                        key="multi"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-[#131313] flex flex-col"
+                    >
+                        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 py-4 flex items-center justify-between">
+                            <button
+                                onClick={() => { setMode('choose'); setError(null); }}
+                                className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
                             >
-                                <CameraCapture
-                                    lang={lang}
-                                    onCapture={(file) => { setMode('choose'); handleFile(file); }}
-                                    onCancel={() => setMode('choose')}
-                                />
-                            </motion.div>
-                        )}
-
-                        {!isAnalyzing && mode === 'upload' && (
-                            <UploadDropzone
-                                lang={lang}
-                                error={error}
-                                onFile={handleFile}
-                                onBack={() => { setMode('choose'); setError(null); }}
-                            />
-                        )}
-
-                        {!isAnalyzing && mode === 'multi' && (
+                                ← Back
+                            </button>
+                            <span className="text-white font-bold">Multi-Photo Analysis</span>
+                            <div className="w-16" />
+                        </nav>
+                        <div className="flex-1 overflow-auto p-4 pt-24 max-w-md mx-auto w-full">
                             <MultiPhotoUpload
                                 lang={lang}
                                 apiError={error}
                                 onAnalyze={handleMultiAnalyze}
                                 onBack={() => { setMode('choose'); setError(null); }}
                             />
-                        )}
-                    </AnimatePresence>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-                    {error && mode !== 'upload' && mode !== 'multi' && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-4 flex items-center gap-2 text-red-200 bg-red-900/60 border border-red-500/30 px-4 py-3 rounded-2xl text-sm"
+            {/* ── Main bento layout ── */}
+            {!isAnalyzing && mode === 'choose' && (
+                <>
+                    {/* Glass Nav */}
+                    <nav
+                        className="fixed top-0 w-full z-50 h-20 px-8 flex justify-between items-center shadow-2xl shadow-black/40"
+                        style={{ background: 'rgba(19,19,19,0.75)', backdropFilter: 'blur(24px)' }}
+                    >
+                        <div
+                            className="text-2xl font-extrabold tracking-tighter text-neutral-50"
+                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
                         >
-                            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                            {error}
-                        </motion.div>
-                    )}
-                </motion.div>
-            </div>
-        </main>
+                            Lumiqe
+                        </div>
+
+                        <div className="hidden md:flex items-center gap-8">
+                            <span
+                                className="text-red-500 font-semibold border-b-2 border-red-500 pb-1 text-sm cursor-default"
+                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                            >
+                                Analysis
+                            </span>
+                            <Link
+                                href="/dashboard"
+                                className="text-neutral-400 font-medium hover:text-neutral-100 transition-colors text-sm"
+                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                            >
+                                Palette
+                            </Link>
+                            <Link
+                                href="/pricing"
+                                className="text-neutral-400 font-medium hover:text-neutral-100 transition-colors text-sm"
+                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                            >
+                                Pro
+                            </Link>
+                            <Link
+                                href="/#how-it-works"
+                                className="text-neutral-400 font-medium hover:text-neutral-100 transition-colors text-sm"
+                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                            >
+                                Science
+                            </Link>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <LanguageSwitcher currentLang={lang} onChange={changeLang} />
+                            <AppMenu />
+                            <Link
+                                href={session ? '/account' : '#'}
+                                className="text-neutral-400 hover:text-neutral-100 transition-colors"
+                                aria-label="Account"
+                            >
+                                <UserCircle className="w-7 h-7" />
+                            </Link>
+                        </div>
+                    </nav>
+
+                    {/* Main Content */}
+                    <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+                        {/* Header */}
+                        <header className="mb-12 text-center md:text-left">
+                            <h1
+                                className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 text-[#e2e2e2]"
+                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                            >
+                                Analysis
+                            </h1>
+                            <p className="text-[#e6bdb8] text-lg md:text-xl max-w-2xl leading-relaxed">
+                                Precision skin intelligence starts here. Upload or scan for a medical-grade aesthetic breakdown.
+                            </p>
+                        </header>
+
+                        {/* Bento Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            {/* ── Primary Zone (8 cols) ── */}
+                            <section className="lg:col-span-8 flex flex-col gap-8">
+                                {/* Drop Zone */}
+                                <div
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label="Upload a photo for analysis"
+                                    className={`relative aspect-video bg-[#1b1b1b] rounded-2xl flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ${
+                                        isDragging
+                                            ? 'border-red-500/70 bg-red-900/10 scale-[1.01]'
+                                            : 'border-[#5c403c]/50 hover:border-red-500/40'
+                                    }`}
+                                    onDragOver={onDragOver}
+                                    onDragLeave={onDragLeave}
+                                    onDrop={onDrop}
+                                    onClick={() => fileInputRef.current?.click()}
+                                    onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
+                                >
+                                    {/* Background portrait image */}
+                                    <div className="absolute inset-0 z-0">
+                                        <div className="w-full h-full bg-gradient-to-br from-[#1f1f1f] to-[#131313] opacity-80" />
+                                    </div>
+
+                                    {/* Scanner line — animates on hover */}
+                                    <div
+                                        className="absolute left-0 w-full h-0.5 z-10 opacity-0 group-hover:opacity-100 scanner-animate"
+                                        style={{
+                                            background: 'linear-gradient(to bottom, transparent 0%, #dc2626 50%, transparent 100%)',
+                                            height: '2px',
+                                        }}
+                                    />
+
+                                    {/* Upload prompt */}
+                                    <div className="relative z-10 flex flex-col items-center text-center p-8">
+                                        <div className="w-20 h-20 bg-[#2a2a2a] rounded-full flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform">
+                                            <Upload className="w-9 h-9 text-red-400" />
+                                        </div>
+                                        <h3
+                                            className="text-2xl font-bold mb-2 text-[#e2e2e2]"
+                                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                        >
+                                            Upload Photo
+                                        </h3>
+                                        <p className="text-[#e6bdb8] mb-8 max-w-sm text-sm">
+                                            Drag and drop your high-resolution portrait or click to browse files.
+                                        </p>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                                            className="bg-red-600 text-white px-10 py-4 rounded-full font-bold text-base shadow-lg shadow-red-900/30 hover:scale-105 active:scale-95 transition-all hover:bg-red-500"
+                                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                        >
+                                            Choose Image
+                                        </button>
+                                        <p className="text-[#e6bdb8]/40 text-xs mt-3">JPEG, PNG, WebP — max 5 MB</p>
+                                    </div>
+
+                                    {/* Hidden file input */}
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        aria-label="Choose a photo to upload"
+                                        className="hidden"
+                                        onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+                                    />
+
+                                    {/* Error banner */}
+                                    {error && (
+                                        <div className="absolute bottom-6 flex items-center gap-2 text-red-200 bg-red-900/80 px-4 py-2 rounded-full text-sm z-20">
+                                            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                                            {error}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Secondary Action Cards */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                    {/* Live Camera */}
+                                    <button
+                                        onClick={() => setMode('camera')}
+                                        className="bg-[#2a2a2a] p-6 rounded-2xl flex items-center justify-between group hover:bg-[#393939] transition-colors cursor-pointer col-span-1 text-left"
+                                    >
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <Video className="w-6 h-6 text-red-400" />
+                                            </div>
+                                            <div>
+                                                <h4
+                                                    className="font-bold text-base text-[#e2e2e2]"
+                                                    style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                                >
+                                                    Start Live Camera
+                                                </h4>
+                                                <p className="text-[#e6bdb8]/60 text-xs mt-0.5">Instant real-time analysis</p>
+                                            </div>
+                                        </div>
+                                        <ArrowRight className="w-5 h-5 text-[#e6bdb8]/40 group-hover:text-red-400 transition-colors flex-shrink-0 ml-2" />
+                                    </button>
+
+                                    {/* Past Scans */}
+                                    <Link
+                                        href="/results"
+                                        className="bg-[#2a2a2a] p-6 rounded-2xl flex items-center justify-between group hover:bg-[#393939] transition-colors cursor-pointer col-span-1"
+                                    >
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <Clock className="w-6 h-6 text-amber-400" />
+                                            </div>
+                                            <div>
+                                                <h4
+                                                    className="font-bold text-base text-[#e2e2e2]"
+                                                    style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                                >
+                                                    Past Scans
+                                                </h4>
+                                                <p className="text-[#e6bdb8]/60 text-xs mt-0.5">View skin evolution</p>
+                                            </div>
+                                        </div>
+                                        <ArrowRight className="w-5 h-5 text-[#e6bdb8]/40 group-hover:text-amber-400 transition-colors flex-shrink-0 ml-2" />
+                                    </Link>
+
+                                    {/* Multi-Photo */}
+                                    <button
+                                        onClick={() => setMode('multi')}
+                                        className="bg-[#2a2a2a] p-6 rounded-2xl flex items-center justify-between group hover:bg-[#393939] transition-colors cursor-pointer col-span-1 text-left"
+                                    >
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <Images className="w-6 h-6 text-emerald-400" />
+                                            </div>
+                                            <div>
+                                                <h4
+                                                    className="font-bold text-base text-[#e2e2e2]"
+                                                    style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                                >
+                                                    Multi-Photo
+                                                </h4>
+                                                <p className="text-[#e6bdb8]/60 text-xs mt-0.5">2–5 selfies, higher accuracy</p>
+                                            </div>
+                                        </div>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
+                                            Pro
+                                        </span>
+                                    </button>
+                                </div>
+                            </section>
+
+                            {/* ── Sidebar (4 cols) ── */}
+                            <aside className="lg:col-span-4 flex flex-col gap-6">
+                                {/* Precision Protocol */}
+                                <div className="bg-[#1f1f1f] rounded-2xl p-7 shadow-sm">
+                                    <h3
+                                        className="text-lg font-bold mb-5 flex items-center gap-3 text-[#e2e2e2]"
+                                        style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                    >
+                                        <Lightbulb className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                                        Precision Protocol
+                                    </h3>
+                                    <ul className="space-y-5">
+                                        {[
+                                            { n: 1, title: 'Natural Lighting.', body: 'Face a window during daylight for the most accurate texture capture.' },
+                                            { n: 2, title: 'Clean Canvas.', body: 'Ensure your skin is free of makeup, SPF, and heavy moisturizers.' },
+                                            { n: 3, title: 'Steady Frame.', body: 'Hold your phone at eye level, approximately 12 inches from your face.' },
+                                        ].map(({ n, title, body }) => (
+                                            <li key={n} className="flex gap-4">
+                                                <div className="w-6 h-6 rounded-full bg-[#353535] flex-shrink-0 flex items-center justify-center text-xs font-bold text-red-400">
+                                                    {n}
+                                                </div>
+                                                <p className="text-[#e6bdb8]/70 text-sm leading-relaxed">
+                                                    <span className="text-[#e2e2e2] font-semibold">{title}</span> {body}
+                                                </p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                {/* System Status */}
+                                <div className="bg-[#0e0e0e] rounded-2xl p-7 border border-[#5c403c]/10">
+                                    <div className="flex items-center justify-between mb-5">
+                                        <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold">System Status</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                            <span className="text-[10px] text-green-500 font-bold uppercase">Ready</span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-neutral-500">Processing Engine</span>
+                                            <span className="text-neutral-300 font-mono">Lumiqe-V4.2</span>
+                                        </div>
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-neutral-500">Analysis Depth</span>
+                                            <span className="text-neutral-300 font-mono">256-bit Spectral</span>
+                                        </div>
+                                        <div className="w-full bg-[#2a2a2a] h-1 rounded-full overflow-hidden mt-3">
+                                            <div className="bg-red-600 w-2/3 h-full rounded-full" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Tips Banner */}
+                                <div className="bg-[#1f1f1f] rounded-2xl p-6 border border-[#5c403c]/20">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <Sparkles className="w-4 h-4 text-red-400 flex-shrink-0" />
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Pro Tips</span>
+                                    </div>
+                                    <ul className="space-y-2">
+                                        {[
+                                            { icon: '☀️', text: 'Natural lighting — no dark rooms' },
+                                            { icon: '👤', text: 'Face centered, no sunglasses' },
+                                            { icon: '🚫', text: 'No heavy filters or beauty mode' },
+                                            { icon: '📷', text: 'Well-lit selfie or portrait works best' },
+                                        ].map(({ icon, text }) => (
+                                            <li key={text} className="flex items-center gap-2 text-xs text-[#e6bdb8]/60">
+                                                <span>{icon}</span> {text}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </aside>
+                        </div>
+                    </main>
+
+                    {/* Footer */}
+                    <footer className="w-full py-10 px-8 flex flex-col md:flex-row justify-between items-center bg-[#0e0e0e] border-t border-neutral-800/30 text-xs uppercase tracking-widest">
+                        <div
+                            className="text-base font-bold text-neutral-200 mb-4 md:mb-0"
+                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                        >
+                            LUMIQE
+                        </div>
+                        <div className="flex gap-8 mb-4 md:mb-0">
+                            {['Terms', 'Privacy', 'Press', 'Contact'].map((item) => (
+                                <a key={item} href="#" className="text-neutral-600 hover:text-red-400 transition-colors">
+                                    {item}
+                                </a>
+                            ))}
+                        </div>
+                        <div className="text-neutral-600">© 2024 Lumiqe AI. The Digital Aesthetician.</div>
+                    </footer>
+                </>
+            )}
+        </div>
     );
 }
