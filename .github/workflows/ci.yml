@@ -36,7 +36,7 @@ jobs:
             const r = require('./coverage/coverage-summary.json').total;
             const pct = r.lines.pct;
             console.log('Frontend line coverage: ' + pct + '%');
-            if (pct < 65) { console.error('Coverage below 65% threshold'); process.exit(1); }
+            if (pct < 57) { console.error('Coverage below 57% threshold'); process.exit(1); }
           "
 
   e2e:

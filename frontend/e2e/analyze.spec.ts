@@ -26,7 +26,7 @@ test.describe('Analyze Page', () => {
 
     test('can navigate back from upload mode', async ({ page }) => {
         await page.getByRole('button', { name: /upload photo/i }).click();
-        await page.getByText(/back/i).first().click();
+        await page.getByRole('button', { name: /back/i }).click();
 
         // Should be back at mode selection
         await expect(page.getByText(/live camera/i)).toBeVisible();
