@@ -1,14 +1,16 @@
 """API — Wardrobe tracker with color extraction and palette compatibility."""
 
+import asyncio
 import io
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, get_current_user
+from app.core.rate_limiter import check_rate_limit, get_rate_limit_key
 from app.models import WardrobeItem
 
 logger = logging.getLogger("lumiqe.api.wardrobe")
@@ -212,6 +214,7 @@ async def add_wardrobe_item(
     notes: str | None = Form(default=None, max_length=500),
     color_hex: str | None = Form(default=None, max_length=7),
     file: UploadFile | None = File(default=None),
+    request: Request = None,
     current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
 ):
@@ -222,6 +225,7 @@ async def add_wardrobe_item(
     is extracted via K-Means clustering. The image itself is NOT persisted
     (privacy by design).
     """
+    await check_rate_limit(f"wardrobe_add:{current_user['id']}", max_requests=30, window_seconds=3600)
     # Validate category
     if category.lower() not in _VALID_CATEGORIES:
         raise HTTPException(
@@ -276,10 +280,13 @@ async def add_wardrobe_item(
                 },
             )
 
-        # Extract dominant color from the image
+        # Extract dominant color from the image (K-Means is CPU-bound — run in thread)
         if not extracted_color:
             try:
-                extracted_color = _extract_dominant_color(image_bytes)
+                loop = asyncio.get_running_loop()
+                extracted_color = await loop.run_in_executor(
+                    None, _extract_dominant_color, image_bytes
+                )
             except ImportError as exc:
                 logger.error(f"Missing dependency for color extraction: {exc}")
                 raise HTTPException(
@@ -341,6 +348,7 @@ async def update_wardrobe_item(
     session: AsyncSession = Depends(get_db),
 ):
     """Update a wardrobe item. Only the owner can update their items."""
+    await check_rate_limit(f"wardrobe_update:{current_user['id']}", max_requests=60, window_seconds=3600)
     result = await session.execute(
         select(WardrobeItem).where(WardrobeItem.id == item_id)
     )
@@ -405,6 +413,7 @@ async def delete_wardrobe_item(
     session: AsyncSession = Depends(get_db),
 ):
     """Delete a wardrobe item. Only the owner can delete their items."""
+    await check_rate_limit(f"wardrobe_delete:{current_user['id']}", max_requests=60, window_seconds=3600)
     result = await session.execute(
         select(WardrobeItem).where(WardrobeItem.id == item_id)
     )

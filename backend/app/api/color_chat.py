@@ -9,6 +9,7 @@ Chat history is persisted server-side in Redis (7-day TTL) so users
 can continue conversations across sessions.
 """
 
+import asyncio
 import json
 import logging
 
@@ -41,13 +42,14 @@ def _get_groq_client():
 async def _store_chat_history(user_id: int, messages: list[dict]) -> None:
     """Store chat history in Redis with TTL. Graceful on failure."""
     try:
-        from app.core.rate_limiter import _redis_client, _redis_available
-        if not _redis_available or not _redis_client:
+        from app.core.rate_limiter import get_redis
+        redis_client, redis_available = get_redis()
+        if not redis_available or not redis_client:
             return
         key = f"lumiqe:chat_history:{user_id}"
         # Keep only the last N messages
         trimmed = messages[-_CHAT_HISTORY_MAX:]
-        await _redis_client.set(key, json.dumps(trimmed), ex=_CHAT_HISTORY_TTL)
+        await redis_client.set(key, json.dumps(trimmed), ex=_CHAT_HISTORY_TTL)
     except Exception as exc:
         logger.debug(f"Could not store chat history: {exc}")
 
@@ -55,11 +57,12 @@ async def _store_chat_history(user_id: int, messages: list[dict]) -> None:
 async def _load_chat_history(user_id: int) -> list[dict]:
     """Load chat history from Redis. Returns empty list on failure."""
     try:
-        from app.core.rate_limiter import _redis_client, _redis_available
-        if not _redis_available or not _redis_client:
+        from app.core.rate_limiter import get_redis
+        redis_client, redis_available = get_redis()
+        if not redis_available or not redis_client:
             return []
         key = f"lumiqe:chat_history:{user_id}"
-        raw = await _redis_client.get(key)
+        raw = await redis_client.get(key)
         if raw:
             return json.loads(raw)
     except Exception as exc:
@@ -181,7 +184,8 @@ async def color_chat(
             messages.append({"role": msg.role, "content": msg.safe_content})
         messages.append({"role": "user", "content": user_message})
 
-        chat = client.chat.completions.create(
+        chat = await asyncio.to_thread(
+            client.chat.completions.create,
             model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.75,

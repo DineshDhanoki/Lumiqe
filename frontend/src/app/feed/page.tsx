@@ -60,7 +60,6 @@ function FeedContent() {
                 url.searchParams.append('gender', gender || 'male');
                 url.searchParams.append('vibe', vibe);
                 url.searchParams.append('is_teaser_request', isPremiumUser ? 'false' : isTeaserRequest.toString());
-                url.searchParams.append('user_tier', isPremiumUser ? 'premium' : 'free');
 
                 // Pass palette for Delta-E precision scoring
                 if (paletteParam) {

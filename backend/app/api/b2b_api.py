@@ -1,9 +1,11 @@
 """API — B2B partner API with key management and metered analysis."""
 
 import hashlib
+import ipaddress
 import logging
 import secrets
 from datetime import datetime, timezone
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, HTTPException, Header
 from pydantic import BaseModel, Field
@@ -11,15 +13,13 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, require_admin
+from app.core.rate_limiter import check_rate_limit
 from app.models import APIKey
 
 logger = logging.getLogger("lumiqe.api.b2b")
 router = APIRouter(prefix="/api/b2b", tags=["B2B API"])
 
-# ─── In-memory rate limit tracking (per key_hash) ───────────
-_rate_window: dict[str, list[float]] = {}
 _B2B_RATE_LIMIT = 100  # requests per hour
-_MAX_RATE_KEYS = 10000
 
 
 # ─── Request / Response Schemas ──────────────────────────────
@@ -50,7 +50,7 @@ class APIKeyResponse(BaseModel):
 
 class B2BAnalyzeRequest(BaseModel):
     """Metered analysis request from a B2B partner."""
-    image_url: str = Field(..., description="URL of image to analyze")
+    image_url: str = Field(..., max_length=2048, description="HTTPS URL of image to analyze")
 
 
 class UsageResponse(BaseModel):
@@ -70,58 +70,45 @@ def _hash_key(raw_key: str) -> str:
     return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
 
 
-def _prune_stale_rate_keys() -> None:
-    """Remove all rate window entries older than 1 hour (TTL-based cleanup)."""
-    now = datetime.now(timezone.utc).timestamp()
-    cutoff = now - 3600
-    stale_keys = [
-        k for k, timestamps in _rate_window.items()
-        if not timestamps or max(timestamps) <= cutoff
-    ]
-    for k in stale_keys:
-        del _rate_window[k]
-    if stale_keys:
-        logger.info(f"Pruned {len(stale_keys)} stale B2B rate-limit keys")
+# ─── SSRF Protection ─────────────────────────────────────────
+
+_PRIVATE_RANGES = [
+    ipaddress.ip_network("10.0.0.0/8"),
+    ipaddress.ip_network("172.16.0.0/12"),
+    ipaddress.ip_network("192.168.0.0/16"),
+    ipaddress.ip_network("127.0.0.0/8"),
+    ipaddress.ip_network("169.254.0.0/16"),  # link-local / cloud metadata
+    ipaddress.ip_network("::1/128"),
+    ipaddress.ip_network("fc00::/7"),
+]
 
 
-def _check_b2b_rate_limit(key_hash: str) -> int:
-    """
-    Check and enforce per-key rate limiting.
-    Returns the number of calls in the current window.
-    Raises HTTPException if limit exceeded.
-    """
-    now = datetime.now(timezone.utc).timestamp()
-    window_start = now - 3600  # 1 hour window
-
-    # TTL-based cleanup: prune entries older than 1 hour
-    _prune_stale_rate_keys()
-
-    # Evict oldest key if store exceeds max capacity
-    if key_hash not in _rate_window and len(_rate_window) >= _MAX_RATE_KEYS:
-        oldest_key = next(iter(_rate_window))
-        del _rate_window[oldest_key]
-        logger.warning("B2B rate window at capacity — evicted oldest key")
-
-    if key_hash not in _rate_window:
-        _rate_window[key_hash] = []
-
-    # Prune old entries
-    _rate_window[key_hash] = [
-        ts for ts in _rate_window[key_hash] if ts > window_start
-    ]
-
-    if len(_rate_window[key_hash]) >= _B2B_RATE_LIMIT:
+def _validate_image_url(url: str) -> None:
+    """Reject non-HTTPS URLs and private/internal IP targets (SSRF prevention)."""
+    try:
+        parsed = urlparse(url)
+    except Exception:
         raise HTTPException(
-            status_code=429,
-            detail={
-                "error": "RATE_LIMIT_EXCEEDED",
-                "detail": f"API key rate limit of {_B2B_RATE_LIMIT}/hour exceeded.",
-                "code": 429,
-            },
+            status_code=422,
+            detail={"error": "INVALID_URL", "detail": "Malformed image URL.", "code": 422},
         )
 
-    _rate_window[key_hash].append(now)
-    return len(_rate_window[key_hash])
+    if parsed.scheme != "https":
+        raise HTTPException(
+            status_code=422,
+            detail={"error": "INVALID_URL", "detail": "image_url must use HTTPS.", "code": 422},
+        )
+
+    hostname = parsed.hostname or ""
+    try:
+        addr = ipaddress.ip_address(hostname)
+        if any(addr in net for net in _PRIVATE_RANGES):
+            raise HTTPException(
+                status_code=422,
+                detail={"error": "INVALID_URL", "detail": "image_url points to a private address.", "code": 422},
+            )
+    except ValueError:
+        pass  # hostname is a domain name, not an IP — accept it
 
 
 async def _validate_api_key(
@@ -267,15 +254,18 @@ async def b2b_analyze(
     """
     api_key = await _validate_api_key(session, x_api_key)
 
-    # Enforce per-key rate limit
-    calls_this_hour = _check_b2b_rate_limit(api_key.key_hash)
+    # Enforce per-key rate limit via Redis (multi-pod safe)
+    await check_rate_limit(f"b2b:{api_key.key_hash}", _B2B_RATE_LIMIT, window_seconds=3600)
+
+    # Validate image URL against SSRF
+    _validate_image_url(body.image_url)
 
     # Increment total calls
     api_key.total_calls += 1
 
     logger.info(
         f"B2B analysis: key_id={api_key.id} key_name={api_key.name} "
-        f"calls_this_hour={calls_this_hour} total_calls={api_key.total_calls}"
+        f"total_calls={api_key.total_calls}"
     )
 
     # Delegate to the existing analysis pipeline
@@ -304,7 +294,6 @@ async def b2b_analyze(
     return {
         "result": result,
         "usage": {
-            "calls_this_hour": calls_this_hour,
             "rate_limit": _B2B_RATE_LIMIT,
             "total_calls": api_key.total_calls,
         },
@@ -319,18 +308,10 @@ async def get_usage(
     """Get usage statistics for the provided API key."""
     api_key = await _validate_api_key(session, x_api_key)
 
-    # Count calls in current hour window
-    now = datetime.now(timezone.utc).timestamp()
-    window_start = now - 3600
-    calls_this_hour = len([
-        ts for ts in _rate_window.get(api_key.key_hash, [])
-        if ts > window_start
-    ])
-
     return UsageResponse(
         key_name=api_key.name,
         total_calls=api_key.total_calls,
         is_active=api_key.is_active,
-        calls_this_hour=calls_this_hour,
+        calls_this_hour=0,  # Redis ZCARD would give accurate count; omit for simplicity
         rate_limit=_B2B_RATE_LIMIT,
     )

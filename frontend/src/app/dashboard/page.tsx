@@ -54,6 +54,30 @@ function daysAgoFromTimestamp(timestamp: number): number {
     return Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24));
 }
 
+function mapToAnalysisEntry(r: {
+    id?: string;
+    season: string;
+    hex_color: string;
+    undertone: string;
+    confidence: number;
+    contrast_level?: string;
+    palette: string[];
+    metal?: string;
+    created_at?: string | null;
+}): AnalysisEntry {
+    return {
+        id: r.id,
+        season: r.season,
+        hexColor: r.hex_color,
+        undertone: r.undertone,
+        confidence: r.confidence,
+        contrastLevel: r.contrast_level ?? 'Medium',
+        palette: r.palette,
+        metal: r.metal ?? 'Gold',
+        timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+    };
+}
+
 export default function Dashboard() {
     const { t } = useTranslation();
     const { data: session, status } = useSession();
@@ -117,21 +141,13 @@ export default function Dashboard() {
                 .then((res) => res.ok ? res.json() : Promise.reject())
                 .then((items: Array<{ id: string; season: string; hex_color: string; undertone: string; confidence: number; contrast_level: string; palette: string[]; metal: string; created_at: string | null }>) => {
                     if (!items.length) return;
-                    const mapped: AnalysisEntry[] = items.map((r) => ({
-                        id: r.id, season: r.season, hexColor: r.hex_color, undertone: r.undertone,
-                        confidence: r.confidence, contrastLevel: r.contrast_level, palette: r.palette,
-                        metal: r.metal, timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
-                    }));
+                    const mapped = items.map(mapToAnalysisEntry);
                     setHistory(mapped);
                     setLastAnalysis(mapped[0]);
                 })
                 .catch(() => {
                     if (storeHydrated && storeHistory.length > 0) {
-                        const mapped: AnalysisEntry[] = storeHistory.map((r) => ({
-                            id: r.id, season: r.season, hexColor: r.hex_color, undertone: r.undertone,
-                            confidence: r.confidence, contrastLevel: 'Medium', palette: r.palette,
-                            metal: r.metal || 'Gold', timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
-                        }));
+                        const mapped = storeHistory.map(mapToAnalysisEntry);
                         setHistory(mapped);
                         setLastAnalysis(mapped[0]);
                     } else {
@@ -139,11 +155,7 @@ export default function Dashboard() {
                     }
                 });
         } else if (storeHydrated && storeHistory.length > 0) {
-            const mapped: AnalysisEntry[] = storeHistory.map((r) => ({
-                id: r.id, season: r.season, hexColor: r.hex_color, undertone: r.undertone,
-                confidence: r.confidence, contrastLevel: 'Medium', palette: r.palette,
-                metal: r.metal || 'Gold', timestamp: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
-            }));
+            const mapped = storeHistory.map(mapToAnalysisEntry);
             setHistory(mapped);
             setLastAnalysis(mapped[0]);
         } else {

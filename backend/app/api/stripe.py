@@ -237,7 +237,8 @@ async def stripe_webhook(
     event_id = event.get("id", "")
     if event_id:
         try:
-            from app.core.rate_limiter import _redis_client, _redis_available
+            from app.core.rate_limiter import get_redis
+            _redis_client, _redis_available = get_redis()
             if _redis_available and _redis_client:
                 already_processed = await _redis_client.set(
                     f"lumiqe:webhook:seen:{event_id}", "1", nx=True, ex=86400

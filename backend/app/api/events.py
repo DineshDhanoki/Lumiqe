@@ -2,6 +2,7 @@
 
 import logging
 from datetime import datetime, timezone
+from typing import Literal
 
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
@@ -14,10 +15,28 @@ from app.models import Event
 logger = logging.getLogger("lumiqe.api.events")
 router = APIRouter(prefix="/api/events", tags=["Analytics"])
 
+# Canonical set of valid event names — prevents arbitrary event pollution
+_ALLOWED_EVENTS = Literal[
+    "analysis_started",
+    "analysis_completed",
+    "product_clicked",
+    "checkout_started",
+    "checkout_completed",
+    "share_created",
+    "wardrobe_item_added",
+    "wishlist_item_added",
+    "price_alert_set",
+    "quiz_completed",
+    "onboarding_completed",
+    "page_viewed",
+    "scan_started",
+    "scan_completed",
+]
+
 
 class TrackRequest(BaseModel):
     """Fire-and-forget event tracking payload."""
-    event_name: str = Field(..., max_length=100)
+    event_name: _ALLOWED_EVENTS
     properties: dict | None = None
 
 

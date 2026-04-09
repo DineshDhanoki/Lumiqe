@@ -185,6 +185,15 @@ def _get_real_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
+def get_redis():
+    """Return the Redis client and availability flag as a tuple.
+
+    Prefer this over importing the private _redis_client/_redis_available directly.
+    Returns (client, is_available).
+    """
+    return _redis_client, _redis_available
+
+
 def get_rate_limit_key(request: Request, user: dict | None, endpoint: str) -> str:
     """Build a rate limit key from user or IP."""
     if user:

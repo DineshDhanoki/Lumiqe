@@ -1,45 +1,20 @@
 """API — Community moderation: reporting, admin review, and admin deletion."""
 
 import logging
-import time
 from collections import defaultdict
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select, delete, func, Integer, cast
+from sqlalchemy import select, delete, func, Integer, cast, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, get_current_user, require_admin
+from app.core.rate_limiter import check_rate_limit
 from app.models import CommunityPost, CommunityLike, Event
 from app.api.community import PostResponse
 
 logger = logging.getLogger("lumiqe.api.community_moderation")
 router = APIRouter(prefix="/api/community", tags=["Community Moderation"])
-
-
-# ─── Report Rate Limiting (in-memory) ────────────────────────
-
-_report_timestamps: dict[int, list[float]] = defaultdict(list)
-_REPORT_MAX_PER_HOUR = 5
-_REPORT_WINDOW_SECONDS = 3600
-
-
-def _check_report_rate_limit(user_id: int) -> None:
-    """Raise 429 if user has exceeded 5 reports per hour."""
-    now = time.time()
-    cutoff = now - _REPORT_WINDOW_SECONDS
-    timestamps = _report_timestamps[user_id]
-    _report_timestamps[user_id] = [t for t in timestamps if t > cutoff]
-    if len(_report_timestamps[user_id]) >= _REPORT_MAX_PER_HOUR:
-        raise HTTPException(
-            status_code=429,
-            detail={
-                "error": "RATE_LIMIT_EXCEEDED",
-                "detail": "You can only submit 5 reports per hour.",
-                "code": 429,
-            },
-        )
-    _report_timestamps[user_id].append(now)
 
 
 # ─── Request / Response Schemas ──────────────────────────────
@@ -119,28 +94,27 @@ async def report_post(
     session: AsyncSession = Depends(get_db),
 ):
     """Report a community post. Rate limited to 5 reports per hour per user."""
-    _check_report_rate_limit(current_user["id"])
+    await check_rate_limit(f"report:{current_user['id']}", max_requests=5, window_seconds=3600)
 
     post = await _fetch_post_or_404(session, post_id)
 
-    # Check if user already reported this post
-    existing_reports_result = await session.execute(
-        select(Event).where(
+    # Check if user already reported this specific post (single targeted query)
+    already_reported_result = await session.execute(
+        select(func.count()).select_from(Event).where(
             Event.event_name == "community_report",
             Event.user_id == current_user["id"],
+            cast(Event.properties["post_id"].astext, Integer) == post_id,
         )
     )
-    existing_reports = existing_reports_result.scalars().all()
-    for report in existing_reports:
-        if report.properties and report.properties.get("post_id") == post_id:
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "error": "ALREADY_REPORTED",
-                    "detail": "You have already reported this post.",
-                    "code": 400,
-                },
-            )
+    if already_reported_result.scalar_one() > 0:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "ALREADY_REPORTED",
+                "detail": "You have already reported this post.",
+                "code": 400,
+            },
+        )
 
     # Create report event
     event = Event(
@@ -186,42 +160,52 @@ async def get_reported_posts(
     session: AsyncSession = Depends(get_db),
 ):
     """Admin only: get posts with 1+ reports, sorted by report count."""
-    report_events_result = await session.execute(
-        select(Event).where(Event.event_name == "community_report")
+    # Use a single SQL query to group and count reports — no full-table scan into memory
+    grouped_result = await session.execute(
+        select(
+            cast(Event.properties["post_id"].astext, Integer).label("post_id"),
+            func.count(Event.id).label("report_count"),
+        )
+        .where(Event.event_name == "community_report")
+        .group_by(text("post_id"))
+        .order_by(text("report_count DESC"))
     )
-    report_events = report_events_result.scalars().all()
+    rows = grouped_result.all()
 
-    # Group report reasons by post_id
-    reports_by_post: dict[int, list[str]] = defaultdict(list)
-    for event in report_events:
-        if event.properties and "post_id" in event.properties:
-            pid = event.properties["post_id"]
-            reason = event.properties.get("reason", "No reason given")
-            reports_by_post[pid].append(reason)
-
-    if not reports_by_post:
+    if not rows:
         return []
 
-    # Fetch the actual posts
-    post_ids = list(reports_by_post.keys())
+    # Fetch reasons for each reported post (separate targeted queries)
+    post_ids = [row.post_id for row in rows]
     posts_result = await session.execute(
         select(CommunityPost).where(CommunityPost.id.in_(post_ids))
     )
     posts_by_id = {p.id: p for p in posts_result.scalars().all()}
 
-    # Build response sorted by report count descending
+    # Fetch reasons grouped in Python (only for posts that still exist)
+    reasons_result = await session.execute(
+        select(
+            cast(Event.properties["post_id"].astext, Integer).label("post_id"),
+            Event.properties["reason"].astext.label("reason"),
+        ).where(
+            Event.event_name == "community_report",
+            cast(Event.properties["post_id"].astext, Integer).in_(post_ids),
+        )
+    )
+    reasons_by_post: dict[int, list[str]] = defaultdict(list)
+    for r in reasons_result.all():
+        reasons_by_post[r.post_id].append(r.reason or "No reason given")
+
     reported_posts = []
-    for pid in sorted(
-        reports_by_post, key=lambda x: len(reports_by_post[x]), reverse=True
-    ):
-        post = posts_by_id.get(pid)
+    for row in rows:
+        post = posts_by_id.get(row.post_id)
         if post is None:
             continue  # Post was already deleted
         reported_posts.append(
             ReportedPostResponse(
                 post=_serialize_post(post),
-                report_count=len(reports_by_post[pid]),
-                report_reasons=reports_by_post[pid],
+                report_count=row.report_count,
+                report_reasons=reasons_by_post.get(row.post_id, []),
             )
         )
 

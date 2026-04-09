@@ -353,14 +353,16 @@ async def analyze_multi_image(
         _validate_upload(img_bytes)
         all_bytes.append(img_bytes)
 
-    # Analyze each image (Celery or ThreadPool)
-    results = []
-    for img_bytes in all_bytes:
+    # Analyze all images concurrently (Celery or ThreadPool)
+    async def _safe_analyze(img_bytes: bytes) -> dict | None:
         try:
-            result = await _run_cv_analysis(img_bytes)
-            results.append(result)
+            return await _run_cv_analysis(img_bytes)
         except Exception as exc:
             logger.warning(f"Multi-analysis: one image failed: {exc}")
+            return None
+
+    raw_results = await asyncio.gather(*[_safe_analyze(b) for b in all_bytes])
+    results = [r for r in raw_results if r is not None]
 
     if not results:
         raise HTTPException(

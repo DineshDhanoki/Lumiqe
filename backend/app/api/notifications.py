@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from app.core.dependencies import get_current_user
-from app.core.rate_limiter import _redis_client, _redis_available
+from app.core.rate_limiter import get_redis
 
 logger = logging.getLogger("lumiqe.api.notifications")
 router = APIRouter(prefix="/api/notifications", tags=["Notifications"])
@@ -90,6 +90,7 @@ async def create_notification(
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
+    _redis_client, _redis_available = get_redis()
     if _redis_available and _redis_client:
         redis_key = f"{_REDIS_PREFIX}{user_id}"
         await _redis_client.lpush(redis_key, json.dumps(notification))
@@ -116,6 +117,7 @@ async def create_notification(
 
 async def _get_user_notifications(user_id: int) -> list[dict]:
     """Return all stored notifications for a user (newest first)."""
+    _redis_client, _redis_available = get_redis()
     if _redis_available and _redis_client:
         redis_key = f"{_REDIS_PREFIX}{user_id}"
         raw_items = await _redis_client.lrange(redis_key, 0, _MAX_PER_USER - 1)
@@ -128,6 +130,7 @@ async def _save_user_notifications(
     user_id: int, notifications: list[dict]
 ) -> None:
     """Overwrite the stored notifications for a user."""
+    _redis_client, _redis_available = get_redis()
     if _redis_available and _redis_client:
         redis_key = f"{_REDIS_PREFIX}{user_id}"
         pipe = _redis_client.pipeline()

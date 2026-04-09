@@ -5,6 +5,7 @@ Adds security headers, request ID tracking, log correlation,
 and request metrics to all responses.
 """
 
+import contextvars
 import logging
 import time
 import uuid
@@ -16,14 +17,18 @@ from starlette.responses import Response
 from app.core.metrics import increment, observe
 
 # ─── Log Correlation ──────────────────────────────────────────
-_current_request_id: str = ""
+# ContextVar is async-safe: each coroutine gets its own copy,
+# eliminating the race condition from the previous module-level global.
+_request_id_var: contextvars.ContextVar[str] = contextvars.ContextVar(
+    "request_id", default="-"
+)
 
 
 class _RequestIDFilter(logging.Filter):
     """Logging filter that adds the current request_id to log records."""
 
     def filter(self, record: logging.LogRecord) -> bool:
-        record.request_id = _current_request_id or "-"
+        record.request_id = _request_id_var.get("-")
         return True
 
 
@@ -36,12 +41,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Inject OWASP-recommended security headers into every response."""
 
     async def dispatch(self, request: Request, call_next) -> Response:
-        global _current_request_id
-
-        # Generate a unique request ID
+        # Generate a unique request ID and bind it to the current coroutine context
         request_id = str(uuid.uuid4())
         request.state.request_id = request_id
-        _current_request_id = request_id
+        _request_id_var.set(request_id)
 
         # Set Sentry user context if authenticated (privacy-safe: id only)
         try:
@@ -73,18 +76,23 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "0"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        # camera=() would block the selfie upload on the analyze page — allow it
+        response.headers["Permissions-Policy"] = "microphone=(), geolocation=()"
         response.headers["Strict-Transport-Security"] = (
             "max-age=63072000; includeSubDomains"
         )
         response.headers["Cache-Control"] = "no-store"
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self'; "
+            "script-src 'self' https://js.stripe.com https://www.googletagmanager.com; "
             "style-src 'self' 'unsafe-inline'; "
             "img-src 'self' data: blob: https:; "
             "font-src 'self' https://fonts.gstatic.com; "
-            "connect-src 'self' https://api.lumiqe.in https://oauth2.googleapis.com https://accounts.google.com; "
+            "connect-src 'self' https://api.lumiqe.in "
+            "https://oauth2.googleapis.com https://accounts.google.com "
+            "https://api.stripe.com https://checkout.stripe.com "
+            "https://vitals.vercel-insights.com https://www.google-analytics.com; "
+            "frame-src https://js.stripe.com https://hooks.stripe.com; "
             "frame-ancestors 'none'; "
             "base-uri 'self'; "
             "form-action 'self'"
