@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, X, LayoutDashboard, ScanLine, ShoppingBag, User, LogOut, Shield } from 'lucide-react';
+import { Menu, X, LayoutDashboard, ScanLine, ShoppingBag, User, LogOut, Shield, Bell } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function AppMenu() {
@@ -16,6 +16,7 @@ export default function AppMenu() {
         { name: t('menuDashboard'), href: '/dashboard', icon: LayoutDashboard },
         { name: t('menuScanner'), href: '/scan', icon: ScanLine },
         { name: t('menuShopColors'), href: '/feed', icon: ShoppingBag },
+        { name: 'Price Alerts', href: '/price-alerts', icon: Bell },
         { name: t('menuAccount'), href: '/account', icon: User },
         ...(session?.isAdmin ? [{ name: t('menuAdminPanel'), href: '/admin', icon: Shield }] : []),
     ];

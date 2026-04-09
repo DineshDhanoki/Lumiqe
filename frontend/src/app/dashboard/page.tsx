@@ -16,6 +16,7 @@ import DiscoveryQuizzes from '@/components/dashboard/DiscoveryQuizzes';
 import SkincareGuide from '@/components/dashboard/SkincareGuide';
 import AnalysisHistory from '@/components/dashboard/AnalysisHistory';
 import EmptyCTA from '@/components/dashboard/EmptyCTA';
+import EmailVerificationBanner from '@/components/dashboard/EmailVerificationBanner';
 
 interface AnalysisEntry {
     id?: string;
@@ -171,6 +172,7 @@ export default function Dashboard() {
             </nav>
 
             <div className="max-w-4xl mx-auto px-4 pt-28 space-y-8">
+                {status === 'authenticated' && <EmailVerificationBanner />}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
                     <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('dashboardSubtitle')}</p>
                     <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white">

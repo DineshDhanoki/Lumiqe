@@ -284,6 +284,33 @@ async def delete_account(
     return {"message": "Account and all associated data permanently deleted."}
 
 
+@router.post("/resend-verification")
+async def resend_verification_email(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db),
+):
+    """Resend the email verification link. Rate-limited to 3 per hour."""
+    import asyncio
+
+    rate_key = f"resend_verify:{current_user['email']}"
+    await check_rate_limit(rate_key, max_requests=3, window_seconds=3600)
+
+    user = await user_repo.get_by_email(session, current_user["email"])
+    if not user:
+        raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "detail": "User not found", "code": 404})
+
+    if user.get("email_verified"):
+        return {"message": "Email is already verified."}
+
+    verify_token = await generate_token(user["email"], "email_verify")
+    verify_url = f"{settings.FRONTEND_URL}/verify-email?token={verify_token}"
+    asyncio.get_running_loop().run_in_executor(None, send_email_verification, user["email"], user.get("name", ""), verify_url)
+
+    logger.info(f"Resent verification email to {user['email']}")
+    return {"message": "Verification email sent."}
+
+
 @router.get("/me/export")
 async def export_user_data(
     current_user: dict = Depends(get_current_user),
