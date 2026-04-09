@@ -324,7 +324,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
 
                                 {!isSignUp && (
                                     <div className="text-right">
-                                        <Link href="/reset-password" onClick={handleClose} className="text-white/40 hover:text-white/70 text-xs transition-colors">
+                                        <Link href="/forgot-password" onClick={handleClose} className="text-white/40 hover:text-white/70 text-xs transition-colors">
                                             {t('authForgotPassword')}
                                         </Link>
                                     </div>
