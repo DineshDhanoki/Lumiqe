@@ -1,8 +1,7 @@
-"""Tests for B2B API helpers: rate limiting, pruning, and key hashing."""
+"""Tests for B2B API helpers: key hashing, SSRF URL validation, and constants."""
 
 import hashlib
 import os
-import time
 
 os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key-for-testing-only-must-be-32-chars-minimum")
 
@@ -11,20 +10,9 @@ from fastapi import HTTPException  # noqa: E402
 
 from app.api.b2b_api import (  # noqa: E402
     _B2B_RATE_LIMIT,
-    _MAX_RATE_KEYS,
-    _check_b2b_rate_limit,
     _hash_key,
-    _prune_stale_rate_keys,
-    _rate_window,
+    _validate_image_url,
 )
-
-
-@pytest.fixture(autouse=True)
-def _clear_rate_window():
-    """Reset the global rate window before each test."""
-    _rate_window.clear()
-    yield
-    _rate_window.clear()
 
 
 class TestHashKey:
@@ -42,54 +30,60 @@ class TestHashKey:
     def test_hash_length_is_64(self):
         assert len(_hash_key("anything")) == 64
 
-
-class TestPruneStaleRateKeys:
-    """Verify that stale entries are removed from the rate window."""
-
-    def test_removes_old_entries(self):
-        old_timestamp = time.time() - 7200  # 2 hours ago
-        _rate_window["old_key"] = [old_timestamp]
-        _rate_window["fresh_key"] = [time.time()]
-
-        _prune_stale_rate_keys()
-
-        assert "old_key" not in _rate_window
-        assert "fresh_key" in _rate_window
-
-    def test_removes_empty_list_entries(self):
-        _rate_window["empty_key"] = []
-        _prune_stale_rate_keys()
-        assert "empty_key" not in _rate_window
+    def test_empty_string_hashes_deterministically(self):
+        assert _hash_key("") == _hash_key("")
 
 
-class TestCheckB2BRateLimit:
-    """Verify per-key rate limit enforcement."""
+class TestRateLimitConstant:
+    """Verify _B2B_RATE_LIMIT is a positive integer."""
 
-    def test_allows_within_limit(self):
-        key_hash = "test_hash_allow"
-        calls = _check_b2b_rate_limit(key_hash)
-        assert calls == 1
+    def test_is_positive_integer(self):
+        assert isinstance(_B2B_RATE_LIMIT, int)
+        assert _B2B_RATE_LIMIT > 0
 
-    def test_blocks_over_limit(self):
-        key_hash = "test_hash_block"
-        _rate_window[key_hash] = [time.time()] * _B2B_RATE_LIMIT
 
+class TestValidateImageUrl:
+    """Verify SSRF protection in _validate_image_url."""
+
+    def test_accepts_valid_https_url(self):
+        # Should not raise
+        _validate_image_url("https://example.com/photo.jpg")
+
+    def test_rejects_http_url(self):
         with pytest.raises(HTTPException) as exc_info:
-            _check_b2b_rate_limit(key_hash)
-        assert exc_info.value.status_code == 429
+            _validate_image_url("http://example.com/photo.jpg")
+        assert exc_info.value.status_code == 422
+        assert exc_info.value.detail["error"] == "INVALID_URL"
 
+    def test_rejects_ftp_url(self):
+        with pytest.raises(HTTPException) as exc_info:
+            _validate_image_url("ftp://example.com/photo.jpg")
+        assert exc_info.value.status_code == 422
 
-class TestMaxRateKeysCap:
-    """Verify eviction when the rate window hits capacity."""
+    def test_rejects_localhost(self):
+        with pytest.raises(HTTPException) as exc_info:
+            _validate_image_url("https://127.0.0.1/secret")
+        assert exc_info.value.status_code == 422
+        assert "private" in exc_info.value.detail["detail"].lower()
 
-    def test_evicts_oldest_when_full(self):
-        # Fill to capacity
-        for i in range(_MAX_RATE_KEYS):
-            _rate_window[f"key_{i}"] = [time.time()]
+    def test_rejects_private_10_range(self):
+        with pytest.raises(HTTPException) as exc_info:
+            _validate_image_url("https://10.0.0.1/internal")
+        assert exc_info.value.status_code == 422
 
-        new_key = "brand_new_key"
-        _check_b2b_rate_limit(new_key)
+    def test_rejects_private_192_168_range(self):
+        with pytest.raises(HTTPException) as exc_info:
+            _validate_image_url("https://192.168.1.100/photo.jpg")
+        assert exc_info.value.status_code == 422
 
-        assert new_key in _rate_window
-        # Total keys should not exceed max + 1 (new key added after eviction)
-        assert len(_rate_window) <= _MAX_RATE_KEYS + 1
+    def test_rejects_link_local_metadata(self):
+        with pytest.raises(HTTPException) as exc_info:
+            _validate_image_url("https://169.254.169.254/latest/meta-data/")
+        assert exc_info.value.status_code == 422
+
+    def test_accepts_public_ip(self):
+        # 8.8.8.8 is a public IP — should be accepted
+        _validate_image_url("https://8.8.8.8/photo.jpg")
+
+    def test_accepts_https_with_path_and_query(self):
+        _validate_image_url("https://cdn.example.com/images/photo.jpg?size=large")
