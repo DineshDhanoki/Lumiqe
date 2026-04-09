@@ -218,13 +218,16 @@ class AdminUserResponse(BaseModel):
 async def list_users(
     admin_user: dict = Depends(require_admin),
     session: AsyncSession = Depends(get_db),
-    limit: int = Query(100, ge=1, le=500),
+    search: str | None = Query(None, description="Filter by name or email"),
+    limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
 ):
-    """List all registered users with key fields."""
-    result = await session.execute(
-        select(User).order_by(User.created_at.desc()).limit(limit).offset(offset)
-    )
+    """List users with optional search by name/email."""
+    q = select(User).order_by(User.created_at.desc())
+    if search and search.strip():
+        pattern = f"%{search.strip()}%"
+        q = q.where(User.name.ilike(pattern) | User.email.ilike(pattern))
+    result = await session.execute(q.limit(limit).offset(offset))
     users = result.scalars().all()
     return [
         AdminUserResponse(
@@ -273,3 +276,55 @@ async def update_user(
 
     logger.info(f"Admin {admin_user['email']} updated user {user_id}: {values}")
     return {"message": f"User {user_id} updated", "updated_fields": list(values.keys())}
+
+
+@router.delete("/users/{user_id}", status_code=204)
+async def delete_user(
+    user_id: int,
+    admin_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db),
+):
+    """Permanently delete a user account. Admins cannot delete themselves."""
+    from fastapi import HTTPException
+    if user_id == admin_user["id"]:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "SELF_DELETE", "detail": "Admins cannot delete their own account.", "code": 400},
+        )
+    result = await session.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail={"error": "NOT_FOUND", "detail": "User not found.", "code": 404})
+    await session.delete(user)
+    await session.commit()
+    logger.info(f"Admin {admin_user['email']} deleted user {user_id} ({user.email})")
+
+
+@router.get("/system-health")
+async def system_health(
+    admin_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db),
+):
+    """Return health status of database and Redis."""
+    health: dict = {}
+
+    # Database check
+    try:
+        await session.execute(select(func.count(User.id)))
+        health["database"] = {"status": "ok"}
+    except Exception as exc:
+        health["database"] = {"status": "error", "detail": str(exc)}
+
+    # Redis check
+    try:
+        from app.core.rate_limiter import get_redis
+        redis_client, redis_available = get_redis()
+        if redis_available and redis_client:
+            redis_client.ping()
+            health["redis"] = {"status": "ok"}
+        else:
+            health["redis"] = {"status": "unavailable"}
+    except Exception as exc:
+        health["redis"] = {"status": "error", "detail": str(exc)}
+
+    return health

@@ -9,9 +9,11 @@ import logging
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, require_admin
+from app.models import Product
 from app.repositories import product_repo
 from app.services.brand_catalog import get_brands, get_all_vibes, get_all_genders
 
@@ -128,3 +130,53 @@ async def catalog_stats(
     """Return catalog health statistics. Requires admin privileges."""
     stats = await product_repo.get_catalog_stats(session)
     return stats
+
+
+@router.get("/products")
+async def list_products(
+    search: str | None = Query(None, description="Filter by name or brand"),
+    gender: str | None = Query(None, description="Filter by gender (male/female)"),
+    vibe: str | None = Query(None, description="Filter by vibe"),
+    active_only: bool = Query(False, description="Only show active products"),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    admin_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db),
+):
+    """List products with optional search and filtering."""
+    q = select(Product).order_by(Product.id.desc())
+    if active_only:
+        q = q.where(Product.is_active == True)  # noqa: E712
+    if search and search.strip():
+        pattern = f"%{search.strip()}%"
+        q = q.where(Product.name.ilike(pattern) | Product.brand.ilike(pattern))
+    if gender:
+        q = q.where(Product.gender == gender.lower())
+    if vibe:
+        q = q.where(Product.vibe == vibe)
+    result = await session.execute(q.limit(limit).offset(offset))
+    products = result.scalars().all()
+    return [p.to_dict() for p in products]
+
+
+@router.patch("/products/{product_id}/toggle")
+async def toggle_product_active(
+    product_id: str,
+    admin_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db),
+):
+    """Toggle a product's is_active flag."""
+    result = await session.execute(select(Product).where(Product.id == product_id))
+    product = result.scalar_one_or_none()
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "NOT_FOUND", "detail": "Product not found.", "code": 404},
+        )
+    product.is_active = not product.is_active
+    await session.flush()
+    logger.info(
+        f"Admin {admin_user['email']} toggled product {product_id} "
+        f"active={product.is_active}"
+    )
+    return {"id": product_id, "is_active": product.is_active}
