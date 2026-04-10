@@ -2,6 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Analyze Page', () => {
     test.beforeEach(async ({ page }) => {
+        // Dismiss the ScanGuide onboarding overlay so it doesn't block clicks
+        await page.addInitScript(() => {
+            localStorage.setItem('lumiqe-scan-guide-seen', 'true');
+        });
         await page.goto('/analyze');
     });
 
