@@ -34,7 +34,7 @@ test.describe('Analyze Page', () => {
         await expect(page.getByText(/multi-photo analysis/i).first()).toBeVisible();
 
         // Click the back button in the overlay nav
-        await page.getByRole('button', { name: /back/i }).click();
+        await page.getByRole('button', { name: /back/i }).first().click();
 
         // Should be back at bento layout
         await expect(page.getByText(/start live camera/i)).toBeVisible({ timeout: 10000 });
