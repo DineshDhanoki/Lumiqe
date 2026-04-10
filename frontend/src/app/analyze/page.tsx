@@ -247,7 +247,7 @@ export default function AnalyzePage() {
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/"
-                                className="text-neutral-400 hover:text-neutral-100 transition-colors text-sm font-medium hidden md:flex items-center gap-1"
+                                className="text-neutral-400 hover:text-neutral-100 transition-colors text-sm font-medium flex items-center gap-1"
                             >
                                 ← Back to Home
                             </Link>

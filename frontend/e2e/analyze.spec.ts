@@ -27,21 +27,17 @@ test.describe('Analyze Page', () => {
     });
 
     test('can navigate back from upload mode', async ({ page }) => {
-        // Navigate into camera mode then back
-        await page.getByText(/start live camera/i).click();
+        // Open multi-photo overlay (no camera API needed)
+        await page.getByText(/multi.*photo/i).click();
 
-        // Camera overlay should be open — look for cancel/back affordance
-        // (CameraCapture renders its own back button)
-        const backBtn = page.getByRole('button', { name: /back|cancel/i }).first();
-        if (await backBtn.isVisible()) {
-            await backBtn.click();
-        } else {
-            // Fallback: press Escape or navigate directly
-            await page.keyboard.press('Escape');
-        }
+        // Overlay should be visible
+        await expect(page.getByText(/multi-photo analysis/i)).toBeVisible();
 
-        // Should be back at bento layout with live camera option visible
-        await expect(page.getByText(/live camera/i)).toBeVisible({ timeout: 15000 });
+        // Click the back button in the overlay nav
+        await page.getByRole('button', { name: /back/i }).click();
+
+        // Should be back at bento layout
+        await expect(page.getByText(/start live camera/i)).toBeVisible({ timeout: 10000 });
     });
 
     test('has back to home link', async ({ page }) => {
