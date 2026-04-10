@@ -31,7 +31,7 @@ test.describe('Analyze Page', () => {
         await page.getByText(/multi.*photo/i).click();
 
         // Overlay should be visible
-        await expect(page.getByText(/multi-photo analysis/i)).toBeVisible();
+        await expect(page.getByText(/multi-photo analysis/i).first()).toBeVisible();
 
         // Click the back button in the overlay nav
         await page.getByRole('button', { name: /back/i }).click();
