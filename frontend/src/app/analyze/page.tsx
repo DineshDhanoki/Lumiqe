@@ -244,11 +244,19 @@ export default function AnalyzePage() {
                         className="fixed top-0 w-full z-50 h-20 px-8 flex justify-between items-center shadow-2xl shadow-black/40"
                         style={{ background: 'rgba(19,19,19,0.75)', backdropFilter: 'blur(24px)' }}
                     >
-                        <div
-                            className="text-2xl font-extrabold tracking-tighter text-neutral-50"
-                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                        >
-                            Lumiqe
+                        <div className="flex items-center gap-4">
+                            <Link
+                                href="/"
+                                className="text-neutral-400 hover:text-neutral-100 transition-colors text-sm font-medium hidden md:flex items-center gap-1"
+                            >
+                                ← Back to Home
+                            </Link>
+                            <div
+                                className="text-2xl font-extrabold tracking-tighter text-neutral-50"
+                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                            >
+                                Lumiqe
+                            </div>
                         </div>
 
                         <div className="hidden md:flex items-center gap-8">
@@ -317,7 +325,7 @@ export default function AnalyzePage() {
                                 <div
                                     role="button"
                                     tabIndex={0}
-                                    aria-label="Upload a photo for analysis"
+                                    aria-label="Upload Photo"
                                     className={`relative aspect-video bg-[#1b1b1b] rounded-2xl flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ${
                                         isDragging
                                             ? 'border-red-500/70 bg-red-900/10 scale-[1.01]'
@@ -355,7 +363,7 @@ export default function AnalyzePage() {
                                             Upload Photo
                                         </h3>
                                         <p className="text-[#e6bdb8] mb-8 max-w-sm text-sm">
-                                            Drag and drop your high-resolution portrait or click to browse files.
+                                            Tap to upload or drag and drop a high-resolution portrait.
                                         </p>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
@@ -364,7 +372,7 @@ export default function AnalyzePage() {
                                         >
                                             Choose Image
                                         </button>
-                                        <p className="text-[#e6bdb8]/40 text-xs mt-3">JPEG, PNG, WebP — max 5 MB</p>
+                                        <p className="text-[#e6bdb8]/40 text-xs mt-3">JPEG, PNG, WebP — max 5 MB · For accurate results use natural lighting</p>
                                     </div>
 
                                     {/* Hidden file input */}
