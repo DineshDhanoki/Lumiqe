@@ -49,13 +49,14 @@ export default function ScanGuide() {
         <AnimatePresence>
             {visible && (
                 <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full max-w-md mx-auto mb-6"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.25 }}
+                    className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
                 >
-                    <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-5">
+                <div className="w-full max-w-md">
+                    <div className="relative rounded-2xl border border-white/10 bg-[#1a1a1a] p-5">
                         {/* Close button */}
                         <button
                             onClick={dismiss}
@@ -106,6 +107,7 @@ export default function ScanGuide() {
                             Got it, let&apos;s go
                         </button>
                     </div>
+                </div>
                 </motion.div>
             )}
         </AnimatePresence>
