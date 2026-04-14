@@ -56,7 +56,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 relative overflow-hidden"
+                className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 relative overflow-hidden"
             >
                 {lastAnalysis && (
                     <div
@@ -65,27 +65,27 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                     />
                 )}
                 <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-4 h-4 text-red-400" />
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider">{t('colorSeason')}</p>
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider">{t('colorSeason')}</p>
                 </div>
                 {lastAnalysis ? (
                     <>
-                        <div className="w-12 h-12 rounded-2xl border border-white/20 mb-3" style={{ backgroundColor: lastAnalysis.hexColor }} />
-                        <p className="text-xl font-bold text-white">{lastAnalysis.season}</p>
-                        <p className="text-white/40 text-xs mt-1 capitalize">{lastAnalysis.undertone} undertone · {lastAnalysis.contrastLevel} contrast</p>
+                        <div className="w-12 h-12 rounded-2xl border border-outline-variant/30 mb-3" style={{ backgroundColor: lastAnalysis.hexColor }} />
+                        <p className="font-headline text-xl font-bold text-on-surface">{lastAnalysis.season}</p>
+                        <p className="text-on-surface-variant text-xs mt-1 capitalize">{lastAnalysis.undertone} undertone · {lastAnalysis.contrastLevel} contrast</p>
                         <div className="flex gap-1.5 mt-3">
                             {lastAnalysis.palette.slice(0, 5).map((c) => (
-                                <div key={`palette-${c}`} className="w-6 h-6 rounded-full border border-white/20" style={{ backgroundColor: c }} />
+                                <div key={`palette-${c}`} className="w-6 h-6 rounded-full border border-outline-variant/30" style={{ backgroundColor: c }} />
                             ))}
                         </div>
-                        <Link href={resultsHref} className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors">
+                        <Link href={resultsHref} className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
                             {t('viewFullResults')} <ChevronRight className="w-3 h-3" />
                         </Link>
                     </>
                 ) : (
                     <div className="text-center py-4">
-                        <p className="text-white/40 text-sm mb-3">{t('noAnalysisYet')}</p>
-                        <Link href="/analyze" className="text-xs text-red-400 font-semibold hover:text-red-300">
+                        <p className="text-on-surface-variant text-sm mb-3">{t('noAnalysisYet')}</p>
+                        <Link href="/analyze" className="text-xs text-primary font-label font-semibold hover:text-primary/80">
                             {t('startYourScan')}
                         </Link>
                     </div>
@@ -97,25 +97,25 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6"
+                className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6"
             >
                 <div className="flex items-center gap-2 mb-4">
-                    <User className="w-4 h-4 text-red-400" />
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider">{t('bodyShape')}</p>
+                    <User className="w-4 h-4 text-primary" />
+                    <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider">{t('bodyShape')}</p>
                 </div>
                 {bodyShape ? (
                     <>
                         <div className="text-4xl mb-2">{SHAPE_EMOJIS[bodyShape.shape] ?? '▭'}</div>
-                        <p className="text-xl font-bold text-white">{SHAPE_LABELS[bodyShape.shape] ?? bodyShape.shape}</p>
-                        <p className="text-white/40 text-xs mt-1">{timeAgo(bodyShape.timestamp)}</p>
-                        <Link href="/quiz/body-shape" className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors">
+                        <p className="font-headline text-xl font-bold text-on-surface">{SHAPE_LABELS[bodyShape.shape] ?? bodyShape.shape}</p>
+                        <p className="text-on-surface-variant text-xs mt-1">{timeAgo(bodyShape.timestamp)}</p>
+                        <Link href="/quiz/body-shape" className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
                             {t('retakeQuiz')} <ChevronRight className="w-3 h-3" />
                         </Link>
                     </>
                 ) : (
                     <div className="text-center py-4">
-                        <p className="text-white/40 text-sm mb-3">{t('notTakenYet')}</p>
-                        <Link href="/quiz/body-shape" className="inline-flex items-center gap-1.5 text-xs bg-red-600/20 text-red-300 border border-red-500/20 px-3 py-1.5 rounded-full font-semibold hover:bg-red-600/30 transition-colors">
+                        <p className="text-on-surface-variant text-sm mb-3">{t('notTakenYet')}</p>
+                        <Link href="/quiz/body-shape" className="inline-flex items-center gap-1.5 text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full font-label font-semibold hover:bg-primary/20 transition-colors">
                             {t('takeQuiz')}
                         </Link>
                     </div>
@@ -127,25 +127,25 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6"
+                className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6"
             >
                 <div className="flex items-center gap-2 mb-4">
-                    <Star className="w-4 h-4 text-red-400" />
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider">{t('stylePersonality')}</p>
+                    <Star className="w-4 h-4 text-primary" />
+                    <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider">{t('stylePersonality')}</p>
                 </div>
                 {stylePersonality ? (
                     <>
                         <div className="text-4xl mb-2">{PERSONALITY_EMOJIS[stylePersonality.personality] ?? '✦'}</div>
-                        <p className="text-xl font-bold text-white">{PERSONALITY_LABELS[stylePersonality.personality] ?? stylePersonality.personality}</p>
-                        <p className="text-white/40 text-xs mt-1">{timeAgo(stylePersonality.timestamp)}</p>
-                        <Link href="/quiz/style" className="mt-4 flex items-center gap-1 text-red-400 text-xs font-semibold hover:text-red-300 transition-colors">
+                        <p className="font-headline text-xl font-bold text-on-surface">{PERSONALITY_LABELS[stylePersonality.personality] ?? stylePersonality.personality}</p>
+                        <p className="text-on-surface-variant text-xs mt-1">{timeAgo(stylePersonality.timestamp)}</p>
+                        <Link href="/quiz/style" className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
                             {t('retakeQuiz')} <ChevronRight className="w-3 h-3" />
                         </Link>
                     </>
                 ) : (
                     <div className="text-center py-4">
-                        <p className="text-white/40 text-sm mb-3">{t('notTakenYet')}</p>
-                        <Link href="/quiz/style" className="inline-flex items-center gap-1.5 text-xs bg-red-600/20 text-red-300 border border-red-500/20 px-3 py-1.5 rounded-full font-semibold hover:bg-red-600/30 transition-colors">
+                        <p className="text-on-surface-variant text-sm mb-3">{t('notTakenYet')}</p>
+                        <Link href="/quiz/style" className="inline-flex items-center gap-1.5 text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full font-label font-semibold hover:bg-primary/20 transition-colors">
                             {t('takeQuiz')}
                         </Link>
                     </div>

@@ -14,7 +14,7 @@ import CapsuleWardrobe from './CapsuleWardrobe';
 import HairAndBeautyGuide from './HairAndBeautyGuide';
 import AIStylistChat from './AIStylistChat';
 import OverviewTab from './results/OverviewTab';
-import AppMenu from './AppMenu';
+import AppLayout from './layout/AppLayout';
 import { apiFetch } from '@/lib/api';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
@@ -101,33 +101,26 @@ export default function ResultsView({
     }, [activeTab]);
 
     return (
-        <main className="min-h-screen bg-transparent text-white font-sans pb-24">
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-                <Link href={backHref} className="text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="text-sm font-medium">{backLabel}</span>
+        <AppLayout>
+            <div className="max-w-4xl mx-auto">
+                {/* Back breadcrumb */}
+                <Link href={backHref} className="inline-flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors mb-6 group">
+                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                    <span className="text-sm font-label font-medium">{backLabel}</span>
                 </Link>
-                <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-red-400" />
-                    <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
-                </div>
-                <AppMenu />
-            </nav>
-
-            <div className="max-w-4xl mx-auto px-4 pt-28">
                 {showAccountNudge && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-6 bg-gradient-to-r from-red-950/60 to-zinc-900/60 border border-red-500/30 rounded-2xl px-5 py-3 flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left"
+                        className="mb-6 bg-gradient-to-r from-primary/10 to-surface-container/60 border border-primary/30 rounded-2xl px-5 py-3 flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left"
                     >
-                        <Sparkles className="w-5 h-5 text-red-400 shrink-0" />
-                        <p className="flex-1 text-sm text-white/80">
+                        <Sparkles className="w-5 h-5 text-primary shrink-0" />
+                        <p className="flex-1 text-sm text-on-surface-variant">
                             Create a free account to save your results and get personalized recommendations
                         </p>
                         <Link
                             href="/"
-                            className="shrink-0 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-full transition-all text-sm whitespace-nowrap"
+                            className="shrink-0 px-4 py-2 bg-primary-container hover:bg-primary text-on-primary-container font-label font-semibold rounded-full transition-all text-sm whitespace-nowrap"
                         >
                             Sign Up Free
                         </Link>
@@ -144,27 +137,27 @@ export default function ResultsView({
                             </div>
                         </div>
                     )}
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('yourAnalysisComplete')}</p>
-                    <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-4">
+                    <p className="text-primary font-label text-sm font-bold tracking-widest uppercase mb-3">{t('yourAnalysisComplete')}</p>
+                    <h1 className="font-display text-5xl md:text-6xl font-bold tracking-tight text-on-surface mb-4">
                         {season}
                     </h1>
                     {description && (
-                        <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed border-l-2 border-red-500 pl-5 text-left">
+                        <p className="text-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed border-l-2 border-primary pl-5 text-left">
                             &ldquo;{description}&rdquo;
                         </p>
                     )}
                 </motion.div>
 
                 {/* Tab Bar */}
-                <div className="flex overflow-x-auto gap-1 bg-zinc-900/50 border border-white/10 rounded-2xl p-1.5 mb-8 scrollbar-none">
+                <div className="flex overflow-x-auto gap-1 bg-surface-container/50 border border-primary/10 rounded-2xl p-1.5 mb-8 scrollbar-none">
                     {TABS.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex-shrink-0 ${
+                            className={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-label font-semibold transition-all flex-shrink-0 ${
                                 activeTab === tab.id
-                                    ? 'bg-red-600 text-white shadow-lg'
-                                    : 'text-white/50 hover:text-white hover:bg-white/10'
+                                    ? 'bg-primary-container text-on-surface shadow-lg'
+                                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50'
                             }`}
                         >
                             {tab.icon}
@@ -195,8 +188,8 @@ export default function ResultsView({
 
                         {activeTab !== 'overview' && profileLoading && (
                             <div className="flex flex-col items-center justify-center py-32 gap-4">
-                                <Sparkles className="w-10 h-10 text-red-500 animate-pulse" />
-                                <p className="text-white/50">Loading your professional profile...</p>
+                                <Sparkles className="w-10 h-10 text-primary animate-pulse" />
+                                <p className="text-on-surface-variant font-label">Loading your professional profile...</p>
                             </div>
                         )}
 
@@ -250,6 +243,6 @@ export default function ResultsView({
                     </motion.div>
                 </AnimatePresence>
             </div>
-        </main>
+        </AppLayout>
     );
 }

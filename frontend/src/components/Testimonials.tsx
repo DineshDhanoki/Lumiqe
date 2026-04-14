@@ -14,14 +14,14 @@ export default function Testimonials() {
     ];
 
     return (
-        <section className="py-24 px-6 relative bg-black/40 border-y border-white/5 overflow-hidden">
+        <section className="py-24 px-6 relative bg-surface-container/20 border-y border-primary/5 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-bold text-white mb-6"
+                        className="font-headline text-4xl md:text-5xl font-bold text-on-surface mb-6"
                     >
                         {t('testimonialsTitle')}
                     </motion.h2>
@@ -35,19 +35,19 @@ export default function Testimonials() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.15 }}
-                            className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md flex flex-col h-full"
+                            className="p-8 rounded-3xl bg-surface-container/30 border border-primary/10 backdrop-blur-md flex flex-col h-full"
                         >
                             <div className="flex gap-1 mb-6">
                                 {[...Array(5)].map((_, i) => (
-                                    <Star key={i} className="w-4 h-4 text-red-400 fill-red-400" />
+                                    <Star key={i} className="w-4 h-4 text-primary fill-primary" />
                                 ))}
                             </div>
-                            <p className="text-white/80 leading-relaxed max-w-sm mb-8 flex-grow">
+                            <p className="text-on-surface-variant leading-relaxed max-w-sm mb-8 flex-grow">
                                 &ldquo;{item.text}&rdquo;
                             </p>
                             <div>
-                                <h4 className="text-white font-bold">{item.name}</h4>
-                                <p className="text-sm text-red-300 font-medium">{item.season}</p>
+                                <h4 className="text-on-surface font-bold">{item.name}</h4>
+                                <p className="text-sm text-primary font-medium">{item.season}</p>
                             </div>
                         </motion.div>
                     ))}

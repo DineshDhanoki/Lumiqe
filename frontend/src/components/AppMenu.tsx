@@ -37,30 +37,30 @@ export default function AppMenu() {
         <div className="relative" ref={menuRef}>
             <button
                 onClick={() => setOpen(!open)}
-                className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition border border-white/10 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2 rounded-full bg-surface-container/50 hover:bg-surface-container transition border border-outline-variant/20 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label={open ? t('navCloseMenu') : t('navOpenMenu')}
                 aria-expanded={open}
             >
-                {open ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
+                {open ? <X className="w-5 h-5 text-on-surface" /> : <Menu className="w-5 h-5 text-on-surface" />}
             </button>
 
             {open && (
-                <div className="absolute right-0 top-full mt-2 w-52 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl py-2 z-[100]">
+                <div className="absolute right-0 top-full mt-2 w-52 bg-surface backdrop-blur-xl border border-primary/10 rounded-2xl shadow-2xl py-2 z-[100]">
                     {menuLinks.map((link) => (
                         <Link
                             key={link.href}
                             href={link.href}
                             onClick={() => setOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-on-surface hover:text-on-surface hover:bg-surface-container/50 transition-colors"
                         >
-                            <link.icon className="w-4 h-4 text-white/50" />
+                            <link.icon className="w-4 h-4 text-on-surface-variant" />
                             {link.name}
                         </Link>
                     ))}
-                    <div className="h-px bg-white/10 my-1" />
+                    <div className="h-px bg-primary/10 my-1" />
                     <button
                         onClick={() => { setOpen(false); signOut({ callbackUrl: '/' }); }}
-                        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/50 hover:text-red-400 hover:bg-white/5 transition-colors w-full"
+                        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container/30 transition-colors w-full"
                     >
                         <LogOut className="w-4 h-4" />
                         {t('menuLogOut')}

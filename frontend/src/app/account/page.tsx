@@ -12,6 +12,7 @@ import { useTranslation } from '@/lib/hooks/useTranslation';
 import SubscriptionPanel from '@/components/account/SubscriptionPanel';
 import ColorProfileSection from '@/components/account/ColorProfileSection';
 import DataPrivacySection from '@/components/account/DataPrivacySection';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface UserProfile {
     id: number;
@@ -145,26 +146,28 @@ export default function AccountPage() {
 
     if (status === 'loading' || loading) {
         return (
-            <main className="min-h-screen flex items-center justify-center bg-zinc-950">
-                <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
-            </main>
+            <AppLayout>
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                </div>
+            </AppLayout>
         );
     }
 
     if (error || !profile) {
         return (
-            <main className="min-h-screen flex items-center justify-center bg-zinc-950 flex-col">
-                <p className="text-red-400 mb-4">{error || t('couldNotLoadProfile')}</p>
-                <Link href="/" className="text-white underline">{t('returnHome')}</Link>
-            </main>
+            <AppLayout>
+                <div className="flex items-center justify-center min-h-[60vh] flex-col">
+                    <p className="text-error mb-4 font-label">{error || t('couldNotLoadProfile')}</p>
+                    <Link href="/" className="text-primary underline font-label">{t('returnHome')}</Link>
+                </div>
+            </AppLayout>
         );
     }
 
     return (
-        <main className="min-h-screen bg-zinc-950 text-white font-sans selection:bg-red-900/50">
-            <Navbar />
-
-            <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
+        <AppLayout>
+            <div className="max-w-4xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -382,8 +385,6 @@ export default function AccountPage() {
                     />
                 </motion.div>
             </div>
-
-            <Footer />
-        </main>
+        </AppLayout>
     );
 }

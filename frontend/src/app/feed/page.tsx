@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
@@ -12,6 +13,7 @@ import VibeSelector from '@/components/VibeSelector';
 import SubscriptionModal from '@/components/SubscriptionModal';
 import ProductCard from '@/components/ProductCard';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface Product {
     id: string;
@@ -258,15 +260,10 @@ function FeedContent() {
 
 export default function FeedPage() {
     return (
-        <main className="flex min-h-screen flex-col items-center p-6 relative overflow-hidden">
-            {/* Background Layers */}
-            <div className="fixed inset-0 bg-gradient-to-b from-gray-900 to-red-950 -z-20" />
-            <div className="fixed bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent -z-10" />
-
-            {/* Suspense Wrapper for SearchParams */}
-            <Suspense fallback={<div className="text-white/50 text-sm mt-10">Loading...</div>}>
+        <AppLayout>
+            <Suspense fallback={<div className="text-on-surface-variant text-sm mt-10 font-label">Loading feed...</div>}>
                 <FeedContent />
             </Suspense>
-        </main>
+        </AppLayout>
     );
 }

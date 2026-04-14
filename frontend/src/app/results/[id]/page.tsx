@@ -8,6 +8,7 @@ import { Sparkles } from 'lucide-react';
 import ResultsView from '@/components/ResultsView';
 import { SkeletonResultsPage } from '@/components/ui/Skeleton';
 import { apiFetch } from '@/lib/api';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface AnalysisData {
     id: string;
@@ -57,14 +58,16 @@ export default function AnalysisResultPage() {
 
     if (error || !analysis) {
         return (
-            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
-                <Sparkles className="w-12 h-12 text-red-500 mb-6" />
-                <h1 className="text-3xl font-bold text-white mb-4">Analysis Not Found</h1>
-                <p className="text-white/60 mb-8">{error || 'This analysis does not exist or you do not have access.'}</p>
-                <Link href="/dashboard" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
-                    Go to Dashboard
-                </Link>
-            </div>
+            <AppLayout>
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6">
+                    <span className="material-symbols-outlined text-5xl text-primary/40 mb-6">palette</span>
+                    <h1 className="font-display text-3xl font-bold text-on-surface mb-4">Analysis Not Found</h1>
+                    <p className="text-on-surface-variant mb-8">{error || 'This analysis does not exist or you do not have access.'}</p>
+                    <Link href="/dashboard" className="px-6 py-3 bg-primary-container text-on-primary-container rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:bg-primary transition-colors inline-block">
+                        Go to Dashboard
+                    </Link>
+                </div>
+            </AppLayout>
         );
     }
 

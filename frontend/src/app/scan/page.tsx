@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, ArrowLeft, ShoppingBag, Sparkles, AlertCircle, Check, X } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface ScanSuggestion {
     hex: string;
@@ -72,32 +73,16 @@ export default function ScanPage() {
     const hasSession = !!session?.user?.email;
 
     return (
-        <main className="min-h-screen bg-transparent text-white font-sans pb-24 relative overflow-hidden">
-            {/* Background */}
-            <div className="fixed inset-0 bg-gradient-to-b from-gray-900/50 via-black/50 to-black/50 -z-10" />
-            <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
-
-            {/* Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-                <Link href="/" className="text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="text-sm font-medium">Home</span>
-                </Link>
-                <div className="flex items-center gap-2">
-                    <ShoppingBag className="w-5 h-5 text-red-400" />
-                    <span className="text-lg font-bold tracking-wider text-white">BUY OR PASS</span>
-                </div>
-            </nav>
-
-            <div className="max-w-md mx-auto px-6 pt-28 space-y-8">
+        <AppLayout>
+            <div className="max-w-md mx-auto space-y-8">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center"
                 >
-                    <h1 className="text-3xl font-bold mb-2">Scan a Clothing Item</h1>
-                    <p className="text-white/60 text-sm">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary mb-2">Buy or Pass</p>
+                    <h1 className="font-display text-4xl font-bold text-on-surface mb-2">Scan a Clothing Item</h1>
+                    <p className="text-on-surface-variant text-sm">
                         Snap a photo and we&apos;ll tell you if it matches your palette.
                     </p>
                 </motion.div>
@@ -266,6 +251,6 @@ export default function ScanPage() {
                     </>
                 )}
             </div>
-        </main>
+        </AppLayout>
     );
 }

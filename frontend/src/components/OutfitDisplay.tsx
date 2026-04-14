@@ -175,7 +175,7 @@ export default function OutfitDisplay({ outfit }: OutfitDisplayProps) {
         >
             {/* Look Title */}
             <div className="flex flex-col items-center text-center gap-2 mb-1">
-                <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-red-400">
+                <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-primary">
                     Curated Look
                 </span>
                 <h2 className="text-xl font-bold italic text-white/90">

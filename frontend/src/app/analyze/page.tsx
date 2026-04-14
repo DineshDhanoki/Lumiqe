@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     Loader2, Upload, Video, Clock, Lightbulb, ArrowRight,
-    UserCircle, AlertCircle, Images, Sparkles,
+    AlertCircle, Images, Sparkles,
 } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { useLumiqeStore } from '@/lib/store';
@@ -15,7 +15,7 @@ import { t } from '@/lib/i18n';
 import { compressImage, storeThumbnail } from '@/lib/imageUtils';
 import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import AppMenu from '@/components/AppMenu';
+import AppLayout from '@/components/layout/AppLayout';
 import AnalyzingSpinner from '@/components/analyze/AnalyzingSpinner';
 import MultiPhotoUpload from '@/components/analyze/MultiPhotoUpload';
 import ScanGuide from '@/components/ScanGuide';
@@ -164,17 +164,17 @@ export default function AnalyzePage() {
 
     if (status === 'loading') {
         return (
-            <div className="min-h-screen bg-[#131313] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#131313] text-[#e2e2e2]" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)' }}>
+        <>
             <ScanGuide />
 
-            {/* ── Overlays for camera / multi / analyzing ── */}
+            {/* ── Full-screen overlays (camera / multi / analyzing) ── */}
             <AnimatePresence>
                 {isAnalyzing && (
                     <motion.div
@@ -182,7 +182,7 @@ export default function AnalyzePage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-[#131313] flex items-center justify-center"
+                        className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
                     >
                         <AnalyzingSpinner lang={lang} previewUrl={previewUrl} />
                     </motion.div>
@@ -212,16 +212,16 @@ export default function AnalyzePage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-[#131313] flex flex-col"
+                        className="fixed inset-0 z-[100] bg-background flex flex-col"
                     >
-                        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 py-4 flex items-center justify-between">
+                        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-primary/10 px-4 py-4 flex items-center justify-between">
                             <button
                                 onClick={() => { setMode('choose'); setError(null); }}
-                                className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
+                                className="text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2 text-sm font-label font-medium"
                             >
                                 ← Back
                             </button>
-                            <span className="text-white font-bold">Multi-Photo Analysis</span>
+                            <span className="font-headline font-bold text-on-surface">Multi-Photo Analysis</span>
                             <div className="w-16" />
                         </nav>
                         <div className="flex-1 overflow-auto p-4 pt-24 max-w-md mx-auto w-full">
@@ -238,81 +238,17 @@ export default function AnalyzePage() {
 
             {/* ── Main bento layout ── */}
             {!isAnalyzing && mode === 'choose' && (
-                <>
-                    {/* Glass Nav */}
-                    <nav
-                        className="fixed top-0 w-full z-50 h-20 px-8 flex justify-between items-center shadow-2xl shadow-black/40"
-                        style={{ background: 'rgba(19,19,19,0.75)', backdropFilter: 'blur(24px)' }}
-                    >
-                        <div className="flex items-center gap-4">
-                            <Link
-                                href="/"
-                                className="text-neutral-400 hover:text-neutral-100 transition-colors text-sm font-medium flex items-center gap-1"
-                            >
-                                ← Back to Home
-                            </Link>
-                            <div
-                                className="text-2xl font-extrabold tracking-tighter text-neutral-50"
-                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                            >
-                                Lumiqe
-                            </div>
-                        </div>
-
-                        <div className="hidden md:flex items-center gap-8">
-                            <span
-                                className="text-red-500 font-semibold border-b-2 border-red-500 pb-1 text-sm cursor-default"
-                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                            >
-                                Analysis
-                            </span>
-                            <Link
-                                href="/dashboard"
-                                className="text-neutral-400 font-medium hover:text-neutral-100 transition-colors text-sm"
-                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                            >
-                                Palette
-                            </Link>
-                            <Link
-                                href="/pricing"
-                                className="text-neutral-400 font-medium hover:text-neutral-100 transition-colors text-sm"
-                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                            >
-                                Pro
-                            </Link>
-                            <Link
-                                href="/#how-it-works"
-                                className="text-neutral-400 font-medium hover:text-neutral-100 transition-colors text-sm"
-                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                            >
-                                Science
-                            </Link>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <LanguageSwitcher currentLang={lang} onChange={changeLang} />
-                            <AppMenu />
-                            <Link
-                                href={session ? '/account' : '#'}
-                                className="text-neutral-400 hover:text-neutral-100 transition-colors"
-                                aria-label="Account"
-                            >
-                                <UserCircle className="w-7 h-7" />
-                            </Link>
-                        </div>
-                    </nav>
-
-                    {/* Main Content */}
-                    <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
-                        {/* Header */}
-                        <header className="mb-12 text-center md:text-left">
-                            <h1
-                                className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 text-[#e2e2e2]"
-                                style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                            >
-                                Analysis
+                <AppLayout>
+                    <div className="max-w-7xl mx-auto">
+                        {/* Page header */}
+                        <header className="mb-10">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary mb-2">
+                                Skin Intelligence
+                            </p>
+                            <h1 className="font-display text-5xl md:text-7xl font-bold text-on-surface leading-none mb-3">
+                                Color Analysis
                             </h1>
-                            <p className="text-[#e6bdb8] text-lg md:text-xl max-w-2xl leading-relaxed">
+                            <p className="text-on-surface-variant text-lg max-w-xl leading-relaxed">
                                 Precision skin intelligence starts here. Upload or scan for a medical-grade aesthetic breakdown.
                             </p>
                         </header>
@@ -320,16 +256,16 @@ export default function AnalyzePage() {
                         {/* Bento Grid */}
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                             {/* ── Primary Zone (8 cols) ── */}
-                            <section className="lg:col-span-8 flex flex-col gap-8">
+                            <section className="lg:col-span-8 flex flex-col gap-6">
                                 {/* Drop Zone */}
                                 <div
                                     role="button"
                                     tabIndex={0}
                                     aria-label="Upload Photo"
-                                    className={`relative aspect-video bg-[#1b1b1b] rounded-2xl flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ${
+                                    className={`relative aspect-video bg-surface-container rounded-2xl flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ghost-border ${
                                         isDragging
-                                            ? 'border-red-500/70 bg-red-900/10 scale-[1.01]'
-                                            : 'border-[#5c403c]/50 hover:border-red-500/40'
+                                            ? 'border-primary/70 bg-primary/5 scale-[1.01]'
+                                            : 'border-outline-variant/40 hover:border-primary/40'
                                     }`}
                                     onDragOver={onDragOver}
                                     onDragLeave={onDragLeave}
@@ -337,42 +273,29 @@ export default function AnalyzePage() {
                                     onClick={() => fileInputRef.current?.click()}
                                     onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
                                 >
-                                    {/* Background portrait image */}
-                                    <div className="absolute inset-0 z-0">
-                                        <div className="w-full h-full bg-gradient-to-br from-[#1f1f1f] to-[#131313] opacity-80" />
-                                    </div>
-
-                                    {/* Scanner line — animates on hover */}
-                                    <div
-                                        className="absolute left-0 w-full h-0.5 z-10 opacity-0 group-hover:opacity-100 scanner-animate"
-                                        style={{
-                                            background: 'linear-gradient(to bottom, transparent 0%, #dc2626 50%, transparent 100%)',
-                                            height: '2px',
-                                        }}
-                                    />
+                                    {/* Scanner sweep on hover */}
+                                    <div className="absolute left-0 w-full h-0.5 z-10 opacity-0 group-hover:opacity-100 scanner-animate scanner-line" />
 
                                     {/* Upload prompt */}
                                     <div className="relative z-10 flex flex-col items-center text-center p-8">
-                                        <div className="w-20 h-20 bg-[#2a2a2a] rounded-full flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform">
-                                            <Upload className="w-9 h-9 text-red-400" />
+                                        <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform ghost-border">
+                                            <Upload className="w-9 h-9 text-primary" />
                                         </div>
-                                        <h3
-                                            className="text-2xl font-bold mb-2 text-[#e2e2e2]"
-                                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                                        >
+                                        <h3 className="font-headline text-2xl font-bold mb-2 text-on-surface">
                                             Upload Photo
                                         </h3>
-                                        <p className="text-[#e6bdb8] mb-8 max-w-sm text-sm">
+                                        <p className="text-on-surface-variant mb-8 max-w-sm text-sm">
                                             Tap to upload or drag and drop a high-resolution portrait.
                                         </p>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                                            className="bg-red-600 text-white px-10 py-4 rounded-full font-bold text-base shadow-lg shadow-red-900/30 hover:scale-105 active:scale-95 transition-all hover:bg-red-500"
-                                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
+                                            className="bg-primary-container text-on-primary-container px-10 py-4 rounded-full font-headline font-bold text-sm tracking-widest uppercase shadow-lg hover:scale-105 active:scale-95 transition-all hover:bg-primary"
                                         >
                                             Choose Image
                                         </button>
-                                        <p className="text-[#e6bdb8]/40 text-xs mt-3">JPEG, PNG, WebP — max 5 MB · For accurate results use natural lighting</p>
+                                        <p className="text-on-surface-variant/40 text-xs mt-3 font-mono">
+                                            JPEG · PNG · WebP — max 5 MB · Natural lighting recommended
+                                        </p>
                                     </div>
 
                                     {/* Hidden file input */}
@@ -387,7 +310,7 @@ export default function AnalyzePage() {
 
                                     {/* Error banner */}
                                     {error && (
-                                        <div className="absolute bottom-6 flex items-center gap-2 text-red-200 bg-red-900/80 px-4 py-2 rounded-full text-sm z-20">
+                                        <div className="absolute bottom-6 flex items-center gap-2 text-error-container bg-error/20 border border-error/30 px-4 py-2 rounded-full text-sm z-20">
                                             <AlertCircle className="w-4 h-4 flex-shrink-0" />
                                             {error}
                                         </div>
@@ -395,71 +318,62 @@ export default function AnalyzePage() {
                                 </div>
 
                                 {/* Secondary Action Cards */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     {/* Live Camera */}
                                     <button
                                         onClick={() => setMode('camera')}
-                                        className="bg-[#2a2a2a] p-6 rounded-2xl flex items-center justify-between group hover:bg-[#393939] transition-colors cursor-pointer col-span-1 text-left"
+                                        className="bg-surface-container-low p-5 rounded-2xl flex items-center justify-between group hover:bg-surface-container transition-colors cursor-pointer text-left ghost-border"
                                     >
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <Video className="w-6 h-6 text-red-400" />
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-11 h-11 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <Video className="w-5 h-5 text-secondary" />
                                             </div>
                                             <div>
-                                                <h4
-                                                    className="font-bold text-base text-[#e2e2e2]"
-                                                    style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                                                >
+                                                <h4 className="font-headline font-bold text-sm text-on-surface">
                                                     Start Live Camera
                                                 </h4>
-                                                <p className="text-[#e6bdb8]/60 text-xs mt-0.5">Instant real-time analysis</p>
+                                                <p className="text-on-surface-variant text-xs mt-0.5">Instant real-time analysis</p>
                                             </div>
                                         </div>
-                                        <ArrowRight className="w-5 h-5 text-[#e6bdb8]/40 group-hover:text-red-400 transition-colors flex-shrink-0 ml-2" />
+                                        <ArrowRight className="w-4 h-4 text-on-surface-variant/40 group-hover:text-secondary transition-colors flex-shrink-0 ml-2" />
                                     </button>
 
                                     {/* Past Scans */}
                                     <Link
                                         href="/results"
-                                        className="bg-[#2a2a2a] p-6 rounded-2xl flex items-center justify-between group hover:bg-[#393939] transition-colors cursor-pointer col-span-1"
+                                        className="bg-surface-container-low p-5 rounded-2xl flex items-center justify-between group hover:bg-surface-container transition-colors ghost-border"
                                     >
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <Clock className="w-6 h-6 text-amber-400" />
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <Clock className="w-5 h-5 text-primary" />
                                             </div>
                                             <div>
-                                                <h4
-                                                    className="font-bold text-base text-[#e2e2e2]"
-                                                    style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                                                >
+                                                <h4 className="font-headline font-bold text-sm text-on-surface">
                                                     Past Scans
                                                 </h4>
-                                                <p className="text-[#e6bdb8]/60 text-xs mt-0.5">View skin evolution</p>
+                                                <p className="text-on-surface-variant text-xs mt-0.5">View skin evolution</p>
                                             </div>
                                         </div>
-                                        <ArrowRight className="w-5 h-5 text-[#e6bdb8]/40 group-hover:text-amber-400 transition-colors flex-shrink-0 ml-2" />
+                                        <ArrowRight className="w-4 h-4 text-on-surface-variant/40 group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
                                     </Link>
 
                                     {/* Multi-Photo */}
                                     <button
                                         onClick={() => setMode('multi')}
-                                        className="bg-[#2a2a2a] p-6 rounded-2xl flex items-center justify-between group hover:bg-[#393939] transition-colors cursor-pointer col-span-1 text-left"
+                                        className="bg-surface-container-low p-5 rounded-2xl flex items-center justify-between group hover:bg-surface-container transition-colors cursor-pointer text-left ghost-border"
                                     >
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <Images className="w-6 h-6 text-emerald-400" />
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-11 h-11 bg-tertiary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <Images className="w-5 h-5 text-tertiary" />
                                             </div>
                                             <div>
-                                                <h4
-                                                    className="font-bold text-base text-[#e2e2e2]"
-                                                    style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                                                >
+                                                <h4 className="font-headline font-bold text-sm text-on-surface">
                                                     Multi-Photo
                                                 </h4>
-                                                <p className="text-[#e6bdb8]/60 text-xs mt-0.5">2–5 selfies, higher accuracy</p>
+                                                <p className="text-on-surface-variant text-xs mt-0.5">2–5 selfies, higher accuracy</p>
                                             </div>
                                         </div>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
+                                        <span className="text-[10px] font-label font-bold uppercase tracking-wider text-tertiary bg-tertiary/10 border border-tertiary/20 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
                                             Pro
                                         </span>
                                     </button>
@@ -469,26 +383,23 @@ export default function AnalyzePage() {
                             {/* ── Sidebar (4 cols) ── */}
                             <aside className="lg:col-span-4 flex flex-col gap-6">
                                 {/* Precision Protocol */}
-                                <div className="bg-[#1f1f1f] rounded-2xl p-7 shadow-sm">
-                                    <h3
-                                        className="text-lg font-bold mb-5 flex items-center gap-3 text-[#e2e2e2]"
-                                        style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                                    >
-                                        <Lightbulb className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                                <div className="bg-surface-container rounded-2xl p-6 ghost-border">
+                                    <h3 className="font-headline text-base font-bold mb-5 flex items-center gap-3 text-on-surface">
+                                        <Lightbulb className="w-4 h-4 text-primary flex-shrink-0" />
                                         Precision Protocol
                                     </h3>
-                                    <ul className="space-y-5">
+                                    <ul className="space-y-4">
                                         {[
                                             { n: 1, title: 'Natural Lighting.', body: 'Face a window during daylight for the most accurate texture capture.' },
                                             { n: 2, title: 'Clean Canvas.', body: 'Ensure your skin is free of makeup, SPF, and heavy moisturizers.' },
                                             { n: 3, title: 'Steady Frame.', body: 'Hold your phone at eye level, approximately 12 inches from your face.' },
                                         ].map(({ n, title, body }) => (
                                             <li key={n} className="flex gap-4">
-                                                <div className="w-6 h-6 rounded-full bg-[#353535] flex-shrink-0 flex items-center justify-center text-xs font-bold text-red-400">
+                                                <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex-shrink-0 flex items-center justify-center text-xs font-bold text-primary">
                                                     {n}
                                                 </div>
-                                                <p className="text-[#e6bdb8]/70 text-sm leading-relaxed">
-                                                    <span className="text-[#e2e2e2] font-semibold">{title}</span> {body}
+                                                <p className="text-on-surface-variant text-sm leading-relaxed">
+                                                    <span className="text-on-surface font-semibold">{title}</span> {body}
                                                 </p>
                                             </li>
                                         ))}
@@ -496,34 +407,36 @@ export default function AnalyzePage() {
                                 </div>
 
                                 {/* System Status */}
-                                <div className="bg-[#0e0e0e] rounded-2xl p-7 border border-[#5c403c]/10">
+                                <div className="bg-surface-container-lowest rounded-2xl p-6 ghost-border">
                                     <div className="flex items-center justify-between mb-5">
-                                        <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold">System Status</span>
+                                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/50 font-bold">System Status</span>
                                         <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                            <span className="text-[10px] text-green-500 font-bold uppercase">Ready</span>
+                                            <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
+                                            <span className="font-mono text-[10px] text-[#4ade80] font-bold uppercase">Ready</span>
                                         </div>
                                     </div>
                                     <div className="space-y-3">
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-neutral-500">Processing Engine</span>
-                                            <span className="text-neutral-300 font-mono">Lumiqe-V4.2</span>
+                                            <span className="text-on-surface-variant/60">Processing Engine</span>
+                                            <span className="font-mono text-on-surface">Lumiqe-V4.2</span>
                                         </div>
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-neutral-500">Analysis Depth</span>
-                                            <span className="text-neutral-300 font-mono">256-bit Spectral</span>
+                                            <span className="text-on-surface-variant/60">Analysis Depth</span>
+                                            <span className="font-mono text-on-surface">256-bit Spectral</span>
                                         </div>
-                                        <div className="w-full bg-[#2a2a2a] h-1 rounded-full overflow-hidden mt-3">
-                                            <div className="bg-red-600 w-2/3 h-full rounded-full" />
+                                        <div className="w-full bg-surface-container-high h-1 rounded-full overflow-hidden mt-3">
+                                            <div className="bg-primary w-2/3 h-full rounded-full" />
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Tips Banner */}
-                                <div className="bg-[#1f1f1f] rounded-2xl p-6 border border-[#5c403c]/20">
+                                {/* Tips — For accurate results */}
+                                <div className="bg-surface-container rounded-2xl p-6 ghost-border">
                                     <div className="flex items-center gap-3 mb-4">
-                                        <Sparkles className="w-4 h-4 text-red-400 flex-shrink-0" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Pro Tips</span>
+                                        <Sparkles className="w-4 h-4 text-secondary flex-shrink-0" />
+                                        <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60">
+                                            For accurate results
+                                        </span>
                                     </div>
                                     <ul className="space-y-2">
                                         {[
@@ -532,35 +445,22 @@ export default function AnalyzePage() {
                                             { icon: '🚫', text: 'No heavy filters or beauty mode' },
                                             { icon: '📷', text: 'Well-lit selfie or portrait works best' },
                                         ].map(({ icon, text }) => (
-                                            <li key={text} className="flex items-center gap-2 text-xs text-[#e6bdb8]/60">
+                                            <li key={text} className="flex items-center gap-2 text-xs text-on-surface-variant/70">
                                                 <span>{icon}</span> {text}
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
+
+                                {/* Language Switcher */}
+                                <div className="flex justify-end">
+                                    <LanguageSwitcher currentLang={lang} onChange={changeLang} />
+                                </div>
                             </aside>
                         </div>
-                    </main>
-
-                    {/* Footer */}
-                    <footer className="w-full py-10 px-8 flex flex-col md:flex-row justify-between items-center bg-[#0e0e0e] border-t border-neutral-800/30 text-xs uppercase tracking-widest">
-                        <div
-                            className="text-base font-bold text-neutral-200 mb-4 md:mb-0"
-                            style={{ fontFamily: 'var(--font-jakarta, Plus Jakarta Sans, sans-serif)' }}
-                        >
-                            LUMIQE
-                        </div>
-                        <div className="flex gap-8 mb-4 md:mb-0">
-                            {['Terms', 'Privacy', 'Press', 'Contact'].map((item) => (
-                                <a key={item} href="#" className="text-neutral-600 hover:text-red-400 transition-colors">
-                                    {item}
-                                </a>
-                            ))}
-                        </div>
-                        <div className="text-neutral-600">© 2024 Lumiqe AI. The Digital Aesthetician.</div>
-                    </footer>
-                </>
+                    </div>
+                </AppLayout>
             )}
-        </div>
+        </>
     );
 }

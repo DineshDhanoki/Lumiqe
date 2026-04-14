@@ -99,12 +99,12 @@ export default function AIStylistChat({
         >
             {/* Header */}
             <div className="text-center mb-4">
-                <h2 className="text-3xl font-bold text-white mb-1">AI Stylist Chat</h2>
-                <p className="text-white/50 text-sm">Your personal color consultant, available 24/7</p>
+                <h2 className="font-headline text-3xl font-bold text-on-surface mb-1">AI Stylist Chat</h2>
+                <p className="text-on-surface-variant text-sm">Your personal color consultant, available 24/7</p>
             </div>
 
             {/* Chat window */}
-            <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4 scrollbar-thin scrollbar-thumb-white/10">
+            <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4 scrollbar-thin scrollbar-thumb-primary/10">
                 <AnimatePresence initial={false}>
                     {messages.map((msg, i) => (
                         <motion.div
@@ -114,15 +114,15 @@ export default function AIStylistChat({
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             {msg.role === 'assistant' && (
-                                <div className="w-7 h-7 rounded-full bg-red-600 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                                    <Sparkles className="w-3.5 h-3.5 text-white" />
+                                <div className="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                                    <Sparkles className="w-3.5 h-3.5 text-on-primary-container" />
                                 </div>
                             )}
                             <div
                                 className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                                     msg.role === 'user'
-                                        ? 'bg-red-600/80 text-white rounded-tr-sm'
-                                        : 'bg-zinc-800/80 border border-white/10 text-white/90 rounded-tl-sm'
+                                        ? 'bg-primary-container/80 text-on-primary-container rounded-tr-sm'
+                                        : 'bg-surface-container/80 border border-primary/10 text-on-surface-variant rounded-tl-sm'
                                 }`}
                             >
                                 {msg.content}
@@ -136,11 +136,11 @@ export default function AIStylistChat({
                             animate={{ opacity: 1 }}
                             className="flex justify-start"
                         >
-                            <div className="w-7 h-7 rounded-full bg-red-600 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                                <Sparkles className="w-3.5 h-3.5 text-white" />
+                            <div className="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                                <Sparkles className="w-3.5 h-3.5 text-on-primary-container" />
                             </div>
-                            <div className="bg-zinc-800/80 border border-white/10 px-4 py-3 rounded-2xl rounded-tl-sm">
-                                <Loader2 className="w-4 h-4 text-white/50 animate-spin" />
+                            <div className="bg-surface-container/80 border border-primary/10 px-4 py-3 rounded-2xl rounded-tl-sm">
+                                <Loader2 className="w-4 h-4 text-on-surface-variant animate-spin" />
                             </div>
                         </motion.div>
                     )}
@@ -155,7 +155,7 @@ export default function AIStylistChat({
                         <button
                             key={i}
                             onClick={() => sendMessage(q)}
-                            className="text-xs text-white/60 bg-white/10 hover:bg-white/20 border border-white/15 px-3 py-1.5 rounded-full transition-colors"
+                            className="text-xs text-on-surface-variant bg-surface-container/50 hover:bg-surface-container border border-outline-variant/20 px-3 py-1.5 rounded-full transition-colors font-label"
                         >
                             {q}
                         </button>
@@ -165,7 +165,7 @@ export default function AIStylistChat({
 
             {/* Error */}
             {error && (
-                <p className="text-red-400 text-xs text-center mb-2">{error}</p>
+                <p className="text-primary text-xs text-center mb-2">{error}</p>
             )}
 
             {/* Input */}
@@ -176,14 +176,14 @@ export default function AIStylistChat({
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && sendMessage()}
                     placeholder="Ask your stylist anything..."
-                    className="flex-1 bg-zinc-800/80 border border-white/15 rounded-2xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-red-500/50 transition-colors"
+                    className="flex-1 bg-surface-container/80 border border-outline-variant/20 rounded-2xl px-4 py-3 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none focus:border-primary/50 transition-colors"
                 />
                 <button
                     onClick={() => sendMessage()}
                     disabled={!input.trim() || isLoading}
-                    className="w-12 h-12 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-2xl flex items-center justify-center transition-colors flex-shrink-0"
+                    className="w-12 h-12 bg-primary-container hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed rounded-2xl flex items-center justify-center transition-colors flex-shrink-0"
                 >
-                    <Send className="w-4 h-4 text-white" />
+                    <Send className="w-4 h-4 text-on-primary-container" />
                 </button>
             </div>
         </motion.div>

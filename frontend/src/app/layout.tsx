@@ -4,7 +4,13 @@
 //   3. Configure sentry.client.config.ts and sentry.server.config.ts
 //   4. Wrap this layout with Sentry error boundary for client-side error capture
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Inter,
+  Plus_Jakarta_Sans,
+  Cormorant_Garamond,
+  JetBrains_Mono,
+  DM_Sans,
+} from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
@@ -29,15 +35,29 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-});
-
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
+});
+
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const viewport: Viewport = {
@@ -51,7 +71,7 @@ export const metadata: Metadata = {
   title: "Lumiqe | Discover Your True Colors",
   description: "AI-Powered Color Analysis Engine. Find your exact season and palette instantly.",
   manifest: "/manifest.json",
-  themeColor: "#DC2626",
+  themeColor: "#09090B",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -72,8 +92,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth overflow-x-hidden" suppressHydrationWarning>
-      <body className={`${inter.variable} ${outfit.variable} ${jakarta.variable} antialiased bg-transparent text-white`} suppressHydrationWarning>
+      <head>
+        {/* Material Symbols Outlined — used throughout Obsidian Luxe UI */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+      </head>
+      <body
+        className={`${inter.variable} ${jakarta.variable} ${cormorant.variable} ${jetbrains.variable} ${dmSans.variable} antialiased bg-background text-on-surface`}
+        suppressHydrationWarning
+      >
         <SkipLink />
+        {/* Film grain texture overlay */}
+        <div className="grain-overlay" aria-hidden="true" />
         <ClientShell />
         <Providers>
           <main id="main-content" role="main">

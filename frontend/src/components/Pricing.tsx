@@ -118,19 +118,19 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-4">
+                    <p className="text-primary text-sm font-label font-bold tracking-widest uppercase mb-4">
                         {t('pricingLabel')}
                     </p>
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4">
+                    <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface mb-4">
                         {t('pricingTitle')}
                     </h2>
-                    <p className="text-white/60 text-lg max-w-xl mx-auto">
+                    <p className="text-on-surface-variant text-lg max-w-xl mx-auto">
                         {t('pricingSubtitle')}
                     </p>
 
                     {/* Billing Toggle */}
                     <div className="flex items-center justify-center gap-4 mt-8">
-                        <span className={`text-sm font-medium transition-colors ${!isAnnual ? 'text-white' : 'text-white/40'}`}>
+                        <span className={`text-sm font-label font-medium transition-colors ${!isAnnual ? 'text-on-surface' : 'text-on-surface-variant'}`}>
                             {t('pricingMonthly')}
                         </span>
                         <button
@@ -138,13 +138,13 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             role="switch"
                             aria-checked={isAnnual}
                             aria-label={t('pricingToggle')}
-                            className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${isAnnual ? 'bg-red-600' : 'bg-white/20'}`}
+                            className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${isAnnual ? 'bg-primary-container' : 'bg-surface-container'}`}
                         >
                             <div
-                                className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-md transition-transform duration-300 ${isAnnual ? 'translate-x-7' : 'translate-x-0.5'}`}
+                                className={`absolute top-0.5 w-6 h-6 rounded-full bg-on-surface shadow-md transition-transform duration-300 ${isAnnual ? 'translate-x-7' : 'translate-x-0.5'}`}
                             />
                         </button>
-                        <span className={`text-sm font-medium transition-colors ${isAnnual ? 'text-white' : 'text-white/40'}`}>
+                        <span className={`text-sm font-label font-medium transition-colors ${isAnnual ? 'text-on-surface' : 'text-on-surface-variant'}`}>
                             {t('pricingAnnual')}
                         </span>
                         {isAnnual && (
@@ -160,7 +160,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                 </motion.div>
 
                 {checkoutError && (
-                    <p className="text-red-400 text-sm text-center mb-6">{checkoutError}</p>
+                    <p className="text-primary text-sm text-center mb-6">{checkoutError}</p>
                 )}
 
                 {/* Pricing Cards */}
@@ -171,32 +171,32 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="relative bg-zinc-900/60 border border-white/10 rounded-3xl p-7 flex flex-col"
+                        className="relative bg-surface-container/50 border border-primary/10 rounded-3xl p-7 flex flex-col"
                     >
                         <div className="flex items-center gap-3 mb-5">
-                            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                                <Zap className="w-5 h-5 text-white/70" />
+                            <div className="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center">
+                                <Zap className="w-5 h-5 text-on-surface-variant" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">{t('pricingFree')}</h3>
+                            <h3 className="font-headline text-xl font-bold text-on-surface">{t('pricingFree')}</h3>
                         </div>
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-extrabold text-white">{'\u20b9'}0</span>
-                                <span className="text-white/40 text-sm">{t('pricingForever')}</span>
+                                <span className="font-display text-4xl font-extrabold text-on-surface">{'\u20b9'}0</span>
+                                <span className="text-on-surface-variant text-sm">{t('pricingForever')}</span>
                             </div>
-                            <p className="text-white/50 text-sm mt-2">{t('pricingFreeDesc')}</p>
+                            <p className="text-on-surface-variant text-sm mt-2">{t('pricingFreeDesc')}</p>
                         </div>
 
                         <ul className="space-y-2.5 mb-6 flex-1">
                             {freeFeatures.map((f, i) => (
                                 <li key={i} className="flex items-center gap-3">
                                     {f.included ? (
-                                        <Check className="w-4 h-4 text-green-400 shrink-0" />
+                                        <Check className="w-4 h-4 text-tertiary shrink-0" />
                                     ) : (
-                                        <X className="w-4 h-4 text-white/20 shrink-0" />
+                                        <X className="w-4 h-4 text-on-surface-variant/30 shrink-0" />
                                     )}
-                                    <span className={`text-sm ${f.included ? 'text-white/80' : 'text-white/30'}`}>
+                                    <span className={`text-sm ${f.included ? 'text-on-surface-variant' : 'text-on-surface-variant/40'}`}>
                                         {f.text}
                                     </span>
                                 </li>
@@ -205,7 +205,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
 
                         <button
                             onClick={() => onOpenAuth?.()}
-                            className="w-full py-3 rounded-full border border-white/20 text-white font-semibold text-sm hover:bg-white/10 transition-all"
+                            className="w-full py-3 rounded-full border border-outline-variant/30 text-on-surface font-label font-semibold text-sm hover:bg-surface-container transition-all"
                         >
                             {t('pricingGetStarted')}
                         </button>
@@ -217,28 +217,28 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.15 }}
-                        className="relative bg-zinc-900/60 border border-amber-500/30 rounded-3xl p-7 flex flex-col"
+                        className="relative bg-surface-container/50 border border-primary/30 rounded-3xl p-7 flex flex-col"
                     >
                         <div className="flex items-center gap-3 mb-5">
-                            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
-                                <CreditCard className="w-5 h-5 text-amber-400" />
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                                <CreditCard className="w-5 h-5 text-primary" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">{t('pricingSinglePack')}</h3>
+                            <h3 className="font-headline text-xl font-bold text-on-surface">{t('pricingSinglePack')}</h3>
                         </div>
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-extrabold text-white">{'\u20b9'}29</span>
-                                <span className="text-white/40 text-sm">{t('pricingSingleRange')}</span>
+                                <span className="font-display text-4xl font-extrabold text-on-surface">{'\u20b9'}29</span>
+                                <span className="text-on-surface-variant text-sm">{t('pricingSingleRange')}</span>
                             </div>
-                            <p className="text-white/50 text-sm mt-2">{t('pricingSingleDesc')}</p>
+                            <p className="text-on-surface-variant text-sm mt-2">{t('pricingSingleDesc')}</p>
                         </div>
 
                         <ul className="space-y-2.5 mb-6 flex-1">
                             {singlePackFeatures.map((f, i) => (
                                 <li key={i} className="flex items-center gap-3">
-                                    <Check className="w-4 h-4 text-amber-400 shrink-0" />
-                                    <span className="text-sm text-white/80">{f.text}</span>
+                                    <Check className="w-4 h-4 text-primary shrink-0" />
+                                    <span className="text-sm text-on-surface-variant">{f.text}</span>
                                 </li>
                             ))}
                         </ul>
@@ -246,7 +246,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         <button
                             onClick={handleBuyCredits}
                             disabled={loadingPlan === 'credits'}
-                            className="group w-full py-3 rounded-full border border-amber-500/40 text-white font-semibold text-sm hover:bg-amber-500/10 disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                            className="group w-full py-3 rounded-full border border-primary/30 text-on-surface font-label font-semibold text-sm hover:bg-primary/10 disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
                         >
                             {loadingPlan === 'credits' ? (
                                 <>
@@ -265,32 +265,32 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="relative bg-gradient-to-b from-red-950/40 to-zinc-900/60 border-2 border-red-500/50 rounded-3xl p-7 flex flex-col shadow-[0_0_100px_-20px_rgba(220,38,38,0.5)]"
+                        className="relative bg-gradient-to-b from-primary/10 to-surface-container/60 border-2 border-primary/40 rounded-3xl p-7 flex flex-col shadow-[0_0_100px_-20px_rgba(240,191,98,0.2)]"
                     >
                         {/* Popular Badge */}
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                            <span className="bg-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
+                            <span className="bg-primary-container text-on-primary-container text-xs font-label font-bold px-4 py-1.5 rounded-full shadow-lg">
                                 {t('pricingMostPopular')}
                             </span>
                         </div>
 
                         <div className="flex items-center gap-3 mb-5">
-                            <div className="w-10 h-10 rounded-xl bg-red-500/20 border border-red-500/30 flex items-center justify-center">
-                                <Crown className="w-5 h-5 text-red-400" />
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                                <Crown className="w-5 h-5 text-primary" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">{t('pricingPremium')}</h3>
+                            <h3 className="font-headline text-xl font-bold text-on-surface">{t('pricingPremium')}</h3>
                         </div>
 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-extrabold text-white">
+                                <span className="font-display text-4xl font-extrabold text-on-surface">
                                     {'\u20b9'}{isAnnual ? '999' : '149'}
                                 </span>
-                                <span className="text-white/40 text-sm">
+                                <span className="text-on-surface-variant text-sm">
                                     {isAnnual ? t('pricingPerYear') : t('pricingPerMonth')}
                                 </span>
                             </div>
-                            <p className="text-white/50 text-sm mt-2">
+                            <p className="text-on-surface-variant text-sm mt-2">
                                 {isAnnual ? t('pricingBestValue') : t('pricingPremiumDesc')}
                             </p>
                         </div>
@@ -298,8 +298,8 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         <ul className="space-y-2.5 mb-6 flex-1">
                             {premiumFeatures.map((f, i) => (
                                 <li key={i} className="flex items-center gap-3">
-                                    <Check className="w-4 h-4 text-red-400 shrink-0" />
-                                    <span className="text-sm text-white/80">{f.text}</span>
+                                    <Check className="w-4 h-4 text-primary shrink-0" />
+                                    <span className="text-sm text-on-surface-variant">{f.text}</span>
                                 </li>
                             ))}
                         </ul>
@@ -307,7 +307,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         <button
                             onClick={() => handleSubscribe(isAnnual ? 'annual' : 'monthly')}
                             disabled={loadingPlan === 'monthly' || loadingPlan === 'annual'}
-                            className="group w-full py-3 rounded-full bg-red-600 hover:bg-red-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-sm shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)] transition-all flex items-center justify-center gap-2"
+                            className="group w-full py-3 rounded-full bg-primary-container hover:bg-primary disabled:opacity-60 disabled:cursor-not-allowed text-on-primary-container font-label font-bold text-sm shadow-[0_0_30px_-5px_rgba(240,191,98,0.3)] transition-all flex items-center justify-center gap-2"
                         >
                             {loadingPlan === 'monthly' || loadingPlan === 'annual' ? (
                                 <>

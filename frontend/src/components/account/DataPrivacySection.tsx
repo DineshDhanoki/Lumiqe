@@ -22,15 +22,15 @@ export default function DataPrivacySection({
     onDeleteCancel,
 }: DataPrivacySectionProps) {
     return (
-        <div className="mt-10 p-8 rounded-3xl bg-white/[0.02] border border-white/10">
-            <h3 className="text-xl font-bold text-white mb-2">Data & Privacy</h3>
-            <p className="text-white/50 text-sm mb-6">Download all your data or permanently delete your account.</p>
+        <div className="mt-10 p-8 rounded-3xl bg-surface-container/30 border border-primary/10">
+            <h3 className="text-xl font-bold text-on-surface mb-2">Data & Privacy</h3>
+            <p className="text-on-surface-variant text-sm mb-6">Download all your data or permanently delete your account.</p>
 
             <div className="flex flex-col sm:flex-row gap-4">
                 <button
                     onClick={onExport}
                     disabled={exporting}
-                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-semibold transition disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-surface-container/50 hover:bg-surface-container border border-outline-variant/30 text-on-surface text-sm font-semibold transition disabled:opacity-50"
                 >
                     {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                     {exporting ? 'Exporting...' : 'Export My Data'}
@@ -56,7 +56,7 @@ export default function DataPrivacySection({
                         </button>
                         <button
                             onClick={onDeleteCancel}
-                            className="px-5 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 text-sm transition"
+                            className="px-5 py-2 rounded-full bg-surface-container/50 hover:bg-surface-container text-on-surface-variant text-sm transition"
                         >
                             Cancel
                         </button>

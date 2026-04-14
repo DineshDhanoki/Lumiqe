@@ -19,24 +19,24 @@ export default function SkinProfileCard({ hexColor, undertone, confidence }: Ski
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900 border border-white/10 p-6 rounded-3xl flex items-center justify-between"
+            className="bg-surface-container/50 border border-primary/10 p-6 rounded-3xl flex items-center justify-between"
         >
             <div className="flex items-center gap-5">
                 <div
-                    className="w-16 h-16 rounded-2xl shadow-inner border-2 border-white/20"
+                    className="w-16 h-16 rounded-2xl shadow-inner border-2 border-outline-variant/30"
                     style={{ backgroundColor: hexColor }}
                 />
                 <div className="flex flex-col">
-                    <span className="text-white/50 text-xs font-semibold tracking-wider uppercase mb-1">Detected Tone</span>
-                    <span className="text-2xl font-mono text-white mb-1">{hexColor.toUpperCase()}</span>
-                    <span className="text-sm text-red-300 capitalize bg-red-950/30 px-2 py-0.5 rounded-full w-fit border border-red-500/20">
+                    <span className="text-on-surface-variant text-xs font-label font-semibold tracking-wider uppercase mb-1">Detected Tone</span>
+                    <span className="text-2xl font-mono text-on-surface mb-1">{hexColor.toUpperCase()}</span>
+                    <span className="text-sm text-primary capitalize bg-primary/10 px-2 py-0.5 rounded-full w-fit border border-primary/20">
                         {undertone} undertone
                     </span>
                 </div>
             </div>
 
             <div className="flex flex-col items-center gap-2">
-                <span className="text-white/50 text-xs font-semibold tracking-wider uppercase">Confidence</span>
+                <span className="text-on-surface-variant text-xs font-label font-semibold tracking-wider uppercase">Confidence</span>
                 <div className="relative flex items-center justify-center w-16 h-16">
                     <svg className="w-16 h-16 transform -rotate-90">
                         <circle
@@ -46,7 +46,7 @@ export default function SkinProfileCard({ hexColor, undertone, confidence }: Ski
                             stroke="currentColor"
                             strokeWidth="4"
                             fill="transparent"
-                            className="text-white/10"
+                            className="text-outline-variant/20"
                         />
                         <motion.circle
                             cx="32"
@@ -59,10 +59,10 @@ export default function SkinProfileCard({ hexColor, undertone, confidence }: Ski
                             initial={{ strokeDashoffset: circumference }}
                             animate={{ strokeDashoffset }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
-                            className="text-green-400"
+                            className="text-tertiary"
                         />
                     </svg>
-                    <span className="absolute text-white font-bold text-sm">{percentage}%</span>
+                    <span className="absolute text-on-surface font-bold text-sm">{percentage}%</span>
                 </div>
             </div>
         </motion.div>

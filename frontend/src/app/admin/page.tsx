@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, RefreshCw, Trash2, Edit2, Plus, X, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
+import AppLayout from '@/components/layout/AppLayout';
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -430,9 +431,11 @@ export default function AdminPage() {
 
     // ── Early returns ────────────────────────────────────────
     if (status === 'loading') return (
-        <main className="min-h-screen bg-transparent flex items-center justify-center">
-            <div className="animate-pulse text-white/40 text-sm">Loading...</div>
-        </main>
+        <AppLayout>
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="animate-pulse text-on-surface-variant text-sm font-label">Loading...</div>
+            </div>
+        </AppLayout>
     );
     if (!session?.isAdmin) return null;
 
@@ -453,23 +456,17 @@ export default function AdminPage() {
     ];
 
     return (
-        <main className="min-h-screen bg-transparent text-white font-sans pb-24">
-            {/* ── Header ──────────────────────────────────────── */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <Link href="/dashboard" className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
-                        <ArrowLeft className="w-4 h-4 text-white/60" />
-                    </Link>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
-                        <span className="text-white/20">|</span>
-                        <span className="text-red-400 text-sm font-bold tracking-wider uppercase">Super Admin</span>
-                    </div>
+        <AppLayout>
+            {/* ── Header breadcrumb ── */}
+            <div className="flex items-center gap-3 mb-8">
+                <span className="material-symbols-outlined text-primary text-3xl">admin_panel_settings</span>
+                <div>
+                    <h1 className="font-display text-3xl font-bold text-on-surface">Admin Panel</h1>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-on-surface-variant/50">
+                        Super Admin · {session.user?.name?.split(' ')[0]}
+                    </p>
                 </div>
-                <p className="text-white/50 text-sm hidden sm:block">
-                    {session.user?.name && <>Welcome, <span className="text-white font-medium">{session.user.name.split(' ')[0]}</span></>}
-                </p>
-            </header>
+            </div>
 
             <div className="max-w-7xl mx-auto px-4 pt-24">
                 {/* ── Tab Bar ──────────────────────────────────── */}
@@ -998,6 +995,6 @@ export default function AdminPage() {
             )}
 
             <ToastContainer toasts={toasts} />
-        </main>
+        </AppLayout>
     );
 }

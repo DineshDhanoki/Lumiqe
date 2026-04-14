@@ -84,17 +84,17 @@ export default function ShareButtons({ analysisId, season, session }: Props) {
     };
 
     return (
-        <div className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl">
+        <div className="bg-surface-container/50 border border-primary/10 p-6 rounded-3xl">
             <div className="flex items-center gap-2 mb-4">
-                <Share2 className="w-5 h-5 text-red-400" />
-                <h3 className="text-lg font-bold text-white">Share Your Results</h3>
+                <Share2 className="w-5 h-5 text-primary" />
+                <h3 className="font-headline text-lg font-bold text-on-surface">Share Your Results</h3>
             </div>
             <div className="flex flex-wrap gap-3">
                 {/* WhatsApp - primary share action */}
                 <button
                     onClick={shareWhatsApp}
                     disabled={loading}
-                    className="flex items-center gap-2 px-5 py-3 bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/30 rounded-xl text-sm font-semibold text-[#25D366] transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-5 py-3 bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/30 rounded-xl text-sm font-label font-semibold text-[#25D366] transition-all disabled:opacity-50"
                 >
                     <WhatsAppIcon className="w-5 h-5" />
                     Share on WhatsApp
@@ -103,9 +103,9 @@ export default function ShareButtons({ analysisId, season, session }: Props) {
                 <button
                     onClick={copyLink}
                     disabled={loading}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-sm font-medium text-white transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-surface-container hover:bg-surface-container/80 border border-outline-variant/30 rounded-xl text-sm font-label font-medium text-on-surface transition-all disabled:opacity-50"
                 >
-                    {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                    {copied ? <Check className="w-4 h-4 text-tertiary" /> : <Copy className="w-4 h-4" />}
                     {copied ? 'Copied!' : 'Copy Link'}
                 </button>
                 {/* Twitter/X */}

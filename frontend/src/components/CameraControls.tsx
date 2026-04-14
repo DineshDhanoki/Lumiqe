@@ -25,7 +25,7 @@ const CameraControls = React.memo(function CameraControls({
         <div className="flex items-center gap-4 w-full">
             <button
                 onClick={onCancel}
-                className="flex-1 py-3 rounded-2xl border border-white/15 text-white/60 hover:text-white hover:bg-white/5 transition-all text-sm font-semibold"
+                className="flex-1 py-3 rounded-2xl border border-outline-variant/20 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 transition-all text-sm font-semibold"
             >
                 {t(lang, 'cancel')}
             </button>
@@ -36,8 +36,8 @@ const CameraControls = React.memo(function CameraControls({
                 aria-label="Capture photo"
                 className={`flex-1 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
                     canCapture
-                        ? 'bg-red-600 hover:bg-red-500 text-white shadow-lg hover:scale-105'
-                        : 'bg-zinc-800 text-white/30 cursor-not-allowed'
+                        ? 'bg-primary-container hover:bg-primary text-on-primary-container shadow-lg hover:scale-105'
+                        : 'bg-surface-container text-on-surface-variant/30 cursor-not-allowed'
                 }`}
                 style={canCapture && heldStill ? {
                     boxShadow: '0 0 20px rgba(34, 197, 94, 0.4), 0 0 40px rgba(34, 197, 94, 0.2)',

@@ -26,8 +26,8 @@ export default function Features() {
             icon: ShoppingBag,
             title: t('featureShoppingTitle'),
             description: t('featureShoppingDesc'),
-            color: 'from-red-500/20 to-rose-600/20',
-            iconColor: 'text-red-400',
+            color: 'from-primary/10 to-primary-container/20',
+            iconColor: 'text-primary',
         },
         {
             icon: ShieldCheck,
@@ -46,7 +46,7 @@ export default function Features() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
-                        className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6"
+                        className="font-headline text-3xl sm:text-4xl md:text-5xl font-bold text-on-surface mb-4 sm:mb-6"
                     >
                         {t('featuresTitle')}
                     </motion.h2>
@@ -55,7 +55,7 @@ export default function Features() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ delay: 0.1 }}
-                        className="text-lg text-white/60 max-w-2xl mx-auto"
+                        className="text-lg text-on-surface-variant max-w-2xl mx-auto"
                     >
                         {t('featuresSubtitle')}
                     </motion.p>
@@ -69,13 +69,13 @@ export default function Features() {
                             whileInView={{ opacity: 1, scale: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ delay: index * 0.1, duration: 0.5 }}
-                            className={`p-6 sm:p-8 rounded-3xl bg-gradient-to-br ${feature.color} bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors group`}
+                            className={`p-6 sm:p-8 rounded-3xl bg-gradient-to-br ${feature.color} bg-surface-container/30 border border-primary/10 backdrop-blur-md hover:bg-surface-container/50 transition-colors group`}
                         >
                             <feature.icon className={`w-10 h-10 ${feature.iconColor} mb-6`} />
-                            <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
+                            <h3 className="text-2xl font-bold text-on-surface mb-3 tracking-tight">
                                 {feature.title}
                             </h3>
-                            <p className="text-white/70 leading-relaxed">
+                            <p className="text-on-surface-variant leading-relaxed">
                                 {feature.description}
                             </p>
                         </motion.div>

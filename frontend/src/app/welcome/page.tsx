@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Camera, Palette, ShoppingBag, Sun, Sparkles, Eye, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
+import AppLayout from '@/components/layout/AppLayout';
 
 const WELCOME_KEY = 'lumiqe-welcome-seen';
 
@@ -105,19 +106,15 @@ export default function WelcomePage() {
 
     if (!mounted) {
         return (
-            <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-                <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
         );
     }
 
     return (
-        <main className="min-h-screen bg-stone-950 text-white relative overflow-hidden">
-            {/* Background glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-red-500/8 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-16">
+        <AppLayout>
+            <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 py-8">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -269,6 +266,6 @@ export default function WelcomePage() {
                     </motion.div>
                 </motion.div>
             </div>
-        </main>
+        </AppLayout>
     );
 }

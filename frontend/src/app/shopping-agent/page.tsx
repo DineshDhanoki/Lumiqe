@@ -7,6 +7,7 @@ import { ArrowLeft, Sparkles, Loader2, AlertCircle, RefreshCcw } from 'lucide-re
 import { apiFetch } from '@/lib/api';
 import OutfitDisplay, { CuratedOutfit } from '@/components/OutfitDisplay';
 import AppMenu from '@/components/AppMenu';
+import AppLayout from '@/components/layout/AppLayout';
 
 // Animated loading messages
 const LOADING_STEPS = [
@@ -316,23 +317,17 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
 
 export default function ShoppingAgentPage() {
     return (
-        <div className="min-h-screen bg-transparent relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-red-950/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-rose-950/10 rounded-full blur-[100px]" />
-            </div>
-
+        <AppLayout>
             <Suspense
                 fallback={
-                    <div className="flex flex-col items-center justify-center min-h-screen text-white/50 gap-4">
-                        <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
-                        <p>Loading AI Stylist…</p>
+                    <div className="flex flex-col items-center justify-center min-h-[60vh] text-on-surface-variant gap-4">
+                        <Sparkles className="w-8 h-8 text-primary animate-pulse" />
+                        <p className="font-label text-sm">Loading AI Stylist…</p>
                     </div>
                 }
             >
                 <ShoppingAgentContent />
             </Suspense>
-        </div>
+        </AppLayout>
     );
 }

@@ -4,10 +4,11 @@ import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Loader2 } from 'lucide-react';
 import ResultsView from '@/components/ResultsView';
 import { useLumiqeStore } from '@/lib/store';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import AppLayout from '@/components/layout/AppLayout';
 
 function ResultsContent() {
     const { t } = useTranslation();
@@ -81,14 +82,16 @@ function ResultsContent() {
 
     if (!searchParams.has('season')) {
         return (
-            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
-                <Sparkles className="w-12 h-12 text-red-500 mb-6" />
-                <h1 className="text-3xl font-bold text-white mb-4">{t('noAnalysisFound')}</h1>
-                <p className="text-white/60 mb-8">{t('noAnalysisFoundDesc')}</p>
-                <Link href={status === 'authenticated' ? '/dashboard' : '/'} className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors inline-block">
-                    {status === 'authenticated' ? t('backToDashboard') : t('goBackHome')}
-                </Link>
-            </div>
+            <AppLayout>
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <span className="material-symbols-outlined text-5xl text-primary/40 mb-6">palette</span>
+                    <h1 className="font-display text-3xl font-bold text-on-surface mb-4">{t('noAnalysisFound')}</h1>
+                    <p className="text-on-surface-variant mb-8">{t('noAnalysisFoundDesc')}</p>
+                    <Link href={status === 'authenticated' ? '/dashboard' : '/'} className="px-6 py-3 bg-primary-container text-on-primary-container rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:bg-primary transition-colors inline-block">
+                        {status === 'authenticated' ? t('backToDashboard') : t('goBackHome')}
+                    </Link>
+                </div>
+            </AppLayout>
         );
     }
 
@@ -116,9 +119,9 @@ function ResultsContent() {
 export default function Results() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 text-white/50">
-                <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
-                <p>Loading results...</p>
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 text-on-surface-variant">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <p className="font-label text-sm">Loading results...</p>
             </div>
         }>
             <ResultsContent />

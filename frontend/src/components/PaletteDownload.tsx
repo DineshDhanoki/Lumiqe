@@ -59,11 +59,11 @@ export default function PaletteDownload({ season, palette = [], hexColor = '', u
             <button
                 onClick={handleDownload}
                 disabled={isDownloading || isSuccess}
-                className={`relative group flex items-center justify-center gap-3 w-full sm:w-auto font-bold text-lg py-4 px-10 rounded-full transition-all duration-300 ${isSuccess
-                    ? 'bg-green-500 text-white cursor-default'
+                className={`relative group flex items-center justify-center gap-3 w-full sm:w-auto font-label font-bold text-lg py-4 px-10 rounded-full transition-all duration-300 ${isSuccess
+                    ? 'bg-tertiary text-on-surface cursor-default'
                     : isDownloading
-                        ? 'bg-white/10 text-white/50 cursor-not-allowed'
-                        : 'bg-white text-stone-900 hover:bg-stone-200 shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)] transform hover:scale-105'
+                        ? 'bg-surface-container text-on-surface-variant cursor-not-allowed'
+                        : 'bg-primary-container text-on-primary-container hover:bg-primary shadow-[0_0_40px_-10px_rgba(240,191,98,0.3)] hover:shadow-[0_0_60px_-15px_rgba(240,191,98,0.4)] transform hover:scale-105'
                     }`}
             >
                 {isSuccess ? (
@@ -85,10 +85,10 @@ export default function PaletteDownload({ season, palette = [], hexColor = '', u
             </button>
 
             {error && (
-                <p className="mt-4 text-red-400 text-sm font-medium">{error}</p>
+                <p className="mt-4 text-primary text-sm font-label font-medium">{error}</p>
             )}
 
-            <p className="mt-4 text-white/40 text-sm">
+            <p className="mt-4 text-on-surface-variant text-sm">
                 Downloads a high-res card to share on Instagram or keep for shopping.
             </p>
         </div>

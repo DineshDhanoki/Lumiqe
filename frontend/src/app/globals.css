@@ -1,37 +1,50 @@
 @import "tailwindcss";
 
+/* ── Obsidian Luxe — Design System Tokens ─────────────────────── */
 @theme {
-  --color-background: #450a0a; /* Tailwind red-950 base */
-  --color-foreground: #ffffff;
+  --color-background: #09090B;
+  --color-foreground: #e5e1e4;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 4%;
+    --foreground: 30 11% 90%;
+    --card: 240 4% 8%;
+    --card-foreground: 30 11% 90%;
+    --popover: 240 4% 8%;
+    --popover-foreground: 30 11% 90%;
+    --primary: 40 82% 66%;
+    --primary-foreground: 36 100% 13%;
+    --secondary: 248 100% 87%;
+    --secondary-foreground: 247 67% 33%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 30 11% 75%;
+    --accent: 40 82% 50%;
+    --accent-foreground: 36 100% 13%;
+    --destructive: 5 100% 84%;
+    --destructive-foreground: 347 100% 22%;
+    --border: 28 14% 27%;
+    --input: 28 14% 27%;
+    --ring: 40 82% 66%;
+    --radius: 0.25rem;
+    --chart-1: 40 82% 66%;
+    --chart-2: 248 100% 87%;
+    --chart-3: 351 72% 75%;
+    --chart-4: 5 100% 84%;
+    --chart-5: 240 4% 65%;
   }
 }
 
-/* No global border-border. Borders are handled explicitly on glassmorphism components. */
-
+/* ── Base body styles ───────────────────────────────────────────── */
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #09090B;
+  color: #e5e1e4;
+  font-family: var(--font-inter), system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
-}
-
-/* Safe area insets for notched phones (iPhone X+, modern Android) */
-.safe-top { padding-top: env(safe-area-inset-top); }
-.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-.safe-x {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Prevent tap highlight flash on mobile */
@@ -46,11 +59,123 @@ body {
   }
 }
 
-/* Analyze page scanner gradient animation */
+/* ── Safe area insets for notched phones ────────────────────────── */
+.safe-top    { padding-top:    env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.safe-x {
+  padding-left:  env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ── Obsidian Luxe Utility Classes ──────────────────────────────── */
+
+/* Film grain overlay — add <div className="grain-overlay pointer-events-none" /> to layout */
+.grain-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url('/grain.png');
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Glassmorphism cards */
+.glass-card {
+  background: rgba(19, 19, 21, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-panel {
+  background: rgba(19, 19, 21, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Gold ghost border */
+.ghost-border {
+  border: 0.5px solid rgba(196, 151, 62, 0.2);
+}
+
+/* Subtle gold-tinted shadow for hero cards */
+.editorial-shadow {
+  box-shadow: 0 40px 60px -15px rgba(196, 151, 62, 0.08);
+}
+
+/* Gold glow on text */
+.text-glow {
+  text-shadow: 0 0 20px rgba(196, 151, 62, 0.3);
+}
+
+/* Horizontal gold scanner sweep */
+.scanner-line {
+  background: linear-gradient(90deg, transparent, #c4973e, transparent);
+  box-shadow: 0 0 15px #c4973e;
+}
+
+/* ── Scanner animation (analyze page) ──────────────────────────── */
 @keyframes scanline {
-  0% { top: -2px; }
+  0%   { top: -2px; }
   100% { top: 100%; }
 }
 .scanner-animate {
   animation: scanline 2s linear infinite;
+}
+
+/* ── Aurora background animation ───────────────────────────────── */
+@keyframes aurora {
+  from { background-position: 50% 50%, 50% 50%; }
+  to   { background-position: 350% 50%, 350% 50%; }
+}
+
+/* ── Typography helpers ─────────────────────────────────────────── */
+.font-display  { font-family: var(--font-cormorant), Georgia, serif; }
+.font-headline { font-family: var(--font-jakarta), system-ui, sans-serif; }
+.font-body     { font-family: var(--font-inter), system-ui, sans-serif; }
+.font-label    { font-family: var(--font-dm-sans), system-ui, sans-serif; }
+.font-mono     { font-family: var(--font-jetbrains), ui-monospace, monospace; }
+
+/* Cormorant italic hero headlines */
+.display-hero {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+/* ── Floating label inputs ──────────────────────────────────────── */
+.floating-label-group {
+  position: relative;
+}
+.floating-label-group input {
+  border: none;
+  border-bottom: 1px solid rgba(196, 151, 62, 0.3);
+  background: transparent;
+  padding: 1.25rem 0 0.5rem 0;
+  width: 100%;
+  color: #e5e1e4;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.floating-label-group input:focus {
+  border-bottom-color: #f0bf62;
+}
+.floating-label-group label {
+  position: absolute;
+  top: 1.25rem;
+  left: 0;
+  color: rgba(229, 225, 228, 0.4);
+  font-size: 0.875rem;
+  pointer-events: none;
+  transition: top 0.15s, font-size 0.15s, color 0.15s;
+}
+.floating-label-group input:focus ~ label,
+.floating-label-group input:not(:placeholder-shown) ~ label {
+  top: 0;
+  font-size: 0.75rem;
+  color: #f0bf62;
 }

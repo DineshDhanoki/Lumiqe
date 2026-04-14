@@ -29,7 +29,7 @@ export default function LanguageSwitcher({ currentLang, onChange }: LanguageSwit
         <div ref={ref} className="relative">
             <button
                 onClick={() => setOpen(prev => !prev)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white/70 hover:text-white transition-all text-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container/50 hover:bg-surface-container border border-outline-variant/20 text-on-surface-variant hover:text-on-surface transition-all text-sm"
             >
                 <Globe className="w-3.5 h-3.5" />
                 <span>{current.flag}</span>
@@ -37,15 +37,15 @@ export default function LanguageSwitcher({ currentLang, onChange }: LanguageSwit
             </button>
 
             {open && (
-                <div className="absolute right-0 top-full mt-2 w-44 bg-zinc-900 border border-white/15 rounded-2xl shadow-2xl z-50 overflow-hidden">
+                <div className="absolute right-0 top-full mt-2 w-44 bg-surface border border-primary/10 rounded-2xl shadow-2xl z-50 overflow-hidden">
                     {LANGUAGES.map(lang => (
                         <button
                             key={lang.code}
                             onClick={() => { onChange(lang.code); setOpen(false); }}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors text-left ${
                                 lang.code === currentLang
-                                    ? 'bg-red-600/20 text-white'
-                                    : 'text-white/60 hover:bg-white/10 hover:text-white'
+                                    ? 'bg-primary/10 text-on-surface'
+                                    : 'text-on-surface-variant hover:bg-surface-container/50 hover:text-on-surface'
                             }`}
                         >
                             <span className="text-base">{lang.flag}</span>

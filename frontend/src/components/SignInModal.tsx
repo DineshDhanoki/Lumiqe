@@ -160,10 +160,10 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
     };
 
     const inputClass = (field: string) =>
-        `w-full bg-black/50 border rounded-2xl py-3 pl-10 pr-4 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 transition-all ${
+        `w-full bg-surface-container/50 border rounded-2xl py-3 pl-10 pr-4 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none focus:ring-1 transition-all ${
             fieldErrors[field]
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-white/10 focus:border-red-500 focus:ring-red-500'
+                ? 'border-primary focus:ring-primary'
+                : 'border-outline-variant/30 focus:border-primary focus:ring-primary'
         }`;
 
     return (
@@ -185,21 +185,21 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                         role="dialog"
                         aria-modal="true"
                         aria-label={isSignUp ? t('authCreateAccount') : t('authWelcomeBack')}
-                        className="relative w-full max-w-md bg-stone-900 border border-white/10 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
+                        className="relative w-full max-w-md bg-surface border border-primary/10 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between p-6 border-b border-white/5">
+                        <div className="flex items-center justify-between p-6 border-b border-primary/10">
                             <div>
-                                <h3 className="text-xl font-bold text-white">
+                                <h3 className="font-headline text-xl font-bold text-on-surface">
                                     {isSignUp ? t('authCreateAccount') : t('authWelcomeBack')}
                                 </h3>
-                                <p className="text-white/40 text-sm mt-0.5">
+                                <p className="text-on-surface-variant text-sm mt-0.5">
                                     {isSignUp ? t('authJoinFree') : t('authSignInToAccount')}
                                 </p>
                             </div>
                             <button
                                 onClick={handleClose}
-                                className="p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                                className="p-2 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -208,7 +208,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                         {/* Body */}
                         <div className="p-6">
                             {error && (
-                                <div role="alert" aria-live="polite" className="mb-5 p-4 rounded-xl bg-red-950/50 border border-red-500/20 flex items-start gap-3 text-red-200 text-sm">
+                                <div role="alert" aria-live="polite" className="mb-5 p-4 rounded-xl bg-primary/5 border border-primary/20 flex items-start gap-3 text-primary text-sm">
                                     <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                                     <p>{error}</p>
                                 </div>
@@ -229,9 +229,9 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                             </button>
 
                             <div className="relative flex items-center mb-5">
-                                <div className="flex-grow border-t border-white/10"></div>
-                                <span className="flex-shrink-0 mx-4 text-white/30 text-xs uppercase tracking-wider">{t('authOr')}</span>
-                                <div className="flex-grow border-t border-white/10"></div>
+                                <div className="flex-grow border-t border-primary/10"></div>
+                                <span className="flex-shrink-0 mx-4 text-on-surface-variant/50 text-xs uppercase tracking-wider">{t('authOr')}</span>
+                                <div className="flex-grow border-t border-primary/10"></div>
                             </div>
 
                             <form onSubmit={handleAuth} className="space-y-3.5">
@@ -266,7 +266,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                 {/* Email */}
                                 <div>
                                     <div className="relative flex items-center">
-                                        <Mail className="absolute left-3.5 w-4 h-4 text-white/40" />
+                                        <Mail className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
                                         <input
                                             type="email"
                                             placeholder={t('authEmail')}
@@ -281,35 +281,35 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             className={inputClass('email')}
                                         />
                                     </div>
-                                    {fieldErrors.email && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.email}</p>}
+                                    {fieldErrors.email && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.email}</p>}
                                 </div>
 
                                 {/* Password */}
                                 <div>
                                     <div className="relative flex items-center">
-                                        <Lock className="absolute left-3.5 w-4 h-4 text-white/40" />
+                                        <Lock className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
                                         <input
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder={t('authPassword')}
                                             aria-label={t('authPassword')}
                                             value={password}
                                             onChange={(e) => { setPassword(e.target.value); clearFieldError('password'); }}
-                                            className={`w-full bg-black/50 border rounded-2xl py-3 pl-10 pr-10 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 transition-all ${
+                                            className={`w-full bg-surface-container/50 border rounded-2xl py-3 pl-10 pr-10 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none focus:ring-1 transition-all ${
                                                 fieldErrors.password
-                                                    ? 'border-red-500 focus:ring-red-500'
-                                                    : 'border-white/10 focus:border-red-500 focus:ring-red-500'
+                                                    ? 'border-primary focus:ring-primary'
+                                                    : 'border-outline-variant/30 focus:border-primary focus:ring-primary'
                                             }`}
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3.5 text-white/40 hover:text-white/70 transition-colors"
+                                            className="absolute right-3.5 text-on-surface-variant hover:text-on-surface transition-colors"
                                             aria-label={showPassword ? t('authHidePassword') : t('authShowPassword')}
                                         >
                                             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         </button>
                                     </div>
-                                    {fieldErrors.password && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.password}</p>}
+                                    {fieldErrors.password && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.password}</p>}
 
                                     {isSignUp && (
                                         <PasswordStrengthMeter
@@ -324,7 +324,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
 
                                 {!isSignUp && (
                                     <div className="text-right">
-                                        <Link href="/forgot-password" onClick={handleClose} className="text-white/40 hover:text-white/70 text-xs transition-colors">
+                                        <Link href="/forgot-password" onClick={handleClose} className="text-on-surface-variant hover:text-on-surface text-xs transition-colors">
                                             {t('authForgotPassword')}
                                         </Link>
                                     </div>
@@ -334,7 +334,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                     <button
                                         type="submit"
                                         disabled={isLoading}
-                                        className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white font-semibold py-3 rounded-full transition-colors shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)] disabled:opacity-60 disabled:cursor-not-allowed"
+                                        className="w-full flex items-center justify-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-label font-semibold py-3 rounded-full transition-colors shadow-[0_0_20px_-5px_rgba(240,191,98,0.2)] disabled:opacity-60 disabled:cursor-not-allowed"
                                     >
                                         {isLoading ? (
                                             <>
@@ -349,26 +349,26 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                 </div>
 
                                 {isSignUp && (
-                                    <p className="text-center text-white/30 text-xs">
+                                    <p className="text-center text-on-surface-variant/50 text-xs">
                                         {t('authAgreeToTerms')}{' '}
-                                        <Link href="/terms" onClick={handleClose} className="text-white/50 hover:text-white underline">{t('authTerms')}</Link>
+                                        <Link href="/terms" onClick={handleClose} className="text-on-surface-variant hover:text-on-surface underline">{t('authTerms')}</Link>
                                         {' '}{t('authAnd')}{' '}
-                                        <Link href="/privacy" onClick={handleClose} className="text-white/50 hover:text-white underline">{t('authPrivacyPolicy')}</Link>
+                                        <Link href="/privacy" onClick={handleClose} className="text-on-surface-variant hover:text-on-surface underline">{t('authPrivacyPolicy')}</Link>
                                     </p>
                                 )}
                             </form>
 
-                            <div className="mt-5 pt-4 border-t border-white/5 flex flex-col items-center gap-3">
+                            <div className="mt-5 pt-4 border-t border-primary/10 flex flex-col items-center gap-3">
                                 <button
                                     onClick={() => { setIsSignUp(!isSignUp); setError(''); setFieldErrors({}); }}
-                                    className="text-white/50 hover:text-white text-sm transition-colors"
+                                    className="text-on-surface-variant hover:text-on-surface text-sm transition-colors"
                                 >
                                     {isSignUp ? t('authAlreadyHaveAccount') : t('authDontHaveAccount')}
-                                    <span className="text-red-400 font-semibold">{isSignUp ? t('authSignInLink') : t('authSignUpLink')}</span>
+                                    <span className="text-primary font-semibold">{isSignUp ? t('authSignInLink') : t('authSignUpLink')}</span>
                                 </button>
                                 <button
                                     onClick={() => { onClose(); router.push('/analyze'); }}
-                                    className="text-white/30 hover:text-white/60 text-xs transition-colors"
+                                    className="text-on-surface-variant/50 hover:text-on-surface-variant text-xs transition-colors"
                                 >
                                     {t('authContinueAsGuest')}
                                 </button>

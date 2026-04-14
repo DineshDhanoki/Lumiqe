@@ -61,27 +61,27 @@ export default function TrialBanner({ trialEndsAt, isPremium }: TrialBannerProps
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-zinc-900 border border-red-500/30 rounded-2xl p-8 max-w-md w-full text-center"
+                        className="bg-surface border border-primary/20 rounded-2xl p-8 max-w-md w-full text-center"
                     >
-                        <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-6">
-                            <Crown className="w-8 h-8 text-red-400" />
+                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                            <Crown className="w-8 h-8 text-primary" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">
+                        <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">
                             Your Trial Has Ended
                         </h3>
-                        <p className="text-white/60 mb-6">
+                        <p className="text-on-surface-variant mb-6">
                             Upgrade to Premium to continue using unlimited scans, AI styling tips,
                             and all premium features.
                         </p>
                         <Link
                             href="/pricing"
-                            className="block w-full py-3 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold transition-colors mb-3"
+                            className="block w-full py-3 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-label font-bold transition-colors mb-3"
                         >
                             View Plans
                         </Link>
                         <button
                             onClick={() => setDismissed(true)}
-                            className="text-white/40 text-sm hover:text-white/60 transition-colors"
+                            className="text-on-surface-variant text-sm hover:text-on-surface transition-colors"
                         >
                             Maybe later
                         </button>
@@ -96,26 +96,26 @@ export default function TrialBanner({ trialEndsAt, isPremium }: TrialBannerProps
         <motion.div
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-gradient-to-r from-red-900/80 to-red-800/60 border-b border-red-500/30"
+            className="bg-gradient-to-r from-primary/15 to-primary-container/20 border-b border-primary/20"
         >
             <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <Clock className="w-4 h-4 text-red-300" />
-                    <span className="text-sm text-white/90">
-                        <span className="font-semibold text-red-300">Premium Trial</span>
+                    <Clock className="w-4 h-4 text-primary" />
+                    <span className="text-sm text-on-surface-variant">
+                        <span className="font-label font-semibold text-primary">Premium Trial</span>
                         {' '}&mdash; {timeLeft}
                     </span>
                 </div>
                 <div className="flex items-center gap-3">
                     <Link
                         href="/pricing"
-                        className="text-xs font-bold bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full transition-colors"
+                        className="text-xs font-label font-bold bg-primary-container hover:bg-primary text-on-primary-container px-4 py-1.5 rounded-full transition-colors"
                     >
                         Upgrade Now
                     </Link>
                     <button
                         onClick={() => setDismissed(true)}
-                        className="text-white/30 hover:text-white/60 transition-colors"
+                        className="text-on-surface-variant/50 hover:text-on-surface-variant transition-colors"
                     >
                         <X className="w-4 h-4" />
                     </button>

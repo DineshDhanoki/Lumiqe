@@ -34,7 +34,7 @@ export default function SignUpFields({
             <div className="grid grid-cols-2 gap-3">
                 <div>
                     <div className="relative flex items-center">
-                        <User className="absolute left-3.5 w-4 h-4 text-white/40" />
+                        <User className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
                         <input
                             type="text"
                             placeholder={t('authFirstName')}
@@ -44,11 +44,11 @@ export default function SignUpFields({
                             className={inputClass('firstName')}
                         />
                     </div>
-                    {fieldErrors.firstName && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.firstName}</p>}
+                    {fieldErrors.firstName && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.firstName}</p>}
                 </div>
                 <div>
                     <div className="relative flex items-center">
-                        <User className="absolute left-3.5 w-4 h-4 text-white/40" />
+                        <User className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
                         <input
                             type="text"
                             placeholder={t('authLastName')}
@@ -58,14 +58,14 @@ export default function SignUpFields({
                             className={inputClass('lastName')}
                         />
                     </div>
-                    {fieldErrors.lastName && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.lastName}</p>}
+                    {fieldErrors.lastName && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.lastName}</p>}
                 </div>
             </div>
 
             {/* Phone */}
             <div>
                 <div className="relative flex items-center">
-                    <Phone className="absolute left-3.5 w-4 h-4 text-white/40" />
+                    <Phone className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
                     <input
                         type="tel"
                         placeholder={t('authPhone')}
@@ -75,13 +75,13 @@ export default function SignUpFields({
                         className={inputClass('phone')}
                     />
                 </div>
-                {fieldErrors.phone && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.phone}</p>}
+                {fieldErrors.phone && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.phone}</p>}
             </div>
 
             {/* Age */}
             <div>
                 <div className="relative flex items-center">
-                    <User className="absolute left-3.5 w-4 h-4 text-white/40" />
+                    <User className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
                     <input
                         type="number"
                         inputMode="numeric"
@@ -94,12 +94,12 @@ export default function SignUpFields({
                         className={inputClass('age')}
                     />
                 </div>
-                {fieldErrors.age && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.age}</p>}
+                {fieldErrors.age && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.age}</p>}
             </div>
 
             {/* Sex */}
             <div>
-                <p className="text-xs text-white/40 mb-2 ml-1">{t('authSex')}</p>
+                <p className="text-xs text-on-surface-variant mb-2 ml-1">{t('authSex')}</p>
                 <div className="grid grid-cols-3 gap-2">
                     {['Male', 'Female', 'Other'].map((option) => (
                         <button
@@ -108,15 +108,15 @@ export default function SignUpFields({
                             onClick={() => { setSex(option); clearFieldError('sex'); }}
                             className={`py-2.5 rounded-2xl text-sm font-medium transition-all border ${
                                 sex === option
-                                    ? 'bg-red-600/20 border-red-500/50 text-red-300'
-                                    : 'bg-black/50 border-white/10 text-white/50 hover:bg-white/10 hover:text-white'
+                                    ? 'bg-primary/10 border-primary/40 text-primary'
+                                    : 'bg-surface-container/50 border-outline-variant/30 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                             }`}
                         >
                             {option}
                         </button>
                     ))}
                 </div>
-                {fieldErrors.sex && <p className="mt-1 ml-2 text-xs text-red-400">{fieldErrors.sex}</p>}
+                {fieldErrors.sex && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.sex}</p>}
             </div>
         </>
     );

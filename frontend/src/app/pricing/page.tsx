@@ -10,7 +10,7 @@ export default function PricingPage() {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     return (
-        <main className="relative min-h-screen text-white font-sans selection:bg-red-900/50">
+        <main className="relative min-h-screen text-on-surface font-body selection:bg-primary/20">
             <Navbar />
             <div className="pt-20">
                 <Pricing onOpenAuth={() => setIsAuthModalOpen(true)} />

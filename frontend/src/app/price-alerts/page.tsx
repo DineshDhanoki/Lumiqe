@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { Skeleton } from '@/components/ui/Skeleton';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface PriceAlert {
     id: number;
@@ -85,14 +86,12 @@ export default function PriceAlertsPage() {
     const triggeredAlerts = alerts.filter((a) => a.is_triggered);
 
     return (
-        <div className="min-h-screen bg-stone-950">
-            <Navbar />
-
-            <main className="max-w-4xl mx-auto px-4 pt-24 pb-12">
+        <AppLayout>
+            <main className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-8">
-                    <Bell className="w-7 h-7 text-red-500" />
-                    <h1 className="text-3xl font-bold text-white">Price Alerts</h1>
+                    <span className="material-symbols-outlined text-primary text-3xl">notifications_active</span>
+                    <h1 className="font-display text-3xl font-bold text-on-surface">Price Alerts</h1>
                 </div>
 
                 {/* Error */}
@@ -182,7 +181,7 @@ export default function PriceAlertsPage() {
                     </div>
                 )}
             </main>
-        </div>
+        </AppLayout>
     );
 }
 

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { Skeleton } from '@/components/ui/Skeleton';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface WardrobeItem {
     id: number;
@@ -154,19 +155,17 @@ export default function WardrobePage() {
     }, {});
 
     return (
-        <div className="min-h-screen bg-stone-950">
-            <Navbar />
-
-            <main className="max-w-6xl mx-auto px-4 pt-24 pb-12">
+        <AppLayout>
+            <main className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                     <div className="flex items-center gap-3">
-                        <Shirt className="w-7 h-7 text-red-500" />
-                        <h1 className="text-3xl font-bold text-white">Your Wardrobe</h1>
+                        <span className="material-symbols-outlined text-primary text-3xl">inventory_2</span>
+                        <h1 className="font-display text-3xl font-bold text-on-surface">Your Wardrobe</h1>
                     </div>
                     <button
                         onClick={() => { setShowAddForm(true); setEditingItem(null); }}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-full text-white font-medium transition-colors"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-primary-container hover:bg-primary text-on-primary-container rounded-full font-label font-medium transition-colors"
                     >
                         <Plus className="w-4 h-4" />
                         Add Item
@@ -385,12 +384,9 @@ export default function WardrobePage() {
                     </div>
                 )}
             </main>
-        </div>
+        </AppLayout>
     );
 }
-
-
-// ─── Add / Edit Form ─────────────────────────────────────
 
 interface WardrobeItemFormProps {
     editItem: WardrobeItem | null;

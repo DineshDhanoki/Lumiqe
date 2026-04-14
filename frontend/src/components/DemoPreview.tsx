@@ -41,61 +41,61 @@ export default function DemoPreview() {
     const activeDemo = demos[activeIndex];
 
     return (
-        <section id="demo" className="py-24 px-6 relative bg-gradient-to-b from-transparent to-red-950/20">
+        <section id="demo" className="py-24 px-6 relative bg-gradient-to-b from-transparent to-primary/5">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/90 text-sm font-medium mb-4"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/30 border border-primary/10 text-on-surface text-sm font-medium mb-4"
                     >
-                        <Sparkles className="w-4 h-4 text-red-400" />
+                        <Sparkles className="w-4 h-4 text-primary" />
                         <span>Live Preview</span>
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-bold text-white mb-6"
+                        className="font-headline text-4xl md:text-5xl font-bold text-on-surface mb-6"
                     >
                         See the Engine in Action
                     </motion.h2>
-                    <p className="text-lg text-white/60 max-w-2xl mx-auto">
+                    <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">
                         Real analyses from our core CV pipeline. Click below to see the exact color palettes calculated for different skin profiles.
                     </p>
                 </div>
 
                 {loading ? (
-                    <div className="flex flex-col items-center justify-center p-20 min-h-[400px] border border-white/10 rounded-3xl bg-black/40 backdrop-blur-md">
-                        <Loader2 className="w-10 h-10 text-red-500 animate-spin mb-4" />
-                        <p className="text-white/60">Loading engine samples...</p>
+                    <div className="flex flex-col items-center justify-center p-20 min-h-[400px] border border-primary/10 rounded-3xl bg-surface-container/30 backdrop-blur-md">
+                        <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                        <p className="text-on-surface-variant">Loading engine samples...</p>
                     </div>
                 ) : error ? (
-                    <div className="flex flex-col items-center justify-center p-20 min-h-[400px] border border-red-500/20 rounded-3xl bg-red-950/20 backdrop-blur-md">
-                        <AlertCircle className="w-10 h-10 text-red-400 mb-4" />
-                        <p className="text-red-200">{error}</p>
+                    <div className="flex flex-col items-center justify-center p-20 min-h-[400px] border border-primary/20 rounded-3xl bg-primary/5 backdrop-blur-md">
+                        <AlertCircle className="w-10 h-10 text-primary mb-4" />
+                        <p className="text-primary">{error}</p>
                     </div>
                 ) : demos.length > 0 && activeDemo ? (
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border border-white/10 rounded-3xl bg-black/40 backdrop-blur-xl overflow-hidden shadow-2xl">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border border-primary/10 rounded-3xl bg-surface/40 backdrop-blur-xl overflow-hidden shadow-2xl">
 
                         {/* Left Sidebar: Thumbnails */}
-                        <div className="col-span-1 lg:col-span-3 bg-white/5 border-r border-white/10 p-6 flex flex-row lg:flex-col gap-4 overflow-x-auto lg:overflow-visible">
+                        <div className="col-span-1 lg:col-span-3 bg-surface-container/30 border-r border-primary/10 p-6 flex flex-row lg:flex-col gap-4 overflow-x-auto lg:overflow-visible">
                             {demos.map((demo, idx) => (
                                 <button
                                     key={demo.id}
                                     onClick={() => setActiveIndex(idx)}
-                                    className={`relative flex-shrink-0 flex items-center gap-4 p-3 rounded-xl transition-all ${idx === activeIndex ? 'bg-white/10 border-white/20' : 'hover:bg-white/5 border-transparent'
+                                    className={`relative flex-shrink-0 flex items-center gap-4 p-3 rounded-xl transition-all ${idx === activeIndex ? 'bg-surface-container/50 border-primary/20' : 'hover:bg-surface-container/30 border-transparent'
                                         } border text-left`}
                                 >
-                                    <div className={`w-12 h-12 rounded-full overflow-hidden border-2 ${idx === activeIndex ? 'border-red-400' : 'border-transparent'}`}>
+                                    <div className={`w-12 h-12 rounded-full overflow-hidden border-2 ${idx === activeIndex ? 'border-primary' : 'border-transparent'}`}>
                                         <div className="w-full h-full bg-stone-700 animate-pulse" /> {/* Placeholder fallback */}
                                         {/* Placeholder image tag since real images aren't present yet */}
                                         {/* <Image src={demo.thumbnail} alt={demo.name} fill className="object-cover" /> */}
                                     </div>
                                     <div className="hidden lg:block">
-                                        <h4 className="text-white font-medium">{demo.name}</h4>
-                                        <p className="text-xs text-white/50">{demo.season}</p>
+                                        <h4 className="text-on-surface font-medium">{demo.name}</h4>
+                                        <p className="text-xs text-on-surface-variant">{demo.season}</p>
                                     </div>
                                 </button>
                             ))}
@@ -115,26 +115,26 @@ export default function DemoPreview() {
                                     <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
                                         {/* Skin Swatch */}
                                         <div>
-                                            <p className="text-sm font-semibold text-white/50 mb-3 tracking-wider uppercase">Detected Tone</p>
+                                            <p className="text-sm font-semibold text-on-surface-variant mb-3 tracking-wider uppercase">Detected Tone</p>
                                             <div className="flex items-center gap-4">
                                                 <div
-                                                    className="w-16 h-16 rounded-full shadow-lg border-2 border-white/20"
+                                                    className="w-16 h-16 rounded-full shadow-lg border-2 border-outline-variant/30"
                                                     style={{ backgroundColor: activeDemo.hex_color }}
                                                 />
                                                 <div>
-                                                    <p className="text-white font-mono font-medium">{activeDemo.hex_color}</p>
-                                                    <p className="text-xs text-white/50 capitalize">{activeDemo.undertone} undertone</p>
+                                                    <p className="text-on-surface font-mono font-medium">{activeDemo.hex_color}</p>
+                                                    <p className="text-xs text-on-surface-variant capitalize">{activeDemo.undertone} undertone</p>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Season Result */}
                                         <div className="md:ml-auto text-left md:text-right">
-                                            <p className="text-sm font-semibold text-white/50 mb-2 tracking-wider uppercase">Your Season</p>
-                                            <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-white">
+                                            <p className="text-sm font-semibold text-on-surface-variant mb-2 tracking-wider uppercase">Your Season</p>
+                                            <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-container to-on-surface">
                                                 {activeDemo.season}
                                             </h3>
-                                            <div className="inline-flex mt-2 items-center gap-1 text-xs px-2 py-1 rounded bg-white/10 text-white/70">
+                                            <div className="inline-flex mt-2 items-center gap-1 text-xs px-2 py-1 rounded bg-surface-container/50 text-on-surface-variant">
                                                 Accuracy: {(activeDemo.confidence * 100).toFixed(1)}%
                                             </div>
                                         </div>
@@ -142,7 +142,7 @@ export default function DemoPreview() {
 
                                     {/* Palette Swatches */}
                                     <div>
-                                        <p className="text-sm font-semibold text-white/50 mb-4 tracking-wider uppercase">Optimal Palette</p>
+                                        <p className="text-sm font-semibold text-on-surface-variant mb-4 tracking-wider uppercase">Optimal Palette</p>
                                         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                                             {activeDemo.palette.map((color, i) => (
                                                 <motion.div
@@ -150,7 +150,7 @@ export default function DemoPreview() {
                                                     initial={{ opacity: 0, scale: 0.5 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     transition={{ delay: i * 0.05 }}
-                                                    className="aspect-square rounded-2xl shadow-inner border border-white/10 flex items-end p-2"
+                                                    className="aspect-square rounded-2xl shadow-inner border border-outline-variant/20 flex items-end p-2"
                                                     style={{ backgroundColor: color }}
                                                 >
                                                     <span className="text-[10px] font-mono font-medium bg-black/40 text-white/90 px-1.5 py-0.5 rounded backdrop-blur-sm">
@@ -161,7 +161,7 @@ export default function DemoPreview() {
                                         </div>
                                     </div>
 
-                                    <p className="mt-8 text-white/80 leading-relaxed max-w-2xl border-l-2 border-red-500 pl-4">
+                                    <p className="mt-8 text-on-surface leading-relaxed max-w-2xl border-l-2 border-primary pl-4">
                                         {activeDemo.description}
                                     </p>
                                 </motion.div>

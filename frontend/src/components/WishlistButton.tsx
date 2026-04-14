@@ -114,7 +114,7 @@ function WishlistButtonInner({
             <Heart
                 className={`h-4 w-4 transition-colors ${
                     wishlisted
-                        ? 'fill-red-500 text-red-500'
+                        ? 'fill-primary text-primary'
                         : 'fill-none text-gray-600'
                 }`}
             />

@@ -21,14 +21,14 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                 className="flex flex-col items-center gap-6 max-w-4xl w-full z-10"
             >
 
-                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white drop-shadow-2xl">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-on-surface drop-shadow-2xl">
                     {t('heroDiscoverYour')} <br className="hidden sm:block" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-white">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-container via-primary to-on-surface">
                         {t('heroTrueColors')}
                     </span>
                 </h1>
 
-                <p className="max-w-2xl text-base sm:text-lg md:text-xl text-white/70 leading-relaxed drop-shadow-md px-2">
+                <p className="max-w-2xl text-base sm:text-lg md:text-xl text-on-surface-variant leading-relaxed drop-shadow-md px-2">
                     {t('heroSubtitle')}
                 </p>
 
@@ -40,7 +40,7 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                 >
                     <button
                         onClick={onOpenAuth}
-                        className="group relative flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-lg py-4 px-8 shadow-[0_0_40px_-10px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_-15px_rgba(220,38,38,0.7)] transition-all transform hover:scale-[1.02]"
+                        className="group relative flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold text-lg py-4 px-8 shadow-[0_0_40px_-10px_rgba(240,191,98,0.3)] hover:shadow-[0_0_60px_-15px_rgba(240,191,98,0.5)] transition-all transform hover:scale-[1.02]"
                     >
                         {t('heroStartFreeTrial')}
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -48,7 +48,7 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
 
                     <a
                         href="#demo"
-                        className="flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-lg py-4 px-8 border border-white/10 hover:border-white/30 backdrop-blur-md transition-all"
+                        className="flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-surface-container/50 hover:bg-surface-container text-on-surface font-medium text-lg py-4 px-8 border border-outline-variant/20 hover:border-outline-variant/50 backdrop-blur-md transition-all"
                     >
                         <PlayCircle className="w-5 h-5 opacity-70" />
                         {t('heroSeeLiveDemo')}
@@ -59,7 +59,7 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.6 }}
-                    className="mt-4 text-white/40 text-sm"
+                    className="mt-4 text-on-surface-variant text-sm"
                 >
                     {t('heroNoCreditCard')}
                 </motion.p>

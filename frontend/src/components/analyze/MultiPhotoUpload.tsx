@@ -62,12 +62,12 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
             exit={{ opacity: 0, y: -10 }}
             className="space-y-4"
         >
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+            <div className="bg-surface-container/30 border border-outline-variant/20 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2">
-                    <Images className="w-5 h-5 text-red-400" />
-                    <h3 className="text-sm font-semibold text-white">Multi-Photo Analysis</h3>
+                    <Images className="w-5 h-5 text-primary" />
+                    <h3 className="text-sm font-semibold text-on-surface">Multi-Photo Analysis</h3>
                 </div>
-                <p className="text-xs text-white/50">
+                <p className="text-xs text-on-surface-variant">
                     Upload 2-5 selfies in different lighting. We analyze each independently
                     and average the results for higher accuracy.
                 </p>
@@ -76,7 +76,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
             {/* Image Grid */}
             <div className="grid grid-cols-3 gap-3">
                 {previews.map((url, index) => (
-                    <div key={index} className="relative aspect-square rounded-2xl overflow-hidden border border-white/10">
+                    <div key={index} className="relative aspect-square rounded-2xl overflow-hidden border border-outline-variant/20">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={url}
@@ -85,20 +85,20 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                         />
                         <button
                             onClick={() => removeFile(index)}
-                            className="absolute top-1.5 right-1.5 p-1 bg-black/70 rounded-full text-white/70 hover:text-red-400 transition-colors"
+                            className="absolute top-1.5 right-1.5 p-1 bg-black/70 rounded-full text-on-surface-variant hover:text-primary transition-colors"
                         >
                             <X className="w-3.5 h-3.5" />
                         </button>
-                        <div className="absolute bottom-1.5 left-1.5 bg-black/70 rounded-full px-2 py-0.5 text-[10px] font-medium text-white">
+                        <div className="absolute bottom-1.5 left-1.5 bg-black/70 rounded-full px-2 py-0.5 text-[10px] font-medium text-on-surface">
                             {index + 1}
                         </div>
                     </div>
                 ))}
 
                 {files.length < MAX_FILES && (
-                    <label className="relative aspect-square rounded-2xl border-2 border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer hover:border-red-500/50 hover:bg-white/5 transition-all">
-                        <Plus className="w-6 h-6 text-white/40" />
-                        <span className="text-[10px] text-white/30 mt-1">Add photo</span>
+                    <label className="relative aspect-square rounded-2xl border-2 border-dashed border-outline-variant/20 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-surface-container/30 transition-all">
+                        <Plus className="w-6 h-6 text-on-surface-variant" />
+                        <span className="text-[10px] text-on-surface-variant/50 mt-1">Add photo</span>
                         <input
                             type="file"
                             accept="image/*"
@@ -112,12 +112,12 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                 )}
             </div>
 
-            <p className="text-xs text-white/30 text-center">
+            <p className="text-xs text-on-surface-variant/50 text-center">
                 {files.length}/5 photos added · Minimum 2 required
             </p>
 
             {displayError && (
-                <div className="flex items-center gap-2 text-red-200 bg-red-900/60 px-4 py-2 rounded-xl text-sm">
+                <div className="flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-xl text-sm">
                     <AlertCircle className="w-4 h-4" />
                     {displayError}
                 </div>
@@ -129,8 +129,8 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                 className={cn(
                     'w-full py-3.5 rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2',
                     files.length >= 2
-                        ? 'bg-red-600 hover:bg-red-500 text-white'
-                        : 'bg-white/5 text-white/30 cursor-not-allowed'
+                        ? 'bg-primary-container hover:bg-primary text-on-primary-container'
+                        : 'bg-surface-container/30 text-on-surface-variant/30 cursor-not-allowed'
                 )}
             >
                 <Images className="w-4 h-4" />
@@ -139,7 +139,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
 
             <button
                 onClick={handleBack}
-                className="w-full py-3 rounded-2xl border border-white/15 text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+                className="w-full py-3 rounded-2xl border border-outline-variant/20 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 transition-all text-sm font-medium"
             >
                 {t(lang, 'back')}
             </button>

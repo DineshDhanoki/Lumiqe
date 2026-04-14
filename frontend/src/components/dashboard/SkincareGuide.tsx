@@ -47,19 +47,19 @@ export default function SkincareGuide({ undertone }: Props) {
 
     return (
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">{t('skincareGuide')}</p>
-            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 space-y-5">
+            <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider mb-4">{t('skincareGuide')}</p>
+            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 space-y-5">
                 <div className="flex items-center gap-2">
-                    <Droplets className="w-5 h-5 text-red-400" />
-                    <p className="text-white font-bold">Routine for {undertone} undertones</p>
+                    <Droplets className="w-5 h-5 text-secondary" />
+                    <p className="text-on-surface font-label font-bold">Routine for {undertone} undertones</p>
                 </div>
 
                 <div>
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-3">{t('dailyRoutine')}</p>
+                    <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider mb-3">{t('dailyRoutine')}</p>
                     <ol className="space-y-2">
                         {skincare.routine.map((step, i) => (
-                            <li key={step} className="flex items-start gap-3 text-sm text-white/70">
-                                <span className="w-5 h-5 rounded-full bg-red-600/30 text-red-300 text-xs flex items-center justify-center flex-shrink-0 font-bold mt-0.5">{i + 1}</span>
+                            <li key={step} className="flex items-start gap-3 text-sm text-on-surface-variant">
+                                <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center flex-shrink-0 font-bold mt-0.5">{i + 1}</span>
                                 {step}
                             </li>
                         ))}
@@ -68,21 +68,21 @@ export default function SkincareGuide({ undertone }: Props) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-2">{t('keyIngredients')}</p>
+                        <p className="text-tertiary text-xs font-label font-bold uppercase tracking-wider mb-2">{t('keyIngredients')}</p>
                         <div className="flex flex-wrap gap-1.5">
                             {skincare.ingredients.map((ing) => (
-                                <span key={ing} className="text-xs bg-green-500/15 text-green-300 border border-green-500/25 px-2.5 py-1 rounded-full">
+                                <span key={ing} className="text-xs bg-tertiary/10 text-tertiary border border-tertiary/20 px-2.5 py-1 rounded-full">
                                     {ing}
                                 </span>
                             ))}
                         </div>
                     </div>
                     <div>
-                        <p className="text-red-400 text-xs font-bold uppercase tracking-wider mb-2">{t('avoid')}</p>
+                        <p className="text-primary text-xs font-label font-bold uppercase tracking-wider mb-2">{t('avoid')}</p>
                         <ul className="space-y-1">
                             {skincare.avoid.map((item) => (
-                                <li key={item} className="text-xs text-white/50 flex items-start gap-1.5">
-                                    <span className="text-red-400 mt-0.5">✕</span>{item}
+                                <li key={item} className="text-xs text-on-surface-variant flex items-start gap-1.5">
+                                    <span className="text-primary mt-0.5">✕</span>{item}
                                 </li>
                             ))}
                         </ul>

@@ -7,6 +7,7 @@ import { Heart, Trash2, ExternalLink, ShoppingBag } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
 import { SkeletonShoppingGrid } from '@/components/ui/Skeleton';
+import AppLayout from '@/components/layout/AppLayout';
 
 interface WishlistItem {
     id: string;
@@ -65,13 +66,11 @@ export default function WishlistPage() {
     }
 
     return (
-        <div className="min-h-screen bg-stone-950">
-            <Navbar />
-
-            <main className="max-w-6xl mx-auto px-4 pt-24 pb-12">
+        <AppLayout>
+            <main className="max-w-6xl mx-auto">
                 <div className="flex items-center gap-3 mb-8">
-                    <Heart className="w-7 h-7 text-red-500" />
-                    <h1 className="text-3xl font-bold text-white">Your Wishlist</h1>
+                    <span className="material-symbols-outlined text-primary text-3xl">favorite</span>
+                    <h1 className="font-display text-3xl font-bold text-on-surface">Your Wishlist</h1>
                 </div>
 
                 {loading ? (
@@ -104,7 +103,7 @@ export default function WishlistPage() {
                     </div>
                 )}
             </main>
-        </div>
+        </AppLayout>
     );
 }
 

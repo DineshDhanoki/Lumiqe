@@ -121,7 +121,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
         good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <CheckCircle2 className="w-4 h-4" />, label: t(lang, 'goodLighting') },
         dark: { color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', icon: <Sun className="w-4 h-4" />, label: t(lang, 'tooDark') },
         bright: { color: 'text-orange-400', bg: 'bg-orange-500/20 border-orange-500/30', icon: <Zap className="w-4 h-4" />, label: t(lang, 'tooBright') },
-        checking: { color: 'text-white/40', bg: 'bg-white/5 border-white/10', icon: <Camera className="w-4 h-4" />, label: t(lang, 'checkingLight') },
+        checking: { color: 'text-on-surface-variant', bg: 'bg-surface-container/30 border-outline-variant/10', icon: <Camera className="w-4 h-4" />, label: t(lang, 'checkingLight') },
     };
     const currentLighting = lightingConfig[lightingStatus];
 
@@ -135,10 +135,10 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
             {/* Camera viewport */}
             <div className="relative w-full rounded-3xl overflow-hidden bg-black" style={{ aspectRatio: '3/4' }}>
                 {cameraError ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center bg-zinc-900">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center bg-surface-container">
                         <AlertCircle className="w-12 h-12 text-red-400" />
-                        <p className="text-white/70 text-sm leading-relaxed">{cameraError}</p>
-                        <button onClick={onCancel} className="text-sm text-red-400 underline underline-offset-2">
+                        <p className="text-on-surface-variant text-sm leading-relaxed">{cameraError}</p>
+                        <button onClick={onCancel} className="text-sm text-primary underline underline-offset-2">
                             Upload a photo instead
                         </button>
                     </div>
@@ -226,11 +226,11 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                         {/* Lighting bar */}
                         {isActive && (
                             <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2">
-                                <span className="text-[10px] text-white/40 font-medium uppercase tracking-wider w-8 shrink-0">Dark</span>
+                                <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider w-8 shrink-0">Dark</span>
                                 <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                                     <div className={`h-full rounded-full transition-all duration-500 ${lightingBarColor}`} style={{ width: `${lightingBarPercent}%` }} />
                                 </div>
-                                <span className="text-[10px] text-white/40 font-medium uppercase tracking-wider w-10 shrink-0 text-right">Bright</span>
+                                <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider w-10 shrink-0 text-right">Bright</span>
                             </div>
                         )}
 
@@ -246,7 +246,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
 
             {/* Guidance text */}
             {isActive && !cameraError && (
-                <p className="text-white/50 text-sm text-center px-4">
+                <p className="text-on-surface-variant text-sm text-center px-4">
                     {lightingStatus === 'dark' && t(lang, 'guidanceDark')}
                     {lightingStatus === 'bright' && t(lang, 'guidanceBright')}
                     {lightingStatus === 'good' && !faceDetected && 'Center your face in the oval above'}
@@ -276,12 +276,12 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
 
             {/* Tips */}
             {isActive && !cameraError && (
-                <div className="w-full bg-zinc-900/50 border border-white/10 rounded-2xl p-4">
-                    <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-2">{t(lang, 'tipTitle')}</p>
+                <div className="w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-4">
+                    <p className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-2">{t(lang, 'tipTitle')}</p>
                     <ul className="space-y-1">
                         {[t(lang, 'tip1'), t(lang, 'tip2'), t(lang, 'tip3'), t(lang, 'tip4')].map((tip, i) => (
-                            <li key={i} className="flex items-start gap-2 text-xs text-white/50">
-                                <span className="text-red-400 mt-0.5">•</span>{tip}
+                            <li key={i} className="flex items-start gap-2 text-xs text-on-surface-variant">
+                                <span className="text-primary mt-0.5">•</span>{tip}
                             </li>
                         ))}
                     </ul>

@@ -29,14 +29,14 @@ export default function VibeSelector({ currentVibe, onSelectVibe, isPremiumUser 
                                 relative flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300
                                 border
                                 ${isActive
-                                    ? 'bg-red-500/20 text-red-100 border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]'
-                                    : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border-white/10'
+                                    ? 'bg-primary/10 text-primary border-primary/40 shadow-[0_0_15px_rgba(240,191,98,0.2)]'
+                                    : 'bg-surface-container/30 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50 border-outline-variant/20'
                                 }
                             `}
                         >
                             {vibe.label}
                             {vibe.isPremium && !isPremiumUser && (
-                                <Lock className={`w-3.5 h-3.5 ${isActive ? 'text-red-300' : 'text-white/40'}`} />
+                                <Lock className={`w-3.5 h-3.5 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`} />
                             )}
                         </button>
                     );

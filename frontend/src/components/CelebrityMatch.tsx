@@ -35,7 +35,7 @@ function seasonGradient(season: string): string {
     if (lower.includes('autumn')) {
         return 'from-orange-950/50 via-amber-950/30 to-zinc-900/30';
     }
-    return 'from-zinc-900/50 to-zinc-800/30';
+    return 'from-surface-container/50 to-surface/30';
 }
 
 interface SeasonCelebrity {
@@ -77,13 +77,13 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
     const gradient = season ? seasonGradient(season) : 'from-zinc-900/50 to-zinc-800/30';
 
     return (
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8">
+        <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
-                <Sparkles className="w-6 h-6 text-red-400" />
-                <h3 className="text-xl font-bold text-white">Your Celebrity Color Twins</h3>
+                <Sparkles className="w-6 h-6 text-primary" />
+                <h3 className="font-headline text-xl font-bold text-on-surface">Your Celebrity Color Twins</h3>
             </div>
 
-            <p className="text-white/60 mb-6 max-w-lg">
+            <p className="text-on-surface-variant mb-6 max-w-lg">
                 These celebrities share your exact color season. Notice the colors they wear on the red carpet&mdash;they&apos;ve already paid the stylists to figure out what works.
             </p>
 
@@ -94,13 +94,13 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.1 }}
-                        className={`bg-gradient-to-br ${gradient} border border-white/10 rounded-2xl p-5 flex flex-col items-center text-center`}
+                        className={`bg-gradient-to-br ${gradient} border border-outline-variant/20 rounded-2xl p-5 flex flex-col items-center text-center`}
                     >
                         {/* Avatar placeholder with initials */}
-                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/20 mb-4 relative bg-zinc-800 flex items-center justify-center">
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-outline-variant/30 mb-4 relative bg-surface-container flex items-center justify-center">
                             {celeb.image ? (
                                 <>
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-zinc-800 to-zinc-700 animate-pulse" />
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-surface to-surface-container animate-pulse" />
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={celeb.image}
@@ -112,7 +112,7 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
                                     />
                                 </>
                             ) : (
-                                <span className="text-2xl font-bold text-white/40 z-10">
+                                <span className="text-2xl font-bold text-on-surface-variant/50 z-10">
                                     {celeb.name
                                         .split(' ')
                                         .map(w => w[0])
@@ -122,12 +122,12 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
                             )}
                         </div>
 
-                        <h4 className="text-white font-semibold text-base mb-1">
+                        <h4 className="text-on-surface font-label font-semibold text-base mb-1">
                             {celeb.name}
                         </h4>
 
                         {celeb.note && (
-                            <p className="text-white/50 text-sm leading-relaxed">
+                            <p className="text-on-surface-variant text-sm leading-relaxed">
                                 {celeb.note}
                             </p>
                         )}

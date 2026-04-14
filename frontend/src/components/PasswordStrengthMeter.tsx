@@ -16,12 +16,12 @@ export default function PasswordStrengthMeter({ password, label, color, score, p
                 {[1, 2, 3, 4, 5].map((i) => (
                     <div
                         key={i}
-                        className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? color : 'bg-white/10'}`}
+                        className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? color : 'bg-outline-variant/20'}`}
                     />
                 ))}
             </div>
             {label && (
-                <p className="text-xs text-white/40">{label} {passwordLabel}</p>
+                <p className="text-xs text-on-surface-variant">{label} {passwordLabel}</p>
             )}
         </div>
     );

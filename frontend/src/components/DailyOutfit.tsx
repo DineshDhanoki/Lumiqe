@@ -36,11 +36,11 @@ export default function DailyOutfit() {
 
     if (loading) {
         return (
-            <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6 animate-pulse">
-                <div className="h-5 w-40 bg-white/10 rounded mb-4" />
+            <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6 animate-pulse">
+                <div className="h-5 w-40 bg-surface-container/50 rounded mb-4" />
                 <div className="grid grid-cols-2 gap-3">
                     {[1, 2, 3, 4].map(i => (
-                        <div key={i} className="h-32 bg-white/5 rounded-xl" />
+                        <div key={i} className="h-32 bg-surface-container/30 rounded-xl" />
                     ))}
                 </div>
             </div>
@@ -53,14 +53,14 @@ export default function DailyOutfit() {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6"
+            className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6"
         >
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-red-400" />
-                    <h3 className="text-white font-bold">Today&apos;s Outfit</h3>
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    <h3 className="text-on-surface font-bold">Today&apos;s Outfit</h3>
                 </div>
-                <span className="text-white/30 text-xs">{outfit.date}</span>
+                <span className="text-on-surface-variant/50 text-xs">{outfit.date}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-4">
@@ -70,10 +70,10 @@ export default function DailyOutfit() {
                         href={item.purchase_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group bg-black/40 border border-white/5 rounded-xl overflow-hidden hover:border-red-500/30 transition-colors"
+                        className="group bg-surface-container/30 border border-outline-variant/10 rounded-xl overflow-hidden hover:border-primary/30 transition-colors"
                     >
                         {item.image_url && (
-                            <div className="relative h-28 w-full bg-zinc-800">
+                            <div className="relative h-28 w-full bg-surface-container">
                                 <Image
                                     src={`/api/image-proxy?url=${encodeURIComponent(item.image_url)}`}
                                     alt={item.name}
@@ -84,17 +84,17 @@ export default function DailyOutfit() {
                             </div>
                         )}
                         <div className="p-2.5">
-                            <p className="text-white/80 text-xs font-medium truncate">{item.name}</p>
+                            <p className="text-on-surface text-xs font-medium truncate">{item.name}</p>
                             <div className="flex items-center justify-between mt-1">
-                                <span className="text-white/40 text-xs">{item.brand}</span>
-                                <ExternalLink className="w-3 h-3 text-white/20 group-hover:text-red-400 transition-colors" />
+                                <span className="text-on-surface-variant text-xs">{item.brand}</span>
+                                <ExternalLink className="w-3 h-3 text-on-surface-variant/20 group-hover:text-primary transition-colors" />
                             </div>
                         </div>
                     </a>
                 ))}
             </div>
 
-            <p className="text-white/40 text-xs italic">{outfit.tip}</p>
+            <p className="text-on-surface-variant text-xs italic">{outfit.tip}</p>
         </motion.div>
     );
 }

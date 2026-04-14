@@ -3,11 +3,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
-import { Sparkles } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { useLumiqeStore } from '@/lib/store';
 import { useTranslation } from '@/lib/hooks/useTranslation';
-import AppMenu from '@/components/AppMenu';
+import AppLayout from '@/components/layout/AppLayout';
 import RescanNudge from '@/components/dashboard/RescanNudge';
 import StyleIdentityCards from '@/components/dashboard/StyleIdentityCards';
 import TodaysOutfit from '@/components/dashboard/TodaysOutfit';
@@ -170,25 +169,22 @@ export default function Dashboard() {
     const rescanDaysAgo = lastAnalysis ? daysAgoFromTimestamp(lastAnalysis.timestamp) : 0;
 
     return (
-        <main className="min-h-screen bg-transparent text-white font-sans pb-24">
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-4 flex items-center justify-between safe-top">
-                <div className="flex items-center gap-2 text-sm font-medium text-white/60">
-                    <Sparkles className="w-4 h-4 text-red-400" />
-                    <span>Dashboard</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-red-400" />
-                    <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
-                </div>
-                <AppMenu />
-            </nav>
-
-            <div className="max-w-4xl mx-auto px-4 pt-28 space-y-8">
+        <AppLayout>
+            <div className="max-w-7xl mx-auto space-y-8">
                 {status === 'authenticated' && <EmailVerificationBanner />}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">{t('dashboardSubtitle')}</p>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white">
-                        {t('dashboardTitle')}
+
+                {/* Page header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                >
+                    <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary mb-2">
+                        {t('dashboardSubtitle')}
+                    </p>
+                    <h1 className="font-display text-5xl md:text-6xl font-bold text-on-surface leading-none">
+                        {t('dashboardTitle')} <br />
+                        <span className="italic text-primary">Continues</span>
                     </h1>
                 </motion.div>
 
@@ -196,35 +192,44 @@ export default function Dashboard() {
                     <RescanNudge daysAgo={rescanDaysAgo} />
                 )}
 
-                <StyleIdentityCards
-                    lastAnalysis={lastAnalysis}
-                    bodyShape={bodyShape}
-                    stylePersonality={stylePersonality}
-                />
+                {/* 12-col grid — main content left, style profile right */}
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+                    {/* Left / center column */}
+                    <div className="xl:col-span-8 space-y-10">
+                        <StyleIdentityCards
+                            lastAnalysis={lastAnalysis}
+                            bodyShape={bodyShape}
+                            stylePersonality={stylePersonality}
+                        />
 
-                {status === 'authenticated' && (
-                    <TodaysOutfit
-                        dailyOutfit={dailyOutfit}
-                        isEmpty={dailyOutfitEmpty}
-                        isError={dailyOutfitError}
-                        onRetry={() => { setDailyOutfitError(false); setDailyOutfit(null); }}
-                    />
-                )}
+                        {status === 'authenticated' && (
+                            <TodaysOutfit
+                                dailyOutfit={dailyOutfit}
+                                isEmpty={dailyOutfitEmpty}
+                                isError={dailyOutfitError}
+                                onRetry={() => { setDailyOutfitError(false); setDailyOutfit(null); }}
+                            />
+                        )}
 
-                <QuickActions aiStylistHref={aiStylistHref} />
+                        <DiscoveryQuizzes />
 
-                <DiscoveryQuizzes />
+                        {lastAnalysis?.undertone && (
+                            <SkincareGuide undertone={lastAnalysis.undertone} />
+                        )}
 
-                {lastAnalysis?.undertone && (
-                    <SkincareGuide undertone={lastAnalysis.undertone} />
-                )}
+                        {history.length > 0 && (
+                            <AnalysisHistory history={history} />
+                        )}
 
-                {history.length > 0 && (
-                    <AnalysisHistory history={history} />
-                )}
+                        {!lastAnalysis && <EmptyCTA />}
+                    </div>
 
-                {!lastAnalysis && <EmptyCTA />}
+                    {/* Right column — quick actions */}
+                    <div className="xl:col-span-4 space-y-6">
+                        <QuickActions aiStylistHref={aiStylistHref} />
+                    </div>
+                </div>
             </div>
-        </main>
+        </AppLayout>
     );
 }

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { apiFetch } from '@/lib/api';
+import AppLayout from '@/components/layout/AppLayout';
 
 const QUESTIONS = [
     {
@@ -181,21 +182,8 @@ export default function BodyShapeQuiz() {
     const shapeData = result ? SHAPES[result] : null;
 
     return (
-        <main className="min-h-screen bg-transparent text-white font-sans pb-24">
-            {/* Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-                <Link href="/dashboard" className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
-                    <ArrowLeft className="w-4 h-4" />
-                    Dashboard
-                </Link>
-                <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-red-400" />
-                    <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
-                </div>
-                <div className="w-24" />
-            </nav>
-
-            <div className="max-w-xl mx-auto px-4 pt-28">
+        <AppLayout>
+            <div className="max-w-xl mx-auto">
                 <AnimatePresence mode="wait">
                     {!result ? (
                         <motion.div
@@ -313,6 +301,6 @@ export default function BodyShapeQuiz() {
                     ) : null}
                 </AnimatePresence>
             </div>
-        </main>
+        </AppLayout>
     );
 }
