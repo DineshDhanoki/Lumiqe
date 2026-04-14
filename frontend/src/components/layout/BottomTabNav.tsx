@@ -26,7 +26,7 @@ export default function BottomTabNav() {
             key={href}
             href={href}
             className={`flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] active:scale-95 transition-all duration-150 ${
-              isActive ? 'text-primary' : 'text-white/30 hover:text-white/60'
+              isActive ? 'text-primary' : 'text-on-surface-variant/50 hover:text-on-surface-variant'
             }`}
             aria-label={label}
           >

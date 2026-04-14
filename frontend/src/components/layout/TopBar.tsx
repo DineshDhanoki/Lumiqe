@@ -39,7 +39,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
               <Link
                 href="/admin"
                 aria-label="Admin panel"
-                className="p-2 rounded-full text-white/40 hover:text-primary hover:bg-primary/10 transition-colors"
+                className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors"
               >
                 <Shield className="w-5 h-5" />
               </Link>
@@ -62,7 +62,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
               aria-label="Log out"
-              className="p-2 rounded-full text-white/30 hover:text-tertiary hover:bg-tertiary/10 transition-colors"
+              className="p-2 rounded-full text-on-surface-variant/50 hover:text-tertiary hover:bg-tertiary/10 transition-colors"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -72,7 +72,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
         {/* Mobile hamburger — shows on lg:hidden pages that need it */}
         {onMobileMenuToggle && (
           <button
-            className="lg:hidden p-2 text-white/60 hover:text-white transition-colors"
+            className="lg:hidden p-2 text-on-surface-variant hover:text-on-surface transition-colors"
             onClick={onMobileMenuToggle}
             aria-label="Open menu"
           >

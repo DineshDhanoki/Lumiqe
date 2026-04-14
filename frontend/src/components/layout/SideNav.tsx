@@ -32,7 +32,7 @@ export default function SideNav() {
           </h2>
         </Link>
         {session?.isPremium && (
-          <p className="font-label text-[10px] tracking-[0.2em] text-white/40 uppercase mt-0.5">
+          <p className="font-label text-[10px] tracking-[0.2em] text-on-surface-variant/50 uppercase mt-0.5">
             Elite Tier
           </p>
         )}
@@ -49,7 +49,7 @@ export default function SideNav() {
               className={`flex items-center gap-4 px-4 py-3 rounded-r-full transition-all duration-200 ${
                 isActive
                   ? 'bg-[#18181F] text-primary font-label font-bold'
-                  : 'text-white/40 hover:bg-[#18181F] hover:text-primary font-label'
+                  : 'text-on-surface-variant hover:bg-[#18181F] hover:text-primary font-label'
               }`}
             >
               <span className="material-symbols-outlined text-[20px] leading-none" aria-hidden="true">
@@ -69,7 +69,7 @@ export default function SideNav() {
               {session.user.name?.[0] ?? session.user.email?.[0] ?? 'U'}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-white truncate">
+              <p className="text-xs font-bold text-on-surface truncate">
                 {session.user.name ?? 'User'}
               </p>
               <p className="text-[10px] text-primary">

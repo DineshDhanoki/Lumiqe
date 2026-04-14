@@ -93,7 +93,7 @@ export default function Navbar() {
                                 )}
                                 <button
                                     onClick={() => signOut({ callbackUrl: '/' })}
-                                    className="text-on-surface-variant/50 hover:text-tertiary p-2 transition-colors rounded-full hover:bg-white/5"
+                                    className="text-on-surface-variant/50 hover:text-tertiary p-2 transition-colors rounded-full hover:bg-surface-container/30"
                                     title={t('logOut')}
                                 >
                                     <LogOut className="w-5 h-5" />
