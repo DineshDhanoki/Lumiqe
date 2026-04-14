@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Users } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { API_BASE } from '@/lib/api';
 
 interface Celebrity {
@@ -78,58 +78,53 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
 
     return (
         <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 md:p-8">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-2">
                 <Sparkles className="w-6 h-6 text-primary" />
-                <h3 className="font-headline text-xl font-bold text-on-surface">Your Celebrity Color Twins</h3>
+                <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60">Style Muses</span>
             </div>
-
-            <p className="text-on-surface-variant mb-6 max-w-lg">
+            <h3 className="font-headline text-xl font-bold text-on-surface mb-3">Your Celebrity Color Twins</h3>
+            <p className="text-on-surface-variant text-sm mb-8 max-w-lg">
                 These celebrities share your exact color season. Notice the colors they wear on the red carpet&mdash;they&apos;ve already paid the stylists to figure out what works.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {displayCelebs.slice(0, 3).map((celeb, idx) => (
                     <motion.div
                         key={celeb.name || idx}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.1 }}
-                        className={`bg-gradient-to-br ${gradient} border border-outline-variant/20 rounded-2xl p-5 flex flex-col items-center text-center`}
+                        className="relative group"
                     >
-                        {/* Avatar placeholder with initials */}
-                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-outline-variant/30 mb-4 relative bg-surface-container flex items-center justify-center">
+                        {/* Image card */}
+                        <div className={`relative overflow-hidden rounded-2xl aspect-[3/4] bg-gradient-to-br ${gradient} border border-outline-variant/20`}>
                             {celeb.image ? (
-                                <>
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-surface to-surface-container animate-pulse" />
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={celeb.image}
-                                        alt={celeb.name}
-                                        className="absolute inset-0 w-full h-full object-cover relative z-10"
-                                        onError={(e) => {
-                                            (e.target as HTMLImageElement).style.display = 'none';
-                                        }}
-                                    />
-                                </>
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img
+                                    src={celeb.image}
+                                    alt={celeb.name}
+                                    className="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700"
+                                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                />
                             ) : (
-                                <span className="text-2xl font-bold text-on-surface-variant/50 z-10">
-                                    {celeb.name
-                                        .split(' ')
-                                        .map(w => w[0])
-                                        .join('')
-                                        .slice(0, 2)}
-                                </span>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className="text-5xl font-display font-bold text-on-surface-variant/20">
+                                        {celeb.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                                    </span>
+                                </div>
                             )}
+                            {/* Bottom gradient + name */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
+                            <div className="absolute bottom-0 left-0 right-0 p-4">
+                                <h4 className="text-on-surface font-label font-bold text-sm">{celeb.name}</h4>
+                            </div>
                         </div>
 
-                        <h4 className="text-on-surface font-label font-semibold text-base mb-1">
-                            {celeb.name}
-                        </h4>
-
+                        {/* Offset info box — appears on hover */}
                         {celeb.note && (
-                            <p className="text-on-surface-variant text-sm leading-relaxed">
-                                {celeb.note}
-                            </p>
+                            <div className="mt-3 bg-surface-container/80 backdrop-blur-sm border border-primary/10 rounded-xl p-3 md:absolute md:mt-0 md:-bottom-2 md:-right-3 md:max-w-[85%] md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300 md:z-10">
+                                <p className="text-on-surface-variant text-xs leading-relaxed">{celeb.note}</p>
+                            </div>
                         )}
                     </motion.div>
                 ))}

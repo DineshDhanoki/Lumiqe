@@ -35,6 +35,18 @@ interface ColorProfileDeepProps {
     patterns: Patterns;
 }
 
+/** Convert a descriptor word to a 0-100 bar percentage. */
+function _scaleValue(descriptor: string): number {
+    const d = descriptor?.toLowerCase() ?? '';
+    if (d.includes('very high') || d.includes('very deep') || d.includes('very dark') || d.includes('very saturated')) return 90;
+    if (d.includes('high') || d.includes('deep') || d.includes('dark') || d.includes('saturated') || d.includes('rich') || d.includes('strong')) return 72;
+    if (d.includes('medium') || d.includes('moderate') || d.includes('mid')) return 50;
+    if (d.includes('low') || d.includes('light') || d.includes('soft') || d.includes('muted') || d.includes('gentle')) return 30;
+    if (d.includes('very low') || d.includes('very light') || d.includes('very soft')) return 15;
+    return 50;
+}
+
+
 export default function ColorProfileDeep({
     season: _season, // eslint-disable-line @typescript-eslint/no-unused-vars
     styleArchetype,
@@ -86,20 +98,24 @@ export default function ColorProfileDeep({
                 </div>
             </div>
 
-            {/* Color Characteristics */}
+            {/* Color Characteristics — with progress bars */}
             <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
-                <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-4">Color Characteristics</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-5">Color Characteristics</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                     {[
-                        { label: 'Value', value: value, icon: <Contrast className="w-4 h-4" /> },
-                        { label: 'Chroma', value: chroma, icon: <Zap className="w-4 h-4" /> },
-                        { label: 'Contrast', value: contrastLevel, icon: <Palette className="w-4 h-4" /> },
-                        { label: 'Undertone', value: undertone.charAt(0).toUpperCase() + undertone.slice(1), icon: <Sparkles className="w-4 h-4" /> },
+                        { label: 'Value', value: value, icon: <Contrast className="w-4 h-4" />, bar: _scaleValue(value) },
+                        { label: 'Chroma', value: chroma, icon: <Zap className="w-4 h-4" />, bar: _scaleValue(chroma) },
+                        { label: 'Contrast', value: contrastLevel, icon: <Palette className="w-4 h-4" />, bar: _scaleValue(contrastLevel) },
+                        { label: 'Undertone', value: undertone.charAt(0).toUpperCase() + undertone.slice(1), icon: <Sparkles className="w-4 h-4" />, bar: null },
                     ].map((item, i) => (
-                        <div key={i} className="bg-surface-container/30 rounded-2xl p-4 text-center">
-                            <div className="flex justify-center mb-2 text-primary">{item.icon}</div>
-                            <p className="text-on-surface-variant text-xs uppercase tracking-wider mb-1">{item.label}</p>
-                            <p className="text-on-surface font-bold text-lg">{item.value}</p>
+                        <div key={i} className="bg-surface-container/30 rounded-2xl p-4">
+                            <div className="flex items-center gap-2 mb-3 text-primary">{item.icon}<p className="text-on-surface-variant text-[10px] uppercase tracking-wider">{item.label}</p></div>
+                            <p className="text-on-surface font-bold text-lg mb-2">{item.value}</p>
+                            {item.bar !== null && (
+                                <div className="h-1 bg-surface-container-high rounded-full overflow-hidden">
+                                    <div className="h-full bg-primary rounded-full transition-all duration-700" style={{ width: `${item.bar}%` }} />
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

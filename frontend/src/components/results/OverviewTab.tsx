@@ -14,7 +14,41 @@ import ShareButtons from '@/components/ShareButtons';
 import ShopYourColors from '@/components/ShopYourColors';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
-/** Map a hex color to clothing suggestions based on hue. */
+/** Derive a short poetic color name from a hex for display under palette swatches. */
+function _getColorName(hex: string): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2 / 255;
+    const d = max - min;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1)) / 255;
+    let h = 0;
+    if (d !== 0) {
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+        else if (max === g) h = ((b - r) / d + 2) * 60;
+        else h = ((r - g) / d + 4) * 60;
+    }
+    if (s < 0.12) {
+        if (l < 0.15) return 'Obsidian';
+        if (l < 0.35) return 'Charcoal';
+        if (l < 0.55) return 'Stone';
+        if (l < 0.75) return 'Ivory';
+        return 'Pearl';
+    }
+    if (h < 20) return l < 0.4 ? 'Mahogany' : 'Brick';
+    if (h < 40) return l < 0.4 ? 'Rust' : 'Terracotta';
+    if (h < 60) return l < 0.4 ? 'Umber' : 'Amber';
+    if (h < 80) return l < 0.4 ? 'Moss' : 'Gold';
+    if (h < 150) return l < 0.4 ? 'Forest' : 'Sage';
+    if (h < 200) return l < 0.4 ? 'Teal' : 'Aqua';
+    if (h < 250) return l < 0.4 ? 'Navy' : 'Cobalt';
+    if (h < 290) return l < 0.4 ? 'Plum' : 'Lavender';
+    if (h < 330) return l < 0.4 ? 'Burgundy' : 'Rose';
+    return 'Blush';
+}
+
+
 function _getClothingSuggestions(hex: string): string[] {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
@@ -88,19 +122,28 @@ export default function OverviewTab({
                 </div>
             )}
 
-            {/* Core Palette */}
+            {/* Core Palette — horizontal editorial scroll */}
             <div className="bg-surface-container/50 border border-primary/10 p-6 md:p-8 rounded-3xl">
-                <h3 className="font-headline text-2xl font-bold text-on-surface mb-6">{t('corePalette')}</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+                <div className="flex items-end justify-between mb-6">
+                    <div>
+                        <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-1">The Spectrum</span>
+                        <h3 className="font-headline text-2xl font-bold text-on-surface">{t('corePalette')}</h3>
+                    </div>
+                    <span className="font-label text-xs text-on-surface-variant/50">{palette.length} colors</span>
+                </div>
+
+                {/* Horizontal scroll swatches */}
+                <div className="flex flex-nowrap overflow-x-auto gap-4 pb-4 scrollbar-hide -mx-1 px-1">
                     {palette.map((color, i) => (
-                        <div
-                            key={i}
-                            className="aspect-square rounded-2xl shadow-inner border border-outline-variant/30 flex items-end p-2 hover:scale-105 transition-transform"
-                            style={{ backgroundColor: color }}
-                        >
-                            <span className="text-xs font-mono font-bold bg-black/50 text-white px-1.5 py-0.5 rounded backdrop-blur-md w-full text-center truncate">
-                                {color}
+                        <div key={i} className="flex-none w-36 group cursor-crosshair">
+                            <div
+                                className="h-52 w-full rounded-2xl border border-outline-variant/20 shadow-lg group-hover:scale-[1.03] transition-transform duration-300"
+                                style={{ backgroundColor: color }}
+                            />
+                            <span className="block font-headline font-bold text-xs text-on-surface uppercase tracking-tighter mt-3 truncate">
+                                {_getColorName(color)}
                             </span>
+                            <span className="block font-mono text-[9px] text-on-surface-variant/60 mt-0.5">{color}</span>
                         </div>
                     ))}
                 </div>
