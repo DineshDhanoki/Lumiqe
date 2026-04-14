@@ -54,13 +54,13 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
             className={`
                 group relative flex flex-col gap-3 rounded-3xl border p-3 transition-colors overflow-hidden
                 ${isLocked
-                    ? 'bg-black/40 border-white/5 cursor-pointer'
-                    : 'bg-white/10 backdrop-blur-md border-white/10 hover:bg-white/20'
+                    ? 'bg-surface/60 border-primary/5 cursor-pointer'
+                    : 'bg-surface-container/30 backdrop-blur-md border-primary/10 hover:bg-surface-container/50'
                 }
             `}
         >
             {/* ── Product Image Box ─────────────────────────── */}
-            <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-white/5">
+            <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-surface-container/30">
                 {imgFailed ? (
                     /* ── Premium Gold Fallback — "Visit Store" CTA ── */
                     <div
@@ -154,15 +154,15 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                 {/* Lock Overlay */}
                 {isLocked && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-lg">
-                            <Lock className="w-5 h-5 text-white/80" />
+                        <div className="w-12 h-12 rounded-full bg-surface/80 backdrop-blur-sm border border-primary/10 flex items-center justify-center shadow-lg">
+                            <Lock className="w-5 h-5 text-on-surface-variant" />
                         </div>
                     </div>
                 )}
 
                 {/* Match Score Badge */}
                 {!isLocked && (
-                    <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-black/40 backdrop-blur-sm text-[10px] font-bold text-white border border-white/10">
+                    <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-surface/80 backdrop-blur-sm text-[10px] font-bold text-on-surface border border-primary/10">
                         {Math.round(product.match_score)}% Match
                     </div>
                 )}
@@ -170,15 +170,15 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
 
             {/* ── Details ───────────────────────────────────── */}
             <div className="px-1 space-y-1">
-                <h3 className={`text-sm font-semibold leading-tight line-clamp-2 ${isLocked ? 'text-white/40' : 'text-white'}`}>
+                <h3 className={`text-sm font-semibold leading-tight line-clamp-2 ${isLocked ? 'text-on-surface-variant' : 'text-on-surface'}`}>
                     {product.name}
                 </h3>
                 <div className="flex justify-between items-center text-xs">
-                    <span className={isLocked ? 'text-white/30' : 'text-white/60'}>
+                    <span className={isLocked ? 'text-on-surface-variant/50' : 'text-on-surface-variant'}>
                         {isLocked ? 'Premium Brand' : product.brand}
                     </span>
                     {!isLocked && (
-                        <span className="text-white font-medium">{product.price}</span>
+                        <span className="text-on-surface font-medium">{product.price}</span>
                     )}
                 </div>
             </div>

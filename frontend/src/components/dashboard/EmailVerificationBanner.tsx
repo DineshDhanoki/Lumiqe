@@ -71,7 +71,7 @@ export default function EmailVerificationBanner() {
             <button
                 onClick={handleDismiss}
                 aria-label="Dismiss"
-                className="text-white/30 hover:text-white/60 transition-colors ml-1"
+                className="text-on-surface-variant/50 hover:text-on-surface-variant transition-colors ml-1"
             >
                 <X className="w-4 h-4" />
             </button>

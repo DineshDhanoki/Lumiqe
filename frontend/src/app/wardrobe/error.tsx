@@ -10,22 +10,22 @@ interface ErrorProps {
 
 export default function WardrobeError({ error, reset }: ErrorProps) {
     return (
-        <div className="min-h-screen bg-stone-950 flex items-center justify-center p-6">
+        <div className="min-h-screen bg-background flex items-center justify-center p-6">
             <div className="max-w-md w-full text-center space-y-6">
                 <div className="flex justify-center">
-                    <AlertCircle className="w-16 h-16 text-red-500" />
+                    <AlertCircle className="w-16 h-16 text-primary" />
                 </div>
                 <div className="space-y-2">
-                    <h1 className="text-2xl font-bold text-white">Wardrobe failed to load</h1>
-                    <p className="text-white/60 text-sm">
+                    <h1 className="text-2xl font-bold text-on-surface">Wardrobe failed to load</h1>
+                    <p className="text-on-surface-variant text-sm">
                         {error.message || 'Something went wrong loading your wardrobe. Please try again.'}
                     </p>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <button onClick={reset} className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors">
+                    <button onClick={reset} className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors">
                         Try Again
                     </button>
-                    <Link href="/" className="px-6 py-3 border border-white/20 rounded-full text-white font-medium hover:bg-white/5 transition-colors">
+                    <Link href="/" className="px-6 py-3 border border-primary/20 rounded-full text-on-surface font-medium hover:bg-surface-container/30 transition-colors">
                         Go Home
                     </Link>
                 </div>

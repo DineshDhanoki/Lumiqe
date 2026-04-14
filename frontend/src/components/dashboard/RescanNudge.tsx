@@ -16,7 +16,7 @@ export default function RescanNudge({ daysAgo }: Props) {
                     <Sun className="w-5 h-5 text-amber-400 flex-shrink-0" />
                     <div>
                         <p className="text-amber-300 font-medium">Time for a seasonal update?</p>
-                        <p className="text-white/50 text-sm">Your last scan was {daysAgo} days ago. Skin tones shift with seasons.</p>
+                        <p className="text-on-surface-variant text-sm">Your last scan was {daysAgo} days ago. Skin tones shift with seasons.</p>
                     </div>
                 </div>
                 <Link href="/analyze" className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold flex-shrink-0 transition-colors">

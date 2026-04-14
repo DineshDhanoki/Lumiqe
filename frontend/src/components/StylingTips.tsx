@@ -56,7 +56,7 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-zinc-900/50 border border-white/10 p-6 md:p-8 rounded-3xl relative overflow-hidden"
+            className="bg-surface-container/50 border border-primary/10 p-6 md:p-8 rounded-3xl relative overflow-hidden"
         >
             {/* Subtle glow behind the card */}
             <div
@@ -70,7 +70,7 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
                     <Lightbulb className="w-5 h-5 text-yellow-400" />
                 </div>
                 <div>
-                    <h3 className="text-xl font-bold text-white tracking-tight">Styling Tips</h3>
+                    <h3 className="text-xl font-bold text-on-surface tracking-tight">Styling Tips</h3>
                     <div className="flex items-center gap-1.5">
                         <Sparkles className="w-3 h-3 text-yellow-500/60" />
                         <span className="text-[10px] font-medium text-yellow-500/60 uppercase tracking-widest">
@@ -84,9 +84,9 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
             {loading ? (
                 /* ── Shimmer Loading State ────────────────── */
                 <div className="space-y-3 pl-5 border-l-2 border-yellow-500/20">
-                    <div className="h-4 w-full bg-white/5 rounded-lg animate-pulse" />
-                    <div className="h-4 w-[90%] bg-white/5 rounded-lg animate-pulse" style={{ animationDelay: '0.1s' }} />
-                    <div className="h-4 w-[75%] bg-white/5 rounded-lg animate-pulse" style={{ animationDelay: '0.2s' }} />
+                    <div className="h-4 w-full bg-surface-container/30 rounded-lg animate-pulse" />
+                    <div className="h-4 w-[90%] bg-surface-container/30 rounded-lg animate-pulse" style={{ animationDelay: '0.1s' }} />
+                    <div className="h-4 w-[75%] bg-surface-container/30 rounded-lg animate-pulse" style={{ animationDelay: '0.2s' }} />
                 </div>
             ) : displayTip ? (
                 /* ── Generated Tip ────────────────────────── */
@@ -95,7 +95,7 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <p className="text-white/80 text-lg leading-relaxed border-l-2 border-yellow-500/50 pl-5 font-light">
+                    <p className="text-on-surface/80 text-lg leading-relaxed border-l-2 border-yellow-500/50 pl-5 font-light">
                         {displayTip}
                     </p>
 
@@ -103,7 +103,7 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
                     {dynamicTip && (
                         <div className="mt-4 flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                            <span className="text-[10px] font-medium text-white/30 uppercase tracking-wider">
+                            <span className="text-[10px] font-medium text-on-surface-variant/50 uppercase tracking-wider">
                                 Generated for your {season} profile
                             </span>
                         </div>
@@ -111,7 +111,7 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
                 </motion.div>
             ) : error ? (
                 /* ── Error Fallback ───────────────────────── */
-                <p className="text-white/50 text-base leading-relaxed border-l-2 border-white/10 pl-5 italic">
+                <p className="text-on-surface-variant text-base leading-relaxed border-l-2 border-primary/20 pl-5 italic">
                     Personalized tips are temporarily unavailable. Your season is {season} —
                     lean into deep, rich tones and avoid anything too muted or washed out.
                 </p>

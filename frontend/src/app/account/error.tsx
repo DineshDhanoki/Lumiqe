@@ -4,16 +4,16 @@ import Link from 'next/link';
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
     return (
-        <div className="min-h-screen bg-stone-950 flex items-center justify-center p-6">
+        <div className="min-h-screen bg-background flex items-center justify-center p-6">
             <div className="max-w-md text-center space-y-6">
-                <AlertCircle className="w-16 h-16 text-red-500 mx-auto" />
-                <h1 className="text-2xl font-bold text-white">Account Error</h1>
-                <p className="text-white/60">{error.message || 'Something went wrong loading your account.'}</p>
+                <AlertCircle className="w-16 h-16 text-primary mx-auto" />
+                <h1 className="text-2xl font-bold text-on-surface">Account Error</h1>
+                <p className="text-on-surface-variant">{error.message || 'Something went wrong loading your account.'}</p>
                 <div className="flex gap-4 justify-center">
-                    <button onClick={reset} className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors">
+                    <button onClick={reset} className="px-6 py-3 bg-primary-container hover:bg-primary text-on-primary-container rounded-xl font-semibold transition-colors">
                         Try Again
                     </button>
-                    <Link href="/" className="px-6 py-3 border border-white/20 text-white rounded-xl font-semibold hover:bg-white/5 transition-colors">
+                    <Link href="/" className="px-6 py-3 border border-primary/20 text-on-surface rounded-xl font-semibold hover:bg-surface-container/30 transition-colors">
                         Go Home
                     </Link>
                 </div>

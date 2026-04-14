@@ -20,7 +20,7 @@ export default function AnalyzingSpinner({ lang, previewUrl }: Props) {
             className="flex flex-col items-center gap-6 py-16"
         >
             <div className="relative">
-                <div className="absolute inset-0 rounded-full border-t-4 border-red-500 animate-spin" />
+                <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin" />
                 {previewUrl && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -31,8 +31,8 @@ export default function AnalyzingSpinner({ lang, previewUrl }: Props) {
                 )}
             </div>
             <div className="text-center">
-                <h3 className="text-xl font-semibold text-white animate-pulse">{t(lang, 'analyzing')}</h3>
-                <p className="text-sm text-white/50 mt-1">{t(lang, 'analyzingSubtitle')}</p>
+                <h3 className="text-xl font-semibold text-on-surface animate-pulse">{t(lang, 'analyzing')}</h3>
+                <p className="text-sm text-on-surface-variant mt-1">{t(lang, 'analyzingSubtitle')}</p>
             </div>
         </motion.div>
     );

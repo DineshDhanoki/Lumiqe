@@ -9,7 +9,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className, variant = 'rectangle', lines }: SkeletonProps) {
-    const base = 'animate-pulse bg-white/10 rounded';
+    const base = 'animate-pulse bg-surface-container/30 rounded';
 
     if (variant === 'circle') {
         return <div className={cn(base, 'rounded-full', className)} />;
@@ -30,7 +30,7 @@ export function Skeleton({ className, variant = 'rectangle', lines }: SkeletonPr
 
 export function SkeletonCard() {
     return (
-        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6 space-y-4">
             <div className="flex items-center gap-3">
                 <Skeleton variant="circle" className="w-10 h-10" />
                 <div className="flex-1 space-y-2">
@@ -46,7 +46,7 @@ export function SkeletonCard() {
 
 export function SkeletonProductCard() {
     return (
-        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl overflow-hidden">
             <Skeleton className="h-48 w-full rounded-none" />
             <div className="p-4 space-y-3">
                 <Skeleton className="h-4 w-3/4" />
@@ -62,7 +62,7 @@ export function SkeletonProductCard() {
 
 export function SkeletonResultsPage() {
     return (
-        <div className="min-h-screen bg-black p-6 space-y-6">
+        <div className="min-h-screen bg-background p-6 space-y-6">
             <div className="max-w-4xl mx-auto space-y-6">
                 <div className="text-center space-y-3">
                     <Skeleton className="h-8 w-48 mx-auto" />
@@ -85,7 +85,7 @@ export function SkeletonResultsPage() {
 
 export function SkeletonDashboard() {
     return (
-        <div className="min-h-screen bg-black p-6 space-y-6">
+        <div className="min-h-screen bg-background p-6 space-y-6">
             <div className="max-w-6xl mx-auto space-y-6">
                 <div className="flex items-center justify-between">
                     <div className="space-y-2">
@@ -96,7 +96,7 @@ export function SkeletonDashboard() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="bg-zinc-900/60 border border-white/10 rounded-xl p-4 space-y-2">
+                        <div key={i} className="bg-surface-container/50 border border-primary/10 rounded-xl p-4 space-y-2">
                             <Skeleton className="h-3 w-20" />
                             <Skeleton className="h-6 w-12" />
                         </div>

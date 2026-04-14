@@ -39,7 +39,7 @@ export default function BeforeAfterComparison({
         <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl overflow-hidden border border-white/10 bg-zinc-900/50"
+            className="rounded-3xl overflow-hidden border border-primary/10 bg-surface-container/50"
         >
             <div
                 ref={containerRef}
@@ -90,10 +90,10 @@ export default function BeforeAfterComparison({
                 </div>
 
                 {/* Labels */}
-                <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-semibold text-white/80 z-10">
+                <div className="absolute top-3 left-3 px-2 py-1 bg-surface/80 backdrop-blur-sm rounded text-xs font-semibold text-on-surface-variant z-10">
                     {beforeLabel}
                 </div>
-                <div className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-semibold text-white/80 z-10">
+                <div className="absolute top-3 right-3 px-2 py-1 bg-surface/80 backdrop-blur-sm rounded text-xs font-semibold text-on-surface-variant z-10">
                     {afterLabel}
                 </div>
             </div>

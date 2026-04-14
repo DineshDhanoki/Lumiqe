@@ -44,8 +44,8 @@ export default function OccasionGuide({ occasions, season }: OccasionGuideProps)
             className="space-y-6"
         >
             <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-white mb-2">Your Occasion Guide</h2>
-                <p className="text-white/50">What to wear for every moment in your life as a {season}</p>
+                <h2 className="text-3xl font-bold text-on-surface mb-2">Your Occasion Guide</h2>
+                <p className="text-on-surface-variant">What to wear for every moment in your life as a {season}</p>
             </div>
 
             <div className="grid grid-cols-1 gap-5">
@@ -57,16 +57,16 @@ export default function OccasionGuide({ occasions, season }: OccasionGuideProps)
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.07 }}
-                            className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 hover:border-white/20 transition-colors"
+                            className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 hover:border-primary/20 transition-colors"
                         >
                             {/* Header */}
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 rounded-xl bg-white/10 text-white">
+                                <div className="p-2 rounded-xl bg-surface-container/50 text-on-surface">
                                     {OCCASION_ICONS[key] ?? <Briefcase className="w-5 h-5" />}
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-bold text-lg">{OCCASION_LABELS[key] ?? key}</h3>
-                                    <p className="text-white/50 text-sm italic">&ldquo;{occasion.formula}&rdquo;</p>
+                                    <h3 className="text-on-surface font-bold text-lg">{OCCASION_LABELS[key] ?? key}</h3>
+                                    <p className="text-on-surface-variant text-sm italic">&ldquo;{occasion.formula}&rdquo;</p>
                                 </div>
                             </div>
 
@@ -78,7 +78,7 @@ export default function OccasionGuide({ occasions, season }: OccasionGuideProps)
                                             className="w-10 h-10 rounded-xl border border-white/20 shadow-md"
                                             style={{ backgroundColor: color }}
                                         />
-                                        <span className="text-xs text-white/30 font-mono">{color}</span>
+                                        <span className="text-xs text-on-surface-variant/50 font-mono">{color}</span>
                                     </div>
                                 ))}
                             </div>
@@ -88,7 +88,7 @@ export default function OccasionGuide({ occasions, season }: OccasionGuideProps)
                                 {occasion.key_pieces.map((piece, pi) => (
                                     <span
                                         key={pi}
-                                        className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full border border-white/10"
+                                        className="text-xs bg-surface-container/30 text-on-surface-variant px-3 py-1.5 rounded-full border border-primary/10"
                                     >
                                         {piece}
                                     </span>
