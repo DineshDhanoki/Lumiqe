@@ -175,7 +175,7 @@ export default function AccountPage() {
                 >
                     <div className="flex items-center justify-between mb-12">
                         <h1 className="text-4xl font-extrabold flex items-center gap-3">
-                            <User className="w-8 h-8 text-red-500" />
+                            <User className="w-8 h-8 text-primary" />
                             {t('yourAccount')}
                         </h1>
                         <button
@@ -192,7 +192,7 @@ export default function AccountPage() {
                         <div className="md:col-span-1 space-y-6">
                             {/* Profile Card */}
                             <div className="p-6 rounded-3xl bg-surface-container/10 border border-primary/10">
-                                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-2xl font-bold text-red-400 border border-primary/20">
+                                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-2xl font-bold text-primary border border-primary/20">
                                     {profile.name.charAt(0).toUpperCase()}
                                 </div>
                                 <h2 className="text-xl font-bold text-on-surface mb-1">{profile.name}</h2>
@@ -217,7 +217,7 @@ export default function AccountPage() {
                                                         setEditingProfile(true);
                                                         setEditError('');
                                                     }}
-                                                    className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
+                                                    className="text-xs text-primary hover:text-primary/80 font-medium transition-colors"
                                                 >
                                                     Edit
                                                 </button>
@@ -355,7 +355,7 @@ export default function AccountPage() {
 
                                         {/* Paywall Overlay */}
                                         <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10 flex-col px-6 text-center">
-                                            <Crown className="w-8 h-8 text-red-500 mb-3" />
+                                            <Crown className="w-8 h-8 text-primary mb-3" />
                                             <h4 className="text-lg font-bold text-on-surface mb-2">{t('unlockFashionInsights')}</h4>
                                             <p className="text-sm text-on-surface-variant mb-4 max-w-sm">
                                                 {t('unlockFashionInsightsDesc')}

@@ -124,8 +124,8 @@ export default function WelcomePage() {
                     {/* Header */}
                     <motion.div variants={itemVariants} className="text-center mb-10">
                         <div className="inline-flex items-center gap-2 mb-6">
-                            <Sparkles className="w-5 h-5 text-red-400" />
-                            <span className="text-sm font-bold uppercase tracking-widest text-red-400">
+                            <Sparkles className="w-5 h-5 text-primary" />
+                            <span className="text-sm font-bold uppercase tracking-widest text-primary">
                                 Lumiqe
                             </span>
                         </div>
@@ -149,7 +149,7 @@ export default function WelcomePage() {
                                 className="flex items-start gap-4 p-4 rounded-2xl bg-surface-container/30 border border-primary/10 hover:border-primary/30 transition-colors"
                             >
                                 <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                                    <benefit.icon className="w-6 h-6 text-red-400" />
+                                    <benefit.icon className="w-6 h-6 text-primary" />
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-on-surface text-sm">

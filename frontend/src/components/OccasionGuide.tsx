@@ -75,7 +75,7 @@ export default function OccasionGuide({ occasions, season }: OccasionGuideProps)
                                 {occasion.colors.map((color, ci) => (
                                     <div key={ci} className="flex flex-col items-center gap-1">
                                         <div
-                                            className="w-10 h-10 rounded-xl border border-white/20 shadow-md"
+                                            className="w-10 h-10 rounded-xl border border-outline-variant/30 shadow-md"
                                             style={{ backgroundColor: color }}
                                         />
                                         <span className="text-xs text-on-surface-variant/50 font-mono">{color}</span>

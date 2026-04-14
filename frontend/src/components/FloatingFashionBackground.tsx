@@ -97,7 +97,7 @@ const floatingItems = [
 export default function FloatingFashionBackground() {
     return (
         // # Step 1: The Container & Glow Layers
-        <div className="fixed inset-0 z-[-10] overflow-hidden bg-black pointer-events-none">
+        <div className="fixed inset-0 z-[-10] overflow-hidden bg-background pointer-events-none">
             {/* Glow Orbs */}
             <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-[#ff4d4d]/20 rounded-full blur-[120px] mix-blend-screen" />
             <div className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] bg-rose-600/20 rounded-full blur-[120px] mix-blend-screen" />

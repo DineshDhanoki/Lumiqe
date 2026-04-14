@@ -194,7 +194,7 @@ export default function AnalyzePage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-black flex flex-col"
+                        className="fixed inset-0 z-[100] bg-background flex flex-col"
                     >
                         <div className="flex-1 overflow-auto p-4 pt-16">
                             <CameraCapture

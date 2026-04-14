@@ -130,7 +130,7 @@ function FeedContent() {
                 </Link>
                 <div className="flex flex-col items-center">
                     <h1 className="text-lg font-bold text-on-surface capitalize">{t('yourCatalog')}</h1>
-                    <span className="text-xs text-red-400 font-medium tracking-wide">{season}</span>
+                    <span className="text-xs text-primary font-medium tracking-wide">{season}</span>
                 </div>
                 <button className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
                     <Filter className="w-5 h-5 text-on-surface" />
@@ -141,7 +141,7 @@ function FeedContent() {
             {!gender ? (
                 <div className="w-full max-w-md flex flex-col items-center justify-center mt-16 z-20 relative">
                     <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                        <User className="w-8 h-8 text-red-400" />
+                        <User className="w-8 h-8 text-primary" />
                     </div>
                     <h2 className="text-xl font-bold text-on-surface mb-2">{t('selectYourStyle')}</h2>
                     <p className="text-on-surface-variant text-sm mb-8 text-center">{t('selectYourStyleDesc')}</p>
@@ -208,7 +208,7 @@ function FeedContent() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.05 }}
                                         onClick={() => setIsModalOpen(true)}
-                                        className="aspect-[3/4] rounded-3xl bg-surface-container/20 border border-white/[0.06] flex items-center justify-center cursor-pointer hover:bg-surface-container/30 transition-colors"
+                                        className="aspect-[3/4] rounded-3xl bg-surface-container/20 border border-primary/5 flex items-center justify-center cursor-pointer hover:bg-surface-container/30 transition-colors"
                                     >
                                         <div className="w-10 h-10 rounded-full bg-surface/60 backdrop-blur-sm border border-primary/10 flex items-center justify-center">
                                             <Lock className="w-4 h-4 text-on-surface-variant" />

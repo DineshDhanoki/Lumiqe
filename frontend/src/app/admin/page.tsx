@@ -675,14 +675,14 @@ export default function AdminPage() {
                             <div className="flex flex-wrap gap-3 items-end">
                                 <div>
                                     <label className="text-on-surface-variant text-xs font-bold uppercase tracking-wider block mb-1">Gender</label>
-                                    <select value={scrapeGender} onChange={(e) => setScrapeGender(e.target.value)} className="px-3 py-2 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                                    <select value={scrapeGender} onChange={(e) => setScrapeGender(e.target.value)} className="px-3 py-2 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label className="text-on-surface-variant text-xs font-bold uppercase tracking-wider block mb-1">Vibe</label>
-                                    <select value={scrapeVibe} onChange={(e) => setScrapeVibe(e.target.value)} className="px-3 py-2 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                                    <select value={scrapeVibe} onChange={(e) => setScrapeVibe(e.target.value)} className="px-3 py-2 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
                                         {['Casual', 'Gym', 'Party', 'Formal'].map((v) => <option key={v} value={v}>{v}</option>)}
                                     </select>
                                 </div>
@@ -795,7 +795,7 @@ export default function AdminPage() {
                                     onChange={(e) => setNewKeyName(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && createB2bKey()}
                                     placeholder="Key name (e.g. Partner ABC)"
-                                    className="flex-1 px-4 py-2.5 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary"
+                                    className="flex-1 px-4 py-2.5 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface text-sm placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary"
                                 />
                                 <button onClick={createB2bKey} disabled={creatingKey || !newKeyName.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
                                     {creatingKey ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Create
@@ -939,7 +939,7 @@ export default function AdminPage() {
                                         type="number"
                                         value={editForm[field]}
                                         onChange={(e) => setEditForm({ ...editForm, [field]: parseInt(e.target.value) || 0 })}
-                                        className="w-full mt-1 px-3 py-2 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                                        className="w-full mt-1 px-3 py-2 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                                     />
                                 </div>
                             ))}
