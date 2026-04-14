@@ -48,7 +48,7 @@ export default function SharePageClient({ token }: { token: string }) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 text-white/50">
+            <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 text-on-surface-variant">
                 <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
                 <p>Loading shared analysis...</p>
             </div>
@@ -59,9 +59,9 @@ export default function SharePageClient({ token }: { token: string }) {
         return (
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
                 <Sparkles className="w-12 h-12 text-red-500 mb-6" />
-                <h1 className="text-3xl font-bold text-white mb-4">Analysis Not Found</h1>
-                <p className="text-white/60 mb-8">This shared link may have expired or doesn&apos;t exist.</p>
-                <Link href="/" className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors">
+                <h1 className="text-3xl font-bold text-on-surface mb-4">Analysis Not Found</h1>
+                <p className="text-on-surface-variant mb-8">This shared link may have expired or doesn&apos;t exist.</p>
+                <Link href="/" className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-red-500 transition-colors">
                     Discover Your Colors
                 </Link>
             </div>
@@ -69,12 +69,12 @@ export default function SharePageClient({ token }: { token: string }) {
     }
 
     return (
-        <main className="min-h-screen bg-transparent text-white font-sans pb-24">
+        <main className="min-h-screen bg-transparent text-on-surface font-sans pb-24">
             {/* Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-center">
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-primary/10 px-6 py-4 flex items-center justify-center">
                 <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-red-400" />
-                    <span className="text-xl font-bold tracking-widest text-white">LUMIQE</span>
+                    <span className="text-xl font-bold tracking-widest text-on-surface">LUMIQE</span>
                 </div>
             </nav>
 
@@ -88,17 +88,17 @@ export default function SharePageClient({ token }: { token: string }) {
                     {/* Skin color + info */}
                     <div className="flex items-center justify-center gap-6 mb-8">
                         <div
-                            className="w-24 h-24 rounded-3xl border-2 border-white/20 shadow-2xl"
+                            className="w-24 h-24 rounded-3xl border-2 border-primary/20 shadow-2xl"
                             style={{ backgroundColor: data.hex_color }}
                         />
                         <div className="text-left">
-                            <p className="text-white/50 text-sm capitalize">{data.undertone} undertone</p>
+                            <p className="text-on-surface-variant text-sm capitalize">{data.undertone} undertone</p>
                             {data.contrast_level && (
-                                <p className="text-white/50 text-sm">{data.contrast_level} contrast</p>
+                                <p className="text-on-surface-variant text-sm">{data.contrast_level} contrast</p>
                             )}
-                            <p className="text-white/50 text-sm">{Math.round(data.confidence * 100)}% confidence</p>
+                            <p className="text-on-surface-variant text-sm">{Math.round(data.confidence * 100)}% confidence</p>
                             {data.metal && (
-                                <p className="text-white/50 text-sm">Best metal: {data.metal}</p>
+                                <p className="text-on-surface-variant text-sm">Best metal: {data.metal}</p>
                             )}
                         </div>
                     </div>
@@ -109,17 +109,17 @@ export default function SharePageClient({ token }: { token: string }) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="bg-zinc-900/50 border border-white/10 p-6 md:p-8 rounded-3xl mb-8"
+                    className="bg-surface-container/50 border border-primary/10 p-6 md:p-8 rounded-3xl mb-8"
                 >
-                    <h3 className="text-xl font-bold text-white mb-5 text-center">Recommended Palette</h3>
+                    <h3 className="text-xl font-bold text-on-surface mb-5 text-center">Recommended Palette</h3>
                     <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
                         {data.palette.map((color, i) => (
                             <div
                                 key={i}
-                                className="aspect-square rounded-2xl shadow-inner border border-white/10 flex items-end p-2"
+                                className="aspect-square rounded-2xl shadow-inner border border-primary/10 flex items-end p-2"
                                 style={{ backgroundColor: color }}
                             >
-                                <span className="text-xs font-mono font-bold bg-black/50 text-white px-1.5 py-0.5 rounded backdrop-blur-md w-full text-center truncate">
+                                <span className="text-xs font-mono font-bold bg-black/50 text-on-surface px-1.5 py-0.5 rounded backdrop-blur-md w-full text-center truncate">
                                     {color}
                                 </span>
                             </div>
@@ -142,9 +142,9 @@ export default function SharePageClient({ token }: { token: string }) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl mb-8"
+                    className="bg-surface-container/50 border border-primary/10 p-6 rounded-3xl mb-8"
                 >
-                    <h3 className="text-lg font-bold text-white mb-4">Share this result</h3>
+                    <h3 className="text-lg font-bold text-on-surface mb-4">Share this result</h3>
                     <div className="flex flex-wrap gap-3">
                         <button
                             onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Check out this ${data.season} color analysis! \u{1F3A8} Discover your color season at ${buildShareUrl('whatsapp')}`)}`, '_blank')}
@@ -155,7 +155,7 @@ export default function SharePageClient({ token }: { token: string }) {
                         </button>
                         <button
                             onClick={copyLink}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-sm font-medium text-white transition-all"
+                            className="flex items-center gap-2 px-4 py-2.5 bg-surface-container/30 hover:bg-surface-container/50 border border-primary/10 rounded-xl text-sm font-medium text-on-surface transition-all"
                         >
                             {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                             {copied ? 'Copied!' : 'Copy Link'}
@@ -175,16 +175,16 @@ export default function SharePageClient({ token }: { token: string }) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25 }}
-                    className="bg-red-950/30 border border-red-500/30 rounded-3xl p-8 md:p-12 text-center"
+                    className="bg-primary/5 border border-primary/20 rounded-3xl p-8 md:p-12 text-center"
                 >
                     <Sparkles className="w-10 h-10 text-red-500 mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold text-white mb-3">Discover your own colors</h3>
-                    <p className="text-white/60 max-w-md mx-auto mb-6">
+                    <h3 className="text-2xl font-bold text-on-surface mb-3">Discover your own colors</h3>
+                    <p className="text-on-surface-variant max-w-md mx-auto mb-6">
                         Find your exact color season in seconds with AI-powered analysis. Get your personalized palette, styling tips, and curated shopping recommendations.
                     </p>
                     <Link
                         href="/analyze"
-                        className="inline-flex items-center gap-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 px-8 transition-all hover:scale-105"
+                        className="inline-flex items-center gap-2 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold py-4 px-8 transition-all hover:scale-105"
                     >
                         Analyze My Colors <ArrowRight className="w-5 h-5" />
                     </Link>

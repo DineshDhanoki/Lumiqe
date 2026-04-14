@@ -50,7 +50,7 @@ export default function DataPrivacySection({
                         <button
                             onClick={onDeleteConfirm}
                             disabled={deleting}
-                            className="px-5 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition disabled:opacity-50"
+                            className="px-5 py-2 rounded-full bg-red-600 hover:bg-red-500 text-on-surface text-sm font-bold transition disabled:opacity-50"
                         >
                             {deleting ? 'Deleting...' : 'Yes, Delete'}
                         </button>

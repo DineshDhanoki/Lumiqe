@@ -238,25 +238,25 @@ export default function StyleQuiz() {
                         >
                             <div className="text-center mb-8">
                                 <p className="text-red-400 text-xs font-bold tracking-widest uppercase mb-2">Style Personality Quiz</p>
-                                <h1 className="text-3xl font-bold text-white">Question {current + 1} of {QUESTIONS.length}</h1>
+                                <h1 className="text-3xl font-bold text-on-surface">Question {current + 1} of {QUESTIONS.length}</h1>
                             </div>
 
-                            <div className="w-full bg-white/10 rounded-full h-1.5 mb-8">
+                            <div className="w-full bg-surface-container/30 rounded-full h-1.5 mb-8">
                                 <motion.div
-                                    className="bg-red-500 h-1.5 rounded-full"
+                                    className="bg-primary h-1.5 rounded-full"
                                     animate={{ width: `${progress}%` }}
                                     transition={{ duration: 0.4 }}
                                 />
                             </div>
 
-                            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-8 mb-6">
-                                <h2 className="text-xl font-bold text-white mb-6">{question.question}</h2>
+                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-8 mb-6">
+                                <h2 className="text-xl font-bold text-on-surface mb-6">{question.question}</h2>
                                 <div className="space-y-3">
                                     {question.options.map((opt) => (
                                         <button
                                             key={opt.value}
                                             onClick={() => handleAnswer(opt.value)}
-                                            className="w-full text-left px-5 py-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-red-600/20 hover:border-red-500/40 text-white/80 hover:text-white transition-all font-medium"
+                                            className="w-full text-left px-5 py-4 rounded-2xl border border-primary/10 bg-surface-container/30 hover:bg-primary/10 hover:border-primary/30 text-on-surface-variant hover:text-on-surface transition-all font-medium"
                                         >
                                             {opt.label}
                                         </button>
@@ -267,7 +267,7 @@ export default function StyleQuiz() {
                             {current > 0 && (
                                 <button
                                     onClick={() => setCurrent(current - 1)}
-                                    className="text-white/40 hover:text-white text-sm flex items-center gap-1 transition-colors"
+                                    className="text-on-surface-variant hover:text-on-surface text-sm flex items-center gap-1 transition-colors"
                                 >
                                     <ArrowLeft className="w-3.5 h-3.5" /> Previous question
                                 </button>
@@ -284,26 +284,26 @@ export default function StyleQuiz() {
                                 <p className="text-red-400 text-xs font-bold tracking-widest uppercase mb-3">Your Style Personality</p>
                                 <div className="text-6xl mb-3">{data.emoji}</div>
                                 <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-2">{data.name}</h1>
-                                <p className="text-red-300 italic mb-4">{data.tagline}</p>
-                                <p className="text-white/70 leading-relaxed max-w-md mx-auto">{data.description}</p>
+                                <p className="text-on-surface-variant italic mb-4">{data.tagline}</p>
+                                <p className="text-on-surface-variant leading-relaxed max-w-md mx-auto">{data.description}</p>
                             </div>
 
-                            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
-                                <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-3">Style Icons</p>
+                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
+                                <p className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-3">Style Icons</p>
                                 <div className="flex flex-wrap gap-2">
                                     {data.icons.map((icon) => (
-                                        <span key={icon} className="text-sm bg-white/10 text-white/70 border border-white/15 px-3 py-1.5 rounded-full">
+                                        <span key={icon} className="text-sm bg-surface-container/30 text-on-surface-variant border border-primary/15 px-3 py-1.5 rounded-full">
                                             ✦ {icon}
                                         </span>
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6">
+                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
                                 <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-3">Your Key Pieces</p>
                                 <ul className="space-y-2">
                                     {data.keyPieces.map((piece) => (
-                                        <li key={piece} className="flex items-center gap-2 text-sm text-white/80">
+                                        <li key={piece} className="flex items-center gap-2 text-sm text-on-surface-variant">
                                             <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />
                                             {piece}
                                         </li>
@@ -311,21 +311,21 @@ export default function StyleQuiz() {
                                 </ul>
                             </div>
 
-                            <div className="bg-gradient-to-r from-red-950/40 to-zinc-900/40 border border-red-500/20 rounded-3xl p-6">
-                                <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-2">Color Advice for Your Personality</p>
-                                <p className="text-white/80 leading-relaxed">{data.colorAdvice}</p>
+                            <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6">
+                                <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-2">Color Advice for Your Personality</p>
+                                <p className="text-on-surface-variant leading-relaxed">{data.colorAdvice}</p>
                             </div>
 
                             <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-3xl p-6">
                                 <p className="text-yellow-400 text-xs font-bold uppercase tracking-wider mb-2">Style Trap to Avoid</p>
-                                <p className="text-white/80 leading-relaxed">{data.avoidTrap}</p>
+                                <p className="text-on-surface-variant leading-relaxed">{data.avoidTrap}</p>
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-3">
-                                <Link href="/dashboard" className="flex-1 text-center py-3 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold transition-all hover:scale-105">
+                                <Link href="/dashboard" className="flex-1 text-center py-3 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold transition-all hover:scale-105">
                                     View Dashboard
                                 </Link>
-                                <Link href="/analyze" className="flex-1 text-center py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold transition-all">
+                                <Link href="/analyze" className="flex-1 text-center py-3 rounded-full bg-surface-container/30 hover:bg-surface-container/50 border border-primary/20 text-on-surface font-bold transition-all">
                                     Scan Your Colors
                                 </Link>
                             </div>

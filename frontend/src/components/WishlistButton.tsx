@@ -109,7 +109,7 @@ function WishlistButtonInner({
             onClick={toggleWishlist}
             disabled={loading}
             aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-sm transition-all hover:scale-110 hover:bg-white disabled:opacity-50"
+            className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-surface/80 backdrop-blur-sm shadow-sm transition-all hover:scale-110 hover:bg-surface disabled:opacity-50"
         >
             <Heart
                 className={`h-4 w-4 transition-colors ${

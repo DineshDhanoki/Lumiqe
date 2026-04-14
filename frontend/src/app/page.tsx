@@ -25,30 +25,30 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen text-white font-sans selection:bg-red-900/50">
+    <main className="relative min-h-screen text-on-surface font-sans selection:bg-primary/20">
       <Navbar />
 
       <HeroSection onOpenAuth={() => openAuth()} />
 
       {/* Analytics Counter Banner (Social Proof) */}
       <ScrollReveal delay={0.1}>
-        <section className="border-y border-white/10 bg-white/5 backdrop-blur-md py-8">
+        <section className="border-y border-primary/10 bg-surface-container/30 backdrop-blur-md py-8">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">50K+</h4>
-              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Faces Analyzed</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">50K+</h4>
+              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Faces Analyzed</p>
             </div>
             <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">12</h4>
-              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Color Seasons</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">12</h4>
+              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Color Seasons</p>
             </div>
             <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">&lt; 3s</h4>
-              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Speed</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">&lt; 3s</h4>
+              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Speed</p>
             </div>
             <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-white mb-1">100%</h4>
-              <p className="text-xs sm:text-sm text-white/50 uppercase tracking-wider">Private</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">100%</h4>
+              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Private</p>
             </div>
           </div>
         </section>

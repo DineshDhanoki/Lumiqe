@@ -77,14 +77,14 @@ export default function WishlistPage() {
                     <SkeletonShoppingGrid />
                 ) : items.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                        <ShoppingBag className="w-16 h-16 text-white/20" />
-                        <h2 className="text-xl font-semibold text-white">No saved items yet</h2>
-                        <p className="text-white/50 max-w-sm">
+                        <ShoppingBag className="w-16 h-16 text-on-surface-variant/20" />
+                        <h2 className="text-xl font-semibold text-on-surface">No saved items yet</h2>
+                        <p className="text-on-surface-variant max-w-sm">
                             Discover products that match your color palette and save your favorites here.
                         </p>
                         <Link
                             href="/shopping-agent"
-                            className="mt-2 px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors"
+                            className="mt-2 px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors"
                         >
                             Browse Shopping Agent
                         </Link>
@@ -122,8 +122,8 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
         : item.image_url;
 
     return (
-        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl overflow-hidden group">
-            <div className="relative aspect-[3/4] bg-zinc-800">
+        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl overflow-hidden group">
+            <div className="relative aspect-[3/4] bg-surface-container">
                 {!imgFailed && proxyUrl ? (
                     <Image
                         src={proxyUrl}
@@ -134,12 +134,12 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full">
-                        <ShoppingBag className="w-10 h-10 text-white/20" />
+                        <ShoppingBag className="w-10 h-10 text-on-surface-variant/20" />
                     </div>
                 )}
 
                 {/* Match score badge */}
-                <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-semibold text-white">
+                <div className="absolute top-2 left-2 bg-surface/80 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-semibold text-on-surface">
                     {Math.round(item.match_score * 100)}% match
                 </div>
 
@@ -147,7 +147,7 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
                 <button
                     onClick={onRemove}
                     disabled={isRemoving}
-                    className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full p-2 text-white/70 hover:text-red-400 hover:bg-black/90 transition-colors disabled:opacity-50"
+                    className="absolute top-2 right-2 bg-surface/80 backdrop-blur-sm rounded-full p-2 text-on-surface-variant hover:text-red-400 hover:bg-surface transition-colors disabled:opacity-50"
                     aria-label={`Remove ${item.name} from wishlist`}
                 >
                     <Trash2 className="w-4 h-4" />
@@ -155,15 +155,15 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
             </div>
 
             <div className="p-4 space-y-2">
-                <p className="text-xs text-white/50 uppercase tracking-wider">{item.brand}</p>
-                <h3 className="text-sm font-medium text-white line-clamp-2 leading-snug">{item.name}</h3>
+                <p className="text-xs text-on-surface-variant uppercase tracking-wider">{item.brand}</p>
+                <h3 className="text-sm font-medium text-on-surface line-clamp-2 leading-snug">{item.name}</h3>
                 <div className="flex items-center justify-between pt-1">
-                    <span className="text-white font-semibold">{item.price}</span>
+                    <span className="text-on-surface font-semibold">{item.price}</span>
                     <a
                         href={affiliateUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-500 rounded-full text-white text-xs font-medium transition-colors"
+                        className="flex items-center gap-1 px-3 py-1.5 bg-primary-container hover:bg-primary rounded-full text-on-primary-container text-xs font-medium transition-colors"
                     >
                         Buy <ExternalLink className="w-3 h-3" />
                     </a>

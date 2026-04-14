@@ -92,16 +92,16 @@ export default function ScanPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-zinc-900/50 border border-white/10 rounded-3xl p-8 text-center"
+                        className="bg-surface-container/50 border border-primary/10 rounded-3xl p-8 text-center"
                     >
-                        <Sparkles className="w-12 h-12 text-red-400 mx-auto mb-4" />
+                        <Sparkles className="w-12 h-12 text-primary mx-auto mb-4" />
                         <h2 className="text-xl font-bold mb-2">Scan Your Face First</h2>
-                        <p className="text-white/60 text-sm mb-6">
+                        <p className="text-on-surface-variant text-sm mb-6">
                             We need to know your color season before we can match clothing. It takes 3 seconds.
                         </p>
                         <Link
                             href="/analyze"
-                            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-full transition-all"
+                            className="inline-flex items-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-bold py-3 px-6 rounded-full transition-all"
                         >
                             <Camera className="w-5 h-5" />
                             Analyze My Face
@@ -116,22 +116,22 @@ export default function ScanPage() {
                             transition={{ delay: 0.1 }}
                             className="relative"
                         >
-                            <label className="flex flex-col items-center justify-center w-full min-h-[280px] rounded-3xl border-2 border-dashed border-white/20 bg-white/5 backdrop-blur-md cursor-pointer hover:bg-white/10 hover:border-white/30 transition-all overflow-hidden">
+                            <label className="flex flex-col items-center justify-center w-full min-h-[280px] rounded-3xl border-2 border-dashed border-primary/20 bg-surface-container/30 backdrop-blur-md cursor-pointer hover:bg-surface-container/30 hover:border-primary/30 transition-all overflow-hidden">
                                 {isScanning ? (
                                     <div className="flex flex-col items-center gap-4">
                                         <div className="relative">
-                                            <div className="w-16 h-16 rounded-full border-4 border-white/20 border-t-red-500 animate-spin" />
+                                            <div className="w-16 h-16 rounded-full border-4 border-primary/20 border-t-red-500 animate-spin" />
                                         </div>
-                                        <p className="text-white/70 font-medium animate-pulse">Analyzing colors...</p>
+                                        <p className="text-on-surface-variant font-medium animate-pulse">Analyzing colors...</p>
                                     </div>
                                 ) : (
                                     <div className="flex flex-col items-center gap-4 p-8">
-                                        <div className="p-4 rounded-full bg-white/10">
-                                            <Camera className="w-10 h-10 text-white" />
+                                        <div className="p-4 rounded-full bg-surface-container/30">
+                                            <Camera className="w-10 h-10 text-on-surface" />
                                         </div>
                                         <div className="text-center space-y-1">
-                                            <p className="text-lg font-medium text-white">Tap to Upload</p>
-                                            <p className="text-sm text-white/50">Photo of a clothing item</p>
+                                            <p className="text-lg font-medium text-on-surface">Tap to Upload</p>
+                                            <p className="text-sm text-on-surface-variant">Photo of a clothing item</p>
                                         </div>
                                     </div>
                                 )}
@@ -152,7 +152,7 @@ export default function ScanPage() {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
-                                    className="flex items-center gap-3 bg-red-900/50 border border-red-500/30 text-red-200 px-5 py-3 rounded-2xl text-sm"
+                                    className="flex items-center gap-3 bg-primary/5 border border-primary/20 text-primary px-5 py-3 rounded-2xl text-sm"
                                 >
                                     <AlertCircle className="w-5 h-5 shrink-0" />
                                     {error}
@@ -171,22 +171,22 @@ export default function ScanPage() {
                                     className="space-y-6"
                                 >
                                     {/* Verdict Card */}
-                                    <div className={`rounded-3xl border p-6 ${verdictConfig[result.verdict as keyof typeof verdictConfig]?.bg || 'bg-zinc-900/50 border-white/10'}`}>
+                                    <div className={`rounded-3xl border p-6 ${verdictConfig[result.verdict as keyof typeof verdictConfig]?.bg || 'bg-surface-container/50 border-primary/10'}`}>
                                         <div className="flex items-center justify-between mb-6">
                                             <div className="flex items-center gap-3">
                                                 <div className={verdictConfig[result.verdict as keyof typeof verdictConfig]?.color}>
                                                     {verdictConfig[result.verdict as keyof typeof verdictConfig]?.icon}
                                                 </div>
                                                 <div>
-                                                    <h3 className="text-2xl font-bold text-white">
+                                                    <h3 className="text-2xl font-bold text-on-surface">
                                                         {verdictConfig[result.verdict as keyof typeof verdictConfig]?.label}
                                                     </h3>
-                                                    <p className="text-white/60 text-sm">{result.item_name}</p>
+                                                    <p className="text-on-surface-variant text-sm">{result.item_name}</p>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <span className="text-4xl font-bold text-white">{result.match_score}%</span>
-                                                <p className="text-white/50 text-xs">Match</p>
+                                                <span className="text-4xl font-bold text-on-surface">{result.match_score}%</span>
+                                                <p className="text-on-surface-variant text-xs">Match</p>
                                             </div>
                                         </div>
 
@@ -194,20 +194,20 @@ export default function ScanPage() {
                                         <div className="flex items-center gap-4">
                                             <div className="flex-1 text-center">
                                                 <div
-                                                    className="w-full aspect-square rounded-2xl border border-white/10 mb-2"
+                                                    className="w-full aspect-square rounded-2xl border border-primary/10 mb-2"
                                                     style={{ backgroundColor: result.item_hex }}
                                                 />
-                                                <p className="text-xs text-white/50">Item Color</p>
-                                                <p className="text-xs font-mono text-white/70">{result.item_hex}</p>
+                                                <p className="text-xs text-on-surface-variant">Item Color</p>
+                                                <p className="text-xs font-mono text-on-surface-variant">{result.item_hex}</p>
                                             </div>
-                                            <div className="text-white/30 text-2xl font-light">vs</div>
+                                            <div className="text-on-surface-variant/50 text-2xl font-light">vs</div>
                                             <div className="flex-1 text-center">
                                                 <div
-                                                    className="w-full aspect-square rounded-2xl border border-white/10 mb-2"
+                                                    className="w-full aspect-square rounded-2xl border border-primary/10 mb-2"
                                                     style={{ backgroundColor: result.best_palette_match }}
                                                 />
-                                                <p className="text-xs text-white/50">Best Match</p>
-                                                <p className="text-xs font-mono text-white/70">{result.best_palette_match}</p>
+                                                <p className="text-xs text-on-surface-variant">Best Match</p>
+                                                <p className="text-xs font-mono text-on-surface-variant">{result.best_palette_match}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -218,20 +218,20 @@ export default function ScanPage() {
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: 0.3 }}
-                                            className="bg-zinc-900/50 border border-white/10 rounded-3xl p-6"
+                                            className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6"
                                         >
-                                            <h4 className="text-sm font-bold text-white/80 uppercase tracking-wider mb-4">
+                                            <h4 className="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-4">
                                                 Try These Instead
                                             </h4>
                                             <div className="flex gap-4">
                                                 {result.suggestions.map((suggestion, idx) => (
                                                     <div key={idx} className="flex-1 text-center">
                                                         <div
-                                                            className="w-full aspect-square rounded-2xl border border-white/10 mb-2 hover:scale-105 transition-transform"
+                                                            className="w-full aspect-square rounded-2xl border border-primary/10 mb-2 hover:scale-105 transition-transform"
                                                             style={{ backgroundColor: suggestion.hex }}
                                                         />
-                                                        <p className="text-xs font-medium text-white/80">{suggestion.name}</p>
-                                                        <p className="text-[10px] text-white/40 font-mono">{suggestion.hex}</p>
+                                                        <p className="text-xs font-medium text-on-surface-variant">{suggestion.name}</p>
+                                                        <p className="text-[10px] text-on-surface-variant font-mono">{suggestion.hex}</p>
                                                     </div>
                                                 ))}
                                             </div>
@@ -241,7 +241,7 @@ export default function ScanPage() {
                                     {/* Scan Again Button */}
                                     <button
                                         onClick={() => { setResult(null); setError(null); }}
-                                        className="w-full py-3 rounded-full border border-white/10 text-white/70 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+                                        className="w-full py-3 rounded-full border border-primary/10 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 transition-all text-sm font-medium"
                                     >
                                         Scan Another Item
                                     </button>

@@ -180,7 +180,7 @@ export default function AccountPage() {
                         </h1>
                         <button
                             onClick={() => signOut({ callbackUrl: '/' })}
-                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-red-400 transition border border-white/10"
+                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 text-on-surface-variant hover:text-red-400 transition border border-primary/10"
                         >
                             <LogOut className="w-4 h-4" />
                             <span className="text-sm font-medium">{t('logOut')}</span>
@@ -191,24 +191,24 @@ export default function AccountPage() {
                         {/* Left Column - Profile & Subscription */}
                         <div className="md:col-span-1 space-y-6">
                             {/* Profile Card */}
-                            <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10">
-                                <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-4 text-2xl font-bold text-red-400 border border-red-500/20">
+                            <div className="p-6 rounded-3xl bg-surface-container/10 border border-primary/10">
+                                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-2xl font-bold text-red-400 border border-primary/20">
                                     {profile.name.charAt(0).toUpperCase()}
                                 </div>
-                                <h2 className="text-xl font-bold text-white mb-1">{profile.name}</h2>
-                                <p className="text-white/50 text-sm mb-6 truncate">{profile.email}</p>
+                                <h2 className="text-xl font-bold text-on-surface mb-1">{profile.name}</h2>
+                                <p className="text-on-surface-variant text-sm mb-6 truncate">{profile.email}</p>
 
-                                <div className="text-xs text-white/30 uppercase tracking-widest font-semibold mb-2">{t('memberSince')}</div>
-                                <p className="text-white/80 text-sm">
+                                <div className="text-xs text-on-surface-variant/50 uppercase tracking-widest font-semibold mb-2">{t('memberSince')}</div>
+                                <p className="text-on-surface-variant text-sm">
                                     {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                 </p>
 
                                 {/* Age & Sex */}
-                                <div className="mt-6 pt-5 border-t border-white/10">
+                                <div className="mt-6 pt-5 border-t border-primary/10">
                                     {!editingProfile ? (
                                         <>
                                             <div className="flex items-center justify-between mb-3">
-                                                <div className="text-xs text-white/30 uppercase tracking-widest font-semibold">Profile Details</div>
+                                                <div className="text-xs text-on-surface-variant/50 uppercase tracking-widest font-semibold">Profile Details</div>
                                                 <button
                                                     type="button"
                                                     onClick={() => {
@@ -224,19 +224,19 @@ export default function AccountPage() {
                                             </div>
                                             <div className="space-y-2">
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-white/50">Age</span>
-                                                    <span className="text-white/80">{profile.age || '—'}</span>
+                                                    <span className="text-on-surface-variant">Age</span>
+                                                    <span className="text-on-surface-variant">{profile.age || '—'}</span>
                                                 </div>
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-white/50">Sex</span>
-                                                    <span className="text-white/80">{profile.sex || '—'}</span>
+                                                    <span className="text-on-surface-variant">Sex</span>
+                                                    <span className="text-on-surface-variant">{profile.sex || '—'}</span>
                                                 </div>
                                             </div>
                                         </>
                                     ) : (
                                         <div className="space-y-4">
                                             <div>
-                                                <label htmlFor="edit-age" className="block text-xs text-white/50 mb-1.5">Age</label>
+                                                <label htmlFor="edit-age" className="block text-xs text-on-surface-variant mb-1.5">Age</label>
                                                 <input
                                                     id="edit-age"
                                                     type="number"
@@ -245,11 +245,11 @@ export default function AccountPage() {
                                                     max={100}
                                                     value={editAge}
                                                     onChange={(e) => setEditAge(e.target.value)}
-                                                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                                                    className="w-full px-3 py-2 rounded-lg bg-surface-container/30 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-xs text-white/50 mb-1.5">Sex</label>
+                                                <label className="block text-xs text-on-surface-variant mb-1.5">Sex</label>
                                                 <div className="grid grid-cols-3 gap-2">
                                                     {['Male', 'Female', 'Other'].map((option) => (
                                                         <button
@@ -258,8 +258,8 @@ export default function AccountPage() {
                                                             onClick={() => setEditSex(option)}
                                                             className={`py-2 rounded-lg text-xs font-semibold transition-all border ${
                                                                 editSex === option
-                                                                    ? 'bg-red-600/20 border-red-500/50 text-red-300'
-                                                                    : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'
+                                                                    ? 'bg-primary-container/30 border-primary/50 text-primary'
+                                                                    : 'bg-surface-container/30 border-primary/10 text-on-surface-variant hover:bg-surface-container/30'
                                                             }`}
                                                         >
                                                             {option}
@@ -273,14 +273,14 @@ export default function AccountPage() {
                                                     type="button"
                                                     onClick={handleSaveProfile}
                                                     disabled={savingProfile}
-                                                    className="flex-1 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition disabled:opacity-50"
+                                                    className="flex-1 py-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container text-xs font-bold transition disabled:opacity-50"
                                                 >
                                                     {savingProfile ? 'Saving...' : 'Save'}
                                                 </button>
                                                 <button
                                                     type="button"
                                                     onClick={() => setEditingProfile(false)}
-                                                    className="flex-1 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 text-xs font-medium transition border border-white/10"
+                                                    className="flex-1 py-2 rounded-lg bg-surface-container/30 hover:bg-surface-container/30 text-on-surface-variant text-xs font-medium transition border border-primary/10"
                                                 >
                                                     Cancel
                                                 </button>
@@ -312,24 +312,24 @@ export default function AccountPage() {
                             />
 
                             {/* Fashion Insights / Improvement Tracker (Premium) */}
-                            <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/10">
-                                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                            <div className="p-8 rounded-3xl bg-surface-container/10 border border-primary/10">
+                                <h3 className="text-xl font-bold text-on-surface mb-2 flex items-center gap-2">
                                     <Sparkles className="w-5 h-5 text-yellow-400" />
                                     {t('fashionInsights')}
                                 </h3>
-                                <p className="text-white/50 text-sm mb-6">{t('fashionInsightsDesc')}</p>
+                                <p className="text-on-surface-variant text-sm mb-6">{t('fashionInsightsDesc')}</p>
 
                                 {profile.is_premium ? (
                                     <div className="grid grid-cols-2 gap-4">
-                                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">{t('styleRating')}</div>
-                                            <div className="text-3xl font-extrabold text-white/30 mb-1">&mdash;</div>
-                                            <div className="text-xs text-white/50">Coming soon</div>
+                                        <div className="p-4 rounded-2xl bg-surface-container/30 border border-primary/10">
+                                            <div className="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-2">{t('styleRating')}</div>
+                                            <div className="text-3xl font-extrabold text-on-surface-variant/50 mb-1">&mdash;</div>
+                                            <div className="text-xs text-on-surface-variant">Coming soon</div>
                                         </div>
-                                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-2">{t('savedOutfits')}</div>
-                                            <div className="text-3xl font-extrabold text-white/30 mb-1">&mdash;</div>
-                                            <div className="text-xs text-white/50">Coming soon</div>
+                                        <div className="p-4 rounded-2xl bg-surface-container/30 border border-primary/10">
+                                            <div className="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-2">{t('savedOutfits')}</div>
+                                            <div className="text-3xl font-extrabold text-on-surface-variant/50 mb-1">&mdash;</div>
+                                            <div className="text-xs text-on-surface-variant">Coming soon</div>
                                         </div>
                                         <div className="col-span-2 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
                                             <div className="flex items-start gap-4">
@@ -337,7 +337,7 @@ export default function AccountPage() {
                                                     <Sparkles className="w-5 h-5 text-yellow-400" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-sm font-bold text-white mb-1">{t('aiStylistTip')}</h4>
+                                                    <h4 className="text-sm font-bold text-on-surface mb-1">{t('aiStylistTip')}</h4>
                                                     <p className="text-sm text-yellow-100/70">
                                                         With {profile.season || 'your'} colors, try pairing deep navy trousers with a crisp white shirt for a high-contrast winter look.
                                                     </p>
@@ -346,23 +346,23 @@ export default function AccountPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="relative overflow-hidden rounded-2xl border border-white/10">
+                                    <div className="relative overflow-hidden rounded-2xl border border-primary/10">
                                         {/* Blurred Premium Content */}
-                                        <div className="p-6 bg-white/[0.02] filter blur-md opacity-50 flex gap-4 select-none">
-                                            <div className="w-1/2 h-24 bg-white/10 rounded-xl" />
-                                            <div className="w-1/2 h-24 bg-white/10 rounded-xl" />
+                                        <div className="p-6 bg-surface-container/10 filter blur-md opacity-50 flex gap-4 select-none">
+                                            <div className="w-1/2 h-24 bg-surface-container/30 rounded-xl" />
+                                            <div className="w-1/2 h-24 bg-surface-container/30 rounded-xl" />
                                         </div>
 
                                         {/* Paywall Overlay */}
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-10 flex-col px-6 text-center">
+                                        <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10 flex-col px-6 text-center">
                                             <Crown className="w-8 h-8 text-red-500 mb-3" />
-                                            <h4 className="text-lg font-bold text-white mb-2">{t('unlockFashionInsights')}</h4>
-                                            <p className="text-sm text-white/60 mb-4 max-w-sm">
+                                            <h4 className="text-lg font-bold text-on-surface mb-2">{t('unlockFashionInsights')}</h4>
+                                            <p className="text-sm text-on-surface-variant mb-4 max-w-sm">
                                                 {t('unlockFashionInsightsDesc')}
                                             </p>
                                             <Link
                                                 href="/pricing"
-                                                className="px-6 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition"
+                                                className="px-6 py-2 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold text-sm transition"
                                             >
                                                 {t('viewPlans')}
                                             </Link>

@@ -55,7 +55,7 @@ function VerifyEmailContent() {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
                 <div className="max-w-md w-full text-center space-y-6">
-                    <div className="w-12 h-12 border-2 border-red-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div className="w-12 h-12 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
                     <div className="space-y-2">
                         <h1 className="text-2xl font-bold text-on-surface">Verifying Your Email</h1>
                         <p className="text-on-surface/60 text-sm">Please wait while we verify your email address...</p>
@@ -68,7 +68,7 @@ function VerifyEmailContent() {
     if (status === 'success') {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
-                <div className="max-w-md w-full bg-zinc-900/60 border border-white/10 rounded-2xl p-8 text-center space-y-6">
+                <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
                     <h1 className="text-2xl font-bold text-on-surface">Email Verified!</h1>
                     <p className="text-on-surface/60">
@@ -76,7 +76,7 @@ function VerifyEmailContent() {
                     </p>
                     <Link
                         href="/"
-                        className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-red-500 transition-colors"
+                        className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors"
                     >
                         Go to Sign In
                     </Link>
@@ -87,7 +87,7 @@ function VerifyEmailContent() {
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
-            <div className="max-w-md w-full bg-zinc-900/60 border border-white/10 rounded-2xl p-8 text-center space-y-6">
+            <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
                 <AlertCircle className="w-16 h-16 text-primary mx-auto" />
                 <h1 className="text-2xl font-bold text-on-surface">Verification Failed</h1>
                 <p className="text-on-surface/60 text-sm">
@@ -95,7 +95,7 @@ function VerifyEmailContent() {
                 </p>
                 <Link
                     href="/"
-                    className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-red-500 transition-colors"
+                    className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors"
                 >
                     Go Home
                 </Link>
@@ -109,7 +109,7 @@ export default function VerifyEmailPage() {
         <Suspense
             fallback={
                 <div className="min-h-screen bg-background flex items-center justify-center">
-                    <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                 </div>
             }
         >

@@ -57,24 +57,24 @@ function SuccessContent() {
                         </span>
                     </div>
 
-                    <h1 className="text-4xl font-extrabold text-white mb-4">
+                    <h1 className="text-4xl font-extrabold text-on-surface mb-4">
                         Welcome to Premium!
                     </h1>
 
-                    <p className="text-white/60 text-lg mb-8">
+                    <p className="text-on-surface-variant text-lg mb-8">
                         Your subscription is active. Unlimited scans, AI Stylist, and all premium features are now unlocked.
                     </p>
 
                     <Link
                         href="/analyze"
-                        className="group inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold px-8 py-4 rounded-full shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)] transition-all"
+                        className="group inline-flex items-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-bold px-8 py-4 rounded-full shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)] transition-all"
                     >
                         <Sparkles className="w-5 h-5" />
                         Start Analyzing
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
 
-                    <p className="text-white/30 text-sm mt-6">
+                    <p className="text-on-surface-variant/50 text-sm mt-6">
                         Redirecting in {countdown}s...
                     </p>
                 </motion.div>

@@ -53,7 +53,7 @@ export default function ScanGuide() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.25 }}
-                    className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                    className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
                 >
                 <div className="w-full max-w-md">
                     <div className="relative rounded-2xl border border-primary/10 bg-surface p-5">

@@ -96,10 +96,10 @@ export default function PriceAlertsPage() {
 
                 {/* Error */}
                 {error && (
-                    <div className="mb-6 flex items-center gap-2 text-red-200 bg-red-900/60 border border-red-500/30 px-4 py-3 rounded-2xl text-sm">
+                    <div className="mb-6 flex items-center gap-2 text-primary bg-primary/5 border border-primary/20 px-4 py-3 rounded-2xl text-sm">
                         <AlertCircle className="w-4 h-4 flex-shrink-0" />
                         {error}
-                        <button onClick={() => setError(null)} className="ml-auto text-white/50 hover:text-white">
+                        <button onClick={() => setError(null)} className="ml-auto text-on-surface-variant hover:text-on-surface">
                             <X className="w-4 h-4" />
                         </button>
                     </div>
@@ -109,7 +109,7 @@ export default function PriceAlertsPage() {
                 {loading ? (
                     <div className="space-y-4">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5 space-y-3">
+                            <div key={i} className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5 space-y-3">
                                 <div className="flex items-center justify-between">
                                     <Skeleton className="h-4 w-1/2" />
                                     <Skeleton className="h-4 w-16" />
@@ -121,14 +121,14 @@ export default function PriceAlertsPage() {
                 ) : alerts.length === 0 ? (
                     /* Empty State */
                     <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                        <TrendingDown className="w-16 h-16 text-white/20" />
-                        <h2 className="text-xl font-semibold text-white">No price alerts yet</h2>
-                        <p className="text-white/50 max-w-sm">
+                        <TrendingDown className="w-16 h-16 text-on-surface-variant/30" />
+                        <h2 className="text-xl font-semibold text-on-surface">No price alerts yet</h2>
+                        <p className="text-on-surface-variant max-w-sm">
                             When you find products you love, set a price alert and we&apos;ll notify you when the price drops.
                         </p>
                         <Link
                             href="/shopping-agent"
-                            className="mt-2 px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors"
+                            className="mt-2 px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors"
                         >
                             Browse Shopping Agent
                         </Link>
@@ -160,7 +160,7 @@ export default function PriceAlertsPage() {
                         {/* Active Alerts */}
                         {activeAlerts.length > 0 && (
                             <section>
-                                <h2 className="text-sm font-bold text-white/40 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <h2 className="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-4 flex items-center gap-2">
                                     <Bell className="w-4 h-4" />
                                     Watching ({activeAlerts.length})
                                 </h2>
@@ -206,7 +206,7 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
             className={`border rounded-2xl p-5 transition-colors ${
                 alert.is_triggered
                     ? 'bg-emerald-500/5 border-emerald-500/20'
-                    : 'bg-zinc-900/60 border-white/10 hover:border-white/20'
+                    : 'bg-surface-container/50 border-primary/10 hover:border-primary/20'
             }`}
         >
             <div className="flex items-start justify-between gap-4">
@@ -217,26 +217,26 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
                                 Dropped
                             </span>
                         )}
-                        <h3 className="text-sm font-semibold text-white truncate">
+                        <h3 className="text-sm font-semibold text-on-surface truncate">
                             {alert.product_name}
                         </h3>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
                         <div>
-                            <span className="text-xs text-white/40">Original: </span>
-                            <span className="text-sm text-white/70">{formatCents(alert.original_price_cents)}</span>
+                            <span className="text-xs text-on-surface-variant">Original: </span>
+                            <span className="text-sm text-on-surface-variant">{formatCents(alert.original_price_cents)}</span>
                         </div>
                         <div>
-                            <span className="text-xs text-white/40">Alert at: </span>
-                            <span className="text-sm font-semibold text-red-400">
+                            <span className="text-xs text-on-surface-variant">Alert at: </span>
+                            <span className="text-sm font-semibold text-primary">
                                 {formatCents(targetPrice)} (-{alert.target_drop_percent}%)
                             </span>
                         </div>
                     </div>
 
                     {alert.created_at && (
-                        <p className="text-xs text-white/20 mt-2">
+                        <p className="text-xs text-on-surface-variant/30 mt-2">
                             Set on {formatDate(alert.created_at)}
                         </p>
                     )}
@@ -247,7 +247,7 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
                         href={alert.product_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 text-white/40 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                        className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 rounded-lg transition-colors"
                         aria-label={`View ${alert.product_name}`}
                     >
                         <ExternalLink className="w-4 h-4" />
@@ -255,7 +255,7 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
                     <button
                         onClick={onDelete}
                         disabled={isDeleting}
-                        className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+                        className="p-2 text-on-surface-variant hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
                         aria-label={`Delete alert for ${alert.product_name}`}
                     >
                         {isDeleting ? (

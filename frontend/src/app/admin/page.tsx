@@ -67,20 +67,20 @@ interface Toast { id: number; message: string; type: 'success' | 'error' }
 
 function SkeletonCard() {
     return (
-        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6 animate-pulse">
-            <div className="h-4 w-20 bg-white/10 rounded mb-3" />
-            <div className="h-8 w-16 bg-white/10 rounded" />
+        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6 animate-pulse">
+            <div className="h-4 w-20 bg-surface-container/30 rounded mb-3" />
+            <div className="h-8 w-16 bg-surface-container/30 rounded" />
         </div>
     );
 }
 
 function SkeletonRow() {
     return (
-        <div className="flex items-center gap-4 px-4 py-3 animate-pulse border-b border-white/5">
-            <div className="h-4 w-8 bg-white/10 rounded" />
-            <div className="h-4 w-32 bg-white/10 rounded" />
-            <div className="h-4 w-48 bg-white/10 rounded" />
-            <div className="h-4 w-16 bg-white/10 rounded ml-auto" />
+        <div className="flex items-center gap-4 px-4 py-3 animate-pulse border-b border-primary/5">
+            <div className="h-4 w-8 bg-surface-container/30 rounded" />
+            <div className="h-4 w-32 bg-surface-container/30 rounded" />
+            <div className="h-4 w-48 bg-surface-container/30 rounded" />
+            <div className="h-4 w-16 bg-surface-container/30 rounded ml-auto" />
         </div>
     );
 }
@@ -89,7 +89,7 @@ function ToastContainer({ toasts }: { toasts: Toast[] }) {
     return (
         <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
             {toasts.map((t) => (
-                <div key={t.id} className={`px-4 py-3 rounded-xl text-sm font-medium shadow-lg ${t.type === 'success' ? 'bg-green-600/90 text-white border border-green-500/30' : 'bg-red-600/90 text-white border border-red-500/30'}`}>
+                <div key={t.id} className={`px-4 py-3 rounded-xl text-sm font-medium shadow-lg ${t.type === 'success' ? 'bg-green-600/90 text-on-surface border border-green-500/30' : 'bg-red-600/90 text-on-surface border border-red-500/30'}`}>
                     {t.message}
                 </div>
             ))}
@@ -99,17 +99,17 @@ function ToastContainer({ toasts }: { toasts: Toast[] }) {
 
 function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
     return (
-        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5 hover:border-white/20 transition-colors">
-            <p className="text-white/40 text-xs font-bold uppercase tracking-wider mb-1">{label}</p>
-            <p className="text-2xl font-extrabold text-white tabular-nums">{typeof value === 'number' ? value.toLocaleString() : value}</p>
-            {sub && <p className="text-white/30 text-xs mt-1">{sub}</p>}
+        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5 hover:border-primary/20 transition-colors">
+            <p className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">{label}</p>
+            <p className="text-2xl font-extrabold text-on-surface tabular-nums">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+            {sub && <p className="text-on-surface-variant/50 text-xs mt-1">{sub}</p>}
         </div>
     );
 }
 
 function Badge({ active, labels = ['Active', 'Inactive'] }: { active: boolean; labels?: [string, string] }) {
     return (
-        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-white/30'}`}>
+        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-green-500/20 text-green-400' : 'bg-surface-container/30 text-on-surface-variant/50'}`}>
             {active ? labels[0] : labels[1]}
         </span>
     );
@@ -118,7 +118,7 @@ function Badge({ active, labels = ['Active', 'Inactive'] }: { active: boolean; l
 function HealthBadge({ status }: { status: string }) {
     if (status === 'ok') return <span className="flex items-center gap-1.5 text-green-400 text-sm font-semibold"><CheckCircle className="w-4 h-4" /> OK</span>;
     if (status === 'unavailable') return <span className="flex items-center gap-1.5 text-yellow-400 text-sm font-semibold"><AlertCircle className="w-4 h-4" /> Unavailable</span>;
-    return <span className="flex items-center gap-1.5 text-red-400 text-sm font-semibold"><XCircle className="w-4 h-4" /> Error</span>;
+    return <span className="flex items-center gap-1.5 text-primary text-sm font-semibold"><XCircle className="w-4 h-4" /> Error</span>;
 }
 
 // ─── Main Admin Page ────────────────────────────────────────
@@ -470,12 +470,12 @@ export default function AdminPage() {
 
             <div className="max-w-7xl mx-auto px-4 pt-24">
                 {/* ── Tab Bar ──────────────────────────────────── */}
-                <div className="flex gap-1 bg-zinc-900/60 border border-white/10 rounded-2xl p-1 mb-8 overflow-x-auto">
+                <div className="flex gap-1 bg-surface-container/50 border border-primary/10 rounded-2xl p-1 mb-8 overflow-x-auto">
                     {TABS.map((tab) => (
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
-                            className={`flex-1 min-w-fit px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${activeTab === tab.key ? 'bg-red-600 text-white shadow' : 'text-white/50 hover:text-white'}`}
+                            className={`flex-1 min-w-fit px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${activeTab === tab.key ? 'bg-primary text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'}`}
                         >
                             {tab.label}
                         </button>
@@ -489,7 +489,7 @@ export default function AdminPage() {
                     <div className="space-y-8">
                         {/* Stats grid */}
                         <section>
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Platform Overview</h2>
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Platform Overview</h2>
                             {loadingDashboard ? (
                                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                                     {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
@@ -503,24 +503,24 @@ export default function AdminPage() {
                                     <StatCard label="Products" value={dashboardStats.catalog.active_products} sub={`${dashboardStats.catalog.total_products} total`} />
                                     <StatCard label="Affiliate Clicks" value={dashboardStats.engagement.affiliate_clicks} />
                                 </div>
-                            ) : <p className="text-white/30 text-sm">Failed to load stats.</p>}
+                            ) : <p className="text-on-surface-variant/50 text-sm">Failed to load stats.</p>}
                         </section>
 
                         {/* Funnel */}
                         <section>
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Conversion Funnel</h2>
-                            <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Conversion Funnel</h2>
+                            <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6 space-y-4">
                                 {funnelSteps.map((s) => {
                                     const w = funnelMax > 0 ? Math.max((s.count / funnelMax) * 100, 4) : 4;
                                     return (
                                         <div key={s.step} className="flex items-center gap-4">
-                                            <p className="text-white/60 text-sm font-medium w-20 shrink-0 text-right">{s.step}</p>
+                                            <p className="text-on-surface-variant text-sm font-medium w-20 shrink-0 text-right">{s.step}</p>
                                             <div className="flex-1">
                                                 <div className="h-9 rounded-lg bg-gradient-to-r from-red-600/80 to-red-400/60 flex items-center px-3 transition-all duration-500" style={{ width: `${w}%` }}>
                                                     <span className="text-white text-xs font-bold">{s.count.toLocaleString()}</span>
                                                 </div>
                                             </div>
-                                            <p className="text-white/40 text-xs font-mono w-12 shrink-0 text-right">{s.pct.toFixed(1)}%</p>
+                                            <p className="text-on-surface-variant text-xs font-mono w-12 shrink-0 text-right">{s.pct.toFixed(1)}%</p>
                                         </div>
                                     );
                                 })}
@@ -530,14 +530,14 @@ export default function AdminPage() {
                         {/* Top seasons + engagement */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <section>
-                                <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Top Seasons</h2>
-                                <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6 space-y-3">
+                                <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Top Seasons</h2>
+                                <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6 space-y-3">
                                     {dashboardStats?.top_seasons?.map((s) => {
                                         const max = dashboardStats.top_seasons[0]?.count || 1;
                                         const w = Math.max((s.count / max) * 100, 6);
                                         return (
                                             <div key={s.season} className="flex items-center gap-3">
-                                                <p className="text-white/60 text-xs font-medium w-32 shrink-0 truncate">{s.season}</p>
+                                                <p className="text-on-surface-variant text-xs font-medium w-32 shrink-0 truncate">{s.season}</p>
                                                 <div className="flex-1">
                                                     <div className="h-6 rounded bg-gradient-to-r from-rose-600/60 to-rose-400/40 flex items-center px-2" style={{ width: `${w}%` }}>
                                                         <span className="text-white text-xs font-bold">{s.count}</span>
@@ -550,8 +550,8 @@ export default function AdminPage() {
                             </section>
 
                             <section>
-                                <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Engagement</h2>
-                                <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6 space-y-3">
+                                <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Engagement</h2>
+                                <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-6 space-y-3">
                                     {dashboardStats && [
                                         { label: 'Wishlisted items', val: dashboardStats.engagement.total_wishlisted },
                                         { label: 'Outfits generated', val: dashboardStats.engagement.total_outfits_generated },
@@ -559,8 +559,8 @@ export default function AdminPage() {
                                         { label: 'Users with palette', val: dashboardStats.users.with_palette },
                                         { label: 'Email verified', val: dashboardStats.users.verified },
                                     ].map(({ label, val }) => (
-                                        <div key={label} className="flex items-center justify-between border-b border-white/5 pb-2 last:border-0 last:pb-0">
-                                            <span className="text-white/50 text-sm">{label}</span>
+                                        <div key={label} className="flex items-center justify-between border-b border-primary/5 pb-2 last:border-0 last:pb-0">
+                                            <span className="text-on-surface-variant text-sm">{label}</span>
                                             <span className="text-white font-bold tabular-nums">{val.toLocaleString()}</span>
                                         </div>
                                     ))}
@@ -570,15 +570,15 @@ export default function AdminPage() {
 
                         {/* Quick actions */}
                         <section>
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Quick Actions</h2>
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Quick Actions</h2>
                             <div className="flex flex-wrap gap-3">
-                                <button onClick={handleTriggerDigest} disabled={loadingDigest} className="flex items-center gap-2 bg-zinc-900/60 border border-white/10 rounded-xl px-5 py-3 text-sm font-semibold text-white/80 hover:text-white hover:border-white/20 transition-all disabled:opacity-50">
+                                <button onClick={handleTriggerDigest} disabled={loadingDigest} className="flex items-center gap-2 bg-surface-container/50 border border-primary/10 rounded-xl px-5 py-3 text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:border-primary/20 transition-all disabled:opacity-50">
                                     {loadingDigest && <RefreshCw className="w-4 h-4 animate-spin" />} Trigger Weekly Digest
                                 </button>
-                                <button onClick={() => { setActiveTab('catalog'); }} className="flex items-center gap-2 bg-zinc-900/60 border border-white/10 rounded-xl px-5 py-3 text-sm font-semibold text-white/80 hover:text-white hover:border-white/20 transition-all">
+                                <button onClick={() => { setActiveTab('catalog'); }} className="flex items-center gap-2 bg-surface-container/50 border border-primary/10 rounded-xl px-5 py-3 text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:border-primary/20 transition-all">
                                     Manage Catalog →
                                 </button>
-                                <button onClick={() => setActiveTab('system')} className="flex items-center gap-2 bg-zinc-900/60 border border-white/10 rounded-xl px-5 py-3 text-sm font-semibold text-white/80 hover:text-white hover:border-white/20 transition-all">
+                                <button onClick={() => setActiveTab('system')} className="flex items-center gap-2 bg-surface-container/50 border border-primary/10 rounded-xl px-5 py-3 text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:border-primary/20 transition-all">
                                     System Health →
                                 </button>
                             </div>
@@ -597,12 +597,12 @@ export default function AdminPage() {
                                 value={userSearch}
                                 onChange={(e) => handleUserSearch(e.target.value)}
                                 placeholder="Search by name or email…"
-                                className="w-full sm:w-80 px-4 py-2.5 rounded-xl bg-zinc-900/60 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-red-500"
+                                className="w-full sm:w-80 px-4 py-2.5 rounded-xl bg-surface-container/50 border border-primary/10 text-on-surface text-sm placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary"
                             />
-                            <span className="text-white/40 text-xs">{users.length} user{users.length !== 1 ? 's' : ''} shown</span>
+                            <span className="text-on-surface-variant text-xs">{users.length} user{users.length !== 1 ? 's' : ''} shown</span>
                         </div>
 
-                        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl overflow-hidden">
+                        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl overflow-hidden">
                             {loadingUsers && users.length === 0 ? (
                                 <div className="divide-y divide-white/5">
                                     {Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)}
@@ -611,7 +611,7 @@ export default function AdminPage() {
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="border-b border-white/10 text-white/40 text-xs uppercase tracking-wider">
+                                            <tr className="border-b border-primary/10 text-on-surface-variant text-xs uppercase tracking-wider">
                                                 <th className="text-left px-4 py-3">ID</th>
                                                 <th className="text-left px-4 py-3">Name</th>
                                                 <th className="text-left px-4 py-3">Email</th>
@@ -626,22 +626,22 @@ export default function AdminPage() {
                                         </thead>
                                         <tbody>
                                             {users.map((user) => (
-                                                <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                                    <td className="px-4 py-3 text-white/40 font-mono text-xs">{user.id}</td>
-                                                    <td className="px-4 py-3 text-white font-medium">{user.name}</td>
-                                                    <td className="px-4 py-3 text-white/70">{user.email}</td>
-                                                    <td className="px-4 py-3 text-white/50 text-xs">{user.season || '—'}</td>
-                                                    <td className="px-4 py-3 text-center text-white/60">{user.free_scans_left}</td>
-                                                    <td className="px-4 py-3 text-center text-white/60">{user.credits}</td>
+                                                <tr key={user.id} className="border-b border-primary/5 hover:bg-surface-container/30 transition-colors">
+                                                    <td className="px-4 py-3 text-on-surface-variant font-mono text-xs">{user.id}</td>
+                                                    <td className="px-4 py-3 text-on-surface font-medium">{user.name}</td>
+                                                    <td className="px-4 py-3 text-on-surface-variant">{user.email}</td>
+                                                    <td className="px-4 py-3 text-on-surface-variant text-xs">{user.season || '—'}</td>
+                                                    <td className="px-4 py-3 text-center text-on-surface-variant">{user.free_scans_left}</td>
+                                                    <td className="px-4 py-3 text-center text-on-surface-variant">{user.credits}</td>
                                                     <td className="px-4 py-3 text-center"><Badge active={user.is_premium} /></td>
                                                     <td className="px-4 py-3 text-center"><Badge active={user.is_admin} labels={['Yes', 'No']} /></td>
-                                                    <td className="px-4 py-3 text-white/40 text-xs">{user.created_at ? new Date(user.created_at).toLocaleDateString() : '—'}</td>
+                                                    <td className="px-4 py-3 text-on-surface-variant text-xs">{user.created_at ? new Date(user.created_at).toLocaleDateString() : '—'}</td>
                                                     <td className="px-4 py-3 text-center">
                                                         <div className="flex items-center justify-center gap-2">
-                                                            <button onClick={() => startEditUser(user)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors" title="Edit">
+                                                            <button onClick={() => startEditUser(user)} className="p-1.5 rounded-lg hover:bg-surface-container/30 text-on-surface-variant hover:text-on-surface transition-colors" title="Edit">
                                                                 <Edit2 className="w-3.5 h-3.5" />
                                                             </button>
-                                                            <button onClick={() => setDeletingUser(user)} className="p-1.5 rounded-lg hover:bg-red-500/20 text-white/40 hover:text-red-400 transition-colors" title="Delete">
+                                                            <button onClick={() => setDeletingUser(user)} className="p-1.5 rounded-lg hover:bg-red-500/20 text-on-surface-variant hover:text-red-400 transition-colors" title="Delete">
                                                                 <Trash2 className="w-3.5 h-3.5" />
                                                             </button>
                                                         </div>
@@ -652,12 +652,12 @@ export default function AdminPage() {
                                     </table>
                                 </div>
                             ) : (
-                                <p className="text-white/30 text-sm p-6">No users found.</p>
+                                <p className="text-on-surface-variant/50 text-sm p-6">No users found.</p>
                             )}
                         </div>
 
                         {hasMoreUsers && (
-                            <button onClick={() => fetchUsers(userOffset + USER_LIMIT, userSearch)} disabled={loadingUsers} className="w-full py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 text-sm font-medium transition-all disabled:opacity-50">
+                            <button onClick={() => fetchUsers(userOffset + USER_LIMIT, userSearch)} disabled={loadingUsers} className="w-full py-3 rounded-xl border border-primary/10 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 text-sm font-medium transition-all disabled:opacity-50">
                                 {loadingUsers ? 'Loading…' : 'Load more'}
                             </button>
                         )}
@@ -670,26 +670,26 @@ export default function AdminPage() {
                 {activeTab === 'catalog' && (
                     <div className="space-y-6">
                         {/* Scrape controls */}
-                        <section className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5">
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Scrape Catalog</h2>
+                        <section className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5">
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Scrape Catalog</h2>
                             <div className="flex flex-wrap gap-3 items-end">
                                 <div>
-                                    <label className="text-white/40 text-xs font-bold uppercase tracking-wider block mb-1">Gender</label>
-                                    <select value={scrapeGender} onChange={(e) => setScrapeGender(e.target.value)} className="px-3 py-2 rounded-xl bg-black/50 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500">
+                                    <label className="text-on-surface-variant text-xs font-bold uppercase tracking-wider block mb-1">Gender</label>
+                                    <select value={scrapeGender} onChange={(e) => setScrapeGender(e.target.value)} className="px-3 py-2 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="text-white/40 text-xs font-bold uppercase tracking-wider block mb-1">Vibe</label>
-                                    <select value={scrapeVibe} onChange={(e) => setScrapeVibe(e.target.value)} className="px-3 py-2 rounded-xl bg-black/50 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500">
+                                    <label className="text-on-surface-variant text-xs font-bold uppercase tracking-wider block mb-1">Vibe</label>
+                                    <select value={scrapeVibe} onChange={(e) => setScrapeVibe(e.target.value)} className="px-3 py-2 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
                                         {['Casual', 'Gym', 'Party', 'Formal'].map((v) => <option key={v} value={v}>{v}</option>)}
                                     </select>
                                 </div>
-                                <button onClick={handleScrape} disabled={loadingScrape} className="flex items-center gap-2 px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-colors disabled:opacity-50">
+                                <button onClick={handleScrape} disabled={loadingScrape} className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
                                     {loadingScrape && <RefreshCw className="w-4 h-4 animate-spin" />} Scrape {scrapeGender}/{scrapeVibe}
                                 </button>
-                                <button onClick={handleScrapeAll} disabled={loadingScrapeAll} className="flex items-center gap-2 px-5 py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 border border-white/10 text-white font-semibold text-sm transition-colors disabled:opacity-50">
+                                <button onClick={handleScrapeAll} disabled={loadingScrapeAll} className="flex items-center gap-2 px-5 py-2 rounded-xl bg-surface-container hover:bg-surface-container/80 border border-primary/10 text-on-surface font-semibold text-sm transition-colors disabled:opacity-50">
                                     {loadingScrapeAll && <RefreshCw className="w-4 h-4 animate-spin" />} Refresh All
                                 </button>
                             </div>
@@ -702,21 +702,21 @@ export default function AdminPage() {
                                 value={productSearch}
                                 onChange={(e) => handleProductSearch(e.target.value)}
                                 placeholder="Search name or brand…"
-                                className="w-full sm:w-64 px-4 py-2.5 rounded-xl bg-zinc-900/60 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-red-500"
+                                className="w-full sm:w-64 px-4 py-2.5 rounded-xl bg-surface-container/50 border border-primary/10 text-on-surface text-sm placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary"
                             />
-                            <select value={productGender} onChange={(e) => applyProductFilters(e.target.value, productVibe)} className="px-3 py-2.5 rounded-xl bg-zinc-900/60 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500">
+                            <select value={productGender} onChange={(e) => applyProductFilters(e.target.value, productVibe)} className="px-3 py-2.5 rounded-xl bg-surface-container/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
                                 <option value="">All genders</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
-                            <select value={productVibe} onChange={(e) => applyProductFilters(productGender, e.target.value)} className="px-3 py-2.5 rounded-xl bg-zinc-900/60 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500">
+                            <select value={productVibe} onChange={(e) => applyProductFilters(productGender, e.target.value)} className="px-3 py-2.5 rounded-xl bg-surface-container/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary">
                                 <option value="">All vibes</option>
                                 {['Casual', 'Gym', 'Party', 'Formal'].map((v) => <option key={v} value={v}>{v}</option>)}
                             </select>
-                            <span className="text-white/40 text-xs">{products.length} shown</span>
+                            <span className="text-on-surface-variant text-xs">{products.length} shown</span>
                         </div>
 
-                        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl overflow-hidden">
+                        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl overflow-hidden">
                             {loadingProducts && products.length === 0 ? (
                                 <div className="divide-y divide-white/5">
                                     {Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)}
@@ -725,7 +725,7 @@ export default function AdminPage() {
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="border-b border-white/10 text-white/40 text-xs uppercase tracking-wider">
+                                            <tr className="border-b border-primary/10 text-on-surface-variant text-xs uppercase tracking-wider">
                                                 <th className="text-left px-4 py-3">Product</th>
                                                 <th className="text-left px-4 py-3">Brand</th>
                                                 <th className="text-center px-4 py-3">Gender</th>
@@ -738,26 +738,26 @@ export default function AdminPage() {
                                         </thead>
                                         <tbody>
                                             {products.map((p) => (
-                                                <tr key={p.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                                    <td className="px-4 py-3 text-white font-medium max-w-[200px] truncate">{p.name}</td>
-                                                    <td className="px-4 py-3 text-white/60">{p.brand}</td>
-                                                    <td className="px-4 py-3 text-center text-white/50 text-xs capitalize">{p.gender}</td>
-                                                    <td className="px-4 py-3 text-center text-white/50 text-xs">{p.vibe}</td>
-                                                    <td className="px-4 py-3 text-white/60">{p.price}</td>
+                                                <tr key={p.id} className="border-b border-primary/5 hover:bg-surface-container/30 transition-colors">
+                                                    <td className="px-4 py-3 text-on-surface font-medium max-w-[200px] truncate">{p.name}</td>
+                                                    <td className="px-4 py-3 text-on-surface-variant">{p.brand}</td>
+                                                    <td className="px-4 py-3 text-center text-on-surface-variant text-xs capitalize">{p.gender}</td>
+                                                    <td className="px-4 py-3 text-center text-on-surface-variant text-xs">{p.vibe}</td>
+                                                    <td className="px-4 py-3 text-on-surface-variant">{p.price}</td>
                                                     <td className="px-4 py-3 text-center">
                                                         {p.color_hex ? (
                                                             <span className="inline-flex items-center gap-1.5">
-                                                                <span className="w-4 h-4 rounded-full border border-white/20 inline-block" style={{ background: p.color_hex }} />
-                                                                <span className="text-white/40 text-xs font-mono">{p.color_hex}</span>
+                                                                <span className="w-4 h-4 rounded-full border border-primary/20 inline-block" style={{ background: p.color_hex }} />
+                                                                <span className="text-on-surface-variant text-xs font-mono">{p.color_hex}</span>
                                                             </span>
-                                                        ) : <span className="text-white/20 text-xs">—</span>}
+                                                        ) : <span className="text-on-surface-variant/30 text-xs">—</span>}
                                                     </td>
                                                     <td className="px-4 py-3 text-center"><Badge active={p.is_active} /></td>
                                                     <td className="px-4 py-3 text-center">
                                                         <button
                                                             onClick={() => toggleProduct(p.id)}
                                                             disabled={togglingProduct === p.id}
-                                                            className={`text-xs font-semibold px-3 py-1 rounded-lg transition-colors disabled:opacity-50 ${p.is_active ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-green-500/20 text-green-400 hover:bg-green-500/30'}`}
+                                                            className={`text-xs font-semibold px-3 py-1 rounded-lg transition-colors disabled:opacity-50 ${p.is_active ? 'bg-primary/10 text-primary hover:bg-primary/20' : 'bg-green-500/20 text-green-400 hover:bg-green-500/30'}`}
                                                         >
                                                             {togglingProduct === p.id ? '…' : p.is_active ? 'Deactivate' : 'Activate'}
                                                         </button>
@@ -768,12 +768,12 @@ export default function AdminPage() {
                                     </table>
                                 </div>
                             ) : (
-                                <p className="text-white/30 text-sm p-6">No products found.</p>
+                                <p className="text-on-surface-variant/50 text-sm p-6">No products found.</p>
                             )}
                         </div>
 
                         {hasMoreProducts && (
-                            <button onClick={() => fetchProducts(productOffset + PRODUCT_LIMIT, productSearch, productGender, productVibe)} disabled={loadingProducts} className="w-full py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 text-sm font-medium transition-all disabled:opacity-50">
+                            <button onClick={() => fetchProducts(productOffset + PRODUCT_LIMIT, productSearch, productGender, productVibe)} disabled={loadingProducts} className="w-full py-3 rounded-xl border border-primary/10 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 text-sm font-medium transition-all disabled:opacity-50">
                                 {loadingProducts ? 'Loading…' : 'Load more'}
                             </button>
                         )}
@@ -786,8 +786,8 @@ export default function AdminPage() {
                 {activeTab === 'b2b' && (
                     <div className="space-y-6">
                         {/* Create key */}
-                        <section className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5">
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Create New API Key</h2>
+                        <section className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5">
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Create New API Key</h2>
                             <div className="flex gap-3">
                                 <input
                                     type="text"
@@ -795,9 +795,9 @@ export default function AdminPage() {
                                     onChange={(e) => setNewKeyName(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && createB2bKey()}
                                     placeholder="Key name (e.g. Partner ABC)"
-                                    className="flex-1 px-4 py-2.5 rounded-xl bg-black/50 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-red-500"
+                                    className="flex-1 px-4 py-2.5 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary"
                                 />
-                                <button onClick={createB2bKey} disabled={creatingKey || !newKeyName.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-colors disabled:opacity-50">
+                                <button onClick={createB2bKey} disabled={creatingKey || !newKeyName.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
                                     {creatingKey ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Create
                                 </button>
                             </div>
@@ -811,7 +811,7 @@ export default function AdminPage() {
                                         <p className="text-yellow-400 font-bold text-sm mb-1">⚠️ Save this key — it will not be shown again</p>
                                         <code className="text-white font-mono text-xs break-all">{newRawKey}</code>
                                     </div>
-                                    <button onClick={() => setNewRawKey(null)} className="text-white/40 hover:text-white transition-colors shrink-0">
+                                    <button onClick={() => setNewRawKey(null)} className="text-on-surface-variant hover:text-on-surface transition-colors shrink-0">
                                         <X className="w-5 h-5" />
                                     </button>
                                 </div>
@@ -819,7 +819,7 @@ export default function AdminPage() {
                         )}
 
                         {/* Keys table */}
-                        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl overflow-hidden">
+                        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl overflow-hidden">
                             {loadingB2b ? (
                                 <div className="divide-y divide-white/5">
                                     {Array.from({ length: 3 }).map((_, i) => <SkeletonRow key={i} />)}
@@ -827,7 +827,7 @@ export default function AdminPage() {
                             ) : b2bKeys.length > 0 ? (
                                 <table className="w-full text-sm">
                                     <thead>
-                                        <tr className="border-b border-white/10 text-white/40 text-xs uppercase tracking-wider">
+                                        <tr className="border-b border-primary/10 text-on-surface-variant text-xs uppercase tracking-wider">
                                             <th className="text-left px-4 py-3">ID</th>
                                             <th className="text-left px-4 py-3">Name</th>
                                             <th className="text-left px-4 py-3">Key Preview</th>
@@ -839,13 +839,13 @@ export default function AdminPage() {
                                     </thead>
                                     <tbody>
                                         {b2bKeys.map((key) => (
-                                            <tr key={key.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                                <td className="px-4 py-3 text-white/40 font-mono text-xs">{key.id}</td>
-                                                <td className="px-4 py-3 text-white font-medium">{key.name}</td>
-                                                <td className="px-4 py-3 text-white/50 font-mono text-xs">{key.key_hash_preview}</td>
-                                                <td className="px-4 py-3 text-center text-white/60">{key.total_calls.toLocaleString()}</td>
+                                            <tr key={key.id} className="border-b border-primary/5 hover:bg-surface-container/30 transition-colors">
+                                                <td className="px-4 py-3 text-on-surface-variant font-mono text-xs">{key.id}</td>
+                                                <td className="px-4 py-3 text-on-surface font-medium">{key.name}</td>
+                                                <td className="px-4 py-3 text-on-surface-variant font-mono text-xs">{key.key_hash_preview}</td>
+                                                <td className="px-4 py-3 text-center text-on-surface-variant">{key.total_calls.toLocaleString()}</td>
                                                 <td className="px-4 py-3 text-center"><Badge active={key.is_active} /></td>
-                                                <td className="px-4 py-3 text-white/40 text-xs">{key.created_at ? new Date(key.created_at).toLocaleDateString() : '—'}</td>
+                                                <td className="px-4 py-3 text-on-surface-variant text-xs">{key.created_at ? new Date(key.created_at).toLocaleDateString() : '—'}</td>
                                                 <td className="px-4 py-3 text-center">
                                                     {key.is_active && (
                                                         <button onClick={() => deactivateB2bKey(key.id)} disabled={togglingKey === key.id} className="text-xs font-semibold px-3 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors disabled:opacity-50">
@@ -858,7 +858,7 @@ export default function AdminPage() {
                                     </tbody>
                                 </table>
                             ) : (
-                                <p className="text-white/30 text-sm p-6">No API keys created yet.</p>
+                                <p className="text-on-surface-variant/50 text-sm p-6">No API keys created yet.</p>
                             )}
                         </div>
                     </div>
@@ -870,10 +870,10 @@ export default function AdminPage() {
                 {activeTab === 'system' && (
                     <div className="space-y-6">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider">System Health</h2>
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider">System Health</h2>
                             <div className="flex items-center gap-3">
-                                {healthCheckedAt && <span className="text-white/30 text-xs">Last checked {healthCheckedAt.toLocaleTimeString()}</span>}
-                                <button onClick={fetchHealth} disabled={loadingHealth} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/60 border border-white/10 text-white/60 hover:text-white text-sm font-medium transition-all disabled:opacity-50">
+                                {healthCheckedAt && <span className="text-on-surface-variant/50 text-xs">Last checked {healthCheckedAt.toLocaleTimeString()}</span>}
+                                <button onClick={fetchHealth} disabled={loadingHealth} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container/50 border border-primary/10 text-on-surface-variant hover:text-on-surface text-sm font-medium transition-all disabled:opacity-50">
                                     <RefreshCw className={`w-4 h-4 ${loadingHealth ? 'animate-spin' : ''}`} /> Refresh
                                 </button>
                             </div>
@@ -889,7 +889,7 @@ export default function AdminPage() {
                                     { key: 'database', label: 'PostgreSQL Database', icon: '🗄️' },
                                     { key: 'redis', label: 'Redis Cache', icon: '⚡' },
                                 ] as const).map(({ key, label, icon }) => (
-                                    <div key={key} className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5">
+                                    <div key={key} className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5">
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xl">{icon}</span>
@@ -898,17 +898,17 @@ export default function AdminPage() {
                                             <HealthBadge status={health[key].status} />
                                         </div>
                                         {health[key].detail && (
-                                            <p className="text-red-400 text-xs font-mono mt-2 bg-red-500/10 rounded-lg px-3 py-2">{health[key].detail}</p>
+                                            <p className="text-primary text-xs font-mono mt-2 bg-primary/5 rounded-lg px-3 py-2">{health[key].detail}</p>
                                         )}
                                     </div>
                                 ))}
                             </div>
                         ) : null}
 
-                        <section className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5">
-                            <h2 className="text-white/40 text-xs font-bold uppercase tracking-wider mb-4">Maintenance Actions</h2>
+                        <section className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5">
+                            <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Maintenance Actions</h2>
                             <div className="flex flex-wrap gap-3">
-                                <button onClick={handleTriggerDigest} disabled={loadingDigest} className="flex items-center gap-2 px-5 py-3 rounded-xl bg-zinc-800/60 border border-white/10 text-white/80 hover:text-white hover:border-white/20 text-sm font-semibold transition-all disabled:opacity-50">
+                                <button onClick={handleTriggerDigest} disabled={loadingDigest} className="flex items-center gap-2 px-5 py-3 rounded-xl bg-surface-container/60 border border-primary/10 text-on-surface-variant hover:text-on-surface hover:border-primary/20 text-sm font-semibold transition-all disabled:opacity-50">
                                     {loadingDigest && <RefreshCw className="w-4 h-4 animate-spin" />} Trigger Weekly Digest
                                 </button>
                             </div>
@@ -920,26 +920,26 @@ export default function AdminPage() {
             {/* ── Edit User Modal ──────────────────────────────── */}
             {editingUser && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingUser(null)} />
-                    <div className="relative w-full max-w-md bg-zinc-900 border border-white/10 rounded-2xl p-6 space-y-5">
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setEditingUser(null)} />
+                    <div className="relative w-full max-w-md bg-surface-container border border-primary/10 rounded-2xl p-6 space-y-5">
                         <div className="flex items-start justify-between">
                             <div>
-                                <h3 className="text-lg font-bold text-white">Edit User</h3>
-                                <p className="text-white/40 text-sm">{editingUser.name} · {editingUser.email}</p>
+                                <h3 className="text-lg font-bold text-on-surface">Edit User</h3>
+                                <p className="text-on-surface-variant text-sm">{editingUser.name} · {editingUser.email}</p>
                             </div>
-                            <button onClick={() => setEditingUser(null)} className="p-2 rounded-full hover:bg-white/10 text-white/40 hover:text-white transition-colors">
+                            <button onClick={() => setEditingUser(null)} className="p-2 rounded-full hover:bg-surface-container/30 text-on-surface-variant hover:text-on-surface transition-colors">
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             {([['Free Scans', 'free_scans_left'], ['Credits', 'credits']] as const).map(([label, field]) => (
                                 <div key={field}>
-                                    <label className="text-xs text-white/40 font-bold uppercase tracking-wider">{label}</label>
+                                    <label className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">{label}</label>
                                     <input
                                         type="number"
                                         value={editForm[field]}
                                         onChange={(e) => setEditForm({ ...editForm, [field]: parseInt(e.target.value) || 0 })}
-                                        className="w-full mt-1 px-3 py-2 rounded-xl bg-black/50 border border-white/10 text-white text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                                        className="w-full mt-1 px-3 py-2 rounded-xl bg-black/50 border border-primary/10 text-on-surface text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                                     />
                                 </div>
                             ))}
@@ -948,15 +948,15 @@ export default function AdminPage() {
                             {([['Premium', 'is_premium'], ['Admin', 'is_admin']] as const).map(([label, field]) => (
                                 <label key={field} className="flex items-center gap-2 cursor-pointer">
                                     <input type="checkbox" checked={editForm[field]} onChange={(e) => setEditForm({ ...editForm, [field]: e.target.checked })} className="accent-red-500" />
-                                    <span className="text-sm text-white/80">{label}</span>
+                                    <span className="text-sm text-on-surface-variant">{label}</span>
                                 </label>
                             ))}
                         </div>
                         <div className="flex gap-3 pt-1">
-                            <button onClick={saveUser} disabled={savingUser} className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-colors disabled:opacity-50">
+                            <button onClick={saveUser} disabled={savingUser} className="flex-1 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
                                 {savingUser ? 'Saving…' : 'Save Changes'}
                             </button>
-                            <button onClick={() => setEditingUser(null)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 font-semibold text-sm transition-colors">
+                            <button onClick={() => setEditingUser(null)} className="flex-1 py-2.5 rounded-xl border border-primary/10 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 font-semibold text-sm transition-colors">
                                 Cancel
                             </button>
                         </div>
@@ -967,26 +967,26 @@ export default function AdminPage() {
             {/* ── Delete User Confirmation ─────────────────────── */}
             {deletingUser && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setDeletingUser(null)} />
-                    <div className="relative w-full max-w-sm bg-zinc-900 border border-red-500/20 rounded-2xl p-6 space-y-4">
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setDeletingUser(null)} />
+                    <div className="relative w-full max-w-sm bg-surface-container border border-red-500/20 rounded-2xl p-6 space-y-4">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
                                 <Trash2 className="w-5 h-5 text-red-400" />
                             </div>
                             <div>
-                                <h3 className="text-white font-bold">Delete User</h3>
-                                <p className="text-white/40 text-sm">This action cannot be undone</p>
+                                <h3 className="text-on-surface font-bold text-on-surface">Delete User</h3>
+                                <p className="text-on-surface-variant text-sm">This action cannot be undone</p>
                             </div>
                         </div>
-                        <p className="text-white/70 text-sm">
-                            Delete <span className="text-white font-semibold">{deletingUser.name}</span> ({deletingUser.email})?
+                        <p className="text-on-surface-variant text-sm">
+                            Delete <span className="text-on-surface font-semibold">{deletingUser.name}</span> ({deletingUser.email})?
                             All their analyses, wardrobe items, and data will be permanently removed.
                         </p>
                         <div className="flex gap-3">
-                            <button onClick={deleteUser} disabled={confirmingDelete} className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-colors disabled:opacity-50">
+                            <button onClick={deleteUser} disabled={confirmingDelete} className="flex-1 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
                                 {confirmingDelete ? 'Deleting…' : 'Delete'}
                             </button>
-                            <button onClick={() => setDeletingUser(null)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 font-semibold text-sm transition-colors">
+                            <button onClick={() => setDeletingUser(null)} className="flex-1 py-2.5 rounded-xl border border-primary/10 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 font-semibold text-sm transition-colors">
                                 Cancel
                             </button>
                         </div>

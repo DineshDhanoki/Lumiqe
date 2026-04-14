@@ -54,7 +54,7 @@ export default async function SeasonPage({ params }: Props) {
 
     if (!seasonName) {
         return (
-            <main className="min-h-screen bg-black flex items-center justify-center text-white">
+            <main className="min-h-screen bg-black flex items-center justify-center text-on-surface">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold mb-4">Season Not Found</h1>
                     <Link href="/" className="text-red-400 hover:underline">Go Home</Link>
@@ -82,7 +82,7 @@ export default async function SeasonPage({ params }: Props) {
     });
 
     return (
-        <main className="min-h-screen bg-black text-white">
+        <main className="min-h-screen bg-black text-on-surface">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: jsonLdScript }}
@@ -99,18 +99,18 @@ export default async function SeasonPage({ params }: Props) {
                 <div className="relative z-10 max-w-3xl mx-auto">
                     <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-4">Color Season Guide</p>
                     <h1 className="text-5xl md:text-6xl font-extrabold mb-4">{seasonName}</h1>
-                    <p className="text-white/60 text-lg max-w-xl mx-auto mb-4">{data.description}</p>
+                    <p className="text-on-surface-variant text-lg max-w-xl mx-auto mb-4">{data.description}</p>
                     <div className="flex flex-wrap justify-center gap-3 mt-6">
-                        <span className="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-sm text-white/70">
+                        <span className="px-3 py-1 rounded-full bg-surface-container/30 border border-primary/10 text-sm text-on-surface-variant">
                             {data.contrast} Contrast
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-sm text-white/70">
+                        <span className="px-3 py-1 rounded-full bg-surface-container/30 border border-primary/10 text-sm text-on-surface-variant">
                             {data.value} Value
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-sm text-white/70">
+                        <span className="px-3 py-1 rounded-full bg-surface-container/30 border border-primary/10 text-sm text-on-surface-variant">
                             {data.chroma} Chroma
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-sm text-white/70">
+                        <span className="px-3 py-1 rounded-full bg-surface-container/30 border border-primary/10 text-sm text-on-surface-variant">
                             Best Metal: {data.metal}
                         </span>
                     </div>
@@ -126,10 +126,10 @@ export default async function SeasonPage({ params }: Props) {
                         {palette.map((hex, i) => (
                             <div key={i} className="text-center">
                                 <div
-                                    className="w-full aspect-square rounded-2xl border border-white/10 mb-2"
+                                    className="w-full aspect-square rounded-2xl border border-primary/10 mb-2"
                                     style={{ backgroundColor: hex }}
                                 />
-                                <span className="text-xs text-white/50 font-mono">{hex.toUpperCase()}</span>
+                                <span className="text-xs text-on-surface-variant font-mono">{hex.toUpperCase()}</span>
                             </div>
                         ))}
                     </div>
@@ -143,14 +143,14 @@ export default async function SeasonPage({ params }: Props) {
                             {avoid.map((hex, i) => (
                                 <div key={i} className="text-center">
                                     <div
-                                        className="w-14 h-14 rounded-xl border border-white/10 relative"
+                                        className="w-14 h-14 rounded-xl border border-primary/10 relative"
                                         style={{ backgroundColor: hex }}
                                     >
-                                        <div className="absolute inset-0 flex items-center justify-center text-white/80 text-lg font-bold">
+                                        <div className="absolute inset-0 flex items-center justify-center text-on-surface-variant text-lg font-bold">
                                             &#10005;
                                         </div>
                                     </div>
-                                    <span className="text-[10px] text-white/40 font-mono mt-1 block">{hex.toUpperCase()}</span>
+                                    <span className="text-[10px] text-on-surface-variant font-mono mt-1 block">{hex.toUpperCase()}</span>
                                 </div>
                             ))}
                         </div>
@@ -163,8 +163,8 @@ export default async function SeasonPage({ params }: Props) {
                         <h2 className="text-2xl font-bold mb-6">Celebrity Color Matches</h2>
                         <div className="flex flex-wrap gap-4">
                             {celebrities.map((celeb, i) => (
-                                <div key={i} className="bg-zinc-900/60 border border-white/10 rounded-xl px-5 py-3">
-                                    <span className="text-white/80 text-sm font-medium">{celeb.name}</span>
+                                <div key={i} className="bg-surface-container/50 border border-primary/10 rounded-xl px-5 py-3">
+                                    <span className="text-on-surface-variant text-sm font-medium">{celeb.name}</span>
                                 </div>
                             ))}
                         </div>
@@ -175,7 +175,7 @@ export default async function SeasonPage({ params }: Props) {
                 {data.tips && (
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Styling Tips</h2>
-                        <p className="text-white/60 leading-relaxed">{data.tips}</p>
+                        <p className="text-on-surface-variant leading-relaxed">{data.tips}</p>
                     </section>
                 )}
 
@@ -187,23 +187,23 @@ export default async function SeasonPage({ params }: Props) {
                             {Object.entries(occasions).map(([occasion, info]) => {
                                 const occasionInfo = info as { formula?: string; colors?: string[]; key_pieces?: string[] };
                                 return (
-                                <div key={occasion} className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5">
+                                <div key={occasion} className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5">
                                     <h3 className="text-white font-bold capitalize mb-2">
                                         {occasion.replace(/_/g, ' ')}
                                     </h3>
-                                    <p className="text-white/50 text-sm mb-3">{occasionInfo.formula}</p>
+                                    <p className="text-on-surface-variant text-sm mb-3">{occasionInfo.formula}</p>
                                     <div className="flex gap-2 mb-3">
                                         {(occasionInfo.colors || []).map((hex: string, i: number) => (
                                             <div
                                                 key={i}
-                                                className="w-6 h-6 rounded-full border border-white/10"
+                                                className="w-6 h-6 rounded-full border border-primary/10"
                                                 style={{ backgroundColor: hex }}
                                             />
                                         ))}
                                     </div>
                                     <ul className="space-y-1">
                                         {(occasionInfo.key_pieces || []).map((piece: string, i: number) => (
-                                            <li key={i} className="text-white/40 text-xs">- {piece}</li>
+                                            <li key={i} className="text-on-surface-variant text-xs">- {piece}</li>
                                         ))}
                                     </ul>
                                 </div>
@@ -219,14 +219,14 @@ export default async function SeasonPage({ params }: Props) {
                         <h2 className="text-2xl font-bold mb-6">10-Piece Capsule Wardrobe</h2>
                         <div className="grid md:grid-cols-2 gap-3">
                             {capsule.map((item, i) => (
-                                <div key={i} className="flex items-center gap-4 bg-zinc-900/60 border border-white/10 rounded-xl p-4">
+                                <div key={i} className="flex items-center gap-4 bg-surface-container/50 border border-primary/10 rounded-xl p-4">
                                     <div
-                                        className="w-10 h-10 rounded-lg border border-white/10 shrink-0"
+                                        className="w-10 h-10 rounded-lg border border-primary/10 shrink-0"
                                         style={{ backgroundColor: item.hex }}
                                     />
                                     <div className="min-w-0">
                                         <p className="text-white text-sm font-medium truncate">{item.piece}</p>
-                                        <p className="text-white/40 text-xs truncate">{item.why}</p>
+                                        <p className="text-on-surface-variant text-xs truncate">{item.why}</p>
                                     </div>
                                 </div>
                             ))}
@@ -239,12 +239,12 @@ export default async function SeasonPage({ params }: Props) {
                     <h2 className="text-3xl font-bold mb-4">
                         Think you&apos;re a {seasonName}?
                     </h2>
-                    <p className="text-white/60 mb-8 max-w-md mx-auto">
+                    <p className="text-on-surface-variant mb-8 max-w-md mx-auto">
                         Upload a selfie and let our AI determine your exact color season in seconds.
                     </p>
                     <Link
                         href="/analyze"
-                        className="inline-flex items-center gap-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-8 transition-all shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)]"
+                        className="inline-flex items-center gap-2 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold py-3 px-8 transition-all shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)]"
                     >
                         Analyze Now
                     </Link>
@@ -252,13 +252,13 @@ export default async function SeasonPage({ params }: Props) {
 
                 {/* Browse Other Seasons */}
                 <section>
-                    <h2 className="text-xl font-bold mb-4 text-white/60">Other Seasons</h2>
+                    <h2 className="text-xl font-bold mb-4 text-on-surface-variant">Other Seasons</h2>
                     <div className="flex flex-wrap gap-2">
                         {allSeasons.filter(s => s !== seasonName).map(s => (
                             <Link
                                 key={s}
                                 href={`/seasons/${toSlug(s)}`}
-                                className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/60 hover:text-white hover:border-white/20 transition-colors"
+                                className="px-4 py-2 rounded-full bg-surface-container/30 border border-primary/10 text-sm text-on-surface-variant hover:text-on-surface hover:border-primary/20 transition-colors"
                             >
                                 {s}
                             </Link>

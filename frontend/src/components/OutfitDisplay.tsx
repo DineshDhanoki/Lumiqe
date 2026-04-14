@@ -66,9 +66,9 @@ const OutfitItemCard = React.memo(function OutfitItemCard({
                 group relative flex flex-col gap-2 rounded-2xl border overflow-hidden
                 transition-all duration-300
                 ${isPlaceholder
-                    ? 'bg-white/[0.02] border-white/5 cursor-default opacity-50'
+                    ? 'bg-surface-container/5 border-primary/5 cursor-default opacity-50'
                     : hasImage
-                        ? 'bg-white/[0.04] border-white/10 hover:border-white/25 hover:bg-white/[0.08] cursor-pointer'
+                        ? 'bg-surface-container/30 border-primary/10 hover:border-primary/25 hover:bg-surface-container/50 cursor-pointer'
                         : 'border-[#d4af37]/20 cursor-pointer hover:border-[#d4af37]/40'
                 }
             `}
@@ -84,7 +84,7 @@ const OutfitItemCard = React.memo(function OutfitItemCard({
                 {isPlaceholder ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <span className="text-2xl mb-2 opacity-30">{emoji}</span>
-                        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/20">
+                        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/20">
                             {label}
                         </span>
                     </div>
@@ -155,10 +155,10 @@ const OutfitItemCard = React.memo(function OutfitItemCard({
             {/* Product Info */}
             {!isPlaceholder && (
                 <div className="px-2.5 pb-2.5 flex flex-col gap-0.5">
-                    <h3 className="text-xs font-semibold text-white leading-tight line-clamp-2">
+                    <h3 className="text-xs font-semibold text-on-surface leading-tight line-clamp-2">
                         {item.name}
                     </h3>
-                    <span className="text-white/50 text-[11px] font-medium">{item.price}</span>
+                    <span className="text-on-surface-variant text-[11px] font-medium">{item.price}</span>
                 </div>
             )}
         </motion.a>
@@ -171,14 +171,14 @@ export default function OutfitDisplay({ outfit }: OutfitDisplayProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="w-full max-w-lg mx-auto flex flex-col gap-5 relative z-10 text-white"
+            className="w-full max-w-lg mx-auto flex flex-col gap-5 relative z-10 text-on-surface"
         >
             {/* Look Title */}
             <div className="flex flex-col items-center text-center gap-2 mb-1">
                 <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-primary">
                     Curated Look
                 </span>
-                <h2 className="text-xl font-bold italic text-white/90">
+                <h2 className="text-xl font-bold italic text-on-surface/90">
                     &ldquo;{outfit.look_name}&rdquo;
                 </h2>
             </div>

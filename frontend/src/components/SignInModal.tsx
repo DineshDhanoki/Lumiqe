@@ -175,7 +175,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-background/80 backdrop-blur-md"
                     />
 
                     <motion.div

@@ -125,36 +125,36 @@ function FeedContent() {
     return (
         <>
             <div className="w-full max-w-md flex justify-between items-center mb-6 pt-4 z-20 relative">
-                <Link href={session ? '/dashboard' : '/results'} className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10">
-                    <ArrowLeft className="w-5 h-5 text-white" />
+                <Link href={session ? '/dashboard' : '/results'} className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
+                    <ArrowLeft className="w-5 h-5 text-on-surface" />
                 </Link>
                 <div className="flex flex-col items-center">
-                    <h1 className="text-lg font-bold text-white capitalize">{t('yourCatalog')}</h1>
+                    <h1 className="text-lg font-bold text-on-surface capitalize">{t('yourCatalog')}</h1>
                     <span className="text-xs text-red-400 font-medium tracking-wide">{season}</span>
                 </div>
-                <button className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10">
-                    <Filter className="w-5 h-5 text-white" />
+                <button className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
+                    <Filter className="w-5 h-5 text-on-surface" />
                 </button>
             </div>
 
             {/* Gender Selection — shown before any products */}
             {!gender ? (
                 <div className="w-full max-w-md flex flex-col items-center justify-center mt-16 z-20 relative">
-                    <div className="w-16 h-16 rounded-full bg-red-500/15 flex items-center justify-center mb-6">
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                         <User className="w-8 h-8 text-red-400" />
                     </div>
-                    <h2 className="text-xl font-bold text-white mb-2">{t('selectYourStyle')}</h2>
-                    <p className="text-white/50 text-sm mb-8 text-center">{t('selectYourStyleDesc')}</p>
+                    <h2 className="text-xl font-bold text-on-surface mb-2">{t('selectYourStyle')}</h2>
+                    <p className="text-on-surface-variant text-sm mb-8 text-center">{t('selectYourStyleDesc')}</p>
                     <div className="flex gap-4 w-full">
                         <button
                             onClick={() => setGender('male')}
-                            className="flex-1 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-semibold transition-all text-center"
+                            className="flex-1 py-4 rounded-2xl bg-surface-container/30 hover:bg-surface-container/30 border border-primary/10 hover:border-primary/20 text-on-surface font-semibold transition-all text-center"
                         >
                             👨 Men&apos;s
                         </button>
                         <button
                             onClick={() => setGender('female')}
-                            className="flex-1 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-semibold transition-all text-center"
+                            className="flex-1 py-4 rounded-2xl bg-surface-container/30 hover:bg-surface-container/30 border border-primary/10 hover:border-primary/20 text-on-surface font-semibold transition-all text-center"
                         >
                             👩 Women&apos;s
                         </button>
@@ -164,12 +164,12 @@ function FeedContent() {
                 <>
                     {/* Gender Toggle (compact, after selection) */}
                     <div className="w-full max-w-md flex items-center justify-center gap-2 mb-4 z-20 relative">
-                        <div className="flex bg-white/5 rounded-full p-1 border border-white/10">
+                        <div className="flex bg-surface-container/30 rounded-full p-1 border border-primary/10">
                             <button
                                 onClick={() => setGender('male')}
                                 className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${gender === 'male'
-                                    ? 'bg-red-500/20 text-red-100 shadow-sm'
-                                    : 'text-white/50 hover:text-white'
+                                    ? 'bg-primary-container/30 text-primary shadow-sm'
+                                    : 'text-on-surface-variant hover:text-on-surface'
                                     }`}
                             >
                                 Men&apos;s
@@ -177,8 +177,8 @@ function FeedContent() {
                             <button
                                 onClick={() => setGender('female')}
                                 className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${gender === 'female'
-                                    ? 'bg-red-500/20 text-red-100 shadow-sm'
-                                    : 'text-white/50 hover:text-white'
+                                    ? 'bg-primary-container/30 text-primary shadow-sm'
+                                    : 'text-on-surface-variant hover:text-on-surface'
                                     }`}
                             >
                                 Women&apos;s
@@ -194,7 +194,7 @@ function FeedContent() {
                     {loading ? (
                         <div className="grid grid-cols-2 gap-4 w-full max-w-md">
                             {[...Array(6)].map((_, i) => (
-                                <div key={`skeleton-${i}`} className="aspect-[3/4] rounded-3xl bg-white/5 animate-pulse" />
+                                <div key={`skeleton-${i}`} className="aspect-[3/4] rounded-3xl bg-surface-container/30 animate-pulse" />
                             ))}
                         </div>
                     ) : isPlaceholderResponse ? (
@@ -208,10 +208,10 @@ function FeedContent() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.05 }}
                                         onClick={() => setIsModalOpen(true)}
-                                        className="aspect-[3/4] rounded-3xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center cursor-pointer hover:bg-white/[0.06] transition-colors"
+                                        className="aspect-[3/4] rounded-3xl bg-surface-container/20 border border-white/[0.06] flex items-center justify-center cursor-pointer hover:bg-surface-container/30 transition-colors"
                                     >
-                                        <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center">
-                                            <Lock className="w-4 h-4 text-white/50" />
+                                        <div className="w-10 h-10 rounded-full bg-surface/60 backdrop-blur-sm border border-primary/10 flex items-center justify-center">
+                                            <Lock className="w-4 h-4 text-on-surface-variant" />
                                         </div>
                                     </motion.div>
                                 ))}
@@ -222,10 +222,10 @@ function FeedContent() {
                                 transition={{ delay: 0.3 }}
                                 className="mt-8 text-center"
                             >
-                                <p className="text-white/40 text-sm mb-4">{t('thisUnlocksWithPremium')}</p>
+                                <p className="text-on-surface-variant text-sm mb-4">{t('thisUnlocksWithPremium')}</p>
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition-all shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)]"
+                                    className="px-6 py-3 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold text-sm transition-all shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)]"
                                 >
                                     {t('unlockPremiumVibes')}
                                 </button>
@@ -233,7 +233,7 @@ function FeedContent() {
                         </div>
                     ) : products.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-64 text-center mt-12 w-full max-w-md relative z-20">
-                            <p className="text-white/60 mb-4">{t('curatingCatalog')}</p>
+                            <p className="text-on-surface-variant mb-4">{t('curatingCatalog')}</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 gap-4 w-full max-w-md pb-20 z-20 relative">

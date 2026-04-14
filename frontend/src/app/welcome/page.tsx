@@ -135,7 +135,7 @@ export default function WelcomePage() {
                                 True Colors
                             </span>
                         </h1>
-                        <p className="text-white/60 text-lg leading-relaxed max-w-md mx-auto">
+                        <p className="text-on-surface-variant text-lg leading-relaxed max-w-md mx-auto">
                             In 30 seconds, our AI will analyze your skin tone and unlock your
                             perfect color palette
                         </p>
@@ -146,16 +146,16 @@ export default function WelcomePage() {
                         {benefits.map((benefit) => (
                             <div
                                 key={benefit.title}
-                                className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-red-500/30 transition-colors"
+                                className="flex items-start gap-4 p-4 rounded-2xl bg-surface-container/30 border border-primary/10 hover:border-primary/30 transition-colors"
                             >
-                                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-red-600/15 flex items-center justify-center">
+                                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
                                     <benefit.icon className="w-6 h-6 text-red-400" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-white text-sm">
+                                    <h3 className="font-semibold text-on-surface text-sm">
                                         {benefit.title}
                                     </h3>
-                                    <p className="text-white/50 text-sm mt-0.5">
+                                    <p className="text-on-surface-variant text-sm mt-0.5">
                                         {benefit.description}
                                     </p>
                                 </div>
@@ -166,15 +166,15 @@ export default function WelcomePage() {
                     {/* Profile Setup */}
                     <motion.div
                         variants={itemVariants}
-                        className="mb-8 p-5 rounded-2xl bg-white/[0.03] border border-white/10"
+                        className="mb-8 p-5 rounded-2xl bg-surface-container/20 border border-primary/10"
                     >
-                        <p className="text-xs font-bold uppercase tracking-wider text-white/40 mb-5">
+                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-5">
                             Tell us about yourself
                         </p>
 
                         {/* Age */}
                         <div className="mb-5">
-                            <label htmlFor="age" className="block text-sm font-semibold text-white/80 mb-2">
+                            <label htmlFor="age" className="block text-sm font-semibold text-on-surface-variant mb-2">
                                 Age
                             </label>
                             <input
@@ -186,14 +186,14 @@ export default function WelcomePage() {
                                 placeholder="e.g. 25"
                                 value={age}
                                 onChange={(e) => { setAge(e.target.value); setAgeError(''); }}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition text-sm"
+                                className="w-full px-4 py-3 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition text-sm"
                             />
                             {ageError && <p className="text-red-400 text-xs mt-1.5">{ageError}</p>}
                         </div>
 
                         {/* Sex */}
                         <div>
-                            <label className="block text-sm font-semibold text-white/80 mb-2">
+                            <label className="block text-sm font-semibold text-on-surface-variant mb-2">
                                 Sex
                             </label>
                             <div className="grid grid-cols-3 gap-3">
@@ -204,8 +204,8 @@ export default function WelcomePage() {
                                         onClick={() => { setSex(option); setSexError(''); }}
                                         className={`py-3 rounded-xl text-sm font-semibold transition-all border ${
                                             sex === option
-                                                ? 'bg-red-600/20 border-red-500/50 text-red-300'
-                                                : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
+                                                ? 'bg-primary-container/30 border-primary/50 text-primary'
+                                                : 'bg-surface-container/30 border-primary/10 text-on-surface-variant hover:bg-surface-container/30 hover:text-on-surface'
                                         }`}
                                     >
                                         {option}
@@ -215,7 +215,7 @@ export default function WelcomePage() {
                             {sexError && <p className="text-red-400 text-xs mt-1.5">{sexError}</p>}
                         </div>
 
-                        <p className="text-white/30 text-xs mt-4">
+                        <p className="text-on-surface-variant/50 text-xs mt-4">
                             This helps our AI deliver more accurate color analysis for your skin tone.
                         </p>
                     </motion.div>
@@ -223,9 +223,9 @@ export default function WelcomePage() {
                     {/* Tips section */}
                     <motion.div
                         variants={itemVariants}
-                        className="mb-8 p-5 rounded-2xl bg-white/[0.03] border border-white/10"
+                        className="mb-8 p-5 rounded-2xl bg-surface-container/20 border border-primary/10"
                     >
-                        <p className="text-xs font-bold uppercase tracking-wider text-white/40 mb-4">
+                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-4">
                             For best results
                         </p>
                         <div className="grid grid-cols-3 gap-3">
@@ -234,10 +234,10 @@ export default function WelcomePage() {
                                     key={tip.text}
                                     className="flex flex-col items-center text-center gap-2"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
-                                        <tip.icon className="w-5 h-5 text-white/50" />
+                                    <div className="w-10 h-10 rounded-full bg-surface-container/30 flex items-center justify-center">
+                                        <tip.icon className="w-5 h-5 text-on-surface-variant" />
                                     </div>
-                                    <p className="text-xs text-white/50 leading-snug">
+                                    <p className="text-xs text-on-surface-variant leading-snug">
                                         {tip.text}
                                     </p>
                                 </div>
@@ -250,7 +250,7 @@ export default function WelcomePage() {
                         <button
                             onClick={validateAndProceed}
                             disabled={saving}
-                            className="w-full py-4 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-base transition-colors shadow-[0_0_30px_-5px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_-5px_rgba(220,38,38,0.5)] disabled:opacity-50 flex items-center justify-center gap-2"
+                            className="w-full py-4 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold text-base transition-colors shadow-[0_0_30px_-5px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_-5px_rgba(220,38,38,0.5)] disabled:opacity-50 flex items-center justify-center gap-2"
                         >
                             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                             {saving ? 'Saving...' : 'Start My Analysis →'}
@@ -258,7 +258,7 @@ export default function WelcomePage() {
                         <div className="text-center">
                             <Link
                                 href="/dashboard"
-                                className="text-white/40 hover:text-white/70 text-sm transition-colors"
+                                className="text-on-surface-variant hover:text-on-surface-variant text-sm transition-colors"
                             >
                                 Skip for now
                             </Link>

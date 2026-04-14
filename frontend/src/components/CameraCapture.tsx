@@ -136,7 +136,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
             <div className="relative w-full rounded-3xl overflow-hidden bg-black" style={{ aspectRatio: '3/4' }}>
                 {cameraError ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center bg-surface-container">
-                        <AlertCircle className="w-12 h-12 text-red-400" />
+                        <AlertCircle className="w-12 h-12 text-primary" />
                         <p className="text-on-surface-variant text-sm leading-relaxed">{cameraError}</p>
                         <button onClick={onCancel} className="text-sm text-primary underline underline-offset-2">
                             Upload a photo instead

@@ -60,7 +60,7 @@ function ResetPasswordForm() {
     if (status === 'success') {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
-                <div className="max-w-md w-full bg-zinc-900/60 border border-white/10 rounded-2xl p-8 text-center space-y-6">
+                <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
                     <h1 className="text-2xl font-bold text-on-surface">Password Reset!</h1>
                     <p className="text-on-surface/60">
@@ -68,7 +68,7 @@ function ResetPasswordForm() {
                     </p>
                     <Link
                         href="/"
-                        className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-red-500 transition-colors"
+                        className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors"
                     >
                         Go to Sign In
                     </Link>
@@ -79,7 +79,7 @@ function ResetPasswordForm() {
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
-            <div className="max-w-md w-full bg-zinc-900/60 border border-white/10 rounded-2xl p-8 space-y-6">
+            <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 space-y-6">
                 <div className="text-center space-y-2">
                     <Lock className="w-12 h-12 text-primary mx-auto" />
                     <h1 className="text-2xl font-bold text-on-surface">Reset Your Password</h1>
@@ -87,7 +87,7 @@ function ResetPasswordForm() {
                 </div>
 
                 {status === 'error' && (
-                    <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-3 text-sm text-primary">
+                    <div className="flex items-center gap-2 bg-primary/5 border border-primary/20 rounded-xl p-3 text-sm text-primary">
                         <AlertCircle className="w-4 h-4 flex-shrink-0" />
                         <span>{errorMessage}</span>
                     </div>
@@ -106,7 +106,7 @@ function ResetPasswordForm() {
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 required
                                 minLength={8}
-                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-on-surface placeholder-white/30 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 pr-12"
+                                className="w-full px-4 py-3 bg-surface-container/30 border border-primary/10 rounded-xl text-on-surface placeholder-on-surface-variant/30 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary pr-12"
                                 placeholder="Enter new password"
                             />
                             <button
@@ -131,7 +131,7 @@ function ResetPasswordForm() {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                                 minLength={8}
-                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-on-surface placeholder-white/30 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 pr-12"
+                                className="w-full px-4 py-3 bg-surface-container/30 border border-primary/10 rounded-xl text-on-surface placeholder-on-surface-variant/30 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary pr-12"
                                 placeholder="Confirm new password"
                             />
                             <button
@@ -147,14 +147,14 @@ function ResetPasswordForm() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? 'Resetting...' : 'Reset Password'}
                     </button>
                 </form>
 
                 <p className="text-center text-sm text-on-surface/40">
-                    <Link href="/" className="text-primary hover:text-red-300 transition-colors">
+                    <Link href="/" className="text-primary hover:text-primary transition-colors">
                         Back to Home
                     </Link>
                 </p>
@@ -168,7 +168,7 @@ export default function ResetPasswordPage() {
         <Suspense
             fallback={
                 <div className="min-h-screen bg-background flex items-center justify-center">
-                    <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                 </div>
             }
         >

@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
     if (status === 'sent') {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
-                <div className="max-w-md w-full bg-zinc-900/60 border border-white/10 rounded-2xl p-8 text-center space-y-6">
+                <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
                     <div className="space-y-2">
                         <h1 className="text-2xl font-bold text-on-surface">Check Your Email</h1>
@@ -53,7 +53,7 @@ export default function ForgotPasswordPage() {
                         Didn't get it? Check your spam folder, or{' '}
                         <button
                             onClick={() => setStatus('idle')}
-                            className="text-primary hover:text-red-300 transition-colors underline"
+                            className="text-primary hover:text-primary transition-colors underline"
                         >
                             try again
                         </button>
@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
-            <div className="max-w-md w-full bg-zinc-900/60 border border-white/10 rounded-2xl p-8 space-y-6">
+            <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 space-y-6">
                 <div className="text-center space-y-2">
                     <Mail className="w-12 h-12 text-primary mx-auto" />
                     <h1 className="text-2xl font-bold text-on-surface">Forgot Password?</h1>
@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
                 </div>
 
                 {status === 'error' && (
-                    <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-3 text-sm text-primary">
+                    <div className="flex items-center gap-2 bg-primary/5 border border-primary/20 rounded-xl p-3 text-sm text-primary">
                         <AlertCircle className="w-4 h-4 flex-shrink-0" />
                         <span>{errorMessage}</span>
                     </div>
@@ -102,14 +102,14 @@ export default function ForgotPasswordPage() {
                             required
                             autoFocus
                             placeholder="you@example.com"
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-on-surface placeholder-white/30 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                            className="w-full px-4 py-3 bg-surface-container/30 border border-primary/10 rounded-xl text-on-surface placeholder-on-surface-variant/30 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={status === 'loading'}
-                        className="w-full py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {status === 'loading' ? (
                             <>

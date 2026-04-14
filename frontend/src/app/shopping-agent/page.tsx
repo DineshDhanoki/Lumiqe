@@ -56,15 +56,15 @@ function ShoppingAgentContent() {
         return (
             <div className="flex flex-col w-full max-w-md mx-auto items-center justify-center min-h-screen p-6 text-center relative z-10">
                 <Sparkles className="w-12 h-12 text-red-500 mb-6" />
-                <h1 className="text-2xl font-bold text-white mb-4">No Palette Found</h1>
-                <p className="text-white/60 mb-8 leading-relaxed">
+                <h1 className="text-2xl font-bold text-on-surface mb-4">No Palette Found</h1>
+                <p className="text-on-surface-variant mb-8 leading-relaxed">
                     You need to scan your face first so we know your skin-tone palette.
                     <br />
                     The AI Stylist matches outfits to <em>your</em> colors.
                 </p>
                 <Link
                     href="/"
-                    className="px-6 py-3 bg-red-600 rounded-full text-white font-medium hover:bg-red-500 transition-colors"
+                    className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors"
                 >
                     Scan Your Face First
                 </Link>
@@ -114,12 +114,12 @@ function ShoppingAgentContent() {
             <div className="w-full flex justify-between items-center mb-8 pt-4">
                 <Link
                     href="/dashboard"
-                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-md border border-white/10"
+                    className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10"
                 >
-                    <ArrowLeft className="w-5 h-5 text-white" />
+                    <ArrowLeft className="w-5 h-5 text-on-surface" />
                 </Link>
                 <div className="flex flex-col items-center">
-                    <h1 className="text-lg font-bold text-white">AI Stylist</h1>
+                    <h1 className="text-lg font-bold text-on-surface">AI Stylist</h1>
                     <span className="text-xs text-red-400 font-medium tracking-wide">
                         8-Piece Outfit Builder
                     </span>
@@ -135,15 +135,15 @@ function ShoppingAgentContent() {
                     className="w-full flex flex-col gap-6"
                 >
                     {/* Palette Preview */}
-                    <div className="flex flex-col gap-3 p-5 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
-                        <h2 className="text-sm font-semibold text-white/70 uppercase tracking-widest text-center">
+                    <div className="flex flex-col gap-3 p-5 rounded-3xl bg-surface-container/30 border border-primary/10 backdrop-blur-md">
+                        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-widest text-center">
                             Your Palette
                         </h2>
                         <div className="flex gap-2 justify-center flex-wrap">
                             {paletteHexes.map((hex, i) => (
                                 <div
                                     key={i}
-                                    className="w-9 h-9 rounded-xl border border-white/20 shadow-inner hover:scale-110 transition-transform"
+                                    className="w-9 h-9 rounded-xl border border-primary/20 shadow-inner hover:scale-110 transition-transform"
                                     style={{ backgroundColor: hex }}
                                     title={hex}
                                 />
@@ -152,8 +152,8 @@ function ShoppingAgentContent() {
                     </div>
 
                     {/* Gender */}
-                    <div className="flex flex-col gap-3 p-5 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
-                        <h2 className="text-sm font-semibold text-white/70 uppercase tracking-widest text-center">
+                    <div className="flex flex-col gap-3 p-5 rounded-3xl bg-surface-container/30 border border-primary/10 backdrop-blur-md">
+                        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-widest text-center">
                             Gender
                         </h2>
                         <div className="flex gap-2">
@@ -162,8 +162,8 @@ function ShoppingAgentContent() {
                                     key={g}
                                     onClick={() => setGender(g)}
                                     className={`flex-1 py-3 rounded-2xl text-sm font-bold transition-all border ${gender === g
-                                        ? 'bg-white text-black border-white'
-                                        : 'bg-transparent text-white/50 border-white/10 hover:border-white/20'
+                                        ? 'bg-on-surface text-surface border-on-surface'
+                                        : 'bg-transparent text-on-surface-variant border-primary/10 hover:border-primary/20'
                                         }`}
                                 >
                                     {g === 'male' ? "Men's" : "Women's"}
@@ -184,7 +184,7 @@ function ShoppingAgentContent() {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="flex items-start gap-3 p-4 rounded-2xl bg-red-500/10 border border-red-500/20"
+                            className="flex items-start gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/20"
                         >
                             <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
                             <p className="text-red-200 text-sm">{error}</p>
@@ -203,17 +203,17 @@ function ShoppingAgentContent() {
 
                     <button
                         onClick={generateOutfit}
-                        className="mx-auto px-6 py-3 rounded-full border border-white/20 text-white hover:bg-white/10 transition-all text-sm font-semibold flex items-center gap-2"
+                        className="mx-auto px-6 py-3 rounded-full border border-primary/20 text-on-surface hover:bg-surface-container/30 transition-all text-sm font-semibold flex items-center gap-2"
                     >
                         <RefreshCcw className="w-4 h-4" />
                         Generate New Outfit
                         {outfitCount > 0 && (
-                            <span className="text-white/40 text-xs">#{outfitCount + 1}</span>
+                            <span className="text-on-surface-variant text-xs">#{outfitCount + 1}</span>
                         )}
                     </button>
 
                     {usedProductUrls.length > 0 && (
-                        <p className="text-center text-white/20 text-[10px] tracking-wider">
+                        <p className="text-center text-on-surface-variant/30 text-[10px] tracking-wider">
                             {usedProductUrls.length} items excluded from next generation
                         </p>
                     )}
@@ -283,7 +283,7 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
                     );
                 })}
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Loader2 className="w-8 h-8 text-white/50 animate-spin" />
+                    <Loader2 className="w-8 h-8 text-on-surface-variant animate-spin" />
                 </div>
             </div>
 
@@ -296,7 +296,7 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
                 className="flex flex-col items-center gap-3"
             >
                 <span className="text-2xl">{step.icon}</span>
-                <p className="text-white/60 text-sm font-medium tracking-wide text-center">
+                <p className="text-on-surface-variant text-sm font-medium tracking-wide text-center">
                     {step.text}
                 </p>
             </motion.div>
@@ -306,7 +306,7 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
                 {LOADING_STEPS.map((_, i) => (
                     <div
                         key={i}
-                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i <= stepIdx ? 'bg-red-400 scale-100' : 'bg-white/10 scale-75'
+                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i <= stepIdx ? 'bg-primary scale-100' : 'bg-surface-container/30 scale-75'
                             }`}
                     />
                 ))}
