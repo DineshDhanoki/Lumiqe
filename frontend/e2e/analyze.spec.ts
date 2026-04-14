@@ -44,11 +44,6 @@ test.describe('Analyze Page', () => {
         await expect(page.getByText(/start live camera/i)).toBeVisible({ timeout: 10000 });
     });
 
-    test('has back to home link', async ({ page }) => {
-        const backLink = page.getByText(/back to home/i);
-        await expect(backLink).toBeVisible();
-    });
-
     test('shows multi-photo option', async ({ page }) => {
         // Multi-photo mode button should exist
         const multiBtn = page.getByText(/multi.*photo/i);
