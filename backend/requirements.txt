@@ -19,7 +19,7 @@ uvicorn[standard]==0.40.0
 python-multipart==0.0.22
 
 # Image Generation (palette card)
-Pillow==12.1.1
+Pillow==12.2.0
 
 # Auth (JWT + password hashing)
 PyJWT==2.12.0
