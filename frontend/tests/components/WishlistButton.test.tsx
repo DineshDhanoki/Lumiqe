@@ -54,9 +54,9 @@ describe('WishlistButton Component', () => {
             expect(button).toBeInTheDocument();
         });
 
-        // The svg should have the fill-red-500 class
+        // The svg should have the fill-primary class (Obsidian Luxe token)
         const svg = screen.getByRole('button').querySelector('svg');
-        expect(svg?.classList.toString()).toContain('fill-red-500');
+        expect(svg?.classList.toString()).toContain('fill-primary');
     });
 
     it('shows outline heart when not wishlisted', async () => {
