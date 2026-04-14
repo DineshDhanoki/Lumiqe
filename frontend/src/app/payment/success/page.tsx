@@ -88,7 +88,7 @@ export default function PaymentSuccess() {
         <Suspense
             fallback={
                 <div className="min-h-screen flex items-center justify-center">
-                    <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
+                    <Sparkles className="w-8 h-8 text-primary animate-pulse" />
                 </div>
             }
         >

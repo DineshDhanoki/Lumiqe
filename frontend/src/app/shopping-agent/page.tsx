@@ -55,7 +55,7 @@ function ShoppingAgentContent() {
     if (paletteHexes.length === 0) {
         return (
             <div className="flex flex-col w-full max-w-md mx-auto items-center justify-center min-h-screen p-6 text-center relative z-10">
-                <Sparkles className="w-12 h-12 text-red-500 mb-6" />
+                <Sparkles className="w-12 h-12 text-primary mb-6" />
                 <h1 className="text-2xl font-bold text-on-surface mb-4">No Palette Found</h1>
                 <p className="text-on-surface-variant mb-8 leading-relaxed">
                     You need to scan your face first so we know your skin-tone palette.
@@ -120,7 +120,7 @@ function ShoppingAgentContent() {
                 </Link>
                 <div className="flex flex-col items-center">
                     <h1 className="text-lg font-bold text-on-surface">AI Stylist</h1>
-                    <span className="text-xs text-red-400 font-medium tracking-wide">
+                    <span className="text-xs text-primary font-medium tracking-wide">
                         8-Piece Outfit Builder
                     </span>
                 </div>
@@ -186,7 +186,7 @@ function ShoppingAgentContent() {
                             animate={{ opacity: 1, y: 0 }}
                             className="flex items-start gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/20"
                         >
-                            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                            <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                             <p className="text-red-200 text-sm">{error}</p>
                         </motion.div>
                     )}

@@ -108,7 +108,7 @@ export default function FloatingFashionBackground() {
                 return (
                     <motion.div
                         key={item.id}
-                        className="absolute text-white"
+                        className="absolute text-on-surface"
                         style={{
                             left: item.initialX,
                             top: item.initialY,

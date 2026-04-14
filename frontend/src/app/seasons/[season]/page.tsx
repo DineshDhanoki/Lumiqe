@@ -57,7 +57,7 @@ export default async function SeasonPage({ params }: Props) {
             <main className="min-h-screen bg-black flex items-center justify-center text-on-surface">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold mb-4">Season Not Found</h1>
-                    <Link href="/" className="text-red-400 hover:underline">Go Home</Link>
+                    <Link href="/" className="text-primary hover:underline">Go Home</Link>
                 </div>
             </main>
         );
@@ -97,7 +97,7 @@ export default async function SeasonPage({ params }: Props) {
                     }}
                 />
                 <div className="relative z-10 max-w-3xl mx-auto">
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-4">Color Season Guide</p>
+                    <p className="text-primary text-sm font-bold tracking-widest uppercase mb-4">Color Season Guide</p>
                     <h1 className="text-5xl md:text-6xl font-extrabold mb-4">{seasonName}</h1>
                     <p className="text-on-surface-variant text-lg max-w-xl mx-auto mb-4">{data.description}</p>
                     <div className="flex flex-wrap justify-center gap-3 mt-6">
@@ -188,7 +188,7 @@ export default async function SeasonPage({ params }: Props) {
                                 const occasionInfo = info as { formula?: string; colors?: string[]; key_pieces?: string[] };
                                 return (
                                 <div key={occasion} className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5">
-                                    <h3 className="text-white font-bold capitalize mb-2">
+                                    <h3 className="text-on-surface font-bold capitalize mb-2">
                                         {occasion.replace(/_/g, ' ')}
                                     </h3>
                                     <p className="text-on-surface-variant text-sm mb-3">{occasionInfo.formula}</p>
@@ -225,7 +225,7 @@ export default async function SeasonPage({ params }: Props) {
                                         style={{ backgroundColor: item.hex }}
                                     />
                                     <div className="min-w-0">
-                                        <p className="text-white text-sm font-medium truncate">{item.piece}</p>
+                                        <p className="text-on-surface text-sm font-medium truncate">{item.piece}</p>
                                         <p className="text-on-surface-variant text-xs truncate">{item.why}</p>
                                     </div>
                                 </div>

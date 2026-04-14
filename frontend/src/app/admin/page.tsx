@@ -561,7 +561,7 @@ export default function AdminPage() {
                                     ].map(({ label, val }) => (
                                         <div key={label} className="flex items-center justify-between border-b border-primary/5 pb-2 last:border-0 last:pb-0">
                                             <span className="text-on-surface-variant text-sm">{label}</span>
-                                            <span className="text-white font-bold tabular-nums">{val.toLocaleString()}</span>
+                                            <span className="text-on-surface font-bold tabular-nums">{val.toLocaleString()}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -809,7 +809,7 @@ export default function AdminPage() {
                                 <div className="flex items-start justify-between gap-4">
                                     <div>
                                         <p className="text-yellow-400 font-bold text-sm mb-1">⚠️ Save this key — it will not be shown again</p>
-                                        <code className="text-white font-mono text-xs break-all">{newRawKey}</code>
+                                        <code className="text-on-surface font-mono text-xs break-all">{newRawKey}</code>
                                     </div>
                                     <button onClick={() => setNewRawKey(null)} className="text-on-surface-variant hover:text-on-surface transition-colors shrink-0">
                                         <X className="w-5 h-5" />
@@ -893,7 +893,7 @@ export default function AdminPage() {
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xl">{icon}</span>
-                                                <p className="text-white font-semibold text-sm">{label}</p>
+                                                <p className="text-on-surface font-semibold text-sm">{label}</p>
                                             </div>
                                             <HealthBadge status={health[key].status} />
                                         </div>

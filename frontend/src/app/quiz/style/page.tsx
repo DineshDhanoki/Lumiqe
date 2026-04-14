@@ -237,7 +237,7 @@ export default function StyleQuiz() {
                             transition={{ duration: 0.2 }}
                         >
                             <div className="text-center mb-8">
-                                <p className="text-red-400 text-xs font-bold tracking-widest uppercase mb-2">Style Personality Quiz</p>
+                                <p className="text-primary text-xs font-bold tracking-widest uppercase mb-2">Style Personality Quiz</p>
                                 <h1 className="text-3xl font-bold text-on-surface">Question {current + 1} of {QUESTIONS.length}</h1>
                             </div>
 
@@ -281,7 +281,7 @@ export default function StyleQuiz() {
                             className="space-y-6"
                         >
                             <div className="text-center">
-                                <p className="text-red-400 text-xs font-bold tracking-widest uppercase mb-3">Your Style Personality</p>
+                                <p className="text-primary text-xs font-bold tracking-widest uppercase mb-3">Your Style Personality</p>
                                 <div className="text-6xl mb-3">{data.emoji}</div>
                                 <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-2">{data.name}</h1>
                                 <p className="text-on-surface-variant italic mb-4">{data.tagline}</p>

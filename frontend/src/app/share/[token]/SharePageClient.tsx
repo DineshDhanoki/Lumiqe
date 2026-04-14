@@ -49,7 +49,7 @@ export default function SharePageClient({ token }: { token: string }) {
     if (loading) {
         return (
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 text-on-surface-variant">
-                <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
+                <Sparkles className="w-8 h-8 text-primary animate-pulse" />
                 <p>Loading shared analysis...</p>
             </div>
         );
@@ -58,10 +58,10 @@ export default function SharePageClient({ token }: { token: string }) {
     if (!data) {
         return (
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
-                <Sparkles className="w-12 h-12 text-red-500 mb-6" />
+                <Sparkles className="w-12 h-12 text-primary mb-6" />
                 <h1 className="text-3xl font-bold text-on-surface mb-4">Analysis Not Found</h1>
                 <p className="text-on-surface-variant mb-8">This shared link may have expired or doesn&apos;t exist.</p>
-                <Link href="/" className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-red-500 transition-colors">
+                <Link href="/" className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors">
                     Discover Your Colors
                 </Link>
             </div>
@@ -73,14 +73,14 @@ export default function SharePageClient({ token }: { token: string }) {
             {/* Nav */}
             <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-primary/10 px-6 py-4 flex items-center justify-center">
                 <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-red-400" />
+                    <Sparkles className="w-5 h-5 text-primary" />
                     <span className="text-xl font-bold tracking-widest text-on-surface">LUMIQE</span>
                 </div>
             </nav>
 
             <div className="max-w-2xl mx-auto px-4 pt-28">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-                    <p className="text-red-400 text-sm font-bold tracking-widest uppercase mb-3">Color Analysis Result</p>
+                    <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Color Analysis Result</p>
                     <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-6">
                         {data.season}
                     </h1>
@@ -177,7 +177,7 @@ export default function SharePageClient({ token }: { token: string }) {
                     transition={{ delay: 0.25 }}
                     className="bg-primary/5 border border-primary/20 rounded-3xl p-8 md:p-12 text-center"
                 >
-                    <Sparkles className="w-10 h-10 text-red-500 mx-auto mb-4" />
+                    <Sparkles className="w-10 h-10 text-primary mx-auto mb-4" />
                     <h3 className="text-2xl font-bold text-on-surface mb-3">Discover your own colors</h3>
                     <p className="text-on-surface-variant max-w-md mx-auto mb-6">
                         Find your exact color season in seconds with AI-powered analysis. Get your personalized palette, styling tips, and curated shopping recommendations.

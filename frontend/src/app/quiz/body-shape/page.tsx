@@ -195,7 +195,7 @@ export default function BodyShapeQuiz() {
                         >
                             {/* Header */}
                             <div className="text-center mb-8">
-                                <p className="text-red-400 text-xs font-bold tracking-widest uppercase mb-2">
+                                <p className="text-primary text-xs font-bold tracking-widest uppercase mb-2">
                                     Body Shape Analysis
                                 </p>
                                 <h1 className="text-3xl font-bold text-on-surface">Question {current + 1} of {QUESTIONS.length}</h1>
@@ -245,7 +245,7 @@ export default function BodyShapeQuiz() {
                         >
                             {/* Result header */}
                             <div className="text-center">
-                                <p className="text-red-400 text-xs font-bold tracking-widest uppercase mb-3">Your Body Shape</p>
+                                <p className="text-primary text-xs font-bold tracking-widest uppercase mb-3">Your Body Shape</p>
                                 <div className="text-6xl mb-3">{shapeData.emoji}</div>
                                 <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-4">
                                     {shapeData.shape}
@@ -268,7 +268,7 @@ export default function BodyShapeQuiz() {
 
                             {/* Avoid */}
                             <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
-                                <p className="text-red-400 text-xs font-bold uppercase tracking-wider mb-3">Styles to Avoid</p>
+                                <p className="text-primary text-xs font-bold uppercase tracking-wider mb-3">Styles to Avoid</p>
                                 <div className="flex flex-wrap gap-2">
                                     {shapeData.avoidStyles.map((s) => (
                                         <span key={s} className="text-sm bg-surface-container/50 text-on-surface-variant border border-primary/20 px-3 py-1.5 rounded-full">✕ {s}</span>
