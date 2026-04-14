@@ -10,7 +10,7 @@ describe('BestAvoidColors Component', () => {
 
     it('renders section titles', () => {
         render(<BestAvoidColors {...mockProps} />);
-        expect(screen.getByText(/Wear These/i)).toBeInTheDocument();
+        expect(screen.getByText(/Ideal Pairings/i)).toBeInTheDocument();
         expect(screen.getByText(/Avoid These/i)).toBeInTheDocument();
     });
 
