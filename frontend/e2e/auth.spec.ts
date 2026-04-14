@@ -83,7 +83,7 @@ test.describe('Auth Modal', () => {
 
     test('closes modal on backdrop click', async ({ page }) => {
         // Click the backdrop (the semi-transparent overlay)
-        await page.locator('.bg-black\\/60').click({ position: { x: 10, y: 10 } });
+        await page.locator('.bg-background\\/80').click({ position: { x: 10, y: 10 } });
         await expect(page.getByRole('dialog')).not.toBeVisible();
     });
 
