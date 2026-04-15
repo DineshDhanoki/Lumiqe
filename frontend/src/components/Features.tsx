@@ -1,82 +1,91 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ShieldCheck, Crosshair, ShoppingBag, Layers } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+
+const FEATURES = [
+    {
+        icon: 'my_location',
+        colorClass: 'text-primary',
+        bgClass: 'bg-primary/10 border-primary/20',
+        titleKey: 'featureClinicalTitle' as const,
+        descKey: 'featureClinicalDesc' as const,
+    },
+    {
+        icon: 'layers',
+        colorClass: 'text-secondary',
+        bgClass: 'bg-secondary/10 border-secondary/20',
+        titleKey: 'featureSeasonTitle' as const,
+        descKey: 'featureSeasonDesc' as const,
+    },
+    {
+        icon: 'shopping_bag',
+        colorClass: 'text-tertiary',
+        bgClass: 'bg-tertiary/10 border-tertiary/20',
+        titleKey: 'featureShoppingTitle' as const,
+        descKey: 'featureShoppingDesc' as const,
+    },
+    {
+        icon: 'verified_user',
+        colorClass: 'text-on-surface-variant',
+        bgClass: 'bg-surface-container-high border-outline-variant/20',
+        titleKey: 'featurePrivacyTitle' as const,
+        descKey: 'featurePrivacyDesc' as const,
+    },
+];
 
 export default function Features() {
     const { t } = useTranslation();
-
-    const features = [
-        {
-            icon: Crosshair,
-            title: t('featureClinicalTitle'),
-            description: t('featureClinicalDesc'),
-            color: 'from-orange-500/20 to-red-500/20',
-            iconColor: 'text-orange-400',
-        },
-        {
-            icon: Layers,
-            title: t('featureSeasonTitle'),
-            description: t('featureSeasonDesc'),
-            color: 'from-rose-500/20 to-pink-500/20',
-            iconColor: 'text-rose-400',
-        },
-        {
-            icon: ShoppingBag,
-            title: t('featureShoppingTitle'),
-            description: t('featureShoppingDesc'),
-            color: 'from-primary/10 to-primary-container/20',
-            iconColor: 'text-primary',
-        },
-        {
-            icon: ShieldCheck,
-            title: t('featurePrivacyTitle'),
-            description: t('featurePrivacyDesc'),
-            color: 'from-stone-500/20 to-zinc-500/20',
-            iconColor: 'text-stone-400',
-        }
-    ];
 
     return (
         <section id="features" className="py-16 md:py-24 px-4 sm:px-6 relative">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
+                    <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-3">
+                        Why Lumiqe
+                    </span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="font-headline text-3xl sm:text-4xl md:text-5xl font-bold text-on-surface mb-4 sm:mb-6"
+                        viewport={{ once: true, margin: '-100px' }}
+                        className="font-display italic text-4xl sm:text-5xl text-on-surface mb-4 sm:mb-6"
                     >
                         {t('featuresTitle')}
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
+                        viewport={{ once: true, margin: '-100px' }}
                         transition={{ delay: 0.1 }}
-                        className="text-lg text-on-surface-variant max-w-2xl mx-auto"
+                        className="text-lg text-on-surface-variant max-w-2xl mx-auto font-light"
                     >
                         {t('featuresSubtitle')}
                     </motion.p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {features.map((feature, index) => (
+                    {FEATURES.map((feature, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
+                            viewport={{ once: true, margin: '-50px' }}
                             transition={{ delay: index * 0.1, duration: 0.5 }}
-                            className={`p-6 sm:p-8 rounded-3xl bg-gradient-to-br ${feature.color} bg-surface-container/30 border border-primary/10 backdrop-blur-md hover:bg-surface-container/50 transition-colors group`}
+                            className="p-6 sm:p-8 rounded-3xl bg-surface-container/30 border border-primary/10 backdrop-blur-md hover:bg-surface-container/50 transition-colors group"
                         >
-                            <feature.icon className={`w-10 h-10 ${feature.iconColor} mb-6`} />
-                            <h3 className="text-2xl font-bold text-on-surface mb-3 tracking-tight">
-                                {feature.title}
+                            <div className={`w-14 h-14 rounded-2xl ${feature.bgClass} border flex items-center justify-center mb-6 group-hover:-translate-y-1 transition-transform`}>
+                                <span
+                                    className={`material-symbols-outlined text-2xl ${feature.colorClass}`}
+                                    style={{ fontVariationSettings: "'FILL' 1" }}
+                                >
+                                    {feature.icon}
+                                </span>
+                            </div>
+                            <h3 className="font-headline text-xl font-bold text-on-surface mb-3 tracking-tight">
+                                {t(feature.titleKey)}
                             </h3>
-                            <p className="text-on-surface-variant leading-relaxed">
-                                {feature.description}
+                            <p className="text-on-surface-variant leading-relaxed text-sm">
+                                {t(feature.descKey)}
                             </p>
                         </motion.div>
                     ))}
