@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface FreeTrialProps {
     onOpenAuth: () => void;
@@ -39,7 +38,7 @@ export default function FreeTrial({ onOpenAuth }: FreeTrialProps) {
                     <ul className="space-y-4 mb-8 text-left inline-block md:block">
                         {benefits.map((benefit, idx) => (
                             <li key={idx} className="flex items-center gap-3 text-on-surface">
-                                <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" />
+                                <span className="material-symbols-outlined text-xl text-green-400 shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                 <span>{benefit}</span>
                             </li>
                         ))}
@@ -70,7 +69,7 @@ export default function FreeTrial({ onOpenAuth }: FreeTrialProps) {
                         className="w-full flex items-center justify-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-bold py-4 rounded-full transition-all shadow-[0_0_20px_-5px_rgba(240,191,98,0.3)] transform hover:scale-[1.02]"
                     >
                         Claim Free Trial
-                        <ArrowRight className="w-5 h-5" />
+                        <span className="material-symbols-outlined text-xl">arrow_forward</span>
                     </button>
 
                     <p className="text-xs text-on-surface-variant text-center mt-4">

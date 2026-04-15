@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Gift, Copy, Check, Users } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useFetch } from '@/lib/hooks/useFetch';
 
@@ -38,7 +37,7 @@ export default function ReferralCard() {
         >
             <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Gift className="w-5 h-5 text-primary" />
+                    <span className="material-symbols-outlined text-xl text-primary">card_giftcard</span>
                 </div>
                 <div>
                     <h3 className="text-on-surface font-bold">Invite Friends</h3>
@@ -54,12 +53,12 @@ export default function ReferralCard() {
                     onClick={handleCopy}
                     className="shrink-0 p-2.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container transition-colors"
                 >
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {copied ? <span className="material-symbols-outlined text-base">check</span> : <span className="material-symbols-outlined text-base">content_copy</span>}
                 </button>
             </div>
 
             <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-                <Users className="w-4 h-4" />
+                <span className="material-symbols-outlined text-base">group</span>
                 <span>{referralData.referral_count} friend{referralData.referral_count !== 1 ? 's' : ''} referred</span>
             </div>
         </motion.div>

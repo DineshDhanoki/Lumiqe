@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Loader2, AlertCircle } from 'lucide-react';
 
 interface DemoResult {
     id: string;
@@ -50,7 +49,7 @@ export default function DemoPreview() {
                         viewport={{ once: true }}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/30 border border-primary/10 text-on-surface text-sm font-medium mb-4"
                     >
-                        <Sparkles className="w-4 h-4 text-primary" />
+                        <span className="material-symbols-outlined text-base text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         <span>Live Preview</span>
                     </motion.div>
                     <motion.h2
@@ -68,12 +67,12 @@ export default function DemoPreview() {
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center p-20 min-h-[400px] border border-primary/10 rounded-3xl bg-surface-container/30 backdrop-blur-md">
-                        <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                        <span className="material-symbols-outlined text-5xl text-primary animate-spin mb-4">progress_activity</span>
                         <p className="text-on-surface-variant">Loading engine samples...</p>
                     </div>
                 ) : error ? (
                     <div className="flex flex-col items-center justify-center p-20 min-h-[400px] border border-primary/20 rounded-3xl bg-primary/5 backdrop-blur-md">
-                        <AlertCircle className="w-10 h-10 text-primary mb-4" />
+                        <span className="material-symbols-outlined text-5xl text-primary mb-4">error</span>
                         <p className="text-primary">{error}</p>
                     </div>
                 ) : demos.length > 0 && activeDemo ? (

@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Clock, TrendingUp, AlertCircle } from 'lucide-react';
 
 interface TrendPoint {
     id: string;
@@ -38,7 +37,7 @@ export default function ColorJourney({ points, seasonChanged, nudge }: Props) {
                 <p className="text-on-surface-variant text-xs font-bold uppercase tracking-wider">Your Color Journey</p>
                 {seasonChanged && (
                     <span className="text-xs bg-amber-500/15 text-amber-300 border border-amber-500/25 px-2.5 py-1 rounded-full flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" /> Season shifted
+                        <span className="material-symbols-outlined text-xs">trending_up</span> Season shifted
                     </span>
                 )}
             </div>
@@ -46,7 +45,7 @@ export default function ColorJourney({ points, seasonChanged, nudge }: Props) {
             {/* Re-scan nudge */}
             {nudge && (
                 <div className="flex items-start gap-3 bg-primary/5 border border-primary/20 rounded-2xl p-4">
-                    <AlertCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <span className="material-symbols-outlined text-xl text-primary flex-shrink-0 mt-0.5">error</span>
                     <div>
                         <p className="text-sm text-on-surface-variant">{nudge}</p>
                         <Link href="/analyze" className="text-xs text-primary font-semibold hover:text-primary/80 mt-1 inline-block">
@@ -86,7 +85,7 @@ export default function ColorJourney({ points, seasonChanged, nudge }: Props) {
                                     </p>
                                 </div>
                                 <p className="text-on-surface-variant/50 text-xs flex items-center gap-1 flex-shrink-0">
-                                    <Clock className="w-3 h-3" />
+                                    <span className="material-symbols-outlined text-xs">schedule</span>
                                     {formatDate(point.created_at)}
                                 </p>
                             </Link>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Globe } from 'lucide-react';
 import { LANGUAGES } from '@/lib/i18n';
 
 interface LanguageSwitcherProps {
@@ -31,7 +30,7 @@ export default function LanguageSwitcher({ currentLang, onChange }: LanguageSwit
                 onClick={() => setOpen(prev => !prev)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container/50 hover:bg-surface-container border border-outline-variant/20 text-on-surface-variant hover:text-on-surface transition-all text-sm"
             >
-                <Globe className="w-3.5 h-3.5" />
+                <span className="material-symbols-outlined text-sm">language</span>
                 <span>{current.flag}</span>
                 <span className="hidden sm:inline">{current.label}</span>
             </button>
