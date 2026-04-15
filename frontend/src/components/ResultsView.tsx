@@ -4,10 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Sparkles, ArrowLeft, Layers,
-    CalendarDays, ShoppingBag, Scissors, MessageCircle, LayoutGrid,
-} from 'lucide-react';
 import ColorProfileDeep from './ColorProfileDeep';
 import OccasionGuide from './OccasionGuide';
 import CapsuleWardrobe from './CapsuleWardrobe';
@@ -35,12 +31,12 @@ interface CompleteProfile {
 }
 
 const TABS = [
-    { id: 'overview',  label: 'Overview',      icon: <LayoutGrid    className="w-4 h-4" /> },
-    { id: 'profile',   label: 'Color Profile',  icon: <Sparkles      className="w-4 h-4" /> },
-    { id: 'occasions', label: 'Occasions',      icon: <CalendarDays  className="w-4 h-4" /> },
-    { id: 'wardrobe',  label: 'Wardrobe',       icon: <ShoppingBag   className="w-4 h-4" /> },
-    { id: 'beauty',    label: 'Hair & Beauty',  icon: <Scissors      className="w-4 h-4" /> },
-    { id: 'chat',      label: 'AI Stylist',     icon: <MessageCircle className="w-4 h-4" /> },
+    { id: 'overview',  label: 'Overview',      icon: <span className="material-symbols-outlined text-base">grid_view</span> },
+    { id: 'profile',   label: 'Color Profile',  icon: <span className="material-symbols-outlined text-base">auto_awesome</span> },
+    { id: 'occasions', label: 'Occasions',      icon: <span className="material-symbols-outlined text-base">event</span> },
+    { id: 'wardrobe',  label: 'Wardrobe',       icon: <span className="material-symbols-outlined text-base">shopping_bag</span> },
+    { id: 'beauty',    label: 'Hair & Beauty',  icon: <span className="material-symbols-outlined text-base">content_cut</span> },
+    { id: 'chat',      label: 'AI Stylist',     icon: <span className="material-symbols-outlined text-base">chat</span> },
 ];
 
 export interface ResultsData {
@@ -105,7 +101,7 @@ export default function ResultsView({
             <div className="max-w-4xl mx-auto">
                 {/* Back breadcrumb */}
                 <Link href={backHref} className="inline-flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors mb-6 group">
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                    <span className="material-symbols-outlined text-base text-on-surface-variant group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
                     <span className="text-sm font-label font-medium">{backLabel}</span>
                 </Link>
                 {showAccountNudge && (
@@ -114,7 +110,7 @@ export default function ResultsView({
                         animate={{ opacity: 1, y: 0 }}
                         className="mb-6 bg-gradient-to-r from-primary/10 to-surface-container/60 border border-primary/30 rounded-2xl px-5 py-3 flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left"
                     >
-                        <Sparkles className="w-5 h-5 text-primary shrink-0" />
+                        <span className="material-symbols-outlined text-xl text-primary shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         <p className="flex-1 text-sm text-on-surface-variant">
                             Create a free account to save your results and get personalized recommendations
                         </p>
@@ -138,7 +134,7 @@ export default function ResultsView({
                         </div>
                     )}
                     <p className="text-primary font-label text-sm font-bold tracking-widest uppercase mb-3">{t('yourAnalysisComplete')}</p>
-                    <h1 className="font-display text-5xl md:text-6xl font-bold tracking-tight text-on-surface mb-4">
+                    <h1 className="font-display italic text-5xl md:text-6xl tracking-tight text-on-surface mb-4">
                         {season}
                     </h1>
                     {description && (
@@ -188,7 +184,7 @@ export default function ResultsView({
 
                         {activeTab !== 'overview' && profileLoading && (
                             <div className="flex flex-col items-center justify-center py-32 gap-4">
-                                <Sparkles className="w-10 h-10 text-primary animate-pulse" />
+                                <span className="material-symbols-outlined text-5xl text-primary animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                 <p className="text-on-surface-variant font-label">Loading your professional profile...</p>
                             </div>
                         )}

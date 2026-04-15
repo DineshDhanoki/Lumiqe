@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Sparkles, Layers, ArrowRight, MessageCircle, Share2, Copy, Check } from 'lucide-react';
 import { type Session } from 'next-auth';
 import SkinProfileCard from '@/components/SkinProfileCard';
 import BestAvoidColors from '@/components/BestAvoidColors';
@@ -116,7 +115,7 @@ export default function OverviewTab({
 
             {contrastLevel && (
                 <div className="flex items-center gap-3 bg-surface-container/50 border border-primary/10 px-5 py-3 rounded-2xl w-fit">
-                    <Layers className="w-5 h-5 text-primary" />
+                    <span className="material-symbols-outlined text-xl text-primary">layers</span>
                     <span className="text-on-surface-variant text-sm font-label font-semibold uppercase tracking-wider">{t('contrastLevelLabel')}</span>
                     <span className="text-on-surface font-label font-bold text-lg">{contrastLevel}</span>
                 </div>
@@ -179,7 +178,7 @@ export default function OverviewTab({
                             ? 'bg-gradient-to-tr from-yellow-600 via-yellow-400 to-yellow-200 border border-yellow-300'
                             : 'bg-gradient-to-tr from-stone-400 via-stone-300 to-white border border-stone-200'
                     }`}>
-                        <Sparkles className={metal.toLowerCase() === 'gold' ? 'text-yellow-800' : 'text-stone-800'} />
+                        <span className={`material-symbols-outlined text-2xl ${metal.toLowerCase() === 'gold' ? 'text-yellow-800' : 'text-stone-800'}`} style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                     </div>
                     <p className="text-on-surface-variant font-label tracking-wider text-sm font-semibold uppercase mb-2">{t('bestMetal')}</p>
                     <h4 className="font-headline text-3xl font-bold text-on-surface">{metal}</h4>
@@ -212,7 +211,7 @@ export default function OverviewTab({
             ) : (
                 <div className="bg-surface-container/50 border border-primary/10 p-6 rounded-3xl">
                     <div className="flex items-center gap-2 mb-4">
-                        <Share2 className="w-5 h-5 text-primary" />
+                        <span className="material-symbols-outlined text-xl text-primary">share</span>
                         <h3 className="font-headline text-lg font-bold text-on-surface">{t('shareResults')}</h3>
                     </div>
                     <div className="flex flex-wrap gap-3">
@@ -227,7 +226,7 @@ export default function OverviewTab({
                             onClick={copyLink}
                             className="flex items-center gap-2 px-4 py-2.5 bg-surface-container hover:bg-surface-container/80 border border-outline-variant/30 rounded-xl text-sm font-label font-medium text-on-surface transition-all"
                         >
-                            {copied ? <Check className="w-4 h-4 text-tertiary" /> : <Copy className="w-4 h-4" />}
+                            {copied ? <span className="material-symbols-outlined text-base text-tertiary">check</span> : <span className="material-symbols-outlined text-base">content_copy</span>}
                             {copied ? t('copied') : t('copyLink')}
                         </button>
                         <button
@@ -243,7 +242,7 @@ export default function OverviewTab({
 
             {/* CTA */}
             <div className="bg-primary/5 border border-primary/20 rounded-3xl p-8 md:p-12 text-center">
-                <Sparkles className="w-10 h-10 text-primary mx-auto mb-4" />
+                <span className="material-symbols-outlined text-5xl text-primary mx-auto mb-4 block" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 <h3 className="font-headline text-2xl font-bold text-on-surface mb-3">{t('exploreFullAnalysis')}</h3>
                 <p className="text-on-surface-variant max-w-lg mx-auto mb-6">{t('exploreFullAnalysisDesc')}</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -251,13 +250,13 @@ export default function OverviewTab({
                         href="/shopping-agent"
                         className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-label font-bold py-4 px-8 transition-all hover:scale-105"
                     >
-                        {t('shopMyColors')} <ArrowRight className="w-5 h-5" />
+                        {t('shopMyColors')} <span className="material-symbols-outlined text-xl">arrow_forward</span>
                     </Link>
                     <button
                         onClick={onChatClick}
                         className="inline-flex items-center justify-center gap-2 rounded-full bg-surface-container hover:bg-surface-container/80 border border-outline-variant/30 text-on-surface font-label font-bold py-4 px-8 transition-all hover:scale-105"
                     >
-                        <MessageCircle className="w-5 h-5" /> {t('chatWithAIStylist')}
+                        <span className="material-symbols-outlined text-xl">chat</span> {t('chatWithAIStylist')}
                     </button>
                 </div>
             </div>
