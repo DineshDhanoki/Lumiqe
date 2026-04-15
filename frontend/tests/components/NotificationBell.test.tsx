@@ -24,7 +24,7 @@ describe('NotificationBell Component', () => {
         vi.clearAllMocks();
     });
 
-    it('renders bell icon', async () => {
+    it('renders bell button', async () => {
         mockApiFetch.mockResolvedValue(
             createMockResponse({ notifications: [], unread_count: 0 })
         );
@@ -32,8 +32,6 @@ describe('NotificationBell Component', () => {
         render(<NotificationBell />);
         const button = screen.getByRole('button', { name: /Notifications/i });
         expect(button).toBeInTheDocument();
-        const svg = button.querySelector('svg');
-        expect(svg).toBeTruthy();
     });
 
     it('shows unread badge when count > 0', async () => {
@@ -59,9 +57,9 @@ describe('NotificationBell Component', () => {
             expect(mockApiFetch).toHaveBeenCalled();
         });
 
-        // No badge number should be rendered
+        // Badge has bg-primary class — should not exist when count is 0
         const button = screen.getByRole('button', { name: /Notifications/i });
-        const badge = button.querySelector('span');
+        const badge = button.querySelector('.bg-primary.rounded-full');
         expect(badge).toBeNull();
     });
 
@@ -111,7 +109,7 @@ describe('NotificationBell Component', () => {
         await user.click(bellButton);
 
         await waitFor(() => {
-            expect(screen.getByText('Mark all as read')).toBeInTheDocument();
+            expect(screen.getByText('Mark all read')).toBeInTheDocument();
         });
     });
 });

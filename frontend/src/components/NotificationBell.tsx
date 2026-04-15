@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Bell, Info, CheckCircle, AlertTriangle, TrendingDown, Newspaper, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiFetch } from '@/lib/api';
 import { timeAgo } from '@/lib/timeAgo';
@@ -21,21 +20,21 @@ interface NotificationsResponse {
     unread_count: number;
 }
 
-function getTypeIcon(type: Notification['type']) {
-    switch (type) {
-        case 'success':
-            return <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />;
-        case 'warning':
-            return <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0" />;
-        case 'price_alert':
-            return <TrendingDown className="w-4 h-4 text-primary shrink-0" />;
-        case 'digest':
-            return <Newspaper className="w-4 h-4 text-blue-400 shrink-0" />;
-        case 'info':
-        default:
-            return <Info className="w-4 h-4 text-on-surface-variant shrink-0" />;
-    }
-}
+const TYPE_ICON: Record<Notification['type'], string> = {
+    success: 'check_circle',
+    warning: 'warning',
+    price_alert: 'trending_down',
+    digest: 'newspaper',
+    info: 'info',
+};
+
+const TYPE_COLOR: Record<Notification['type'], string> = {
+    success: 'text-green-400',
+    warning: 'text-yellow-400',
+    price_alert: 'text-primary',
+    digest: 'text-secondary',
+    info: 'text-on-surface-variant',
+};
 
 export default function NotificationBell() {
     const [isOpen, setIsOpen] = useState(false);
@@ -86,9 +85,7 @@ export default function NotificationBell() {
 
     const markAsRead = async (notificationId: string) => {
         try {
-            const res = await apiFetch(`/api/notifications/${notificationId}/read`, {
-                method: 'POST',
-            });
+            const res = await apiFetch(`/api/notifications/${notificationId}/read`, { method: 'POST' });
             if (res.ok) {
                 setNotifications((prev) =>
                     prev.map((n) => (n.id === notificationId ? { ...n, is_read: true } : n))
@@ -100,123 +97,118 @@ export default function NotificationBell() {
         }
     };
 
-    // Fetch on mount
-    useEffect(() => {
-        fetchNotifications();
-    }, [fetchNotifications]);
+    useEffect(() => { fetchNotifications(); }, [fetchNotifications]);
 
-    // Poll every 60 seconds for unread count
     useEffect(() => {
         const interval = setInterval(fetchUnreadCount, 60_000);
         return () => clearInterval(interval);
     }, [fetchUnreadCount]);
 
-    // Close on outside click
     useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        function handleClickOutside(e: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
                 setIsOpen(false);
             }
         }
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
+        if (isOpen) document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
-    // Refetch when dropdown opens
     useEffect(() => {
-        if (isOpen) {
-            fetchNotifications();
-        }
+        if (isOpen) fetchNotifications();
     }, [isOpen, fetchNotifications]);
 
     return (
         <div className="relative" ref={dropdownRef}>
-            {/* Bell Button */}
+            {/* Bell button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 text-on-surface-variant hover:text-on-surface transition-colors rounded-full hover:bg-surface-container/50"
                 aria-label="Notifications"
+                className="relative p-2 text-on-surface-variant hover:text-on-surface transition-colors rounded-full hover:bg-surface-container/50"
             >
-                <Bell className="w-5 h-5" />
+                <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: unreadCount > 0 ? "'FILL' 1" : "'FILL' 0" }}>
+                    notifications
+                </span>
                 {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-on-primary-container bg-primary rounded-full leading-none">
+                    <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[9px] font-mono font-bold text-on-primary bg-primary rounded-full leading-none">
                         {unreadCount > 99 ? '99+' : unreadCount}
                     </span>
                 )}
             </button>
 
-            {/* Dropdown Panel */}
+            {/* Dropdown */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        initial={{ opacity: 0, y: -6, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                        exit={{ opacity: 0, y: -6, scale: 0.96 }}
                         transition={{ duration: 0.15, ease: 'easeOut' }}
-                        className="absolute right-0 top-full mt-2 w-80 max-h-[420px] bg-surface backdrop-blur-xl border border-primary/10 rounded-xl shadow-2xl overflow-hidden z-50"
+                        className="absolute right-0 top-full mt-2 w-80 max-h-[420px] bg-surface/95 backdrop-blur-xl border border-primary/10 rounded-2xl shadow-2xl overflow-hidden z-50"
                     >
-                        {/* Header */}
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-primary/10">
-                            <h3 className="text-sm font-semibold text-on-surface">Notifications</h3>
+                        {/* Panel header */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant/10">
+                            <div>
+                                <span className="font-label text-[10px] tracking-[0.25em] uppercase text-on-surface-variant/60 block leading-none mb-0.5">Inbox</span>
+                                <h3 className="font-headline text-sm font-bold text-on-surface">Notifications</h3>
+                            </div>
                             <div className="flex items-center gap-2">
                                 {unreadCount > 0 && (
                                     <button
                                         onClick={markAllAsRead}
                                         disabled={isLoading}
-                                        className="text-xs text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
+                                        className="text-[10px] font-label uppercase tracking-widest text-primary hover:text-primary/70 transition-colors disabled:opacity-50"
                                     >
-                                        Mark all as read
+                                        Mark all read
                                     </button>
                                 )}
                                 <button
                                     onClick={() => setIsOpen(false)}
                                     className="text-on-surface-variant hover:text-on-surface transition-colors"
+                                    aria-label="Close notifications"
                                 >
-                                    <X className="w-4 h-4" />
+                                    <span className="material-symbols-outlined text-base">close</span>
                                 </button>
                             </div>
                         </div>
 
-                        {/* Notification List */}
-                        <div className="overflow-y-auto max-h-[350px]">
+                        {/* List */}
+                        <div className="overflow-y-auto max-h-[352px]">
                             {notifications.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center py-10 px-4">
-                                    <Bell className="w-8 h-8 text-on-surface-variant/20 mb-2" />
+                                <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                                    <span className="material-symbols-outlined text-4xl text-on-surface-variant/15 block mb-2">notifications</span>
                                     <p className="text-sm text-on-surface-variant">No notifications yet</p>
                                 </div>
                             ) : (
-                                notifications.map((notification) => (
+                                notifications.map((n) => (
                                     <button
-                                        key={notification.id}
-                                        onClick={() => {
-                                            if (!notification.is_read) {
-                                                markAsRead(notification.id);
-                                            }
-                                        }}
-                                        className={`w-full text-left px-4 py-3 border-b border-primary/5 hover:bg-surface-container/30 transition-colors ${
-                                            !notification.is_read ? 'bg-surface-container/20' : ''
+                                        key={n.id}
+                                        onClick={() => { if (!n.is_read) markAsRead(n.id); }}
+                                        className={`w-full text-left px-4 py-3 border-b border-outline-variant/8 hover:bg-surface-container/30 transition-colors ${
+                                            !n.is_read ? 'bg-surface-container/20' : ''
                                         }`}
                                     >
                                         <div className="flex gap-3">
-                                            <div className="mt-0.5">
-                                                {getTypeIcon(notification.type)}
-                                            </div>
+                                            <span
+                                                className={`material-symbols-outlined text-base mt-0.5 flex-shrink-0 ${TYPE_COLOR[n.type]}`}
+                                                style={{ fontVariationSettings: "'FILL' 1" }}
+                                            >
+                                                {TYPE_ICON[n.type]}
+                                            </span>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-sm font-medium text-on-surface truncate">
-                                                        {notification.title}
+                                                    <span className="text-sm font-headline font-semibold text-on-surface truncate">
+                                                        {n.title}
                                                     </span>
-                                                    {!notification.is_read && (
-                                                        <span className="w-2 h-2 bg-primary rounded-full shrink-0" />
+                                                    {!n.is_read && (
+                                                        <span className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
                                                     )}
                                                 </div>
-                                                <p className="text-xs text-on-surface-variant mt-0.5 line-clamp-2">
-                                                    {notification.message}
+                                                <p className="text-xs text-on-surface-variant mt-0.5 line-clamp-2 leading-relaxed">
+                                                    {n.message}
                                                 </p>
-                                                <p className="text-[10px] text-on-surface-variant/50 mt-1">
-                                                    {timeAgo(notification.created_at)}
+                                                <p className="text-[10px] text-on-surface-variant/40 font-mono mt-1">
+                                                    {timeAgo(n.created_at)}
                                                 </p>
                                             </div>
                                         </div>
