@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Share2, Copy, Check, Instagram } from 'lucide-react';
+
 import { apiFetch } from '@/lib/api';
 import { Session } from 'next-auth';
 import { events } from '@/lib/analytics';
@@ -86,7 +86,7 @@ export default function ShareButtons({ analysisId, season, session }: Props) {
     return (
         <div className="bg-surface-container/50 border border-primary/10 p-6 rounded-3xl">
             <div className="flex items-center gap-2 mb-4">
-                <Share2 className="w-5 h-5 text-primary" />
+                <span className="material-symbols-outlined text-xl text-primary">share</span>
                 <h3 className="font-headline text-lg font-bold text-on-surface">Share Your Results</h3>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -105,7 +105,7 @@ export default function ShareButtons({ analysisId, season, session }: Props) {
                     disabled={loading}
                     className="flex items-center gap-2 px-4 py-2.5 bg-surface-container hover:bg-surface-container/80 border border-outline-variant/30 rounded-xl text-sm font-label font-medium text-on-surface transition-all disabled:opacity-50"
                 >
-                    {copied ? <Check className="w-4 h-4 text-tertiary" /> : <Copy className="w-4 h-4" />}
+                    {copied ? <span className="material-symbols-outlined text-base text-tertiary">check</span> : <span className="material-symbols-outlined text-base">content_copy</span>}
                     {copied ? 'Copied!' : 'Copy Link'}
                 </button>
                 {/* Twitter/X */}
@@ -124,7 +124,7 @@ export default function ShareButtons({ analysisId, season, session }: Props) {
                     className="flex items-center gap-2 px-4 py-2.5 bg-pink-600/20 hover:bg-pink-600/30 border border-pink-500/20 rounded-xl text-sm font-medium text-pink-300 transition-all disabled:opacity-50"
                     title="Link copied — paste in Instagram Stories"
                 >
-                    <Instagram className="w-4 h-4" />
+                    <span className="material-symbols-outlined text-base">photo_camera</span>
                     Stories
                 </button>
             </div>

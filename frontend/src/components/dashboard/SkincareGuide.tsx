@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Droplets } from 'lucide-react';
+
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 const SKINCARE: Record<string, { routine: string[]; ingredients: string[]; avoid: string[] }> = {
@@ -50,7 +50,7 @@ export default function SkincareGuide({ undertone }: Props) {
             <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider mb-4">{t('skincareGuide')}</p>
             <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 space-y-5">
                 <div className="flex items-center gap-2">
-                    <Droplets className="w-5 h-5 text-secondary" />
+                    <span className="material-symbols-outlined text-xl text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>water_drop</span>
                     <p className="text-on-surface font-label font-bold">Routine for {undertone} undertones</p>
                 </div>
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Sparkles, User, Star, ChevronRight } from 'lucide-react';
+
 import { useTranslation } from '@/lib/hooks/useTranslation';
 import { timeAgo } from '@/lib/timeAgo';
 
@@ -65,7 +65,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                     />
                 )}
                 <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                     <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider">{t('colorSeason')}</p>
                 </div>
                 {lastAnalysis ? (
@@ -79,7 +79,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                             ))}
                         </div>
                         <Link href={resultsHref} className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
-                            {t('viewFullResults')} <ChevronRight className="w-3 h-3" />
+                            {t('viewFullResults')} <span className="material-symbols-outlined text-sm">chevron_right</span>
                         </Link>
                     </>
                 ) : (
@@ -100,7 +100,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                 className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6"
             >
                 <div className="flex items-center gap-2 mb-4">
-                    <User className="w-4 h-4 text-primary" />
+                    <span className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
                     <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider">{t('bodyShape')}</p>
                 </div>
                 {bodyShape ? (
@@ -109,7 +109,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                         <p className="font-headline text-xl font-bold text-on-surface">{SHAPE_LABELS[bodyShape.shape] ?? bodyShape.shape}</p>
                         <p className="text-on-surface-variant text-xs mt-1">{timeAgo(bodyShape.timestamp)}</p>
                         <Link href="/quiz/body-shape" className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
-                            {t('retakeQuiz')} <ChevronRight className="w-3 h-3" />
+                            {t('retakeQuiz')} <span className="material-symbols-outlined text-sm">chevron_right</span>
                         </Link>
                     </>
                 ) : (
@@ -130,7 +130,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                 className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6"
             >
                 <div className="flex items-center gap-2 mb-4">
-                    <Star className="w-4 h-4 text-primary" />
+                    <span className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                     <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider">{t('stylePersonality')}</p>
                 </div>
                 {stylePersonality ? (
@@ -139,7 +139,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
                         <p className="font-headline text-xl font-bold text-on-surface">{PERSONALITY_LABELS[stylePersonality.personality] ?? stylePersonality.personality}</p>
                         <p className="text-on-surface-variant text-xs mt-1">{timeAgo(stylePersonality.timestamp)}</p>
                         <Link href="/quiz/style" className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
-                            {t('retakeQuiz')} <ChevronRight className="w-3 h-3" />
+                            {t('retakeQuiz')} <span className="material-symbols-outlined text-sm">chevron_right</span>
                         </Link>
                     </>
                 ) : (

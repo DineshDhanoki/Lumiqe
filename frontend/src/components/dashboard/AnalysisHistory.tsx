@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Clock, ChevronRight } from 'lucide-react';
+
 import { useTranslation } from '@/lib/hooks/useTranslation';
 import { timeAgo } from '@/lib/timeAgo';
 
@@ -51,10 +51,10 @@ export default function AnalysisHistory({ history }: Props) {
                                 ))}
                             </div>
                             <p className="text-on-surface-variant/50 text-xs flex items-center gap-1 justify-end">
-                                <Clock className="w-3 h-3" />{timeAgo(entry.timestamp)}
+                                <span className="material-symbols-outlined text-sm">schedule</span>{timeAgo(entry.timestamp)}
                             </p>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-on-surface-variant/30 group-hover:text-on-surface-variant transition-colors" />
+                        <span className="material-symbols-outlined text-lg text-on-surface-variant/30 group-hover:text-on-surface-variant transition-colors">chevron_right</span>
                     </Link>
                 ))}
             </div>

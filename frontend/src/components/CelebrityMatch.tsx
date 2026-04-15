@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 import { API_BASE } from '@/lib/api';
 
 interface Celebrity {
@@ -79,7 +78,7 @@ export default function CelebrityMatch({ celebrities, season }: CelebrityMatchPr
     return (
         <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 md:p-8">
             <div className="flex items-center gap-3 mb-2">
-                <Sparkles className="w-6 h-6 text-primary" />
+                <span className="material-symbols-outlined text-primary text-2xl">auto_awesome</span>
                 <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60">Style Muses</span>
             </div>
             <h3 className="font-headline text-xl font-bold text-on-surface mb-3">Your Celebrity Color Twins</h3>

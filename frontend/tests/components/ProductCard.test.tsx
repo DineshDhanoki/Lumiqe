@@ -51,6 +51,6 @@ describe('ProductCard', () => {
 
     it('shows the match score badge', () => {
         render(<ProductCard {...defaultProps} />);
-        expect(screen.getByText('87% Match')).toBeInTheDocument();
+        expect(screen.getByText('AI 87%')).toBeInTheDocument();
     });
 });

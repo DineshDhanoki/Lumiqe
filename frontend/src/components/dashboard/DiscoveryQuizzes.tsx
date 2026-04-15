@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+
 
 export default function DiscoveryQuizzes() {
     return (
@@ -16,7 +16,7 @@ export default function DiscoveryQuizzes() {
                         <p className="text-on-surface font-semibold text-sm">Body Shape Analysis</p>
                         <p className="text-on-surface-variant text-xs mt-0.5">6 questions · Find your silhouette</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-on-surface-variant/30 group-hover:text-on-surface-variant transition-colors" />
+                    <span className="material-symbols-outlined text-lg text-on-surface-variant/30 group-hover:text-on-surface-variant transition-colors">chevron_right</span>
                 </Link>
 
                 <Link href="/quiz/style"
@@ -26,7 +26,7 @@ export default function DiscoveryQuizzes() {
                         <p className="text-on-surface font-semibold text-sm">Style Personality Quiz</p>
                         <p className="text-on-surface-variant text-xs mt-0.5">10 questions · Discover your aesthetic</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-on-surface-variant/30 group-hover:text-on-surface-variant transition-colors" />
+                    <span className="material-symbols-outlined text-lg text-on-surface-variant/30 group-hover:text-on-surface-variant transition-colors">chevron_right</span>
                 </Link>
             </div>
         </motion.div>

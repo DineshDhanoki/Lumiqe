@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+
 
 interface DataPrivacySectionProps {
     exporting: boolean;
@@ -45,7 +45,7 @@ export default function DataPrivacySection({
                             className="flex items-center gap-2 text-primary font-mono text-[10px] uppercase tracking-[0.2em] hover:gap-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {exporting ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
                             ) : (
                                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
                             )}

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+
 import { apiFetch } from '@/lib/api';
 
 interface Message {
@@ -150,7 +150,7 @@ export default function AIStylistChat({
                                 </span>
                             </div>
                             <div className="bg-surface-container/80 border border-primary/10 px-4 py-3 rounded-2xl rounded-tl-sm">
-                                <Loader2 className="w-4 h-4 text-on-surface-variant animate-spin" />
+                                <span className="material-symbols-outlined text-on-surface-variant text-base animate-spin">progress_activity</span>
                             </div>
                         </motion.div>
                     )}

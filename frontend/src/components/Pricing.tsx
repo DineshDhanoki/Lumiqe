@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, X, Sparkles, Zap, Crown, ArrowRight, Loader2, CreditCard } from 'lucide-react';
+
 import { useSession } from 'next-auth/react';
 import { events } from '@/lib/analytics';
 import { apiFetch } from '@/lib/api';
@@ -118,10 +118,10 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <p className="text-primary text-sm font-label font-bold tracking-widest uppercase mb-4">
+                    <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-3">
                         {t('pricingLabel')}
-                    </p>
-                    <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface mb-4">
+                    </span>
+                    <h2 className="font-display italic text-3xl sm:text-4xl md:text-5xl text-on-surface mb-4">
                         {t('pricingTitle')}
                     </h2>
                     <p className="text-on-surface-variant text-lg max-w-xl mx-auto">
@@ -175,7 +175,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                     >
                         <div className="flex items-center gap-3 mb-5">
                             <div className="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center">
-                                <Zap className="w-5 h-5 text-on-surface-variant" />
+                                <span className="material-symbols-outlined text-lg text-on-surface-variant">bolt</span>
                             </div>
                             <h3 className="font-headline text-xl font-bold text-on-surface">{t('pricingFree')}</h3>
                         </div>
@@ -192,9 +192,9 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                             {freeFeatures.map((f, i) => (
                                 <li key={i} className="flex items-center gap-3">
                                     {f.included ? (
-                                        <Check className="w-4 h-4 text-tertiary shrink-0" />
+                                        <span className="material-symbols-outlined text-base text-tertiary shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                     ) : (
-                                        <X className="w-4 h-4 text-on-surface-variant/30 shrink-0" />
+                                        <span className="material-symbols-outlined text-base text-on-surface-variant/30 shrink-0">cancel</span>
                                     )}
                                     <span className={`text-sm ${f.included ? 'text-on-surface-variant' : 'text-on-surface-variant/40'}`}>
                                         {f.text}
@@ -221,7 +221,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                     >
                         <div className="flex items-center gap-3 mb-5">
                             <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <CreditCard className="w-5 h-5 text-primary" />
+                                <span className="material-symbols-outlined text-lg text-primary">credit_card</span>
                             </div>
                             <h3 className="font-headline text-xl font-bold text-on-surface">{t('pricingSinglePack')}</h3>
                         </div>
@@ -237,7 +237,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         <ul className="space-y-2.5 mb-6 flex-1">
                             {singlePackFeatures.map((f, i) => (
                                 <li key={i} className="flex items-center gap-3">
-                                    <Check className="w-4 h-4 text-primary shrink-0" />
+                                    <span className="material-symbols-outlined text-base text-primary shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                     <span className="text-sm text-on-surface-variant">{f.text}</span>
                                 </li>
                             ))}
@@ -250,7 +250,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         >
                             {loadingPlan === 'credits' ? (
                                 <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                                     {t('pricingOpeningStripe')}
                                 </>
                             ) : (
@@ -276,7 +276,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
 
                         <div className="flex items-center gap-3 mb-5">
                             <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <Crown className="w-5 h-5 text-primary" />
+                                <span className="material-symbols-outlined text-lg text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
                             </div>
                             <h3 className="font-headline text-xl font-bold text-on-surface">{t('pricingPremium')}</h3>
                         </div>
@@ -298,7 +298,7 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         <ul className="space-y-2.5 mb-6 flex-1">
                             {premiumFeatures.map((f, i) => (
                                 <li key={i} className="flex items-center gap-3">
-                                    <Check className="w-4 h-4 text-primary shrink-0" />
+                                    <span className="material-symbols-outlined text-base text-primary shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                     <span className="text-sm text-on-surface-variant">{f.text}</span>
                                 </li>
                             ))}
@@ -311,14 +311,14 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
                         >
                             {loadingPlan === 'monthly' || loadingPlan === 'annual' ? (
                                 <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                                     {t('pricingOpeningStripe')}
                                 </>
                             ) : (
                                 <>
-                                    <Sparkles className="w-4 h-4" />
+                                    <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                     {t('pricingUpgrade')}
-                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform inline-block">arrow_forward</span>
                                 </>
                             )}
                         </button>

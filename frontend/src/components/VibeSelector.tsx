@@ -1,6 +1,6 @@
 'use client';
 
-import { Lock } from 'lucide-react';
+
 
 interface VibeSelectorProps {
     currentVibe: string;
@@ -36,7 +36,7 @@ export default function VibeSelector({ currentVibe, onSelectVibe, isPremiumUser 
                         >
                             {vibe.label}
                             {vibe.isPremium && !isPremiumUser && (
-                                <Lock className={`w-3.5 h-3.5 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`} />
+                                <span className={`material-symbols-outlined text-sm ${isActive ? 'text-primary' : 'text-on-surface-variant'}`}>lock</span>
                             )}
                         </button>
                     );

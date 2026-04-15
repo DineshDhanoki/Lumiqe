@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Palette, Sparkles, Contrast, Zap } from 'lucide-react';
+
 
 interface SignatureColor {
     hex: string;
@@ -66,9 +66,10 @@ export default function ColorProfileDeep({
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
         >
-            <div className="text-center mb-6">
-                <h2 className="font-headline text-3xl font-bold text-on-surface mb-2">Your Color Profile</h2>
-                <p className="text-on-surface-variant">A professional breakdown of your personal coloring</p>
+            <div className="mb-6">
+                <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-1">The Science of You</span>
+                <h2 className="font-display italic text-4xl text-on-surface">Your Color Profile</h2>
+                <p className="text-on-surface-variant text-sm mt-1">A professional breakdown of your personal coloring</p>
             </div>
 
             {/* Top 2 cards: Archetype + Signature Color */}
@@ -76,7 +77,7 @@ export default function ColorProfileDeep({
                 {/* Style Archetype */}
                 <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
                     <div className="flex items-center gap-2 mb-3">
-                        <Sparkles className="w-5 h-5 text-primary" />
+                        <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Style Archetype</p>
                     </div>
                     <p className="text-3xl font-bold text-on-surface">{styleArchetype}</p>
@@ -103,10 +104,10 @@ export default function ColorProfileDeep({
                 <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-5">Color Characteristics</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                     {[
-                        { label: 'Value', value: value, icon: <Contrast className="w-4 h-4" />, bar: _scaleValue(value) },
-                        { label: 'Chroma', value: chroma, icon: <Zap className="w-4 h-4" />, bar: _scaleValue(chroma) },
-                        { label: 'Contrast', value: contrastLevel, icon: <Palette className="w-4 h-4" />, bar: _scaleValue(contrastLevel) },
-                        { label: 'Undertone', value: undertone.charAt(0).toUpperCase() + undertone.slice(1), icon: <Sparkles className="w-4 h-4" />, bar: null },
+                        { label: 'Value', value: value, icon: <span className="material-symbols-outlined text-primary text-base">contrast</span>, bar: _scaleValue(value) },
+                        { label: 'Chroma', value: chroma, icon: <span className="material-symbols-outlined text-primary text-base">bolt</span>, bar: _scaleValue(chroma) },
+                        { label: 'Contrast', value: contrastLevel, icon: <span className="material-symbols-outlined text-primary text-base">palette</span>, bar: _scaleValue(contrastLevel) },
+                        { label: 'Undertone', value: undertone.charAt(0).toUpperCase() + undertone.slice(1), icon: <span className="material-symbols-outlined text-primary text-base">auto_awesome</span>, bar: null },
                     ].map((item, i) => (
                         <div key={i} className="bg-surface-container/30 rounded-2xl p-4">
                             <div className="flex items-center gap-2 mb-3 text-primary">{item.icon}<p className="text-on-surface-variant text-[10px] uppercase tracking-wider">{item.label}</p></div>

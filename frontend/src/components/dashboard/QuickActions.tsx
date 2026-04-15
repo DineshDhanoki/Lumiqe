@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Camera, ShoppingBag, MessageCircle, Shirt } from 'lucide-react';
+
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface Props {
@@ -13,10 +13,10 @@ export default function QuickActions({ aiStylistHref }: Props) {
     const { t } = useTranslation();
 
     const actions = [
-        { label: t('newScan'), icon: <Camera className="w-5 h-5" />, href: '/analyze', color: 'bg-primary/10 border-primary/20 hover:bg-primary/20' },
-        { label: t('shopColors'), icon: <ShoppingBag className="w-5 h-5" />, href: '/shopping-agent', color: 'bg-surface-container/30 border-outline-variant/20 hover:bg-surface-container/50' },
-        { label: t('aiStylist'), icon: <MessageCircle className="w-5 h-5" />, href: aiStylistHref, color: 'bg-surface-container/30 border-outline-variant/20 hover:bg-surface-container/50' },
-        { label: t('buyOrPass'), icon: <Shirt className="w-5 h-5" />, href: '/scan', color: 'bg-surface-container/30 border-outline-variant/20 hover:bg-surface-container/50' },
+        { label: t('newScan'), icon: <span className="material-symbols-outlined text-xl">photo_camera</span>, href: '/analyze', color: 'bg-primary/10 border-primary/20 hover:bg-primary/20' },
+        { label: t('shopColors'), icon: <span className="material-symbols-outlined text-xl">shopping_bag</span>, href: '/shopping-agent', color: 'bg-surface-container/30 border-outline-variant/20 hover:bg-surface-container/50' },
+        { label: t('aiStylist'), icon: <span className="material-symbols-outlined text-xl">chat</span>, href: aiStylistHref, color: 'bg-surface-container/30 border-outline-variant/20 hover:bg-surface-container/50' },
+        { label: t('buyOrPass'), icon: <span className="material-symbols-outlined text-xl">checkroom</span>, href: '/scan', color: 'bg-surface-container/30 border-outline-variant/20 hover:bg-surface-container/50' },
     ];
 
     return (

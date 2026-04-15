@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Lock, ShoppingBag, ArrowUpRight, Sparkles } from 'lucide-react';
 
 interface Product {
     id: string;
@@ -60,7 +59,7 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
             `}
         >
             {/* ── Product Image Box ─────────────────────────── */}
-            <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-surface-container/30">
+            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-surface-container/30">
                 {imgFailed ? (
                     /* ── Premium Gold Fallback — "Visit Store" CTA ── */
                     <div
@@ -106,11 +105,7 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                                     boxShadow: `0 0 30px rgba(212,175,55,0.2), inset 0 0 20px rgba(212,175,55,0.1)`,
                                 }}
                             >
-                                <ShoppingBag
-                                    className="w-7 h-7 transition-all duration-300 group-hover:-translate-y-0.5"
-                                    style={{ color: `#e6c27a` }}
-                                    strokeWidth={1.5}
-                                />
+                                <span className="material-symbols-outlined text-base transition-all duration-300 group-hover:-translate-y-0.5" style={{ color: `#e6c27a` }}>shopping_bag</span>
                             </div>
 
                             {/* Brand name */}
@@ -131,9 +126,9 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                                     boxShadow: `0 4px 15px rgba(0,0,0,0.5)`,
                                 }}
                             >
-                                <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
+                                <span className="material-symbols-outlined text-sm" style={{ color: '#d4af37' }}>auto_awesome</span>
                                 Visit Store
-                                <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-[#d4af37]" />
+                                <span className="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#d4af37' }}>arrow_outward</span>
                             </div>
                         </div>
                     </div>
@@ -155,15 +150,15 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                 {isLocked && (
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="w-12 h-12 rounded-full bg-surface/80 backdrop-blur-sm border border-primary/10 flex items-center justify-center shadow-lg">
-                            <Lock className="w-5 h-5 text-on-surface-variant" />
+                            <span className="material-symbols-outlined text-xl text-on-surface-variant">lock</span>
                         </div>
                     </div>
                 )}
 
-                {/* Match Score Badge */}
+                {/* Match Score Badge — top-left, AI MATCH % in JetBrains Mono */}
                 {!isLocked && (
-                    <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-surface/80 backdrop-blur-sm text-[10px] font-bold text-on-surface border border-primary/10">
-                        {Math.round(product.match_score)}% Match
+                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface/80 backdrop-blur-sm text-[9px] font-mono font-bold text-primary border border-primary/15 uppercase tracking-wider">
+                        AI {Math.round(product.match_score)}%
                     </div>
                 )}
             </div>

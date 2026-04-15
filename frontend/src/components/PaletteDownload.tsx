@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Download, Loader2, CheckCircle2 } from 'lucide-react';
+
 import { apiFetch } from '@/lib/api';
 
 interface PaletteDownloadProps {
@@ -68,17 +68,17 @@ export default function PaletteDownload({ season, palette = [], hexColor = '', u
             >
                 {isSuccess ? (
                     <>
-                        <CheckCircle2 className="w-5 h-5" />
+                        <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                         Saved to Device!
                     </>
                 ) : isDownloading ? (
                     <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                         Generating Beautiful Card...
                     </>
                 ) : (
                     <>
-                        <Download className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
+                        <span className="material-symbols-outlined text-base group-hover:-translate-y-1 transition-transform inline-block">download</span>
                         Save My Palette
                     </>
                 )}
