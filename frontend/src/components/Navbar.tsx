@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
-import { Sparkles, Menu, X, Crown, User, LogOut, Shield } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import SignInModal from './SignInModal';
 import NotificationBell from './NotificationBell';
@@ -79,7 +78,7 @@ export default function Navbar() {
                                         : 'bg-surface-container/50 hover:bg-surface-container text-on-surface border-outline-variant/20'
                                         }`}
                                 >
-                                    {isPremium ? <Crown className="w-4 h-4 text-primary" /> : <User className="w-4 h-4" />}
+                                    {isPremium ? <span className="material-symbols-outlined text-base text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span> : <span className="material-symbols-outlined text-base">person</span>}
                                     <span className="text-sm font-label font-bold">{t('navAccount')}</span>
                                 </Link>
                                 {session?.isAdmin && (
@@ -87,7 +86,7 @@ export default function Navbar() {
                                         href="/admin"
                                         className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 hover:bg-secondary/20 text-secondary border border-secondary/30 transition-all"
                                     >
-                                        <Shield className="w-4 h-4" />
+                                        <span className="material-symbols-outlined text-base">admin_panel_settings</span>
                                         <span className="text-sm font-label font-bold">Admin</span>
                                     </Link>
                                 )}
@@ -96,7 +95,7 @@ export default function Navbar() {
                                     className="text-on-surface-variant/50 hover:text-tertiary p-2 transition-colors rounded-full hover:bg-surface-container/30"
                                     title={t('logOut')}
                                 >
-                                    <LogOut className="w-5 h-5" />
+                                    <span className="material-symbols-outlined text-xl">logout</span>
                                 </button>
                             </>
                         ) : (
@@ -118,7 +117,7 @@ export default function Navbar() {
                         aria-label={isMobileMenuOpen ? t('navCloseMenu') : t('navOpenMenu')}
                         aria-expanded={isMobileMenuOpen}
                     >
-                        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        {isMobileMenuOpen ? <span className="material-symbols-outlined text-2xl">close</span> : <span className="material-symbols-outlined text-2xl">menu</span>}
                     </button>
                 </div>
 
@@ -154,7 +153,7 @@ export default function Navbar() {
                                             : 'bg-surface-container/50 text-on-surface border-outline-variant/30'
                                             }`}
                                     >
-                                        {isPremium ? <Crown className="w-4 h-4 text-primary" /> : <User className="w-4 h-4" />}
+                                        {isPremium ? <span className="material-symbols-outlined text-base text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span> : <span className="material-symbols-outlined text-base">person</span>}
                                         <span className="text-base font-bold">{t('navAccount')}</span>
                                     </Link>
                                     {session?.isAdmin && (
@@ -163,7 +162,7 @@ export default function Navbar() {
                                             onClick={() => setIsMobileMenuOpen(false)}
                                             className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-secondary/10 text-secondary border border-secondary/30"
                                         >
-                                            <Shield className="w-4 h-4" />
+                                            <span className="material-symbols-outlined text-base">admin_panel_settings</span>
                                             <span className="text-base font-bold">Admin</span>
                                         </Link>
                                     )}
@@ -171,7 +170,7 @@ export default function Navbar() {
                                         onClick={() => signOut({ callbackUrl: '/' })}
                                         className="flex items-center justify-center gap-2 text-base font-medium text-on-surface-variant hover:text-primary w-full py-2"
                                     >
-                                        <LogOut className="w-4 h-4" />
+                                        <span className="material-symbols-outlined text-base">logout</span>
                                         {t('logOut')}
                                     </button>
                                 </>

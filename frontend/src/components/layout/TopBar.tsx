@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Bell, LogOut, Shield, Menu } from 'lucide-react';
 import NotificationBell from '@/components/NotificationBell';
 
 interface TopBarProps {
@@ -41,7 +40,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
                 aria-label="Admin panel"
                 className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors"
               >
-                <Shield className="w-5 h-5" />
+                <span className="material-symbols-outlined text-xl">admin_panel_settings</span>
               </Link>
             )}
 
@@ -64,7 +63,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
               aria-label="Log out"
               className="p-2 rounded-full text-on-surface-variant/50 hover:text-tertiary hover:bg-tertiary/10 transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <span className="material-symbols-outlined text-base">logout</span>
             </button>
           </>
         )}
@@ -76,7 +75,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
             onClick={onMobileMenuToggle}
             aria-label="Open menu"
           >
-            <Menu className="w-5 h-5" />
+            <span className="material-symbols-outlined text-xl">menu</span>
           </button>
         )}
       </div>

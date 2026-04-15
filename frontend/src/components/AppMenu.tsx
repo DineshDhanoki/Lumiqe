@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, X, LayoutDashboard, ScanLine, ShoppingBag, User, LogOut, Shield, Bell } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function AppMenu() {
@@ -13,12 +12,12 @@ export default function AppMenu() {
     const menuRef = useRef<HTMLDivElement>(null);
 
     const menuLinks = [
-        { name: t('menuDashboard'), href: '/dashboard', icon: LayoutDashboard },
-        { name: t('menuScanner'), href: '/scan', icon: ScanLine },
-        { name: t('menuShopColors'), href: '/feed', icon: ShoppingBag },
-        { name: 'Price Alerts', href: '/price-alerts', icon: Bell },
-        { name: t('menuAccount'), href: '/account', icon: User },
-        ...(session?.isAdmin ? [{ name: t('menuAdminPanel'), href: '/admin', icon: Shield }] : []),
+        { name: t('menuDashboard'), href: '/dashboard', icon: 'dashboard' },
+        { name: t('menuScanner'), href: '/scan', icon: 'photo_camera' },
+        { name: t('menuShopColors'), href: '/feed', icon: 'shopping_bag' },
+        { name: 'Price Alerts', href: '/price-alerts', icon: 'notifications' },
+        { name: t('menuAccount'), href: '/account', icon: 'person' },
+        ...(session?.isAdmin ? [{ name: t('menuAdminPanel'), href: '/admin', icon: 'admin_panel_settings' }] : []),
     ];
 
     useEffect(() => {
@@ -41,7 +40,7 @@ export default function AppMenu() {
                 aria-label={open ? t('navCloseMenu') : t('navOpenMenu')}
                 aria-expanded={open}
             >
-                {open ? <X className="w-5 h-5 text-on-surface" /> : <Menu className="w-5 h-5 text-on-surface" />}
+                        {open ? <span className="material-symbols-outlined text-xl text-on-surface">close</span> : <span className="material-symbols-outlined text-xl text-on-surface">menu</span>}
             </button>
 
             {open && (
@@ -53,7 +52,7 @@ export default function AppMenu() {
                             onClick={() => setOpen(false)}
                             className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-on-surface hover:text-on-surface hover:bg-surface-container/50 transition-colors"
                         >
-                            <link.icon className="w-4 h-4 text-on-surface-variant" />
+                            <span className="material-symbols-outlined text-base text-on-surface-variant">{link.icon}</span>
                             {link.name}
                         </Link>
                     ))}
@@ -62,7 +61,7 @@ export default function AppMenu() {
                         onClick={() => { setOpen(false); signOut({ callbackUrl: '/' }); }}
                         className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container/30 transition-colors w-full"
                     >
-                        <LogOut className="w-4 h-4" />
+                        <span className="material-symbols-outlined text-base">logout</span>
                         {t('menuLogOut')}
                     </button>
                 </div>
