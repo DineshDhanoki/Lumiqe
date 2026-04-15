@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 
 interface Message {
@@ -38,7 +38,7 @@ export default function AIStylistChat({
     const [messages, setMessages] = useState<Message[]>([
         {
             role: 'assistant',
-            content: `Hi! I'm your personal Lumiqe color stylist. You're a ${season} — ${styleArchetype} energy with ${undertone} undertones. Ask me anything about what colors to wear, outfit formulas, shopping choices, or beauty tips. I'm here to help you dress like you hired a private stylist! ✨`,
+            content: `Hi! I'm your personal Lumiqe color stylist. You're a ${season} — ${styleArchetype} energy with ${undertone} undertones. Ask me anything about what colors to wear, outfit formulas, shopping choices, or beauty tips. I'm here to help you dress like you hired a private stylist!`,
         },
     ]);
     const [input, setInput] = useState('');
@@ -97,10 +97,16 @@ export default function AIStylistChat({
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col h-[680px]"
         >
-            {/* Header */}
-            <div className="text-center mb-4">
-                <h2 className="font-headline text-3xl font-bold text-on-surface mb-1">AI Stylist Chat</h2>
-                <p className="text-on-surface-variant text-sm">Your personal color consultant, available 24/7</p>
+            {/* Editorial header */}
+            <div className="mb-5">
+                <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-1">Lumiqe Intelligence</span>
+                <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-secondary text-2xl">auto_awesome</span>
+                    <div>
+                        <h2 className="font-display italic text-3xl text-on-surface leading-tight">AI Stylist</h2>
+                        <p className="text-on-surface-variant text-xs font-label mt-0.5">Your personal color consultant, available 24/7</p>
+                    </div>
+                </div>
             </div>
 
             {/* Chat window */}
@@ -109,13 +115,15 @@ export default function AIStylistChat({
                     {messages.map((msg, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             {msg.role === 'assistant' && (
-                                <div className="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                                    <Sparkles className="w-3.5 h-3.5 text-on-primary-container" />
+                                <div className="w-7 h-7 rounded-full bg-secondary-container/40 border border-secondary/20 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                                    <span className="material-symbols-outlined text-secondary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                        auto_awesome
+                                    </span>
                                 </div>
                             )}
                             <div
@@ -136,8 +144,10 @@ export default function AIStylistChat({
                             animate={{ opacity: 1 }}
                             className="flex justify-start"
                         >
-                            <div className="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                                <Sparkles className="w-3.5 h-3.5 text-on-primary-container" />
+                            <div className="w-7 h-7 rounded-full bg-secondary-container/40 border border-secondary/20 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                                <span className="material-symbols-outlined text-secondary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                    auto_awesome
+                                </span>
                             </div>
                             <div className="bg-surface-container/80 border border-primary/10 px-4 py-3 rounded-2xl rounded-tl-sm">
                                 <Loader2 className="w-4 h-4 text-on-surface-variant animate-spin" />
@@ -168,22 +178,23 @@ export default function AIStylistChat({
                 <p className="text-primary text-xs text-center mb-2">{error}</p>
             )}
 
-            {/* Input */}
-            <div className="flex gap-2">
+            {/* Input row */}
+            <div className="flex gap-2 items-center border-t border-outline-variant/10 pt-4">
                 <input
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && sendMessage()}
                     placeholder="Ask your stylist anything..."
-                    className="flex-1 bg-surface-container/80 border border-outline-variant/20 rounded-2xl px-4 py-3 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none focus:border-primary/50 transition-colors"
+                    className="flex-1 bg-transparent border-b border-outline-variant/30 focus:border-primary/60 px-1 py-2.5 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none transition-colors"
                 />
                 <button
                     onClick={() => sendMessage()}
                     disabled={!input.trim() || isLoading}
-                    className="w-12 h-12 bg-primary-container hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed rounded-2xl flex items-center justify-center transition-colors flex-shrink-0"
+                    aria-label="Send message"
+                    className="w-10 h-10 bg-gradient-to-br from-primary-container to-primary disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-opacity flex-shrink-0 hover:opacity-90 active:scale-95"
                 >
-                    <Send className="w-4 h-4 text-on-primary-container" />
+                    <span className="material-symbols-outlined text-on-primary text-base">send</span>
                 </button>
             </div>
         </motion.div>
