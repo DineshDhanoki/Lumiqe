@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { apiFetch } from '@/lib/api';
 import AppLayout from '@/components/layout/AppLayout';
@@ -232,7 +231,7 @@ export default function BodyShapeQuiz() {
                                     onClick={() => setCurrent(current - 1)}
                                     className="text-on-surface-variant hover:text-on-surface text-sm flex items-center gap-1 transition-colors"
                                 >
-                                    <ArrowLeft className="w-3.5 h-3.5" /> Previous question
+                                    <span className="material-symbols-outlined text-sm">arrow_back</span> Previous question
                                 </button>
                             )}
                         </motion.div>
@@ -259,7 +258,7 @@ export default function BodyShapeQuiz() {
                                 <div className="flex flex-wrap gap-2">
                                     {shapeData.bestStyles.map((s) => (
                                         <span key={s} className="flex items-center gap-1.5 text-sm bg-green-500/15 text-green-300 border border-green-500/25 px-3 py-1.5 rounded-full">
-                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                             {s}
                                         </span>
                                     ))}
@@ -294,7 +293,7 @@ export default function BodyShapeQuiz() {
                                     href="/quiz/style"
                                     className="flex-1 text-center py-3 rounded-full bg-surface-container/30 hover:bg-surface-container/50 border border-primary/20 text-on-surface font-bold transition-all"
                                 >
-                                    Take Style Quiz <ArrowRight className="inline w-4 h-4" />
+                                    Take Style Quiz <span className="material-symbols-outlined text-base align-middle">arrow_forward</span>
                                 </Link>
                             </div>
                         </motion.div>

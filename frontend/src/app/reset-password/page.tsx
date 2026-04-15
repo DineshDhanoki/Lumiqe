@@ -3,7 +3,6 @@
 import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Eye, EyeOff, Lock, CheckCircle, AlertCircle } from 'lucide-react';
 
 function ResetPasswordForm() {
     const searchParams = useSearchParams();
@@ -61,7 +60,7 @@ function ResetPasswordForm() {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
                 <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
-                    <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                    <span className="material-symbols-outlined text-6xl text-green-500 block mx-auto" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                     <h1 className="text-2xl font-bold text-on-surface">Password Reset!</h1>
                     <p className="text-on-surface/60">
                         Your password has been successfully reset. You can now sign in with your new password.
@@ -81,14 +80,14 @@ function ResetPasswordForm() {
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
             <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 space-y-6">
                 <div className="text-center space-y-2">
-                    <Lock className="w-12 h-12 text-primary mx-auto" />
+                    <span className="material-symbols-outlined text-5xl text-primary block mx-auto">lock</span>
                     <h1 className="text-2xl font-bold text-on-surface">Reset Your Password</h1>
                     <p className="text-on-surface/60 text-sm">Enter your new password below.</p>
                 </div>
 
                 {status === 'error' && (
                     <div className="flex items-center gap-2 bg-primary/5 border border-primary/20 rounded-xl p-3 text-sm text-primary">
-                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
                         <span>{errorMessage}</span>
                     </div>
                 )}
@@ -114,7 +113,7 @@ function ResetPasswordForm() {
                                 onClick={() => setShowNewPassword(!showNewPassword)}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface/40 hover:text-on-surface/70 transition-colors"
                             >
-                                {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                {showNewPassword ? <span className="material-symbols-outlined text-xl">visibility_off</span> : <span className="material-symbols-outlined text-xl">visibility</span>}
                             </button>
                         </div>
                     </div>
@@ -139,7 +138,7 @@ function ResetPasswordForm() {
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface/40 hover:text-on-surface/70 transition-colors"
                             >
-                                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                {showConfirmPassword ? <span className="material-symbols-outlined text-xl">visibility_off</span> : <span className="material-symbols-outlined text-xl">visibility</span>}
                             </button>
                         </div>
                     </div>

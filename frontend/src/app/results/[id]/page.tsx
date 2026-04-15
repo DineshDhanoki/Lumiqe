@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { Sparkles } from 'lucide-react';
 import ResultsView from '@/components/ResultsView';
 import { SkeletonResultsPage } from '@/components/ui/Skeleton';
 import { apiFetch } from '@/lib/api';

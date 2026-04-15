@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Filter, Lock, User } from 'lucide-react';
 
 import VibeSelector from '@/components/VibeSelector';
 import SubscriptionModal from '@/components/SubscriptionModal';
@@ -126,14 +125,14 @@ function FeedContent() {
         <>
             <div className="w-full max-w-md flex justify-between items-center mb-6 pt-4 z-20 relative">
                 <Link href={session ? '/dashboard' : '/results'} className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
-                    <ArrowLeft className="w-5 h-5 text-on-surface" />
+                    <span className="material-symbols-outlined text-xl text-on-surface">arrow_back</span>
                 </Link>
                 <div className="flex flex-col items-center">
                     <h1 className="text-lg font-bold text-on-surface capitalize">{t('yourCatalog')}</h1>
                     <span className="text-xs text-primary font-medium tracking-wide">{season}</span>
                 </div>
                 <button className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
-                    <Filter className="w-5 h-5 text-on-surface" />
+                    <span className="material-symbols-outlined text-xl text-on-surface">filter_list</span>
                 </button>
             </div>
 
@@ -141,7 +140,7 @@ function FeedContent() {
             {!gender ? (
                 <div className="w-full max-w-md flex flex-col items-center justify-center mt-16 z-20 relative">
                     <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                        <User className="w-8 h-8 text-primary" />
+                        <span className="material-symbols-outlined text-4xl text-primary">person</span>
                     </div>
                     <h2 className="text-xl font-bold text-on-surface mb-2">{t('selectYourStyle')}</h2>
                     <p className="text-on-surface-variant text-sm mb-8 text-center">{t('selectYourStyleDesc')}</p>
@@ -211,7 +210,7 @@ function FeedContent() {
                                         className="aspect-[3/4] rounded-3xl bg-surface-container/20 border border-primary/5 flex items-center justify-center cursor-pointer hover:bg-surface-container/30 transition-colors"
                                     >
                                         <div className="w-10 h-10 rounded-full bg-surface/60 backdrop-blur-sm border border-primary/10 flex items-center justify-center">
-                                            <Lock className="w-4 h-4 text-on-surface-variant" />
+                                            <span className="material-symbols-outlined text-base text-on-surface-variant">lock</span>
                                         </div>
                                     </motion.div>
                                 ))}

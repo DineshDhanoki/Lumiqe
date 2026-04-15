@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Crown, Sparkles, LogOut, Loader2, User } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -148,7 +147,7 @@ export default function AccountPage() {
         return (
             <AppLayout>
                 <div className="flex items-center justify-center min-h-[60vh]">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                    <span className="material-symbols-outlined text-4xl text-primary animate-spin">progress_activity</span>
                 </div>
             </AppLayout>
         );
@@ -175,14 +174,14 @@ export default function AccountPage() {
                 >
                     <div className="flex items-center justify-between mb-12">
                         <h1 className="text-4xl font-extrabold flex items-center gap-3">
-                            <User className="w-8 h-8 text-primary" />
+                            <span className="material-symbols-outlined text-4xl text-primary">person</span>
                             {t('yourAccount')}
                         </h1>
                         <button
                             onClick={() => signOut({ callbackUrl: '/' })}
                             className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 text-on-surface-variant hover:text-red-400 transition border border-primary/10"
                         >
-                            <LogOut className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base">logout</span>
                             <span className="text-sm font-medium">{t('logOut')}</span>
                         </button>
                     </div>
@@ -314,7 +313,7 @@ export default function AccountPage() {
                             {/* Fashion Insights / Improvement Tracker (Premium) */}
                             <div className="p-8 rounded-3xl bg-surface-container/10 border border-primary/10">
                                 <h3 className="text-xl font-bold text-on-surface mb-2 flex items-center gap-2">
-                                    <Sparkles className="w-5 h-5 text-yellow-400" />
+                                    <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                     {t('fashionInsights')}
                                 </h3>
                                 <p className="text-on-surface-variant text-sm mb-6">{t('fashionInsightsDesc')}</p>
@@ -334,7 +333,7 @@ export default function AccountPage() {
                                         <div className="col-span-2 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
                                             <div className="flex items-start gap-4">
                                                 <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
-                                                    <Sparkles className="w-5 h-5 text-yellow-400" />
+                                                    <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                                 </div>
                                                 <div>
                                                     <h4 className="text-sm font-bold text-on-surface mb-1">{t('aiStylistTip')}</h4>
@@ -355,7 +354,7 @@ export default function AccountPage() {
 
                                         {/* Paywall Overlay */}
                                         <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10 flex-col px-6 text-center">
-                                            <Crown className="w-8 h-8 text-primary mb-3" />
+                                            <span className="material-symbols-outlined text-4xl text-primary mb-3" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
                                             <h4 className="text-lg font-bold text-on-surface mb-2">{t('unlockFashionInsights')}</h4>
                                             <p className="text-sm text-on-surface-variant mb-4 max-w-sm">
                                                 {t('unlockFashionInsightsDesc')}

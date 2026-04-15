@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-    Loader2, Upload, Video, Clock, Lightbulb, ArrowRight,
-    AlertCircle, Images, Sparkles,
-} from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { useLumiqeStore } from '@/lib/store';
 import { t } from '@/lib/i18n';
@@ -165,7 +161,7 @@ export default function AnalyzePage() {
     if (status === 'loading') {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <span className="material-symbols-outlined text-4xl text-primary animate-spin">progress_activity</span>
             </div>
         );
     }
@@ -279,7 +275,7 @@ export default function AnalyzePage() {
                                     {/* Upload prompt */}
                                     <div className="relative z-10 flex flex-col items-center text-center p-8">
                                         <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform ghost-border">
-                                            <Upload className="w-9 h-9 text-primary" />
+                                            <span className="material-symbols-outlined text-5xl text-primary">upload</span>
                                         </div>
                                         <h3 className="font-headline text-2xl font-bold mb-2 text-on-surface">
                                             Upload Photo
@@ -311,7 +307,7 @@ export default function AnalyzePage() {
                                     {/* Error banner */}
                                     {error && (
                                         <div className="absolute bottom-6 flex items-center gap-2 text-error-container bg-error/20 border border-error/30 px-4 py-2 rounded-full text-sm z-20">
-                                            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                                            <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
                                             {error}
                                         </div>
                                     )}
@@ -326,7 +322,7 @@ export default function AnalyzePage() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="w-11 h-11 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <Video className="w-5 h-5 text-secondary" />
+                                                <span className="material-symbols-outlined text-xl text-secondary">videocam</span>
                                             </div>
                                             <div>
                                                 <h4 className="font-headline font-bold text-sm text-on-surface">
@@ -335,7 +331,7 @@ export default function AnalyzePage() {
                                                 <p className="text-on-surface-variant text-xs mt-0.5">Instant real-time analysis</p>
                                             </div>
                                         </div>
-                                        <ArrowRight className="w-4 h-4 text-on-surface-variant/40 group-hover:text-secondary transition-colors flex-shrink-0 ml-2" />
+                                        <span className="material-symbols-outlined text-base text-on-surface-variant/40 group-hover:text-secondary transition-colors flex-shrink-0 ml-2">arrow_forward</span>
                                     </button>
 
                                     {/* Past Scans */}
@@ -345,7 +341,7 @@ export default function AnalyzePage() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <Clock className="w-5 h-5 text-primary" />
+                                                <span className="material-symbols-outlined text-xl text-primary">schedule</span>
                                             </div>
                                             <div>
                                                 <h4 className="font-headline font-bold text-sm text-on-surface">
@@ -354,7 +350,7 @@ export default function AnalyzePage() {
                                                 <p className="text-on-surface-variant text-xs mt-0.5">View skin evolution</p>
                                             </div>
                                         </div>
-                                        <ArrowRight className="w-4 h-4 text-on-surface-variant/40 group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                                        <span className="material-symbols-outlined text-base text-on-surface-variant/40 group-hover:text-primary transition-colors flex-shrink-0 ml-2">arrow_forward</span>
                                     </Link>
 
                                     {/* Multi-Photo */}
@@ -364,7 +360,7 @@ export default function AnalyzePage() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="w-11 h-11 bg-tertiary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <Images className="w-5 h-5 text-tertiary" />
+                                                <span className="material-symbols-outlined text-xl text-tertiary">photo_library</span>
                                             </div>
                                             <div>
                                                 <h4 className="font-headline font-bold text-sm text-on-surface">
@@ -385,7 +381,7 @@ export default function AnalyzePage() {
                                 {/* Precision Protocol */}
                                 <div className="bg-surface-container rounded-2xl p-6 ghost-border">
                                     <h3 className="font-headline text-base font-bold mb-5 flex items-center gap-3 text-on-surface">
-                                        <Lightbulb className="w-4 h-4 text-primary flex-shrink-0" />
+                                        <span className="material-symbols-outlined text-base text-primary flex-shrink-0">lightbulb</span>
                                         Precision Protocol
                                     </h3>
                                     <ul className="space-y-4">
@@ -433,7 +429,7 @@ export default function AnalyzePage() {
                                 {/* Tips — For accurate results */}
                                 <div className="bg-surface-container rounded-2xl p-6 ghost-border">
                                     <div className="flex items-center gap-3 mb-4">
-                                        <Sparkles className="w-4 h-4 text-secondary flex-shrink-0" />
+                                        <span className="material-symbols-outlined text-base text-secondary flex-shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                         <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60">
                                             For accurate results
                                         </span>

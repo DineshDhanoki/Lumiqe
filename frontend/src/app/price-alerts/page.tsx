@@ -4,10 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Bell, Trash2, ExternalLink, TrendingDown,
-    AlertCircle, X, Loader2, ShoppingBag,
-} from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { Skeleton } from '@/components/ui/Skeleton';
 import AppLayout from '@/components/layout/AppLayout';
@@ -97,10 +93,10 @@ export default function PriceAlertsPage() {
                 {/* Error */}
                 {error && (
                     <div className="mb-6 flex items-center gap-2 text-primary bg-primary/5 border border-primary/20 px-4 py-3 rounded-2xl text-sm">
-                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
                         {error}
                         <button onClick={() => setError(null)} className="ml-auto text-on-surface-variant hover:text-on-surface">
-                            <X className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base">close</span>
                         </button>
                     </div>
                 )}
@@ -121,7 +117,7 @@ export default function PriceAlertsPage() {
                 ) : alerts.length === 0 ? (
                     /* Empty State */
                     <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                        <TrendingDown className="w-16 h-16 text-on-surface-variant/30" />
+                        <span className="material-symbols-outlined text-7xl text-on-surface-variant/30">trending_down</span>
                         <h2 className="text-xl font-semibold text-on-surface">No price alerts yet</h2>
                         <p className="text-on-surface-variant max-w-sm">
                             When you find products you love, set a price alert and we&apos;ll notify you when the price drops.
@@ -139,7 +135,7 @@ export default function PriceAlertsPage() {
                         {triggeredAlerts.length > 0 && (
                             <section>
                                 <h2 className="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                    <TrendingDown className="w-4 h-4" />
+                                    <span className="material-symbols-outlined text-base">trending_down</span>
                                     Price Dropped ({triggeredAlerts.length})
                                 </h2>
                                 <div className="space-y-3">
@@ -161,7 +157,7 @@ export default function PriceAlertsPage() {
                         {activeAlerts.length > 0 && (
                             <section>
                                 <h2 className="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-4 flex items-center gap-2">
-                                    <Bell className="w-4 h-4" />
+                                    <span className="material-symbols-outlined text-base">notifications</span>
                                     Watching ({activeAlerts.length})
                                 </h2>
                                 <div className="space-y-3">
@@ -250,7 +246,7 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
                         className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 rounded-lg transition-colors"
                         aria-label={`View ${alert.product_name}`}
                     >
-                        <ExternalLink className="w-4 h-4" />
+                        <span className="material-symbols-outlined text-base">open_in_new</span>
                     </a>
                     <button
                         onClick={onDelete}
@@ -259,9 +255,9 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
                         aria-label={`Delete alert for ${alert.product_name}`}
                     >
                         {isDeleting ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                         ) : (
-                            <Trash2 className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base">delete</span>
                         )}
                     </button>
                 </div>

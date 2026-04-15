@@ -4,10 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Shirt, Plus, Trash2, Palette, Edit2, X, Loader2,
-    CheckCircle, AlertCircle, ChevronDown,
-} from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { Skeleton } from '@/components/ui/Skeleton';
 import AppLayout from '@/components/layout/AppLayout';
@@ -167,7 +163,7 @@ export default function WardrobePage() {
                         onClick={() => { setShowAddForm(true); setEditingItem(null); }}
                         className="flex items-center gap-2 px-5 py-2.5 bg-primary-container hover:bg-primary text-on-primary-container rounded-full font-label font-medium transition-colors"
                     >
-                        <Plus className="w-4 h-4" />
+                        <span className="material-symbols-outlined text-base">add</span>
                         Add Item
                     </button>
                 </div>
@@ -242,10 +238,10 @@ export default function WardrobePage() {
                 {/* Error */}
                 {error && (
                     <div className="mb-6 flex items-center gap-2 text-primary bg-primary/5 border border-primary/20 px-4 py-3 rounded-2xl text-sm">
-                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
                         {error}
                         <button onClick={() => setError(null)} className="ml-auto text-on-surface-variant hover:text-on-surface">
-                            <X className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base">close</span>
                         </button>
                     </div>
                 )}
@@ -280,7 +276,7 @@ export default function WardrobePage() {
                 ) : filteredItems.length === 0 ? (
                     /* Empty State */
                     <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                        <Shirt className="w-16 h-16 text-on-surface-variant/30" />
+                        <span className="material-symbols-outlined text-7xl text-on-surface-variant/30">checkroom</span>
                         <h2 className="text-xl font-semibold text-on-surface">
                             {items.length === 0 ? 'Your wardrobe is empty' : 'No items in this category'}
                         </h2>
@@ -324,7 +320,7 @@ export default function WardrobePage() {
                                             className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 rounded-lg transition-colors"
                                             aria-label={`Edit ${item.name}`}
                                         >
-                                            <Edit2 className="w-3.5 h-3.5" />
+                                            <span className="material-symbols-outlined text-sm">edit</span>
                                         </button>
                                         <button
                                             onClick={() => handleDelete(item.id)}
@@ -332,7 +328,7 @@ export default function WardrobePage() {
                                             className="p-1.5 text-on-surface-variant hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
                                             aria-label={`Delete ${item.name}`}
                                         >
-                                            <Trash2 className="w-3.5 h-3.5" />
+                                            <span className="material-symbols-outlined text-sm">delete</span>
                                         </button>
                                     </div>
                                 </div>
@@ -346,7 +342,7 @@ export default function WardrobePage() {
                                         />
                                     ) : (
                                         <div className="w-10 h-10 rounded-xl border border-primary/10 bg-surface-container/30 flex items-center justify-center flex-shrink-0">
-                                            <Palette className="w-4 h-4 text-on-surface-variant/30" />
+                                            <span className="material-symbols-outlined text-base text-on-surface-variant/30">palette</span>
                                         </div>
                                     )}
                                     <div>
@@ -495,7 +491,7 @@ function WardrobeItemForm({ editItem, onClose, onAdded, onUpdated }: WardrobeIte
                         onClick={onClose}
                         className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 rounded-lg transition-colors"
                     >
-                        <X className="w-5 h-5" />
+                        <span className="material-symbols-outlined text-xl">close</span>
                     </button>
                 </div>
 
@@ -528,7 +524,7 @@ function WardrobeItemForm({ editItem, onClose, onAdded, onUpdated }: WardrobeIte
                             <span className={category ? 'text-on-surface' : 'text-on-surface-variant/50'}>
                                 {category ? CATEGORY_LABELS[category] : 'Select category'}
                             </span>
-                            <ChevronDown className="w-4 h-4 text-on-surface-variant" />
+                            <span className="material-symbols-outlined text-base text-on-surface-variant">expand_more</span>
                         </button>
                         {showCategoryDropdown && (
                             <div className="absolute top-full left-0 right-0 mt-1 bg-surface-container border border-primary/10 rounded-xl overflow-hidden z-10 max-h-48 overflow-y-auto">
@@ -626,7 +622,7 @@ function WardrobeItemForm({ editItem, onClose, onAdded, onUpdated }: WardrobeIte
                     {/* Error */}
                     {error && (
                         <div className="flex items-center gap-2 text-primary bg-primary/5 px-3 py-2 rounded-xl text-sm">
-                            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                            <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
                             {error}
                         </div>
                     )}
@@ -639,12 +635,12 @@ function WardrobeItemForm({ editItem, onClose, onAdded, onUpdated }: WardrobeIte
                     >
                         {submitting ? (
                             <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                                 {isEditing ? 'Updating...' : 'Adding...'}
                             </>
                         ) : (
                             <>
-                                <CheckCircle className="w-4 h-4" />
+                                <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                 {isEditing ? 'Update Item' : 'Add to Wardrobe'}
                             </>
                         )}

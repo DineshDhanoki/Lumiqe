@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Camera } from 'lucide-react';
 import { t } from '@/lib/i18n';
 
 interface CameraControlsProps {
@@ -44,7 +43,7 @@ const CameraControls = React.memo(function CameraControls({
                     animation: 'captureGlow 1.5s ease-in-out infinite',
                 } : undefined}
             >
-                <Camera className="w-4 h-4" />
+                <span className="material-symbols-outlined text-base">photo_camera</span>
                 {countdown !== null ? `${t(lang, 'capturePhoto')} ${countdown}...` : t(lang, 'capturePhoto')}
             </button>
         </div>

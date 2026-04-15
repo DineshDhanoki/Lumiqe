@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, Trash2, ExternalLink, ShoppingBag } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
 import { SkeletonShoppingGrid } from '@/components/ui/Skeleton';
@@ -77,7 +76,7 @@ export default function WishlistPage() {
                     <SkeletonShoppingGrid />
                 ) : items.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                        <ShoppingBag className="w-16 h-16 text-on-surface-variant/20" />
+                        <span className="material-symbols-outlined text-7xl text-on-surface-variant/20">shopping_bag</span>
                         <h2 className="text-xl font-semibold text-on-surface">No saved items yet</h2>
                         <p className="text-on-surface-variant max-w-sm">
                             Discover products that match your color palette and save your favorites here.
@@ -134,7 +133,7 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full">
-                        <ShoppingBag className="w-10 h-10 text-on-surface-variant/20" />
+                        <span className="material-symbols-outlined text-5xl text-on-surface-variant/20">shopping_bag</span>
                     </div>
                 )}
 
@@ -150,7 +149,7 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
                     className="absolute top-2 right-2 bg-surface/80 backdrop-blur-sm rounded-full p-2 text-on-surface-variant hover:text-red-400 hover:bg-surface transition-colors disabled:opacity-50"
                     aria-label={`Remove ${item.name} from wishlist`}
                 >
-                    <Trash2 className="w-4 h-4" />
+                    <span className="material-symbols-outlined text-base">delete</span>
                 </button>
             </div>
 
@@ -165,7 +164,7 @@ function WishlistCard({ item, isRemoving, onRemove, affiliateUrl }: WishlistCard
                         rel="noopener noreferrer"
                         className="flex items-center gap-1 px-3 py-1.5 bg-primary-container hover:bg-primary rounded-full text-on-primary-container text-xs font-medium transition-colors"
                     >
-                        Buy <ExternalLink className="w-3 h-3" />
+                        Buy <span className="material-symbols-outlined text-xs">open_in_new</span>
                     </a>
                 </div>
             </div>

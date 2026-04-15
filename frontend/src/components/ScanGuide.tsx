@@ -2,23 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Cpu, Sparkles, X } from 'lucide-react';
 
 const GUIDE_KEY = 'lumiqe-scan-guide-seen';
 
 const steps = [
     {
-        icon: Camera,
+        icon: 'photo_camera',
         title: 'Take a selfie or upload a photo',
         description: 'Use your camera or choose an existing photo from your device.',
     },
     {
-        icon: Cpu,
+        icon: 'memory',
         title: 'Our AI analyzes your skin tone in seconds',
         description: 'Advanced color analysis determines your unique undertone and season.',
     },
     {
-        icon: Sparkles,
+        icon: 'auto_awesome',
         title: 'Get your season, palette, and personalized recommendations',
         description: 'Discover the colors that make you look your best.',
     },
@@ -63,7 +62,7 @@ export default function ScanGuide() {
                             aria-label="Dismiss guide"
                             className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors"
                         >
-                            <X className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base">close</span>
                         </button>
 
                         {/* Header */}
@@ -86,7 +85,7 @@ export default function ScanGuide() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-0.5">
-                                            <step.icon className="w-3.5 h-3.5 text-on-surface-variant flex-shrink-0" />
+                                            <span className="material-symbols-outlined text-sm text-on-surface-variant flex-shrink-0">{step.icon}</span>
                                             <p className="text-sm font-medium text-on-surface leading-snug">
                                                 {step.title}
                                             </p>

@@ -3,7 +3,6 @@
 import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Sparkles, Loader2, AlertCircle, RefreshCcw } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import OutfitDisplay, { CuratedOutfit } from '@/components/OutfitDisplay';
 import AppMenu from '@/components/AppMenu';
@@ -55,7 +54,7 @@ function ShoppingAgentContent() {
     if (paletteHexes.length === 0) {
         return (
             <div className="flex flex-col w-full max-w-md mx-auto items-center justify-center min-h-screen p-6 text-center relative z-10">
-                <Sparkles className="w-12 h-12 text-primary mb-6" />
+                <span className="material-symbols-outlined text-6xl text-primary mb-6" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 <h1 className="text-2xl font-bold text-on-surface mb-4">No Palette Found</h1>
                 <p className="text-on-surface-variant mb-8 leading-relaxed">
                     You need to scan your face first so we know your skin-tone palette.
@@ -116,7 +115,7 @@ function ShoppingAgentContent() {
                     href="/dashboard"
                     className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10"
                 >
-                    <ArrowLeft className="w-5 h-5 text-on-surface" />
+                    <span className="material-symbols-outlined text-xl text-on-surface">arrow_back</span>
                 </Link>
                 <div className="flex flex-col items-center">
                     <h1 className="text-lg font-bold text-on-surface">AI Stylist</h1>
@@ -176,7 +175,7 @@ function ShoppingAgentContent() {
                         onClick={generateOutfit}
                         className="w-full py-4 rounded-full bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)]"
                     >
-                        <Sparkles className="w-5 h-5" />
+                        <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         Generate Outfit
                     </button>
 
@@ -186,7 +185,7 @@ function ShoppingAgentContent() {
                             animate={{ opacity: 1, y: 0 }}
                             className="flex items-start gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/20"
                         >
-                            <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                            <span className="material-symbols-outlined text-xl text-primary shrink-0 mt-0.5">error</span>
                             <p className="text-red-200 text-sm">{error}</p>
                         </motion.div>
                     )}
@@ -205,7 +204,7 @@ function ShoppingAgentContent() {
                         onClick={generateOutfit}
                         className="mx-auto px-6 py-3 rounded-full border border-primary/20 text-on-surface hover:bg-surface-container/30 transition-all text-sm font-semibold flex items-center gap-2"
                     >
-                        <RefreshCcw className="w-4 h-4" />
+                        <span className="material-symbols-outlined text-base">refresh</span>
                         Generate New Outfit
                         {outfitCount > 0 && (
                             <span className="text-on-surface-variant text-xs">#{outfitCount + 1}</span>
@@ -283,7 +282,7 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
                     );
                 })}
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Loader2 className="w-8 h-8 text-on-surface-variant animate-spin" />
+                    <span className="material-symbols-outlined text-4xl text-on-surface-variant animate-spin">progress_activity</span>
                 </div>
             </div>
 
@@ -321,7 +320,7 @@ export default function ShoppingAgentPage() {
             <Suspense
                 fallback={
                     <div className="flex flex-col items-center justify-center min-h-[60vh] text-on-surface-variant gap-4">
-                        <Sparkles className="w-8 h-8 text-primary animate-pulse" />
+                        <span className="material-symbols-outlined text-4xl text-primary animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         <p className="font-label text-sm">Loading AI Stylist…</p>
                     </div>
                 }

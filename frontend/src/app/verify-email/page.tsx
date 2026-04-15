@@ -3,7 +3,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, AlertCircle } from 'lucide-react';
 
 function VerifyEmailContent() {
     const searchParams = useSearchParams();
@@ -69,7 +68,7 @@ function VerifyEmailContent() {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
                 <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
-                    <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                    <span className="material-symbols-outlined text-6xl text-green-500 block mx-auto" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                     <h1 className="text-2xl font-bold text-on-surface">Email Verified!</h1>
                     <p className="text-on-surface/60">
                         Your email has been successfully verified. You can now sign in and start using Lumiqe.
@@ -88,7 +87,7 @@ function VerifyEmailContent() {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
             <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
-                <AlertCircle className="w-16 h-16 text-primary mx-auto" />
+                <span className="material-symbols-outlined text-6xl text-primary block mx-auto">error</span>
                 <h1 className="text-2xl font-bold text-on-surface">Verification Failed</h1>
                 <p className="text-on-surface/60 text-sm">
                     {errorMessage}

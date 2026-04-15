@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
@@ -41,7 +40,7 @@ export default function ForgotPasswordPage() {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
                 <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
-                    <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                    <span className="material-symbols-outlined text-6xl text-green-500 block mx-auto" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                     <div className="space-y-2">
                         <h1 className="text-2xl font-bold text-on-surface">Check Your Email</h1>
                         <p className="text-on-surface/60 text-sm">
@@ -63,7 +62,7 @@ export default function ForgotPasswordPage() {
                         href="/"
                         className="inline-flex items-center gap-2 text-sm text-on-surface/40 hover:text-on-surface/70 transition-colors"
                     >
-                        <ArrowLeft className="w-4 h-4" />
+                        <span className="material-symbols-outlined text-base">arrow_back</span>
                         Back to sign in
                     </Link>
                 </div>
@@ -75,7 +74,7 @@ export default function ForgotPasswordPage() {
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
             <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 space-y-6">
                 <div className="text-center space-y-2">
-                    <Mail className="w-12 h-12 text-primary mx-auto" />
+                    <span className="material-symbols-outlined text-5xl text-primary block mx-auto">mail</span>
                     <h1 className="text-2xl font-bold text-on-surface">Forgot Password?</h1>
                     <p className="text-on-surface/60 text-sm">
                         Enter your email and we'll send you a reset link.
@@ -84,7 +83,7 @@ export default function ForgotPasswordPage() {
 
                 {status === 'error' && (
                     <div className="flex items-center gap-2 bg-primary/5 border border-primary/20 rounded-xl p-3 text-sm text-primary">
-                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
                         <span>{errorMessage}</span>
                     </div>
                 )}
@@ -113,7 +112,7 @@ export default function ForgotPasswordPage() {
                     >
                         {status === 'loading' ? (
                             <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                                 Sending...
                             </>
                         ) : (
@@ -126,7 +125,7 @@ export default function ForgotPasswordPage() {
                     href="/"
                     className="flex items-center justify-center gap-2 text-sm text-on-surface/40 hover:text-on-surface/70 transition-colors"
                 >
-                    <ArrowLeft className="w-4 h-4" />
+                    <span className="material-symbols-outlined text-base">arrow_back</span>
                     Back to sign in
                 </Link>
             </div>

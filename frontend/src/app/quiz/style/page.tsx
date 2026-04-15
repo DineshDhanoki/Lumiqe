@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Sparkles } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { apiFetch } from '@/lib/api';
 import AppLayout from '@/components/layout/AppLayout';
@@ -269,7 +268,7 @@ export default function StyleQuiz() {
                                     onClick={() => setCurrent(current - 1)}
                                     className="text-on-surface-variant hover:text-on-surface text-sm flex items-center gap-1 transition-colors"
                                 >
-                                    <ArrowLeft className="w-3.5 h-3.5" /> Previous question
+                                    <span className="material-symbols-outlined text-sm">arrow_back</span> Previous question
                                 </button>
                             )}
                         </motion.div>

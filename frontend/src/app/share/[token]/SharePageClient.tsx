@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight, Copy, Check } from 'lucide-react';
 import CelebrityMatch from '@/components/CelebrityMatch';
 import { API_BASE } from '@/lib/api';
 
@@ -49,7 +48,7 @@ export default function SharePageClient({ token }: { token: string }) {
     if (loading) {
         return (
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 text-on-surface-variant">
-                <Sparkles className="w-8 h-8 text-primary animate-pulse" />
+                <span className="material-symbols-outlined text-4xl text-primary animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 <p>Loading shared analysis...</p>
             </div>
         );
@@ -58,7 +57,7 @@ export default function SharePageClient({ token }: { token: string }) {
     if (!data) {
         return (
             <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center">
-                <Sparkles className="w-12 h-12 text-primary mb-6" />
+                <span className="material-symbols-outlined text-6xl text-primary mb-6" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 <h1 className="text-3xl font-bold text-on-surface mb-4">Analysis Not Found</h1>
                 <p className="text-on-surface-variant mb-8">This shared link may have expired or doesn&apos;t exist.</p>
                 <Link href="/" className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors">
@@ -73,7 +72,7 @@ export default function SharePageClient({ token }: { token: string }) {
             {/* Nav */}
             <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-primary/10 px-6 py-4 flex items-center justify-center">
                 <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                    <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                     <span className="text-xl font-bold tracking-widest text-on-surface">LUMIQE</span>
                 </div>
             </nav>
@@ -157,7 +156,7 @@ export default function SharePageClient({ token }: { token: string }) {
                             onClick={copyLink}
                             className="flex items-center gap-2 px-4 py-2.5 bg-surface-container/30 hover:bg-surface-container/50 border border-primary/10 rounded-xl text-sm font-medium text-on-surface transition-all"
                         >
-                            {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                            {copied ? <span className="material-symbols-outlined text-base text-green-400" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> : <span className="material-symbols-outlined text-base">content_copy</span>}
                             {copied ? 'Copied!' : 'Copy Link'}
                         </button>
                         <button
@@ -177,7 +176,7 @@ export default function SharePageClient({ token }: { token: string }) {
                     transition={{ delay: 0.25 }}
                     className="bg-primary/5 border border-primary/20 rounded-3xl p-8 md:p-12 text-center"
                 >
-                    <Sparkles className="w-10 h-10 text-primary mx-auto mb-4" />
+                    <span className="material-symbols-outlined text-5xl text-primary block mx-auto mb-4" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                     <h3 className="text-2xl font-bold text-on-surface mb-3">Discover your own colors</h3>
                     <p className="text-on-surface-variant max-w-md mx-auto mb-6">
                         Find your exact color season in seconds with AI-powered analysis. Get your personalized palette, styling tips, and curated shopping recommendations.
@@ -186,7 +185,7 @@ export default function SharePageClient({ token }: { token: string }) {
                         href="/analyze"
                         className="inline-flex items-center gap-2 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold py-4 px-8 transition-all hover:scale-105"
                     >
-                        Analyze My Colors <ArrowRight className="w-5 h-5" />
+                        Analyze My Colors <span className="material-symbols-outlined text-xl">arrow_forward</span>
                     </Link>
                 </motion.div>
             </div>

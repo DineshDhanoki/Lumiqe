@@ -1,6 +1,5 @@
 'use client';
 
-import { AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 interface ErrorProps {
@@ -13,7 +12,7 @@ export default function PricingError({ error, reset }: ErrorProps) {
         <div className="min-h-screen bg-background flex items-center justify-center p-6">
             <div className="max-w-md w-full text-center space-y-6">
                 <div className="flex justify-center">
-                    <AlertCircle className="w-16 h-16 text-primary" />
+                    <span className="material-symbols-outlined text-6xl text-primary">error</span>
                 </div>
                 <div className="space-y-2">
                     <h1 className="text-2xl font-bold text-on-surface">Could not load pricing</h1>

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, ArrowLeft, ShoppingBag, Sparkles, AlertCircle, Check, X } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -64,9 +63,9 @@ export default function ScanPage() {
     };
 
     const verdictConfig = {
-        BUY: { icon: <Check className="w-8 h-8" />, color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', label: 'Buy It!' },
-        MAYBE: { icon: <ShoppingBag className="w-8 h-8" />, color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', label: 'Maybe...' },
-        PASS: { icon: <X className="w-8 h-8" />, color: 'text-red-400', bg: 'bg-red-500/20 border-red-500/30', label: 'Pass' },
+        BUY: { icon: <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>, color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', label: 'Buy It!' },
+        MAYBE: { icon: <span className="material-symbols-outlined text-4xl">shopping_bag</span>, color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', label: 'Maybe...' },
+        PASS: { icon: <span className="material-symbols-outlined text-4xl">close</span>, color: 'text-red-400', bg: 'bg-red-500/20 border-red-500/30', label: 'Pass' },
     };
 
     // If user has no session and no email, show a CTA to analyze first
@@ -94,7 +93,7 @@ export default function ScanPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-surface-container/50 border border-primary/10 rounded-3xl p-8 text-center"
                     >
-                        <Sparkles className="w-12 h-12 text-primary mx-auto mb-4" />
+                        <span className="material-symbols-outlined text-6xl text-primary block mx-auto mb-4" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         <h2 className="text-xl font-bold mb-2">Scan Your Face First</h2>
                         <p className="text-on-surface-variant text-sm mb-6">
                             We need to know your color season before we can match clothing. It takes 3 seconds.
@@ -103,7 +102,7 @@ export default function ScanPage() {
                             href="/analyze"
                             className="inline-flex items-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-bold py-3 px-6 rounded-full transition-all"
                         >
-                            <Camera className="w-5 h-5" />
+                            <span className="material-symbols-outlined text-xl">photo_camera</span>
                             Analyze My Face
                         </Link>
                     </motion.div>
@@ -127,7 +126,7 @@ export default function ScanPage() {
                                 ) : (
                                     <div className="flex flex-col items-center gap-4 p-8">
                                         <div className="p-4 rounded-full bg-surface-container/30">
-                                            <Camera className="w-10 h-10 text-on-surface" />
+                                            <span className="material-symbols-outlined text-5xl text-on-surface">photo_camera</span>
                                         </div>
                                         <div className="text-center space-y-1">
                                             <p className="text-lg font-medium text-on-surface">Tap to Upload</p>
@@ -154,7 +153,7 @@ export default function ScanPage() {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="flex items-center gap-3 bg-primary/5 border border-primary/20 text-primary px-5 py-3 rounded-2xl text-sm"
                                 >
-                                    <AlertCircle className="w-5 h-5 shrink-0" />
+                                    <span className="material-symbols-outlined text-xl shrink-0">error</span>
                                     {error}
                                 </motion.div>
                             )}

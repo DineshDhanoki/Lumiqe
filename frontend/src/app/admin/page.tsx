@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, RefreshCw, Trash2, Edit2, Plus, X, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+
 import { apiFetch } from '@/lib/api';
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -116,9 +116,9 @@ function Badge({ active, labels = ['Active', 'Inactive'] }: { active: boolean; l
 }
 
 function HealthBadge({ status }: { status: string }) {
-    if (status === 'ok') return <span className="flex items-center gap-1.5 text-green-400 text-sm font-semibold"><CheckCircle className="w-4 h-4" /> OK</span>;
-    if (status === 'unavailable') return <span className="flex items-center gap-1.5 text-yellow-400 text-sm font-semibold"><AlertCircle className="w-4 h-4" /> Unavailable</span>;
-    return <span className="flex items-center gap-1.5 text-primary text-sm font-semibold"><XCircle className="w-4 h-4" /> Error</span>;
+    if (status === 'ok') return <span className="flex items-center gap-1.5 text-green-400 text-sm font-semibold"><span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> OK</span>;
+    if (status === 'unavailable') return <span className="flex items-center gap-1.5 text-yellow-400 text-sm font-semibold"><span className="material-symbols-outlined text-base">error</span> Unavailable</span>;
+    return <span className="flex items-center gap-1.5 text-primary text-sm font-semibold"><span className="material-symbols-outlined text-base">cancel</span> Error</span>;
 }
 
 // ─── Main Admin Page ────────────────────────────────────────
@@ -573,7 +573,7 @@ export default function AdminPage() {
                             <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Quick Actions</h2>
                             <div className="flex flex-wrap gap-3">
                                 <button onClick={handleTriggerDigest} disabled={loadingDigest} className="flex items-center gap-2 bg-surface-container/50 border border-primary/10 rounded-xl px-5 py-3 text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:border-primary/20 transition-all disabled:opacity-50">
-                                    {loadingDigest && <RefreshCw className="w-4 h-4 animate-spin" />} Trigger Weekly Digest
+                                    {loadingDigest && <span className="material-symbols-outlined text-base animate-spin">refresh</span>} Trigger Weekly Digest
                                 </button>
                                 <button onClick={() => { setActiveTab('catalog'); }} className="flex items-center gap-2 bg-surface-container/50 border border-primary/10 rounded-xl px-5 py-3 text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:border-primary/20 transition-all">
                                     Manage Catalog →
@@ -639,10 +639,10 @@ export default function AdminPage() {
                                                     <td className="px-4 py-3 text-center">
                                                         <div className="flex items-center justify-center gap-2">
                                                             <button onClick={() => startEditUser(user)} className="p-1.5 rounded-lg hover:bg-surface-container/30 text-on-surface-variant hover:text-on-surface transition-colors" title="Edit">
-                                                                <Edit2 className="w-3.5 h-3.5" />
+                                                                <span className="material-symbols-outlined text-sm">edit</span>
                                                             </button>
                                                             <button onClick={() => setDeletingUser(user)} className="p-1.5 rounded-lg hover:bg-red-500/20 text-on-surface-variant hover:text-red-400 transition-colors" title="Delete">
-                                                                <Trash2 className="w-3.5 h-3.5" />
+                                                                <span className="material-symbols-outlined text-sm">delete</span>
                                                             </button>
                                                         </div>
                                                     </td>
@@ -687,10 +687,10 @@ export default function AdminPage() {
                                     </select>
                                 </div>
                                 <button onClick={handleScrape} disabled={loadingScrape} className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
-                                    {loadingScrape && <RefreshCw className="w-4 h-4 animate-spin" />} Scrape {scrapeGender}/{scrapeVibe}
+                                    {loadingScrape && <span className="material-symbols-outlined text-base animate-spin">refresh</span>} Scrape {scrapeGender}/{scrapeVibe}
                                 </button>
                                 <button onClick={handleScrapeAll} disabled={loadingScrapeAll} className="flex items-center gap-2 px-5 py-2 rounded-xl bg-surface-container hover:bg-surface-container/80 border border-primary/10 text-on-surface font-semibold text-sm transition-colors disabled:opacity-50">
-                                    {loadingScrapeAll && <RefreshCw className="w-4 h-4 animate-spin" />} Refresh All
+                                    {loadingScrapeAll && <span className="material-symbols-outlined text-base animate-spin">refresh</span>} Refresh All
                                 </button>
                             </div>
                         </section>
@@ -798,7 +798,7 @@ export default function AdminPage() {
                                     className="flex-1 px-4 py-2.5 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface text-sm placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary"
                                 />
                                 <button onClick={createB2bKey} disabled={creatingKey || !newKeyName.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-semibold text-sm transition-colors disabled:opacity-50">
-                                    {creatingKey ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Create
+                                    {creatingKey ? <span className="material-symbols-outlined text-base animate-spin">refresh</span> : <span className="material-symbols-outlined text-base">add</span>} Create
                                 </button>
                             </div>
                         </section>
@@ -812,7 +812,7 @@ export default function AdminPage() {
                                         <code className="text-on-surface font-mono text-xs break-all">{newRawKey}</code>
                                     </div>
                                     <button onClick={() => setNewRawKey(null)} className="text-on-surface-variant hover:text-on-surface transition-colors shrink-0">
-                                        <X className="w-5 h-5" />
+                                    <span className="material-symbols-outlined text-xl">close</span>
                                     </button>
                                 </div>
                             </div>
@@ -874,7 +874,7 @@ export default function AdminPage() {
                             <div className="flex items-center gap-3">
                                 {healthCheckedAt && <span className="text-on-surface-variant/50 text-xs">Last checked {healthCheckedAt.toLocaleTimeString()}</span>}
                                 <button onClick={fetchHealth} disabled={loadingHealth} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container/50 border border-primary/10 text-on-surface-variant hover:text-on-surface text-sm font-medium transition-all disabled:opacity-50">
-                                    <RefreshCw className={`w-4 h-4 ${loadingHealth ? 'animate-spin' : ''}`} /> Refresh
+                                    <span className={`material-symbols-outlined text-base ${loadingHealth ? 'animate-spin' : ''}`}>refresh</span> Refresh
                                 </button>
                             </div>
                         </div>
@@ -909,7 +909,7 @@ export default function AdminPage() {
                             <h2 className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-4">Maintenance Actions</h2>
                             <div className="flex flex-wrap gap-3">
                                 <button onClick={handleTriggerDigest} disabled={loadingDigest} className="flex items-center gap-2 px-5 py-3 rounded-xl bg-surface-container/60 border border-primary/10 text-on-surface-variant hover:text-on-surface hover:border-primary/20 text-sm font-semibold transition-all disabled:opacity-50">
-                                    {loadingDigest && <RefreshCw className="w-4 h-4 animate-spin" />} Trigger Weekly Digest
+                                    {loadingDigest && <span className="material-symbols-outlined text-base animate-spin">refresh</span>} Trigger Weekly Digest
                                 </button>
                             </div>
                         </section>
@@ -928,7 +928,7 @@ export default function AdminPage() {
                                 <p className="text-on-surface-variant text-sm">{editingUser.name} · {editingUser.email}</p>
                             </div>
                             <button onClick={() => setEditingUser(null)} className="p-2 rounded-full hover:bg-surface-container/30 text-on-surface-variant hover:text-on-surface transition-colors">
-                                <X className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base">close</span>
                             </button>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -971,7 +971,7 @@ export default function AdminPage() {
                     <div className="relative w-full max-w-sm bg-surface-container border border-red-500/20 rounded-2xl p-6 space-y-4">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
-                                <Trash2 className="w-5 h-5 text-red-400" />
+                                <span className="material-symbols-outlined text-xl text-red-400">delete</span>
                             </div>
                             <div>
                                 <h3 className="text-on-surface font-bold text-on-surface">Delete User</h3>

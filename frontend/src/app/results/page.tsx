@@ -4,7 +4,6 @@ import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { Sparkles, Loader2 } from 'lucide-react';
 import ResultsView from '@/components/ResultsView';
 import { useLumiqeStore } from '@/lib/store';
 import { useTranslation } from '@/lib/hooks/useTranslation';
@@ -120,7 +119,7 @@ export default function Results() {
     return (
         <Suspense fallback={
             <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 text-on-surface-variant">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <span className="material-symbols-outlined text-4xl text-primary animate-spin">progress_activity</span>
                 <p className="font-label text-sm">Loading results...</p>
             </div>
         }>
