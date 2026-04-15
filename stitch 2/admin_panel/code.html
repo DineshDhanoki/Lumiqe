@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#5e1322",
+                    "on-primary": "#412d00",
+                    "on-secondary-container": "#b5abff",
+                    "surface-variant": "#353437",
+                    "outline-variant": "#4f4537",
+                    "on-surface": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-dim": "#131315",
+                    "primary": "#f0bf62",
+                    "secondary-fixed": "#e4dfff",
+                    "on-background": "#e5e1e4",
+                    "inverse-primary": "#7c5800",
+                    "on-tertiary-fixed": "#40000f",
+                    "surface-container-high": "#2a2a2c",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "secondary-container": "#44369c",
+                    "on-error": "#690005",
+                    "tertiary": "#ffb2b9",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-secondary": "#2d1a85",
+                    "primary-container": "#c4973e",
+                    "surface-container": "#201f22",
+                    "primary-fixed": "#ffdea7",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "secondary": "#c7bfff",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "tertiary-container": "#e87f8b",
+                    "surface-tint": "#f0bf62",
+                    "inverse-on-surface": "#313032",
+                    "outline": "#9b8f7e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "on-surface-variant": "#d2c5b2",
+                    "primary-fixed-dim": "#f0bf62",
+                    "on-secondary-fixed": "#180065",
+                    "surface-bright": "#39393b",
+                    "surface-container-low": "#1c1b1d",
+                    "surface": "#131315",
+                    "tertiary-fixed": "#ffdadc",
+                    "background": "#131315",
+                    "surface-container-highest": "#353437",
+                    "on-primary-fixed": "#271900",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#483100"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["DM Sans"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #09090B; }
+        ::-webkit-scrollbar-thumb { background: #353437; }
+        ::-webkit-scrollbar-thumb:hover { background: #C4973E; }
+    </style>
+</head>
+<body class="bg-[#09090B] text-on-surface font-body selection:bg-primary/30">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full py-6 bg-zinc-950 h-screen w-64 border-r border-[#C4973E]/10 font-['JetBrains_Mono'] text-xs tracking-tight transition-all duration-200 ease-in-out">
+<div class="px-6 mb-10">
+<span class="font-['Cormorant_Garamond'] text-xl text-white">Lumiqe Admin</span>
+<p class="text-zinc-500 text-[10px] uppercase tracking-[0.2em] mt-1">Editorial Control</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center px-4 py-3 text-[#C4973E] bg-[#C4973E]/5 border-r-2 border-[#C4973E] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="monitoring">monitoring</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="quiz">quiz</span>
+<span>Style Quizzes</span>
+</a>
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="notifications_active">notifications_active</span>
+<span>Alerts</span>
+</a>
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="auto_awesome">auto_awesome</span>
+<span>Seasons</span>
+</a>
+</nav>
+<div class="px-3 pt-6 border-t border-zinc-900 space-y-1">
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center px-4 py-3 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<div class="mt-6 px-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-zinc-800 border border-primary/20 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a professional male administrator in a dark studio with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3FQwmMvVEIbzL1AZe0ZSxcRTo-k3MpJun-rpjiu52n8XPcxAu-itEqMN-cycFFyc02C71qL3K9hAh_uGiON4RcHZ7RakQ75F_Eh1-dmbMBoenMSm_bf5xK0UrbcK_uvaUxQEs_fo-faFEpRrClxgMP5IBxRRh3jqEha0-s-ECHOszS6jphptT5oA6OmsPzdxsOcFGpdaae90kibHxHikBRoFaUib675vR1v34Ghj8F8TUPA6_M88EAJnM4jVBODfySRpyQ0la0fYf"/>
+</div>
+<div class="flex flex-col">
+<span class="text-zinc-200 text-[10px] font-bold uppercase tracking-wider">Admin User</span>
+<span class="text-zinc-600 text-[9px] uppercase tracking-tighter">System Root</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col overflow-y-auto bg-[#09090B]">
+<!-- Top Header (Contextual) -->
+<header class="flex justify-between items-center px-8 h-16 w-full bg-zinc-950/80 backdrop-blur-lg sticky top-0 z-40">
+<div class="flex flex-col">
+<h1 class="font-headline font-extrabold text-lg tracking-tight text-on-surface">System Control</h1>
+<p class="font-mono text-[9px] text-primary/60 uppercase tracking-[0.3em]">Operational Metrics &amp; Node Status</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/30 group transition-all focus-within:border-primary/40">
+<span class="material-symbols-outlined text-zinc-500 mr-2 !text-base" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 font-mono text-[10px] text-zinc-400 placeholder:text-zinc-600 w-48" placeholder="QUERY DATABASE..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+<button class="text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-12">
+<!-- Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-surface-container p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Active nodes</span>
+<span class="text-primary material-symbols-outlined !text-lg" data-icon="hub" data-weight="fill">hub</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="font-mono text-3xl font-medium text-white">4,812</h3>
+<span class="font-mono text-[10px] text-tertiary">+12.4%</span>
+</div>
+<div class="mt-4 w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-4/5"></div>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Conversion velocity</span>
+<span class="text-secondary material-symbols-outlined !text-lg" data-icon="bolt" data-weight="fill">bolt</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="font-mono text-3xl font-medium text-white">0.84<span class="text-xs">s</span></h3>
+<span class="font-mono text-[10px] text-zinc-500">OPTIMAL</span>
+</div>
+<div class="mt-4 w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-1/3"></div>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Session depth</span>
+<span class="text-tertiary material-symbols-outlined !text-lg" data-icon="layers" data-weight="fill">layers</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="font-mono text-3xl font-medium text-white">18.2</h3>
+<span class="font-mono text-[10px] text-zinc-500">AVG PAGES</span>
+</div>
+<div class="mt-4 w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-3/5"></div>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Revenue drift</span>
+<span class="text-primary material-symbols-outlined !text-lg" data-icon="payments" data-weight="fill">payments</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="font-mono text-3xl font-medium text-white">$142.9k</h3>
+<span class="font-mono text-[10px] text-tertiary">+2.1%</span>
+</div>
+<div class="mt-4 w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-2/3"></div>
+</div>
+</div>
+</section>
+<!-- Main Data Tables -->
+<div class="space-y-8">
+<!-- Table Section 1: User Statistics -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/10 shadow-2xl">
+<div class="p-6 flex flex-col md:flex-row justify-between items-center gap-4 bg-surface-container/50 border-b border-outline-variant/10">
+<div>
+<h2 class="font-headline text-xl font-bold text-white tracking-tight">Active User Intelligence</h2>
+<p class="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">Cross-platform synchronization status</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-surface-container-highest px-4 py-2 rounded-lg border border-outline-variant/20 font-mono text-[10px] uppercase tracking-wider text-zinc-300 hover:text-primary transition-all">
+<span class="flex items-center"><span class="material-symbols-outlined mr-2 !text-sm" data-icon="filter_list">filter_list</span> Filter</span>
+</button>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-mono text-[10px] uppercase font-bold tracking-widest hover:opacity-90 transition-opacity">
+                                    Export CSV
+                                </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-label border-collapse">
+<thead>
+<tr class="bg-zinc-900/50">
+<th class="px-6 py-4 font-mono text-[10px] text-primary/80 uppercase tracking-widest">ID Reference</th>
+<th class="px-6 py-4 font-mono text-[10px] text-primary/80 uppercase tracking-widest">User Profile</th>
+<th class="px-6 py-4 font-mono text-[10px] text-primary/80 uppercase tracking-widest">Skin Type</th>
+<th class="px-6 py-4 font-mono text-[10px] text-primary/80 uppercase tracking-widest">AI Tier</th>
+<th class="px-6 py-4 font-mono text-[10px] text-primary/80 uppercase tracking-widest">LTV (USD)</th>
+<th class="px-6 py-4 font-mono text-[10px] text-primary/80 uppercase tracking-widest">Status</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-primary/5 transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-zinc-400">LU-9928-1A</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-zinc-800 flex-shrink-0">
+<img class="w-full h-full object-cover rounded opacity-80" data-alt="modern close-up portrait of a woman with clean glowing skin in editorial soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5mwm0Z9opSfkajkB-IVX2MQr2xcao1J8pxdjlLRQ19gRUZYz1TNvPWYncdQ_GvkGJgVSXvqJhm3OCR63epHouqIZzVOphdQPBHq4XNx8hqJsqzH8BOt-GWr5pGiqvq5gUSj9o6Eq7Sg5zZ5k_EjwJn4EYCfjFhR86snxH28YxXNKV4zLV-W-Ot12ntZJr9J-z3mBkRSGoxpMm2MC_czZEOXOguuqToU28WqzBaWIwwwYO4qh9bqbYApfVnvh0SknkwWYvFhAScC6b"/>
+</div>
+<div>
+<div class="text-white text-sm font-medium">Elena Vance</div>
+<div class="text-[10px] text-zinc-600">elena.v@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-tertiary/10 text-tertiary text-[9px] rounded uppercase font-bold tracking-tighter">Oily/Sensitive</span>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-secondary/10 text-secondary text-[9px] rounded uppercase font-bold tracking-tighter italic">Luminary Luxe</span>
+</td>
+<td class="px-6 py-5 font-mono text-sm text-zinc-300">1,240.50</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+<span class="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Synchronized</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-zinc-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-zinc-400">LU-8112-4C</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-zinc-800 flex-shrink-0">
+<img class="w-full h-full object-cover rounded opacity-80" data-alt="professional portrait of a man with minimalist style and neutral tones for profile image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsZC7gMhpv0RR_9k6M25pJNl0PXbJB92bD9rAHCA04fxrZFAbsMfvbJL0Cx64SLrLkCTVbniLs4Z8X8kSTF0F_-r_PNDjxD4yS0dZi9zJMS5pEevvVc01Gh5tNaF-HpDze9S5UjDPw01db6Jq0Qb1u9-pYSmUwJUJfnDeGOf3GcRfL6USSLhjdzVMXP1fxzHrAOSNSyYAsc3S81fbNt6zm-rRd-dO6al_K2N7Lh5diY1cF4IbDLXL_kTSqA-Cv-ODQVj70LqpkH01q"/>
+</div>
+<div>
+<div class="text-white text-sm font-medium">Marcus Chen</div>
+<div class="text-[10px] text-zinc-600">chen_m@arch.tech</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-[9px] rounded uppercase font-bold tracking-tighter">Combination</span>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-[9px] rounded uppercase font-bold tracking-tighter">Standard AI</span>
+</td>
+<td class="px-6 py-5 font-mono text-sm text-zinc-300">450.00</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-zinc-600"></div>
+<span class="text-[10px] uppercase font-bold text-zinc-600 tracking-wider">Idle</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-zinc-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-zinc-400">LU-7741-2X</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-zinc-800 flex-shrink-0">
+<img class="w-full h-full object-cover rounded opacity-80" data-alt="editorial close-up of a stylish woman with high fashion makeup and lighting for profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjRj-eUBGqgfTXP5qizQrucBZzmYljv8sRSy1dGNq2vmoz3XoM22tlmhNqv_1GtaDEwFQ741sjd4lRDNZIdkBA7Ybv1m66gHKlRpV0mfD2eNMU1lFYB0wqffPJEUlZt2XP1YygS1p6pEV78IywPZuMoPF2IKnSJVGHckCN8avlDBIlulCibyXnc5-yt0rAXARh_qT-eT8cDCQlveITvBEIO_m4ZoF8lz4tcsZODDHkiZUlLpIENDIu0PtI25ukRJ4rl7hZW0RZsEyT"/>
+</div>
+<div>
+<div class="text-white text-sm font-medium">Sienna Brooks</div>
+<div class="text-[10px] text-zinc-600">s.brooks@vogue.ai</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-tertiary/10 text-tertiary text-[9px] rounded uppercase font-bold tracking-tighter">Dry/Sensitive</span>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-secondary/10 text-secondary text-[9px] rounded uppercase font-bold tracking-tighter italic">Luminary Luxe</span>
+</td>
+<td class="px-6 py-5 font-mono text-sm text-zinc-300">3,890.15</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+<span class="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Processing</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-zinc-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-zinc-950 flex justify-between items-center border-t border-outline-variant/10">
+<span class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest">Page 01 of 244</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant/20 text-zinc-500 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined !text-base" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-primary/40 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined !text-base" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Table Section 2: AI Processing Queue -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/10">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<div>
+<h2 class="font-headline text-lg font-bold text-white tracking-tight">System Infrastructure</h2>
+<p class="font-mono text-[9px] text-zinc-500 uppercase tracking-widest">Active API and Neural nodes</p>
+</div>
+<span class="material-symbols-outlined text-zinc-700" data-icon="memory">memory</span>
+</div>
+<div class="p-6">
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-zinc-900/40 rounded-xl border-l-2 border-primary hover:bg-zinc-900/60 transition-colors">
+<div class="flex gap-4 items-center">
+<div class="font-mono text-xs text-primary bg-primary/10 w-10 h-10 flex items-center justify-center rounded">V3</div>
+<div>
+<div class="text-sm font-medium text-white">Visual Synthesis Core</div>
+<div class="text-[9px] font-mono text-zinc-500">Uptime: 99.98% • Latency: 42ms</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full border border-primary/20 text-primary text-[9px] font-bold tracking-widest uppercase">Operational</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-zinc-900/40 rounded-xl border-l-2 border-secondary hover:bg-zinc-900/60 transition-colors">
+<div class="flex gap-4 items-center">
+<div class="font-mono text-xs text-secondary bg-secondary/10 w-10 h-10 flex items-center justify-center rounded">N2</div>
+<div>
+<div class="text-sm font-medium text-white">Neural Personalization Index</div>
+<div class="text-[9px] font-mono text-zinc-500">Uptime: 98.42% • Latency: 112ms</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full border border-secondary/20 text-secondary text-[9px] font-bold tracking-widest uppercase">Stressed</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-zinc-900/40 rounded-xl border-l-2 border-zinc-700 hover:bg-zinc-900/60 transition-colors opacity-60">
+<div class="flex gap-4 items-center">
+<div class="font-mono text-xs text-zinc-500 bg-zinc-800 w-10 h-10 flex items-center justify-center rounded">B1</div>
+<div>
+<div class="text-sm font-medium text-zinc-400">Backup Diffusion Cluster</div>
+<div class="text-[9px] font-mono text-zinc-600">Uptime: 0.00% • Offline</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full border border-zinc-800 text-zinc-600 text-[9px] font-bold tracking-widest uppercase">Standby</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Stats / Logs -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/10 flex flex-col">
+<div class="p-6 border-b border-outline-variant/10">
+<h2 class="font-headline text-lg font-bold text-white tracking-tight">Event Stream</h2>
+<p class="font-mono text-[9px] text-zinc-500 uppercase tracking-widest">Real-time system telemetry</p>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<div class="flex gap-4">
+<div class="w-1 h-full bg-primary/20 rounded-full"></div>
+<div>
+<span class="font-mono text-[8px] text-zinc-600">14:22:01.42</span>
+<p class="text-xs text-zinc-300 mt-1 leading-relaxed"><span class="text-primary">CORE_SYNC</span> completed for node <span class="font-mono text-white">#LU-9928</span></p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-1 h-full bg-secondary/20 rounded-full"></div>
+<div>
+<span class="font-mono text-[8px] text-zinc-600">14:21:45.02</span>
+<p class="text-xs text-zinc-300 mt-1 leading-relaxed"><span class="text-secondary">NEURAL_PASS</span> generated for 4 active users in <span class="font-mono text-white">FR-EU-1</span></p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-1 h-full bg-tertiary/20 rounded-full"></div>
+<div>
+<span class="font-mono text-[8px] text-zinc-600">14:19:59.88</span>
+<p class="text-xs text-zinc-300 mt-1 leading-relaxed"><span class="text-tertiary">ALERT</span>: Inbound traffic spike detected on <span class="font-mono text-white">CDN_GLOBAL_04</span></p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-1 h-full bg-zinc-800 rounded-full"></div>
+<div>
+<span class="font-mono text-[8px] text-zinc-600">14:15:22.11</span>
+<p class="text-xs text-zinc-400 mt-1 leading-relaxed">Routine database maintenance protocol initiated by <span class="font-mono text-white">SYSTEM_DAEMON</span></p>
+</div>
+</div>
+</div>
+<button class="m-6 bg-zinc-900 hover:bg-zinc-800 border border-outline-variant/20 py-2.5 rounded-lg font-mono text-[9px] uppercase tracking-widest text-zinc-400 transition-colors">
+                                View Full Archive
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Footer Status -->
+<footer class="mt-auto p-8 border-t border-outline-variant/10 bg-[#09090B]">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+<span class="font-mono text-[10px] text-zinc-400 uppercase tracking-widest">Global Status: Healthy</span>
+</div>
+<div class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest">Node Version: 4.8.1-Lumiqe-Obsidian</div>
+</div>
+<div class="flex gap-6">
+<a class="text-[10px] font-mono text-zinc-500 hover:text-primary uppercase tracking-widest transition-colors" href="#">Documentation</a>
+<a class="text-[10px] font-mono text-zinc-500 hover:text-primary uppercase tracking-widest transition-colors" href="#">Security Audit</a>
+<span class="text-[10px] font-mono text-zinc-800 uppercase tracking-widest">© 2024 Lumiqe Editorial Control</span>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- Mobile Navigation (Suppressed based on transactional/focused content rule but keeping if defined as top level) -->
+<div class="md:hidden">
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-6 bg-zinc-950/90 backdrop-blur-xl border-t border-[#C4973E]/20 z-50">
+<a class="flex flex-col items-center justify-center text-[#C4973E] scale-110" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-600" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Data</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-600" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Inv</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-600" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Set</span>
+</a>
+</nav>
+</div>
+</body></html>

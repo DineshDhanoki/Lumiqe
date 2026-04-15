@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=DM+Sans:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#9b8f7e",
+                    "on-error": "#690005",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "primary-container": "#c4973e",
+                    "on-surface-variant": "#d2c5b2",
+                    "surface": "#131315",
+                    "background": "#131315",
+                    "on-tertiary-fixed": "#40000f",
+                    "on-background": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "primary-fixed-dim": "#f0bf62",
+                    "secondary-container": "#44369c",
+                    "on-secondary-fixed": "#180065",
+                    "surface-dim": "#131315",
+                    "secondary": "#c7bfff",
+                    "surface-container-highest": "#353437",
+                    "surface-container-high": "#2a2a2c",
+                    "tertiary-container": "#e87f8b",
+                    "surface-container": "#201f22",
+                    "surface-variant": "#353437",
+                    "on-primary-container": "#483100",
+                    "on-primary": "#412d00",
+                    "surface-container-low": "#1c1b1d",
+                    "primary-fixed": "#ffdea7",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "secondary-fixed": "#e4dfff",
+                    "on-primary-fixed": "#271900",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "surface-bright": "#39393b",
+                    "on-tertiary": "#5e1322",
+                    "inverse-primary": "#7c5800",
+                    "on-surface": "#e5e1e4",
+                    "tertiary": "#ffb2b9",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#2d1a85",
+                    "inverse-on-surface": "#313032",
+                    "tertiary-fixed": "#ffdadc",
+                    "error-container": "#93000a",
+                    "error": "#ffb4ab",
+                    "on-secondary-container": "#b5abff",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-tint": "#f0bf62",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "surface-container-lowest": "#0e0e10",
+                    "outline-variant": "#4f4537",
+                    "primary": "#f0bf62"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["DM Sans"],
+                    "serif": ["Cormorant Garamond"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 21, 0.6);
+            backdrop-filter: blur(16px);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.2);
+        }
+        .abstract-blob {
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container/30">
+<!-- Onboarding Flow: Suppression of Navigation Shells as per UX Goal (Focused Journey) -->
+<main class="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+<!-- Background Atmosphere -->
+<div class="absolute inset-0 z-0 overflow-hidden">
+<div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary-container abstract-blob"></div>
+<div class="absolute bottom-[10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-secondary-container abstract-blob"></div>
+<div class="absolute top-[30%] left-[20%] w-[300px] h-[300px] rounded-full bg-tertiary-container abstract-blob"></div>
+</div>
+<!-- Content Canvas -->
+<div class="relative z-10 w-full max-w-6xl px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Step Indicators (Fixed Left) -->
+<div class="hidden lg:flex lg:col-span-1 flex-col gap-8 items-center">
+<div class="flex flex-col gap-4">
+<div class="w-1 h-12 bg-primary rounded-full"></div>
+<div class="w-1 h-12 bg-surface-container-highest rounded-full"></div>
+<div class="w-1 h-12 bg-surface-container-highest rounded-full"></div>
+</div>
+<span class="font-mono text-[10px] tracking-tighter rotate-90 whitespace-nowrap text-primary/60">PROGRESS_METRIC_01</span>
+</div>
+<!-- Main Onboarding Card -->
+<div class="lg:col-span-11 xl:col-span-10">
+<!-- Step 1: Welcome (Current View) -->
+<section class="space-y-12">
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<span class="font-mono text-xs tracking-[0.2em] text-primary uppercase">Identity Verification</span>
+<div class="h-[1px] w-12 bg-outline-variant"></div>
+</div>
+<h1 class="font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tighter text-on-surface">
+                            Welcome to <br/> <span class="text-primary italic">Lumiqe</span>
+</h1>
+</div>
+<div class="max-w-xl">
+<p class="text-xl md:text-2xl font-light text-on-surface-variant leading-relaxed">
+                            A curated digital atelier where your unique aesthetic is refined by artificial intelligence and high-fashion heritage.
+                        </p>
+</div>
+<!-- Bento Feature Preview (Step 2 Preview Context) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
+<div class="glass-panel ghost-border p-8 rounded-2xl space-y-6 group hover:bg-surface-container/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded-xl bg-primary-container/10 text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="document_scanner">document_scanner</span>
+</div>
+<div class="space-y-2">
+<h3 class="font-headline font-bold text-lg uppercase tracking-wider">Vision Scan</h3>
+<p class="text-sm text-on-surface-variant leading-snug">Our AI analyzes your wardrobe's DNA to identify silhouette patterns and tonal harmonies.</p>
+</div>
+</div>
+<div class="glass-panel ghost-border p-8 rounded-2xl space-y-6 group hover:bg-surface-container/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded-xl bg-secondary-container/10 text-secondary">
+<span class="material-symbols-outlined text-3xl" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+</div>
+<div class="space-y-2">
+<h3 class="font-headline font-bold text-lg uppercase tracking-wider">Smart Feed</h3>
+<p class="text-sm text-on-surface-variant leading-snug">Hyper-personalized editorial looks generated specifically for your unique measurements.</p>
+</div>
+</div>
+<div class="glass-panel ghost-border p-8 rounded-2xl space-y-6 group hover:bg-surface-container/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded-xl bg-tertiary-container/10 text-tertiary">
+<span class="material-symbols-outlined text-3xl" data-icon="forum">forum</span>
+</div>
+<div class="space-y-2">
+<h3 class="font-headline font-bold text-lg uppercase tracking-wider">The Atelier</h3>
+<p class="text-sm text-on-surface-variant leading-snug">Connect with elite style architects and share your curated seasonal lookbooks.</p>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="flex flex-col sm:flex-row items-center gap-8 pt-12">
+<button class="group relative px-10 py-5 bg-primary-container rounded-[10px] overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container to-primary"></div>
+<span class="relative font-headline font-extrabold uppercase tracking-widest text-xs text-on-primary-container flex items-center gap-3">
+                                Initiate Analysis 
+                                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</button>
+<div class="flex items-center gap-6">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close up portrait of stylish woman with editorial makeup and high fashion lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJDN_HNuT7hut0W9BKbSP6ZgGCCArxdeMHFRiz9tWMc7xZdeNTSLk0a9kvcps5QKa9jTuFFyZeZ6fZeaKW4Gb-l5UMMeBwfqQqV0TWvEOgqghOI_jGes1ME4eQK-wAEFcr8zmLf3ut3QQMjEj7PAiAhV5YVwqmmTXUohHGr2wT6zUwTGaUjlu24t6MVKKewIhaDXQ7Ap6XufDsZJCNfvQliSrzTbzIDEp1Mo4K1VsoCVq9yeBDLCGgbqKSgi7coUD9zm1tga-ujZve"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close up portrait of fashion forward man with minimalist aesthetic and sharp shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6gPdqClh9CnMP6Fzhei9SH6VrwwXP9bvW95Es_5MpLwaNzMZMgLTFZulChhbBRoYh-TXu8slyKVJ4rWYlemCG6xM7ZL-VuYx7mSUSqf5C7vcteIl8UR93oYVyYloLb0G1a1GFXc8fbV1EoW59gWhCMVD-DJdk9_yp70QpTMEI0ipKjltX_QGe-JHnFPWILb2ANVMkiWCWAWXiVIfa0esfMQZAKFeSeP2VcS-yApLga3UBTVRK2mHNLbvHF8tCwKq6YcPsmii6XyRO"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="editorial close up of person with striking features in soft warm studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOI5b_5BCy1r_BDMzsafB-wqSYrsmk8cj6utQP9zSUPGojTYcyZUyof2I5VOJRdSfflz587pTjPVgjXWHlzseQUqCblg8jGTZPXzXkX4sFJymuTkUoJPjf1fX34rWtDI75rS41aGziFlilu-rphAA3XprSPjxJLsSksjJQEX2PaidkenMW-PoQXVRZr4GFeCUBAThZw2Ja9ZnOnxT7mPwI4ZRDt-f_dEA3BKSM1H90iDneGANZs6Y6ajdLWyL555Z8E10LNNjld8Bc"/>
+</div>
+</div>
+<span class="font-label text-xs text-white/40 tracking-wide uppercase">Join 12k+ Elite Curators</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Mobile Progress Bar -->
+<div class="fixed bottom-0 left-0 w-full p-8 lg:hidden flex justify-center items-center gap-3 z-20">
+<div class="w-12 h-1 bg-primary rounded-full"></div>
+<div class="w-3 h-1 bg-white/10 rounded-full"></div>
+<div class="w-3 h-1 bg-white/10 rounded-full"></div>
+</div>
+<!-- System Architecture Footnote -->
+<footer class="absolute bottom-12 right-12 z-10 hidden xl:block">
+<div class="flex items-center gap-4 text-white/20">
+<div class="text-right">
+<p class="font-mono text-[10px] uppercase tracking-widest">Protocol Version</p>
+<p class="font-mono text-[10px] text-primary/40 tracking-widest">LX-8800.V2</p>
+</div>
+<div class="w-[1px] h-8 bg-outline-variant"></div>
+<div class="text-right">
+<p class="font-mono text-[10px] uppercase tracking-widest">Latency Status</p>
+<p class="font-mono text-[10px] text-secondary/40 tracking-widest">OPTIMIZED_12MS</p>
+</div>
+</div>
+</footer>
+</main>
+<!-- Branding Element (Top Left) -->
+<div class="fixed top-8 left-8 z-50">
+<h2 class="font-serif text-2xl font-bold tracking-tighter text-primary">LUMIQE</h2>
+</div>
+</body></html>

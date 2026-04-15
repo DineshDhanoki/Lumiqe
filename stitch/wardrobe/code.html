@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500&amp;family=DM+Sans:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#9b8f7e",
+                    "on-error": "#690005",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "primary-container": "#c4973e",
+                    "on-surface-variant": "#d2c5b2",
+                    "surface": "#131315",
+                    "background": "#131315",
+                    "on-tertiary-fixed": "#40000f",
+                    "on-background": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "primary-fixed-dim": "#f0bf62",
+                    "secondary-container": "#44369c",
+                    "on-secondary-fixed": "#180065",
+                    "surface-dim": "#131315",
+                    "secondary": "#c7bfff",
+                    "surface-container-highest": "#353437",
+                    "surface-container-high": "#2a2a2c",
+                    "tertiary-container": "#e87f8b",
+                    "surface-container": "#201f22",
+                    "surface-variant": "#353437",
+                    "on-primary-container": "#483100",
+                    "on-primary": "#412d00",
+                    "surface-container-low": "#1c1b1d",
+                    "primary-fixed": "#ffdea7",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "secondary-fixed": "#e4dfff",
+                    "on-primary-fixed": "#271900",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "surface-bright": "#39393b",
+                    "on-tertiary": "#5e1322",
+                    "inverse-primary": "#7c5800",
+                    "on-surface": "#e5e1e4",
+                    "tertiary": "#ffb2b9",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#2d1a85",
+                    "inverse-on-surface": "#313032",
+                    "tertiary-fixed": "#ffdadc",
+                    "error-container": "#93000a",
+                    "error": "#ffb4ab",
+                    "on-secondary-container": "#b5abff",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-tint": "#f0bf62",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "surface-container-lowest": "#0e0e10",
+                    "outline-variant": "#4f4537",
+                    "primary": "#f0bf62"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["DM Sans"],
+                    "serif": ["Cormorant Garamond"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(19, 19, 21, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#09090B]/80 backdrop-blur-lg flex justify-between items-center px-6 py-4 w-full">
+<div class="font-serif text-2xl font-bold tracking-tighter text-[#C4973E]">LUMIQE</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-headline font-medium uppercase tracking-widest text-[10px] text-white/60 hover:text-white transition-colors duration-300" href="#">Dashboard</a>
+<a class="font-headline font-medium uppercase tracking-widest text-[10px] text-[#C4973E] border-b border-[#C4973E]/20" href="#">Wardrobe</a>
+<a class="font-headline font-medium uppercase tracking-widest text-[10px] text-white/60 hover:text-white transition-colors duration-300" href="#">Scanner</a>
+<a class="font-headline font-medium uppercase tracking-widest text-[10px] text-white/60 hover:text-white transition-colors duration-300" href="#">Feed</a>
+</div>
+<div class="flex items-center gap-4 text-[#C4973E]">
+<span class="material-symbols-outlined cursor-pointer active:opacity-70">account_circle</span>
+<span class="material-symbols-outlined cursor-pointer active:opacity-70">flare</span>
+</div>
+</nav>
+<div class="flex min-h-screen pt-20">
+<!-- Side Navigation Bar (Desktop) -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-80px)] py-8 bg-[#111116] h-screen w-64 border-r border-[#C4973E]/10 shadow-[40px_0_60px_-15px_rgba(196,151,62,0.05)] sticky top-20">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<p class="font-headline text-sm tracking-wide text-on-surface">Alex Rivera</p>
+<p class="font-label text-[10px] uppercase tracking-widest text-primary/60">Elite Tier</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 font-headline text-sm tracking-wide text-white/40 hover:bg-[#18181F] hover:text-[#C4973E] transition-all ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-headline text-sm tracking-wide text-[#C4973E] font-bold bg-[#18181F] rounded-r-full ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Wardrobe</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-headline text-sm tracking-wide text-white/40 hover:bg-[#18181F] hover:text-[#C4973E] transition-all ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span>Scanner</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-headline text-sm tracking-wide text-white/40 hover:bg-[#18181F] hover:text-[#C4973E] transition-all ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+<span>Feed</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-headline text-sm tracking-wide text-white/40 hover:bg-[#18181F] hover:text-[#C4973E] transition-all ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Community</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-6 lg:px-12 py-8 overflow-y-auto">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+<div>
+<h1 class="font-serif text-5xl md:text-6xl text-on-surface mb-2 tracking-tight">The Digital <span class="italic text-primary">Atelier</span></h1>
+<p class="font-label text-sm text-on-surface-variant max-w-md">Your curated collection, analyzed and optimized by Lumiqe AI.</p>
+</div>
+<button class="group relative flex items-center gap-3 bg-primary-container px-8 py-4 rounded-[10px] text-on-primary font-headline font-bold uppercase tracking-widest text-[11px] hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Add Item</span>
+<div class="absolute inset-0 rounded-[10px] ring-1 ring-primary/30 group-hover:ring-primary/60 transition-all"></div>
+</button>
+</header>
+<!-- Stats Pills -->
+<section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+<div class="bg-surface-container-low ghost-border p-6 rounded-[16px] flex items-center justify-between">
+<div>
+<p class="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant/60 mb-1">Total Items</p>
+<p class="font-headline text-3xl font-extrabold text-on-surface">142</p>
+</div>
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">checkroom</span>
+</div>
+</div>
+<div class="bg-surface-container-low ghost-border p-6 rounded-[16px] flex items-center justify-between">
+<div>
+<p class="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant/60 mb-1">Avg Match Score</p>
+<p class="font-headline text-3xl font-extrabold text-secondary">88%</p>
+</div>
+<div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">insights</span>
+</div>
+</div>
+<div class="bg-surface-container-low ghost-border p-6 rounded-[16px] flex items-center justify-between">
+<div>
+<p class="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant/60 mb-1">Active Categories</p>
+<p class="font-headline text-3xl font-extrabold text-tertiary">12</p>
+</div>
+<div class="w-12 h-12 bg-tertiary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">category</span>
+</div>
+</div>
+</section>
+<!-- Palette Compatibility Banner -->
+<div class="relative w-full h-48 rounded-[24px] overflow-hidden mb-12 group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract close-up of textured silk and wool fabrics in deep navy and gold tones, moody editorial lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAP4bYnGtXNcQGPc71k1W6XVDdmHv_CM7L9F6rmoX_Hb0YUvnFiQigQmIvicAJT4zCu492GmEBY5K1wJZfG6mCbCL_icIvgC-3845xUIxp92SburQ4q02uwF6KYB6rcLaVUZBSaQs3rtM3lJcayMc_YmAys0OJ0KJkrx0KVI6iQ_gvzmnAx2x4DpuudoNMtdUyuDeYY9Wo-S3y-ypE0v3P9El5CWOEq6XCF4FaE4l7b_SMW5LOzP-mG1qQVtU7dDWdGpYQRinbSDaEv')"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-highest/90 via-surface-container-highest/40 to-transparent"></div>
+<div class="relative h-full flex flex-col justify-center px-10">
+<div class="inline-flex items-center gap-2 bg-tertiary-container/30 backdrop-blur-md px-3 py-1 rounded-full w-fit mb-4">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label text-[10px] uppercase font-bold text-tertiary tracking-widest">Seasonal Insight</span>
+</div>
+<h2 class="font-serif text-3xl text-on-surface mb-2">Autumn Harmony Palette</h2>
+<p class="font-body text-sm text-on-surface-variant max-w-sm">Lumiqe AI suggests your Deep Teal and Ochre items are trending 40% higher in match compatibility today.</p>
+</div>
+</div>
+<!-- Category Filter Bar -->
+<div class="flex items-center gap-4 overflow-x-auto pb-4 mb-8 no-scrollbar">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-headline text-xs font-bold uppercase tracking-widest">All Items</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container ghost-border text-on-surface/60 font-headline text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors">Outerwear</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container ghost-border text-on-surface/60 font-headline text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors">Tops</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container ghost-border text-on-surface/60 font-headline text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors">Dresses</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container ghost-border text-on-surface/60 font-headline text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors">Bottoms</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container ghost-border text-on-surface/60 font-headline text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors">Accessories</button>
+</div>
+<!-- Wardrobe Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-24">
+<!-- Card 1 -->
+<div class="group bg-surface-container-low rounded-[24px] overflow-hidden ghost-border flex flex-col transition-all duration-500 hover:-translate-y-2">
+<div class="relative aspect-[4/5] overflow-hidden">
+<img alt="Outerwear" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="high-fashion editorial shot of a tailored charcoal grey wool coat on a minimalist black stand, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_6SJSUwnxRN2PTZ7NGqWwfZePMwh6MZOijug4XfGYPmiN7ncFPkx6mBwuuneO3vXeXPcVbF-0I0yWm9xH1pIJ2cfbViKgA_J2L6DJJkl0Eyj38Y7o5VR8lm3j58DV_xZa10iH1Zx0XRz8QEj11xT4ZpGxLC-1qBYmI2DEqw6Sah42avZRoQAyOmMo03ZHkC_N5dhcjFN5beX0cVr9CR_51W24SYWUG_qlGU1ak8auwAUShkSdNPFq9nzJVw_z_hOM_e-QpvNIwHk7"/>
+<div class="absolute top-4 right-4 bg-surface/80 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 border border-primary/20">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-mono text-xs text-primary font-bold">94%</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-primary/70 font-bold mb-1">Saint Laurent</p>
+<h3 class="font-headline text-lg font-medium text-on-surface">Double-Breasted Wool Coat</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex gap-2">
+<div class="w-5 h-5 rounded-full bg-[#2A2A2E] ring-1 ring-white/10 shadow-inner"></div>
+<div class="w-5 h-5 rounded-full bg-[#1A1A1A] ring-1 ring-white/10 shadow-inner"></div>
+</div>
+<p class="font-mono text-[10px] text-on-surface-variant">Last worn 2d ago</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface-container-low rounded-[24px] overflow-hidden ghost-border flex flex-col transition-all duration-500 hover:-translate-y-2">
+<div class="relative aspect-[4/5] overflow-hidden">
+<img alt="Shoes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="stiletto leather heels in deep burgundy and obsidian black, luxury showroom lighting with reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJAlOmVkrN7mrsIe17JzPwC2BBHsUfOUcmiAPThNxNgoAwnrxq5PlntayDsq8PmbDBE4uWk-F3EF-1V6DxVxA-ruwi4_MFv81KU_QVUOUQQ_2Ja5Ps35su9NH-WUDRurZL0JlqmV5Pb592aTKc6cxEEmos0DrIZNES-00aj0BIyXNyRlE4pnacSm5NErIVd_kZ3RBhmsx8HWqlDNcNQ1r02mLdZ_DUEuZP1JAle3RJYpOYRiga4CcNZdCEwlEENEpOFfeNkkd1q1Jv"/>
+<div class="absolute top-4 right-4 bg-surface/80 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 border border-primary/20">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-mono text-xs text-primary font-bold">81%</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-primary/70 font-bold mb-1">Prada</p>
+<h3 class="font-headline text-lg font-medium text-on-surface">Brushed Leather Pumps</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex gap-2">
+<div class="w-5 h-5 rounded-full bg-[#4A0E0E] ring-1 ring-white/10 shadow-inner"></div>
+<div class="w-5 h-5 rounded-full bg-[#000000] ring-1 ring-white/10 shadow-inner"></div>
+</div>
+<p class="font-mono text-[10px] text-on-surface-variant">Unworn this season</p>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface-container-low rounded-[24px] overflow-hidden ghost-border flex flex-col transition-all duration-500 hover:-translate-y-2">
+<div class="relative aspect-[4/5] overflow-hidden">
+<img alt="Knitwear" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="soft cashmere knit sweater in cream ivory color, macro texture detail, warm morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwwacUT33uF-9yADfpbB39ni1-yCT5Lqpzao_cDKjP-S-KtkrtC0uU_y0_UNOJ5qz-7PzwOLOVhx22jjLTmLdpoS-LCkmVHV2WgIcAzFO6EEyYhOa4Rn1e_r_-tKXE3F6ZmB-90yJz-CK9KL1Qs1qzKbADz2_epJ_xYiTiCT4_SjTLue6_sLxV_yKBa4LC2hYbWCclTGtT_lpCJadEMYQX0pLEKcgng082aost67Sav_x2rCb4Y7P2lxOrTuJdduayjkOHIbujnOqF"/>
+<div class="absolute top-4 right-4 bg-surface/80 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 border border-primary/20">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-mono text-xs text-primary font-bold">76%</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-primary/70 font-bold mb-1">The Row</p>
+<h3 class="font-headline text-lg font-medium text-on-surface">Oversized Cashmere Polo</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex gap-2">
+<div class="w-5 h-5 rounded-full bg-[#F5F5F0] ring-1 ring-white/10 shadow-inner"></div>
+<div class="w-5 h-5 rounded-full bg-[#D6D6C8] ring-1 ring-white/10 shadow-inner"></div>
+</div>
+<p class="font-mono text-[10px] text-on-surface-variant">Highly compatible</p>
+</div>
+</div>
+</div>
+<!-- Card 4 (Asymmetric sizing/break) -->
+<div class="group bg-surface-container-low rounded-[24px] overflow-hidden ghost-border flex flex-col transition-all duration-500 hover:-translate-y-2">
+<div class="relative aspect-[4/5] overflow-hidden">
+<img alt="Bag" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="luxury designer handbag in deep forest green pebbled leather, close up shot with gold hardware" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDebYONxqB9kO8PgTrdaZXxHadIiFgy9rwNrERA7S0aLE_uzUAuAteNX0edb0UiLgplg42RAuZfNraM9U5BeISKKG8Et0RBjwWCNidFOArd07HC9Lhj7ehQqJ7XcqMfbvjTrjV9FFaYNKlb5fF1LlO9rnSfALIuX0DAbcfxceRcBoy37odft13tQYDSrMf8Ak2K3JqjSSOGd7KZ3_SdgWCzny4rCSeaomukTtsn4lSc_hDyH3rQmsrIqAPb6lmXYncih1VlNozKWRPG"/>
+<div class="absolute top-4 right-4 bg-surface/80 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 border border-primary/20">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-mono text-xs text-primary font-bold">92%</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-primary/70 font-bold mb-1">Celine</p>
+<h3 class="font-headline text-lg font-medium text-on-surface">Pico Belt Bag</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex gap-2">
+<div class="w-5 h-5 rounded-full bg-[#243324] ring-1 ring-white/10 shadow-inner"></div>
+<div class="w-5 h-5 rounded-full bg-[#C4973E] ring-1 ring-white/10 shadow-inner"></div>
+</div>
+<p class="font-mono text-[10px] text-on-surface-variant">Daily Essential</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 lg:hidden bg-[#09090B]/90 backdrop-blur-xl border-t border-[#C4973E]/15 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] rounded-t-3xl">
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E]">
+<span class="material-symbols-outlined">home</span>
+<span class="font-headline text-[9px] font-semibold uppercase tracking-tighter">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#C4973E] scale-110 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">checkroom</span>
+<span class="font-headline text-[9px] font-semibold uppercase tracking-tighter">Wardrobe</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E]">
+<span class="material-symbols-outlined">document_scanner</span>
+<span class="font-headline text-[9px] font-semibold uppercase tracking-tighter">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E]">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-headline text-[9px] font-semibold uppercase tracking-tighter">Feed</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E]">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-headline text-[9px] font-semibold uppercase tracking-tighter">Social</span>
+</div>
+</nav>
+<!-- FAB (Suppressed on this view as per hierarchy - only on Home/Dash, but keeping a task-specific one for context) -->
+<!-- Suppressing FAB on Wardrobe page per PRD rules -->
+</body></html>

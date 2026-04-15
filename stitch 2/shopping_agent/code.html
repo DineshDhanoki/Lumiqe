@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumiqe | Shopping Agent</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500&amp;family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#5e1322",
+                    "on-primary": "#412d00",
+                    "on-secondary-container": "#b5abff",
+                    "surface-variant": "#353437",
+                    "outline-variant": "#4f4537",
+                    "on-surface": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-dim": "#131315",
+                    "primary": "#f0bf62",
+                    "secondary-fixed": "#e4dfff",
+                    "on-background": "#e5e1e4",
+                    "inverse-primary": "#7c5800",
+                    "on-tertiary-fixed": "#40000f",
+                    "surface-container-high": "#2a2a2c",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "secondary-container": "#44369c",
+                    "on-error": "#690005",
+                    "tertiary": "#ffb2b9",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-secondary": "#2d1a85",
+                    "primary-container": "#c4973e",
+                    "surface-container": "#201f22",
+                    "primary-fixed": "#ffdea7",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "secondary": "#c7bfff",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "tertiary-container": "#e87f8b",
+                    "surface-tint": "#f0bf62",
+                    "inverse-on-surface": "#313032",
+                    "outline": "#9b8f7e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "on-surface-variant": "#d2c5b2",
+                    "primary-fixed-dim": "#f0bf62",
+                    "on-secondary-fixed": "#180065",
+                    "surface-bright": "#39393b",
+                    "surface-container-low": "#1c1b1d",
+                    "surface": "#131315",
+                    "tertiary-fixed": "#ffdadc",
+                    "background": "#131315",
+                    "surface-container-highest": "#353437",
+                    "on-primary-fixed": "#271900",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#483100"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .obsidian-glass {
+            background: rgba(19, 19, 21, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.15);
+        }
+        .aspect-3-4 {
+            aspect-ratio: 3 / 4;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 bg-zinc-950 border-r border-[#C4973E]/10 py-6 sticky top-0">
+<div class="px-6 mb-10">
+<h1 class="font-['Cormorant_Garamond'] text-xl text-white">Lumiqe Admin</h1>
+<p class="font-['JetBrains_Mono'] text-[10px] tracking-tight text-zinc-500 uppercase mt-1">Editorial Control</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+                    Analytics
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                    Inventory
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#C4973E] bg-[#C4973E]/5 border-r-2 border-[#C4973E] transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+                    Shopping Agent
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+                    Style Quizzes
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+                    Alerts
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                    Seasons
+                </a>
+</nav>
+<div class="px-3 pt-6 border-t border-zinc-900 mt-6 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200 ease-in-out font-['JetBrains_Mono'] text-xs tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    Support
+                </a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 bg-surface-container-lowest min-h-screen relative pb-24 md:pb-12">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-zinc-950/80 backdrop-blur-lg flex justify-between items-center px-8 h-16 bg-gradient-to-b from-zinc-900/20 to-transparent">
+<div class="flex items-center gap-8">
+<div class="font-['Cormorant_Garamond'] italic text-2xl tracking-tighter text-[#C4973E]">Lumiqe</div>
+<nav class="hidden md:flex gap-6">
+<a class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-zinc-500 hover:text-white transition-colors duration-300" href="#">Seasons</a>
+<a class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-[#C4973E] border-b-[0.5px] border-[#C4973E]/40 pb-1 hover:text-white transition-colors duration-300" href="#">Shopping Agent</a>
+<a class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-zinc-500 hover:text-white transition-colors duration-300" href="#">Wishlist</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#C4973E] opacity-100 hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+<button class="text-[#C4973E] opacity-100 hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Editorial Content -->
+<section class="mt-24 px-6 md:px-12 max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+<div class="max-w-2xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[9px] font-bold uppercase tracking-[0.2em] font-label">AI Curated</span>
+<span class="px-3 py-1 bg-surface-container-high text-outline rounded-full text-[9px] font-bold uppercase tracking-[0.2em] font-label">Volume VIII</span>
+</div>
+<h2 class="font-['Cormorant_Garamond'] text-6xl md:text-8xl leading-tight tracking-tighter text-on-surface">Your Curated <br/><span class="italic text-primary">Ensemble</span></h2>
+<p class="mt-6 text-on-surface-variant font-body text-lg leading-relaxed max-w-lg">
+                            An architectural approach to modern layering. Our AI agent has synthesized your style profile with current runway silhouettes to generate this 8-piece selection.
+                        </p>
+</div>
+<div class="flex flex-col gap-4">
+<button class="bg-primary-container text-on-primary-container px-8 py-4 rounded-[10px] font-headline font-bold uppercase tracking-widest text-xs flex items-center gap-3 shadow-2xl hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+                            Regenerate Ensemble
+                        </button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+<!-- Item 1: Outerwear -->
+<div class="group cursor-pointer">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="editorial fashion shot of a luxury charcoal wool overcoat with structured shoulders on a dark minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU1d-neYm38A4hY0OLfFHW5RF8HgsrxZ_LsaRODJe7Pf0MOys4COY6hfsBvcCQWT9QG064v5ytXu83GHtfJPAREC15GucLSQr-WyZPstiq-KGwa1INE74EOVVzgpEk7De6DymgeUoZ17ZpxOwKRqRDFYRESF2kLbi5XpTCvO95SHAMPTCjrpFza2Cmge3Ztp6QnyXFvTew0CKc5f3y-VOcmGdhkfLhjJ3DZeU9pcGjcpEUJmXiCy-ZQR-bxmbW_GvRo9x5tCXjkZLE"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Outerwear</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Obsidian Wool Overcoat</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">LUMIQE ESSENTIALS</p>
+<p class="font-body text-xs text-primary mt-2">$1,250</p>
+</div>
+</div>
+<!-- Item 2: Top -->
+<div class="group cursor-pointer lg:mt-12">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close up high fashion shot of a silk black turtleneck sweater with subtle sheen and fine knit texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3_-52p0CucjJL3_tpSN1W-rVs_f9TRPakknAkvhW9Kd7ALjvQXCILEwNNwjryzncLJSUESheNrDAejnnxiCBSA_7hVatQ2P83ypbOhO7XcZb7kt4b9gxIoD6LDZ4-plFrb1B4ZQqbZXR9yckNptqKjaGO5B15nMynizxfvHIUj8GAP5gkeJ7RKEeqGfm--QlMYpOxB1Tzm-Bia1FyUoxXKjbrQBE5vowjMUp7HwD9gBfvPqx9J3i3gmABQfSG4eoHYv-oL9QtFAOa"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Knitwear</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Silk Blend Turtleneck</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">ATELIER SERIES</p>
+<p class="font-body text-xs text-primary mt-2">$420</p>
+</div>
+</div>
+<!-- Item 3: Bottom -->
+<div class="group cursor-pointer">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="fashion photography of tailored wide-leg trousers in deep navy fabric draped elegantly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOTuPCd9Tre2L4IJbkLCMC_2zF0vlR4jOZRwQxl_mAnTavTflfUNHBORjQOMb7v4GllkMQjcVNpEcbbUN1YajVxmUhpdFKk7pMLEiMMkboomBtKmOgANxha5cgU7TrrTr0wsExyi7m62E8115u0TTjzwRgEk5ig_TbZgmHenrTI8siP81jQ-Upevb46-r86Bx1SP_BcAgq-9VV0ZhSKuONn6kqLM9Hqbi5K_wlKewOPcI1fETLBizDs54WetX2v5cpTrZ03SCelBKM"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Bottoms</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Architectural Trousers</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">MODERN TAILORING</p>
+<p class="font-body text-xs text-primary mt-2">$680</p>
+</div>
+</div>
+<!-- Item 4: Shoes -->
+<div class="group cursor-pointer lg:mt-12">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="macro shot of luxury black leather chelsea boots with polished finish and sharp silhouette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhjHMkVrILWqLgLZswfoG-IVzvOMpBvbGOeH96WyC3StZfa6YamyLrYFlV5VnBzS7u20ROdXhyBcE7jmbwBdOlNo3eRU8RdI9T7CkWWWr2LK5NU0XOn8lqi2--cbI70YGyH6pyiTrvth1BWXH6iAmF5OqjQlVpNyiL3md_FsiNezvVsMzzGC8D_2tO3lDj4YyGUP4YSmz5KLkz0HPTZyVm4gAH7fb8AlUiZWc6OEgkJst-WKWRATbDPx-w-01F7_SjH-QrprxtkEgL"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Footwear</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Vitello Chelsea Boot</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">HERITAGE CRAFT</p>
+<p class="font-body text-xs text-primary mt-2">$950</p>
+</div>
+</div>
+<!-- Item 5: Bag -->
+<div class="group cursor-pointer">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="studio shot of a minimalist geometric leather handbag in matte black with gold hardware accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtobXWCHZgM6cMTspEvE61RYqUZBh7P3wgKcoFcXcGltCtLxlgC9TBevqsA8z9dEy0u2C4Y0CU-b1IyUTiuDq50rP7ahxYrfkKoxLNDlzrkAHHksQ4cXsdyNyzGBrJ7geQSDG9obsSUo7aVdjBM_vvwhqwYz7gqUPWzLVF3R8K-crDm09scJPzV187RhRULATroVMftQE6IokXrFYEg-F3gEPpFb1XCg4wl2fW07-1HnZkGlDIikLkguh5QR_dcJRc65rCgDs4Tk2t"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Accessories</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Geometric Tote</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">STRUCTURAL LINE</p>
+<p class="font-body text-xs text-primary mt-2">$1,400</p>
+</div>
+</div>
+<!-- Item 6: Scarf -->
+<div class="group cursor-pointer lg:mt-12">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="detailed close up of a heavy cashmere scarf in camel tone with fringed edges against a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk6rKOzh1hSiF2jc1MkPcQMrNAzGWx8AvaI5vFrwxkOETDnpJYOcAxLprfWUokwgKqUK2w7h-KVGq09pRt7SkWjp14yuNdqVyP4P-BxOSDsUm4zq4kwW-s4V_kNt_mjGB2CXx2sDFJpZvZQeyPTAYdLe7wiAFRPM74Mcoyl3uo0XeDH2zhZDVJKBmCErw_iaCJLfdSYtQLbsVcDeCHxBftELpbPHcYpMkYkRWXqx_jJs0nLS0PhUAHZ1jxEMzitxT-qMY7tH8GXJTd"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Textiles</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Pure Cashmere Wrap</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">SEASONAL LAYER</p>
+<p class="font-body text-xs text-primary mt-2">$350</p>
+</div>
+</div>
+<!-- Item 7: Belt -->
+<div class="group cursor-pointer">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="macro artistic shot of a sleek black leather belt with a custom gold sculptural buckle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEdQAb6PBUs4V5h7h_uGh7Xcw80l7d9BU-V7gqEo0q0tmIbZw_KYtCapymCSb7nzpLgzV2UkjvISIrkNr7_o_nHwM_yZtHZ5BUKhbdRICuesut-WuHe8Bmdb6VC3s-vB7Rm38S4Iu-72NB_1fLuFmCoTVqPh1Q_O_kVh9xC-O2i1dJ7jnvmy9Ri3AYgHray4uKXgFRBL_BYll7ha9RVc4Ljyeinb-yRq9F7tnLsYLo8oa2xrSVDAp3UenRuA055UAfCj8c0wKDl_1I"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Hardware</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Signature Buckle Belt</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">ACCENTS</p>
+<p class="font-body text-xs text-primary mt-2">$290</p>
+</div>
+</div>
+<!-- Item 8: Fragrance -->
+<div class="group cursor-pointer lg:mt-12">
+<div class="aspect-3-4 overflow-hidden rounded-xl bg-surface-container relative ghost-border">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="luxurious perfume bottle with gold cap and minimal label on a dark reflecting surface with amber liquid" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhsTIf_Tsq738YrLKCOWySgQsZI8dTDjvxvLRSSxkTnhoINv5xOTCd8MwXv31x-ZKMgbP891pun9QWhRanHeoETJuelHtjtl2ff_SmFBZ7xpHlxyIqmeCr1KBadaK15aHOAc3GntzIqtfB9rZFoXgk-vtkRqArhj4YqpJu3Zy3o5EHfTGN--VQTJaO_ctijEyDUyS66_fwaDXw8MNWOqBH0YxixAdQNUM-OvZzYnk2QQEuhrxdMe4-o7gFsiIYCw2Y7XDiCr5lQiQc"/>
+<div class="absolute top-4 left-4">
+<span class="bg-zinc-950/60 backdrop-blur-md px-2 py-1 text-[8px] font-mono text-primary-fixed uppercase tracking-tighter rounded border border-white/10">Aura</span>
+</div>
+</div>
+<div class="mt-6 space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline font-semibold text-sm tracking-tight text-on-surface">Nocturnal Amber EdP</h3>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+</div>
+<p class="font-['JetBrains_Mono'] text-[10px] text-outline">OLFACTORY</p>
+<p class="font-body text-xs text-primary mt-2">$210</p>
+</div>
+</div>
+</div>
+<!-- AI Insights Overlay (Bento Component) -->
+<div class="mt-32 mb-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-surface-container rounded-2xl p-8 ghost-border relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="psychology">psychology</span>
+<h4 class="font-headline font-bold text-xs uppercase tracking-widest text-on-surface">AI Rationale</h4>
+</div>
+<p class="font-body text-on-surface-variant leading-relaxed max-w-xl">
+                                This ensemble was constructed based on your "Obsidian Minimalist" preference vector. We detected a transition toward heavier textures for the upcoming season, prompting the selection of high-weight wool and raw silk components. The silhouette maintains a 2:1 ratio of drape to structure, optimized for your specified height profile.
+                            </p>
+</div>
+<div class="absolute -right-20 -bottom-20 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[200px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+<div class="bg-[#C4973E]/5 rounded-2xl p-8 border border-[#C4973E]/20 flex flex-col justify-center text-center">
+<span class="font-['JetBrains_Mono'] text-4xl font-bold text-primary mb-2">98%</span>
+<h4 class="font-headline font-bold text-[10px] uppercase tracking-widest text-primary/60">Style Match Accuracy</h4>
+<div class="w-full bg-zinc-900 h-1 mt-6 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98%]"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-6 bg-zinc-950/90 backdrop-blur-xl z-50 rounded-t-2xl border-t border-[#C4973E]/20 shadow-[0_-10px_40px_rgba(196,151,62,0.05)]">
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Discover</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#C4973E] scale-110 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">AI Agent</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="checkroom">checkroom</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Try-On</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Wishlist</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Me</span>
+</button>
+</nav>
+</body></html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Price Alerts | Lumiqe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#5e1322",
+                    "on-primary": "#412d00",
+                    "on-secondary-container": "#b5abff",
+                    "surface-variant": "#353437",
+                    "outline-variant": "#4f4537",
+                    "on-surface": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-dim": "#131315",
+                    "primary": "#f0bf62",
+                    "secondary-fixed": "#e4dfff",
+                    "on-background": "#e5e1e4",
+                    "inverse-primary": "#7c5800",
+                    "on-tertiary-fixed": "#40000f",
+                    "surface-container-high": "#2a2a2c",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "secondary-container": "#44369c",
+                    "on-error": "#690005",
+                    "tertiary": "#ffb2b9",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-secondary": "#2d1a85",
+                    "primary-container": "#c4973e",
+                    "surface-container": "#201f22",
+                    "primary-fixed": "#ffdea7",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "secondary": "#c7bfff",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "tertiary-container": "#e87f8b",
+                    "surface-tint": "#f0bf62",
+                    "inverse-on-surface": "#313032",
+                    "outline": "#9b8f7e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "on-surface-variant": "#d2c5b2",
+                    "primary-fixed-dim": "#f0bf62",
+                    "on-secondary-fixed": "#180065",
+                    "surface-bright": "#39393b",
+                    "surface-container-low": "#1c1b1d",
+                    "surface": "#131315",
+                    "tertiary-fixed": "#ffdadc",
+                    "background": "#131315",
+                    "surface-container-highest": "#353437",
+                    "on-primary-fixed": "#271900",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#483100"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "serif": ["Cormorant Garamond"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container/30">
+<div class="flex min-h-screen">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col h-screen w-64 border-r border-[#C4973E]/10 bg-zinc-950 py-6 sticky top-0 shrink-0">
+<div class="px-8 mb-12">
+<h1 class="font-serif text-xl text-white">Lumiqe Admin</h1>
+<p class="font-mono text-[10px] tracking-tight text-[#C4973E] uppercase mt-1">Editorial Control</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="monitoring">monitoring</span>
+                    Analytics
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="inventory_2">inventory_2</span>
+                    Inventory
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="quiz">quiz</span>
+                    Style Quizzes
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C4973E] bg-[#C4973E]/5 border-r-2 border-[#C4973E] font-mono text-xs tracking-tight transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="notifications_active">notifications_active</span>
+                    Alerts
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+                    Seasons
+                </a>
+</nav>
+<div class="px-4 mt-auto border-t border-zinc-900 pt-6 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+                    Settings
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-500 font-mono text-xs tracking-tight hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+                    Support
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 bg-surface min-h-screen relative overflow-hidden">
+<!-- Background Tonal Shifts -->
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary-container/5 blur-[100px] rounded-full pointer-events-none"></div>
+<!-- Header Section -->
+<header class="pt-20 pb-12 px-8 md:px-16 max-w-6xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-4">
+<span class="font-mono text-[10px] tracking-[0.2em] text-primary uppercase">Market Intelligence</span>
+<h2 class="font-serif text-5xl md:text-7xl text-on-surface tracking-tighter leading-none">Price Alerts</h2>
+<p class="text-on-surface-variant max-w-md text-sm leading-relaxed">Automated monitoring for your curated wishlists. Real-time insights into luxury valuation shifts.</p>
+</div>
+<button class="bg-primary-container text-on-primary font-headline font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-[10px] hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary-container/20">
+                        Create New Alert
+                    </button>
+</div>
+</header>
+<!-- Alerts Grid -->
+<section class="px-8 md:px-16 max-w-6xl mx-auto pb-32">
+<div class="grid grid-cols-1 gap-4">
+<!-- Alert Card 1 -->
+<div class="ghost-border bg-surface-container/40 backdrop-blur-md rounded-2xl p-6 flex flex-col md:flex-row items-center gap-8 group hover:bg-surface-container-high/60 transition-all duration-500">
+<div class="w-24 h-24 shrink-0 overflow-hidden rounded-xl bg-surface-dim">
+<img alt="Luxury leather bag" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Close-up of a high-end black leather designer handbag with gold hardware against a minimalist dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYXg8ICPzDa_tXmuThA5hr5sc2-5glqGjSw4b58-ANex5djST08JlTEDEvSzw0ZpCdLSUlnCjaFMpna5fSyxY6sQ17O_CE0FKMEm2ZgAJ8YnwwAwnhnU12ZHVcNAkzgJzL2l-ubA3HUkXanJ7vxPb85nBbuOdfSzm378c7ysk61NmFXgK0xyDjQb6DDgy8VuJz9k3R60Pq76cMs4J10b6Vv2FI36xLJrkCGwviDIbUAZwGrA3CyG2qliWaSkWYaskz-cad5g0rivy5"/>
+</div>
+<div class="flex-1 space-y-1">
+<h3 class="font-headline font-semibold text-lg text-white">Saint Laurent Sac de Jour</h3>
+<div class="flex items-center gap-4 text-xs font-mono text-on-surface-variant">
+<span>Ref: SL-2024-001</span>
+<span class="text-primary/40">•</span>
+<span>Black Grained Leather</span>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-end gap-1 px-8 border-x border-primary/10">
+<span class="text-[10px] font-mono text-primary/60 uppercase tracking-widest">Target Price</span>
+<div class="font-mono text-2xl text-primary font-medium tracking-tighter">$2,450.00</div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-6">
+<span class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-bold uppercase tracking-widest">Active</span>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Alert Card 2 -->
+<div class="ghost-border bg-surface-container/40 backdrop-blur-md rounded-2xl p-6 flex flex-col md:flex-row items-center gap-8 group hover:bg-surface-container-high/60 transition-all duration-500">
+<div class="w-24 h-24 shrink-0 overflow-hidden rounded-xl bg-surface-dim">
+<img alt="Smartwatch" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Minimalist luxury smartwatch with a silver casing and white band on a clean textured surface with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8xvNG8NPyYZYkT2VI9-YHsoBhGSAwZMx0hHjlPFlL4ssEvgV4olO9qub9tPE8QuFxJA0xQKPXVwBGZidE5dpVO0Z6v5H3pirQrWpo01zMZfwbdfBJslhsTuZRENDfonrD3KfEXi0N2FgyKO0YV21L14HoL9mrW4K6Ir0tjjVAC-xtHjJvW2w8QM7kB04gvSjCmADiRpGuWXsPqHw5IpIeDMXH-ZZ8tOdxaG-gSKCDuSg8imaBC-QsHZ3WcpDEl3mVRiwOHPfrmnt6"/>
+</div>
+<div class="flex-1 space-y-1">
+<h3 class="font-headline font-semibold text-lg text-white">Apple Watch Hermès Series 9</h3>
+<div class="flex items-center gap-4 text-xs font-mono text-on-surface-variant">
+<span>Ref: WH-H9-042</span>
+<span class="text-primary/40">•</span>
+<span>Silver Stainless Steel</span>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-end gap-1 px-8 border-x border-primary/10">
+<span class="text-[10px] font-mono text-primary/60 uppercase tracking-widest">Current Value</span>
+<div class="font-mono text-2xl text-secondary font-medium tracking-tighter">$1,249.00</div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-6">
+<span class="px-3 py-1 bg-secondary/10 text-secondary border border-secondary/20 rounded-full text-[9px] font-bold uppercase tracking-widest">Triggered</span>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Alert Card 3 -->
+<div class="ghost-border bg-surface-container/40 backdrop-blur-md rounded-2xl p-6 flex flex-col md:flex-row items-center gap-8 group hover:bg-surface-container-high/60 transition-all duration-500">
+<div class="w-24 h-24 shrink-0 overflow-hidden rounded-xl bg-surface-dim">
+<img alt="Silk Scarf" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Elegantly draped silk scarf with intricate colorful patterns resting on an obsidian surface with sharp directional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT59vkzZvQ30sv-YfmYYZv2Wq1lX_jbOkO4njw3o_R6kM0pHWQV7VlP1B7zM0EHiVA6rXPGm2uWimjH1f3PQfxYrbjV1njcrLr_3ocOEIDr7UGFJf4kED0E5Jn_EFDYj1P2D9te7J8zmC98FtgJkHGmHBtYQnlg7RHOxB-i52C_rOjj0pFdzGv1-BIomfDADm7XiSkogzPTBZI7c0_FHRH0WWnCHZYABk5vqIy6rL44m7z-xWEfc5-1WrWEcZZsYzqR3CSa6RhAEV-"/>
+</div>
+<div class="flex-1 space-y-1">
+<h3 class="font-headline font-semibold text-lg text-white">Loro Piana Cashmere Scarf</h3>
+<div class="flex items-center gap-4 text-xs font-mono text-on-surface-variant">
+<span>Ref: LP-CS-772</span>
+<span class="text-primary/40">•</span>
+<span>Vicuna / Sandstone</span>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-end gap-1 px-8 border-x border-primary/10">
+<span class="text-[10px] font-mono text-primary/60 uppercase tracking-widest">Target Price</span>
+<div class="font-mono text-2xl text-primary font-medium tracking-tighter">$890.00</div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-6">
+<span class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-bold uppercase tracking-widest">Active</span>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination/Load More (Asymmetric Detail) -->
+<div class="mt-16 flex items-center justify-between border-t border-primary/10 pt-8">
+<div class="font-mono text-[10px] text-on-surface-variant uppercase tracking-widest">
+                        Showing 3 of 12 Intelligence Triggers
+                    </div>
+<div class="flex gap-8">
+<button class="font-headline text-[10px] uppercase font-bold tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors">Previous</button>
+<button class="font-headline text-[10px] uppercase font-bold tracking-[0.2em] text-primary">Next Phase</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-zinc-950/90 backdrop-blur-xl border-t border-[#C4973E]/20 flex justify-around items-center h-20 pb-safe px-6 z-50">
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Discover</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">AI Agent</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#C4973E] scale-110 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications_active" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Alerts</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Wishlist</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-600 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Me</span>
+</button>
+</nav>
+</body></html>

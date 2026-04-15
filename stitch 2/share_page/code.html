@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumiqe | Share Your Season</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;family=DM+Sans:wght@100;200;300;400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#5e1322",
+                        "on-primary": "#412d00",
+                        "on-secondary-container": "#b5abff",
+                        "surface-variant": "#353437",
+                        "outline-variant": "#4f4537",
+                        "on-surface": "#e5e1e4",
+                        "on-tertiary-container": "#651927",
+                        "inverse-surface": "#e5e1e4",
+                        "surface-dim": "#131315",
+                        "primary": "#f0bf62",
+                        "secondary-fixed": "#e4dfff",
+                        "on-background": "#e5e1e4",
+                        "inverse-primary": "#7c5800",
+                        "on-tertiary-fixed": "#40000f",
+                        "surface-container-high": "#2a2a2c",
+                        "secondary-fixed-dim": "#c7bfff",
+                        "secondary-container": "#44369c",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb2b9",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-secondary": "#2d1a85",
+                        "primary-container": "#c4973e",
+                        "surface-container": "#201f22",
+                        "primary-fixed": "#ffdea7",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb2b9",
+                        "secondary": "#c7bfff",
+                        "on-secondary-fixed-variant": "#44369c",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "tertiary-container": "#e87f8b",
+                        "surface-tint": "#f0bf62",
+                        "inverse-on-surface": "#313032",
+                        "outline": "#9b8f7e",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#7c2a37",
+                        "on-surface-variant": "#d2c5b2",
+                        "primary-fixed-dim": "#f0bf62",
+                        "on-secondary-fixed": "#180065",
+                        "surface-bright": "#39393b",
+                        "surface-container-low": "#1c1b1d",
+                        "surface": "#131315",
+                        "tertiary-fixed": "#ffdadc",
+                        "background": "#131315",
+                        "surface-container-highest": "#353437",
+                        "on-primary-fixed": "#271900",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#483100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "display": ["Cormorant Garamond"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 21, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .autumn-gradient {
+            background: linear-gradient(135deg, #2D1B0D 0%, #4A3219 50%, #1A120B 100%);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-[#09090B] text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
+<!-- Navigation Shell (Filtered: Logo Only) -->
+<nav class="fixed top-0 w-full z-50 flex justify-center items-center h-24 px-8 bg-gradient-to-b from-zinc-950/40 to-transparent">
+<span class="font-display italic text-3xl tracking-tighter text-primary-container">Lumiqe</span>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center pt-24 pb-32 px-6">
+<!-- Center Shareable Card -->
+<div class="relative group max-w-md w-full">
+<!-- Background Ambient Glow -->
+<div class="absolute -inset-10 bg-primary/5 blur-[80px] rounded-full opacity-50 pointer-events-none"></div>
+<div class="autumn-gradient rounded-[24px] overflow-hidden ghost-border shadow-2xl relative z-10 aspect-[3/4] flex flex-col">
+<!-- Card Header -->
+<div class="p-10 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-12">
+<span class="font-display italic text-2xl text-primary/80">Lumiqe</span>
+<div class="flex flex-col items-end">
+<span class="font-mono text-[8px] tracking-[0.2em] text-primary/40 uppercase">A.I. Analysis</span>
+<span class="font-mono text-[10px] text-white/60">#A932-TX4</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-headline text-[10px] uppercase tracking-[0.4em] text-primary/60 mb-2">Color Archetype</p>
+<h1 class="font-display text-6xl leading-[0.9] text-white/95">True Autumn</h1>
+</div>
+<!-- Swatches Section -->
+<div class="mt-auto grid grid-cols-4 gap-3">
+<div class="group/swatch relative">
+<div class="aspect-square rounded-full bg-[#8B4513] ghost-border transition-transform group-hover/swatch:scale-105 duration-500"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-mono text-[7px] opacity-0 group-hover/swatch:opacity-100 transition-opacity text-white/50">Rust</span>
+</div>
+<div class="group/swatch relative">
+<div class="aspect-square rounded-full bg-[#556B2F] ghost-border transition-transform group-hover/swatch:scale-105 duration-500"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-mono text-[7px] opacity-0 group-hover/swatch:opacity-100 transition-opacity text-white/50">Olive</span>
+</div>
+<div class="group/swatch relative">
+<div class="aspect-square rounded-full bg-[#DAA520] ghost-border transition-transform group-hover/swatch:scale-105 duration-500"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-mono text-[7px] opacity-0 group-hover/swatch:opacity-100 transition-opacity text-white/50">Gold</span>
+</div>
+<div class="group/swatch relative">
+<div class="aspect-square rounded-full bg-[#800000] ghost-border transition-transform group-hover/swatch:scale-105 duration-500"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-mono text-[7px] opacity-0 group-hover/swatch:opacity-100 transition-opacity text-white/50">Maroon</span>
+</div>
+</div>
+</div>
+<!-- Subtle Texture/Image Overlay -->
+<div class="h-1/3 w-full relative overflow-hidden">
+<img class="w-full h-full object-cover mix-blend-overlay opacity-60" data-alt="Close-up of luxury silk fabric in deep burnt orange and copper tones with dramatic editorial shadows and rich texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9zLH6ITOKnLp5yhxVGK99bNWULQp4nLFRaQgii0v1FAt82Hp1v3LzXiuPW9uUzdPi3d-u4wfL12TSb7-gFXggdbkZaMURsckMNP4rIxkeylRzFEpgBW1jRYi5i7zvTkkFaVw4ghxDBbNmkRhk-1Yq8EZxCvr1YyHAQKFapJBGUbKwVvCKgK58AcdwWKW61_523RNP_ngvOaQyqhFm1gB6-obmAdzCd-DMHNVR37AlUEnc_N8OntlyGHBnG95WWuaUpECqrlTWuPVo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1A120B] via-transparent to-transparent"></div>
+</div>
+</div>
+</div>
+<!-- Call to Action Section -->
+<div class="mt-16 flex flex-col items-center gap-6">
+<button class="bg-primary-container text-on-primary font-headline font-bold text-xs uppercase tracking-widest px-12 py-5 rounded-[10px] shadow-lg shadow-primary/10 hover:opacity-90 transition-all active:scale-95 flex items-center gap-3">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                Download as Image
+            </button>
+<div class="flex gap-8 items-center">
+<button class="text-white/40 hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+<span class="font-label text-[10px] uppercase tracking-widest">Share Link</span>
+</button>
+<div class="w-px h-3 bg-white/10"></div>
+<button class="text-white/40 hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest">Show QR</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Contextual Details (Editorial) -->
+<section class="max-w-4xl mx-auto w-full px-8 pb-20">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-16 border-t border-white/5">
+<div class="space-y-4">
+<h3 class="font-headline text-[11px] uppercase tracking-[0.2em] text-primary/80">Season Definition</h3>
+<p class="font-body text-xs text-white/50 leading-relaxed">True Autumns are characterized by warm, golden undertones and medium to high contrast. Your palette is rich, earthy, and saturated.</p>
+</div>
+<div class="space-y-4">
+<h3 class="font-headline text-[11px] uppercase tracking-[0.2em] text-primary/80">Style Advice</h3>
+<p class="font-body text-xs text-white/50 leading-relaxed">Embrace heavy textures like suede, wool, and silk in toasted shades. Avoid cool greys and stark electric blues.</p>
+</div>
+<div class="space-y-4">
+<h3 class="font-headline text-[11px] uppercase tracking-[0.2em] text-primary/80">Editorial Note</h3>
+<p class="font-body text-xs text-white/50 leading-relaxed">This profile was generated using Lumiqe AI's spectral skin analysis and high-fidelity tonal mapping.</p>
+</div>
+</div>
+</section>
+<!-- Footer Space -->
+<footer class="py-12 flex flex-col items-center gap-4">
+<p class="font-mono text-[9px] text-white/20 uppercase tracking-[0.3em]">Lumiqe Atelier © 2024</p>
+</footer>
+</body></html>

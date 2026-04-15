@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500&amp;family=DM+Sans:wght@400;500&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#9b8f7e",
+                    "on-error": "#690005",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "primary-container": "#c4973e",
+                    "on-surface-variant": "#d2c5b2",
+                    "surface": "#131315",
+                    "background": "#131315",
+                    "on-tertiary-fixed": "#40000f",
+                    "on-background": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "primary-fixed-dim": "#f0bf62",
+                    "secondary-container": "#44369c",
+                    "on-secondary-fixed": "#180065",
+                    "surface-dim": "#131315",
+                    "secondary": "#c7bfff",
+                    "surface-container-highest": "#353437",
+                    "surface-container-high": "#2a2a2c",
+                    "tertiary-container": "#e87f8b",
+                    "surface-container": "#201f22",
+                    "surface-variant": "#353437",
+                    "on-primary-container": "#483100",
+                    "on-primary": "#412d00",
+                    "surface-container-low": "#1c1b1d",
+                    "primary-fixed": "#ffdea7",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "secondary-fixed": "#e4dfff",
+                    "on-primary-fixed": "#271900",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "surface-bright": "#39393b",
+                    "on-tertiary": "#5e1322",
+                    "inverse-primary": "#7c5800",
+                    "on-surface": "#e5e1e4",
+                    "tertiary": "#ffb2b9",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#2d1a85",
+                    "inverse-on-surface": "#313032",
+                    "tertiary-fixed": "#ffdadc",
+                    "error-container": "#93000a",
+                    "error": "#ffb4ab",
+                    "on-secondary-container": "#b5abff",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-tint": "#f0bf62",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "surface-container-lowest": "#0e0e10",
+                    "outline-variant": "#4f4537",
+                    "primary": "#f0bf62"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.2);
+        }
+        .editorial-title {
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: -0.02em;
+        }
+        body {
+            background-color: #09090B;
+            color: #e5e1e4;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="antialiased">
+<!-- TopNavBar -->
+<nav class="bg-[#09090B]/80 backdrop-blur-lg fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-8">
+<span class="font-['Cormorant_Garamond'] text-2xl font-bold tracking-tighter text-[#C4973E]">LUMIQE</span>
+<div class="hidden md:flex gap-6 items-center">
+<span class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-white/60 hover:text-white transition-colors duration-300 cursor-pointer active:opacity-70">Dashboard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-white/60 hover:text-white transition-colors duration-300 cursor-pointer active:opacity-70">Wardrobe</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-[#C4973E] border-b border-[#C4973E]/20 hover:text-white transition-colors duration-300 cursor-pointer active:opacity-70">Feed</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-white/60 hover:text-white transition-colors duration-300 cursor-pointer active:opacity-70">Community</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#C4973E] cursor-pointer" data-icon="account_circle">account_circle</span>
+<span class="material-symbols-outlined text-[#C4973E] cursor-pointer" data-icon="flare">flare</span>
+</div>
+</nav>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="fixed left-0 top-0 hidden lg:flex flex-col h-full py-8 bg-[#111116] h-screen w-64 border-r border-[#C4973E]/10 shadow-[40px_0_60px_-15px_rgba(196,151,62,0.05)] z-40 pt-24">
+<div class="px-6 mb-10">
+<div class="w-12 h-12 rounded-full overflow-hidden mb-3 border border-[#C4973E]/20">
+<img alt="Lumiqe User Profile" data-alt="professional portrait of a sophisticated man with sharp features and a tailored charcoal coat in a minimalist studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA04WP3baWF52f8dpEY6gGynlWxPfe-keSp32mP4sHo6tumkt-IHMVzjC-S9h6JRtKWq40nCy127_Rjtzyju0JKPdy33nXQf3jNwfGNkaGtf3A1ULEzAiZ1fkX2F4bojjZkCOPRp0Ot4_c0CuQnR5GqTFEvUaZDzSqFT6HAJIuWIE1o4ztSSWBwgfZ_C6x5eWM3NJOxpamsVevUG4THZLhWWmv-xZYkuOSyT57kmViIvDk4_Syv5xDsDUtsIeBuPy5O-Ovyh_CXMe0K"/>
+</div>
+<div class="font-['Cormorant_Garamond'] text-xl font-bold text-[#C4973E]">LUMIQE</div>
+<div class="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-[0.2em] text-white/40">Elite Tier</div>
+</div>
+<nav class="flex flex-col gap-2 px-4">
+<div class="flex items-center gap-4 px-4 py-3 text-white/40 font-['Plus_Jakarta_Sans'] text-sm tracking-wide hover:bg-[#18181F] hover:text-[#C4973E] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-white/40 font-['Plus_Jakarta_Sans'] text-sm tracking-wide hover:bg-[#18181F] hover:text-[#C4973E] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Wardrobe</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-white/40 font-['Plus_Jakarta_Sans'] text-sm tracking-wide hover:bg-[#18181F] hover:text-[#C4973E] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span>Scanner</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-[#C4973E] font-bold bg-[#18181F] rounded-r-full font-['Plus_Jakarta_Sans'] text-sm tracking-wide transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+<span>Feed</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-white/40 font-['Plus_Jakarta_Sans'] text-sm tracking-wide hover:bg-[#18181F] hover:text-[#C4973E] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Community</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="lg:ml-64 pt-24 pb-32 px-6 md:px-12">
+<!-- Header Section -->
+<header class="mb-12">
+<h1 class="editorial-title text-6xl md:text-8xl font-bold text-[#E5E1E4] mb-4">The Feed</h1>
+<p class="font-['Plus_Jakarta_Sans'] text-sm text-white/40 tracking-widest uppercase">Curated Excellence for Your Aesthetic</p>
+</header>
+<!-- Vibe Selector -->
+<section class="mb-12 overflow-x-auto pb-4 hide-scrollbar">
+<div class="flex items-center gap-4 min-w-max">
+<button class="px-8 py-3 bg-[#C4973E] text-[#09090B] font-['Plus_Jakarta_Sans'] text-xs font-bold uppercase tracking-widest rounded-full transition-all">All</button>
+<button class="px-8 py-3 bg-[#18181F] text-white/60 font-['Plus_Jakarta_Sans'] text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#201F22] hover:text-white transition-all ghost-border">Casual</button>
+<button class="px-8 py-3 bg-[#18181F] text-white/60 font-['Plus_Jakarta_Sans'] text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#201F22] hover:text-white transition-all ghost-border">Chic</button>
+<button class="px-8 py-3 bg-[#18181F] text-white/60 font-['Plus_Jakarta_Sans'] text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#201F22] hover:text-white transition-all ghost-border">Minimalist</button>
+<button class="px-8 py-3 bg-[#18181F] text-white/60 font-['Plus_Jakarta_Sans'] text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#201F22] hover:text-white transition-all ghost-border">Streetwear</button>
+<button class="px-8 py-3 bg-[#18181F] text-white/60 font-['Plus_Jakarta_Sans'] text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#201F22] hover:text-white transition-all ghost-border">Old Money</button>
+<button class="px-8 py-3 bg-[#18181F] text-white/60 font-['Plus_Jakarta_Sans'] text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#201F22] hover:text-white transition-all ghost-border">Boho</button>
+</div>
+</section>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+<!-- Product Card 1 -->
+<div class="group relative flex flex-col bg-[#111116] rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Product 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="editorial fashion shot of a designer camel overcoat draped over a black turtleneck, soft cinematic museum lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9He3_JO4hb1EgSsc_XVi-KR9dxwKCnaIjaM_PM-6_8ddTfCsDZfXv3wnVbrRyo2hKnlVCP_c2DL9ElZMu_J3KsYjK4aHUbcSBISOyTZ8FrBmMdePMo9qv9CjHNsuU5rnYXgi2OmECxkTHDzqZSI8zwVy3Ku_QXbVtTMrDbQKi-md4kDTGmoeZXiEGzhKc05UNNbuf9f9VDV15jM8e033b9X-tMFAHUNiGUegR9XfK9MWEu7aaydXX4hWQLqdBfuvoXYKQSSk4JxZW"/>
+<div class="absolute top-4 left-4 bg-[#09090B]/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 ghost-border">
+<span class="material-symbols-outlined text-[#C4973E] text-xs" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#C4973E] font-bold">98% MATCH</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Saint Laurent</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Camel Cashmere Wrap</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$3,450</span>
+<button class="w-10 h-10 rounded-full bg-[#18181F] flex items-center justify-center text-[#C4973E] ghost-border transition-all hover:bg-[#C4973E] hover:text-[#09090B]">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group relative flex flex-col bg-[#111116] rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Product 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="minimalist studio shot of high-end white leather sneakers with subtle cream accents on a dark obsidian surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7qbEAfVqqO9Skc-sl2Vehv2YPBrCTY4TI6OBkjBjIWVMNY2T5voKMAWTU8BSNhVZX12cF1SHCwGvoNJmh7KyOAefCtwGkpdoegPt4qqHaAQRl6gy7Xy-hzdZWULEvREA6wWg4ypA6EsPCpM4KwxZSR1leNz4fnutQ8yB3M_tmavWD8Sp_4mrFQ35bmm7qRTq92yEfUGcx8_TzkdCBVk9tiHyDWQ0s16rR0mimGUxtIdf2R5gZUD1DoyzwRsPhrUZ26wjNqsf-I6gM"/>
+<div class="absolute top-4 left-4 bg-[#09090B]/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 ghost-border">
+<span class="material-symbols-outlined text-[#C4973E] text-xs" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#C4973E] font-bold">94% MATCH</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Common Projects</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Original Achilles Low</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$415</span>
+<button class="w-10 h-10 rounded-full bg-[#18181F] flex items-center justify-center text-[#C4973E] ghost-border transition-all hover:bg-[#C4973E] hover:text-[#09090B]">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Locked Section Overlay (Formal) -->
+<div class="relative group flex flex-col bg-[#111116] rounded-2xl overflow-hidden">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Locked Product" class="w-full h-full object-cover grayscale opacity-30" data-alt="black and white moody close-up of a perfectly tailored tuxedo lapel and silk bow tie, dramatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvxSjlSLvvQOyTAzqam8OdLO1PnEMuMbQY_G3hy8EPjjsFtuidz6QE04rGc324medsOOYCa8QdouTvekijO2TkGamE3aKIc4mLaIcSIA0RqPpUI28HDaJkXRIW9OY2PZfAiNsmrK2yQeVa90Qg_ZOKn2782DhKZ-gHoI74onh5t_DErX9og5EQZ-Ere6S4Zu4hRV8ev43Hpa4-Ag9tMltld1n4p-UNyti4cEIMqE5IESco7i73pulitbi8xoNJ-HYXKZizv7ABzBJP"/>
+<!-- Locked State Overlay -->
+<div class="absolute inset-0 flex flex-col items-center justify-center bg-[#09090B]/80 backdrop-blur-md z-10 px-6 text-center">
+<span class="material-symbols-outlined text-[#C4973E] text-4xl mb-4" data-icon="lock">lock</span>
+<h4 class="font-['Cormorant_Garamond'] text-2xl font-bold text-white mb-2">Formal Collection</h4>
+<p class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-widest mb-6 leading-relaxed">Exclusive access for Platinum Tier members and special occasions</p>
+<button class="px-6 py-2 bg-[#C4973E]/10 text-[#C4973E] font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest border border-[#C4973E]/30 rounded-full transition-all hover:bg-[#C4973E] hover:text-[#09090B]">Unlock Access</button>
+</div>
+</div>
+<div class="p-6 opacity-20">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Tom Ford</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Shelton Wool Tuxedo</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$4,950</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group relative flex flex-col bg-[#111116] rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Product 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="luxury dark indigo denim jeans precisely folded on a mahogany table, warm spotlight highlighting the texture of the fabric" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz_iVggvV2U_QZFieSHRzB0f-G5sdPfIeiJbnm-O8YMk34y74swmmT4Wv7XHNB0QikPAHrminKyDTWH7M6qguce1LW05fmku2nlVsAQgAFWu_nGb4zjxq7al94F0VfS49udaqy1WFeXLfJi8yZz-bw6TmyDv9KZvPRvfLB74pYlBi8ci35VMFaOKzgzYoXaEDJ9gr23JAdE8MifIwC0HZfAXxSD0PdzzCOK1TrakolIAFyZ-_3vafjEa6JtKtpmPnMXSla6lhzvY03"/>
+<div class="absolute top-4 left-4 bg-[#09090B]/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 ghost-border">
+<span class="material-symbols-outlined text-[#C4973E] text-xs" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#C4973E] font-bold">89% MATCH</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">A.P.C.</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Petit Standard Indigo</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$265</span>
+<button class="w-10 h-10 rounded-full bg-[#18181F] flex items-center justify-center text-[#C4973E] ghost-border transition-all hover:bg-[#C4973E] hover:text-[#09090B]">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group relative flex flex-col bg-[#111116] rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Product 4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close up of a luxury Swiss watch with a dark face and gold accents, resting on a textured black silk background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXESbbq17zqhQLCmOVTKz5OrRQCm6hJcmBMevbRwC6nJTRQtQEE1l0Tcf37pX8eweMlSXfgZvxgqZ9hy5hm42eJclc6rDwr2Cj8TjW1ycpatGVijrvhKdAw_VQdiM3glZycMSmjl9inRv3I-mr7o6QlHMy6DhuooBZg4zEB1-CARkuJI88v5zA9MnJs5BMuSOIGy58VSPXSWNofagPanBnKHqGWbbq6r3xpLDYzwLT8IY2s9n4tj1Dwr3E0VTZkxafLGb7M4n2nhZ2"/>
+<div class="absolute top-4 left-4 bg-[#09090B]/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 ghost-border">
+<span class="material-symbols-outlined text-[#C4973E] text-xs" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#C4973E] font-bold">91% MATCH</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Cartier</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Tank Must XL Automatic</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$4,850</span>
+<button class="w-10 h-10 rounded-full bg-[#18181F] flex items-center justify-center text-[#C4973E] ghost-border transition-all hover:bg-[#C4973E] hover:text-[#09090B]">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Locked Section Overlay (Gym/Athleisure) -->
+<div class="relative group flex flex-col bg-[#111116] rounded-2xl overflow-hidden">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Locked Gym Product" class="w-full h-full object-cover grayscale opacity-30" data-alt="dramatic low-key shot of technical performance fabric with sharp moisture-wicking textures, matte black finish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxv5TKUNRmUCk5eL6H_8pUaCqcB8g_MCdYKmBBZn4H4rUahOtmEq-1pnHenqeGqGf5iVwbQJ5gMhG4W-LxIEpz-1vmeVAyyad0BKuusf4G8tiHeIgm3qvDO_YOO0wgKWditIQXGqMDYALLNfyoMiRc8GPUCL_W6NYNezJtvho-XSVVQOZotkP0uLRgndcYsKOMJ6jxmBVx-ScY6eUQEKm1BBKsLFMPyAVG6EPAxr_YIwJ9u7Gtl13TEofmtFLLJdYSgaF7tLytPuSR"/>
+<!-- Locked State Overlay -->
+<div class="absolute inset-0 flex flex-col items-center justify-center bg-[#09090B]/80 backdrop-blur-md z-10 px-6 text-center">
+<span class="material-symbols-outlined text-[#C4973E] text-4xl mb-4" data-icon="lock">lock</span>
+<h4 class="font-['Cormorant_Garamond'] text-2xl font-bold text-white mb-2">Performance Lab</h4>
+<p class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-widest mb-6 leading-relaxed">Available after your next biometric scan analysis</p>
+<button class="px-6 py-2 bg-[#C4973E]/10 text-[#C4973E] font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest border border-[#C4973E]/30 rounded-full transition-all hover:bg-[#C4973E] hover:text-[#09090B]">Schedule Scan</button>
+</div>
+</div>
+<div class="p-6 opacity-20">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Lululemon Lab</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Warpstreme Tech Jacket</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$198</span>
+</div>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="group relative flex flex-col bg-[#111116] rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Product 5" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="luxury silk scarf with intricate geometric patterns in muted gold and obsidian tones, draped over a minimalist white mannequin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB7_s9HuDK2hcJxRxJVst_Pgf5msDTWhXi1dNjPc5OZj3sjK54jltdynxAjJUpdv-6VW3uIIDoKkTWePJsO5ul99NDW5C-qIpYXXzgH80v-iQ2rqCfvqnAxKmEdHIQLYKIoL9tMvYoKt6_IpECqfzAw9oBDHg92F4u9d_pJvuh5ZdVaOD9dxjQcpyM0yivxVlolTd_SaRnvkvvBpSBmHohbWwuxgENP1QBlqlUujusa1dTQ1QbF9j3ozbbRXCFN7F7DpDCYAxlCv_X"/>
+<div class="absolute top-4 left-4 bg-[#09090B]/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 ghost-border">
+<span class="material-symbols-outlined text-[#C4973E] text-xs" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#C4973E] font-bold">99% MATCH</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Hermès</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Cheval de Fête Scarf</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$495</span>
+<button class="w-10 h-10 rounded-full bg-[#18181F] flex items-center justify-center text-[#C4973E] ghost-border transition-all hover:bg-[#C4973E] hover:text-[#09090B]">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="group relative flex flex-col bg-[#111116] rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]">
+<div class="relative aspect-[3/4] overflow-hidden">
+<img alt="Product 6" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="crisp charcoal gray tailored trousers hanging on a minimalist brass rail, soft lighting emphasizing the premium wool weave" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ7e_tDDvU7vvdP-IbKbrRkCD57LlLq4XN6ov8TcVto4CWEYWRun1M8HEO3NAZqx9MLhwGl5zVIL0NNXRIcHIDAX7KwEibQGkGHUG9ELjdXkmw6oPKiabOW_AFlroHMxYOQ2TFsJx4EHX_H8RRwirarxSo62ckZR1llzx4gPs32NrCthIYQzQjZxYqJ2kCEMzEfkmdbWAra8diBjRoJ1l_7y1hwS6ZS9sYI0ftXyQfeG5P8TuuNk7XiJm-Zs2crlK5nzbk0zcdwhGO"/>
+<div class="absolute top-4 left-4 bg-[#09090B]/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 ghost-border">
+<span class="material-symbols-outlined text-[#C4973E] text-xs" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#C4973E] font-bold">87% MATCH</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] mb-1">Brunello Cucinelli</span>
+<h3 class="font-['Cormorant_Garamond'] text-xl font-bold text-white mb-4">Virgin Wool Trousers</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white/80">$1,150</span>
+<button class="w-10 h-10 rounded-full bg-[#18181F] flex items-center justify-center text-[#C4973E] ghost-border transition-all hover:bg-[#C4973E] hover:text-[#09090B]">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 lg:hidden bg-[#09090B]/90 backdrop-blur-xl border-t border-[#C4973E]/15 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] rounded-t-3xl">
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E] active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-tighter">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E] active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="checkroom">checkroom</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-tighter">Wardrobe</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E] active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="document_scanner">document_scanner</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-tighter">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#C4973E] scale-110 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="shopping_bag" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-tighter">Feed</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 active:text-[#C4973E] active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-tighter">Social</span>
+</div>
+</nav>
+<!-- AI Intelligence Indicator (Subtle Floating Detail) -->
+<div class="fixed bottom-32 right-8 hidden xl:flex items-center gap-4 group">
+<div class="flex flex-col items-end">
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] text-white/40 uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">AI Processing</span>
+<span class="font-['JetBrains_Mono'] text-xs text-[#8B7FE8] opacity-0 group-hover:opacity-100 transition-opacity">Live Aesthetic Analysis</span>
+</div>
+<div class="w-12 h-12 bg-[#111116] rounded-full flex items-center justify-center border border-[#8B7FE8]/30 shadow-[0_0_20px_rgba(139,127,232,0.15)] animate-pulse">
+<span class="material-symbols-outlined text-[#8B7FE8]" data-icon="psychology">psychology</span>
+</div>
+</div>
+</body></html>

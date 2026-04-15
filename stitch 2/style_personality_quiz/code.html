@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;family=DM+Sans:wght@400;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary": "#5e1322",
+            "on-primary": "#412d00",
+            "on-secondary-container": "#b5abff",
+            "surface-variant": "#353437",
+            "outline-variant": "#4f4537",
+            "on-surface": "#e5e1e4",
+            "on-tertiary-container": "#651927",
+            "inverse-surface": "#e5e1e4",
+            "surface-dim": "#131315",
+            "primary": "#f0bf62",
+            "secondary-fixed": "#e4dfff",
+            "on-background": "#e5e1e4",
+            "inverse-primary": "#7c5800",
+            "on-tertiary-fixed": "#40000f",
+            "surface-container-high": "#2a2a2c",
+            "secondary-fixed-dim": "#c7bfff",
+            "secondary-container": "#44369c",
+            "on-error": "#690005",
+            "tertiary": "#ffb2b9",
+            "surface-container-lowest": "#0e0e10",
+            "on-secondary": "#2d1a85",
+            "primary-container": "#c4973e",
+            "surface-container": "#201f22",
+            "primary-fixed": "#ffdea7",
+            "on-error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#ffb2b9",
+            "secondary": "#c7bfff",
+            "on-secondary-fixed-variant": "#44369c",
+            "on-primary-fixed-variant": "#5e4200",
+            "tertiary-container": "#e87f8b",
+            "surface-tint": "#f0bf62",
+            "inverse-on-surface": "#313032",
+            "outline": "#9b8f7e",
+            "error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#7c2a37",
+            "on-surface-variant": "#d2c5b2",
+            "primary-fixed-dim": "#f0bf62",
+            "on-secondary-fixed": "#180065",
+            "surface-bright": "#39393b",
+            "surface-container-low": "#1c1b1d",
+            "surface": "#131315",
+            "tertiary-fixed": "#ffdadc",
+            "background": "#131315",
+            "surface-container-highest": "#353437",
+            "on-primary-fixed": "#271900",
+            "error": "#ffb4ab",
+            "on-primary-container": "#483100"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans"],
+            "body": ["Inter"],
+            "label": ["Inter"],
+            "display": ["Cormorant Garamond"],
+            "mono": ["JetBrains Mono"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .obsidian-glass {
+      background: rgba(19, 19, 21, 0.8);
+      backdrop-filter: blur(16px);
+    }
+    .ghost-border {
+      border: 0.5px solid rgba(196, 151, 62, 0.2);
+    }
+    .active-card {
+      border: 1px solid #C4973E;
+    }
+    body {
+      background-color: #09090B;
+      color: #e5e1e4;
+    }
+  </style>
+</head>
+<body class="font-body selection:bg-primary-container/30">
+<!-- Top Navigation (Shell Invisible for Task Focus) -->
+<header class="fixed top-0 w-full z-50 bg-zinc-950/80 backdrop-blur-lg flex justify-between items-center px-8 h-16 w-full">
+<div class="font-['Cormorant_Garamond'] italic text-2xl tracking-tighter text-[#C4973E]">Lumiqe</div>
+<div class="flex items-center gap-6">
+<span class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-zinc-500 hover:text-white transition-colors duration-300 cursor-pointer">Exit Quiz</span>
+<span class="material-symbols-outlined text-[#C4973E] cursor-pointer" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Progress Bar Section -->
+<div class="fixed top-16 left-0 w-full z-40 bg-zinc-950/50">
+<div class="h-[2px] w-full bg-zinc-800">
+<div class="h-full bg-[#C4973E] w-1/3 transition-all duration-500 shadow-[0_0_10px_rgba(196,151,62,0.5)]"></div>
+</div>
+<div class="px-8 py-3 flex justify-between items-center">
+<span class="font-mono text-[10px] tracking-tighter text-[#C4973E] uppercase">Analysis Stage 01: Aesthetic Foundations</span>
+<span class="font-mono text-[10px] tracking-tighter text-zinc-500">Step 3 of 9</span>
+</div>
+</div>
+<main class="pt-32 pb-24 min-h-screen px-6 md:px-12 lg:px-24">
+<!-- Editorial Header -->
+<section class="max-w-4xl mx-auto mb-16 text-center">
+<span class="font-label text-[9px] uppercase tracking-[0.3em] text-primary mb-4 block">Personal Curation</span>
+<h1 class="font-display text-5xl md:text-7xl font-light mb-6 tracking-tight">
+        Define your <span class="italic text-primary-container">Visual Language</span>
+</h1>
+<p class="font-body text-zinc-400 max-w-xl mx-auto leading-relaxed text-sm md:text-base">
+        Select up to <span class="text-white font-medium">three archetypes</span> that resonate with your current silhouette preference. Our AI will synthesize these selections to build your signature profile.
+      </p>
+</section>
+<!-- Bento Mood Board Grid (3x3) -->
+<div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Minimalist -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="high-fashion minimalist editorial photography of a model in a sharp cream blazer against a stark white studio background, clean lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAFmiRJAjSVjYX7yrYzMUfdsVktG7higG-3BMGCkZKtqXXsD4XaL8x1IF1uwkQ1rtnvw-XWgb5EqA9fZzI5ZqRvBQr6yoxFkxXL9f3KDtKmsv57XxOR5s8wPI61S74jUCoNhRvGwZT-1es2uV16Ps5k2_vlsnsHsfTxtAR7LFwJxZ2YY8KBvyxK_gX40oSKZoBhn51YpdaJt4Slj0R7jj3xWyxDH99N-0ONzafn5KHwo-aY0czYygzzp8vOIFromdp6mqF4kqJz527"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 01</p>
+<h3 class="font-display text-2xl text-white">The Minimalist</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Avant-Garde (Selected State) -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl active-card h-[400px] shadow-[0_0_30px_rgba(196,151,62,0.15)]">
+<img class="absolute inset-0 w-full h-full object-cover transition-all duration-700" data-alt="editorial fashion photography of model in structured avant-garde black drapery, dramatic lighting with deep shadows, high fashion mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxTUinV3f3QvNWynWrRXrThjXmhIIFb4YaviMaGfRURRle2Z3MsNIEiU1H6vTRKlgHUDvtn9hO_-JH9Pu26CXnd_OsuP8x8k94-HEW_kJXk-RN9WQZCv9kHuRXnhOMeJRRovbqR9va-FCTVFjGzD_wzMcueE8H7jvJntu2eYjAS6O8fnOdyUBBBCKUhX5kaOnvEQQ8eIThXdTTjgm0Pnr20KhPcl-uakqG3_kt6smewInzGEvZ_qDpp-MseoTuMG-HS4lUhaaZDStB"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<!-- Selection Badge -->
+<div class="absolute top-4 right-4 h-8 w-8 bg-primary rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 02</p>
+<h3 class="font-display text-2xl text-white">Avant-Garde</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Bohemian -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="bohemian luxe style fashion photo of a person in flowing silk fabrics, warm sunset lighting, soft focus, rich textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7g7tu7YTiHZRvy27_mD_Dili3qTA5t1KiE_vaHKLZQ2SnZw2ev82bXtrDelSu2ek1xQnRDplB-3kqO4YZqHXKksyRu_3NIdqP7URaalX2QhC7ynkOFMvU7jsTTPTbN8cbBBSKxhSR3JTNs0ZJmVMOjkulTBzxGhMTC8YlHaKn9lKeTJW54DODT6ApfLMC-s3kh3Pc6vtkdS1D-qccCsHwNl_2FSW1xpLTTlSv6_I0fswOR4al5aOPH0roakFwQ6qk91sFsSTzU2x5"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 03</p>
+<h3 class="font-display text-2xl text-white">Neo-Bohemian</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4: Street Luxe -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="luxury streetwear editorial, model wearing oversized tailored coat and sleek sneakers in an urban obsidian-toned setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXGbIX0NZ1Px-TPHX4hgp8ue80R7TAm42czysqjb0F_ACGzaSOooaASPokUOnRh-l1mEz5m6ZJ6QSG8qgRBvXgOpaF0CXr-31OVU7FYDsMn-3-VAUAvmB0S2Yav7N34FuKrCg9UFCkXUKj2d_LfTMSeTmdcv2exjIPptuLLmKexFOEn4JhoVUXvSIYO9e2ASX0eMenHaHBQbfpf_VeSZXBlTAqmAHSgPP8Z1flHrNWGVzKYmT5SY_wpcryLLBn6IXx8YXDeuuYc-Dv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 04</p>
+<h3 class="font-display text-2xl text-white">Street Luxe</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 5: Old Money (Selected State) -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl active-card h-[400px] shadow-[0_0_30px_rgba(196,151,62,0.15)]">
+<img class="absolute inset-0 w-full h-full object-cover transition-all duration-700" data-alt="old money aesthetic fashion photography, tailored wool coat and cashmere, classic luxury setting, muted expensive tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1q4iIqfPWPXUZereOilWhmd4PBhJ-zkAnp-ug_QXMqgAKmo1psA7Rq8GzQEsp9diRqmVPn5lXfN0uBYrb-2PVi4eHZP_SBiCc7G_G7UDdihJMGANumgs9fpB9R7tM0OXuXpEtWGEH5TZK3t0sHZ8bGpV0vuqC3UUse0xvP905QHZu237jgAnpkhN2t3VTZ70a_iXsC37C8S--2lOqzOSMnO3ftesWJRWqCe-ur84Vr-UUYjUQf3sJksp1kFbyMcoZ9XDDHVIwH0Fg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-4 right-4 h-8 w-8 bg-primary rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 05</p>
+<h3 class="font-display text-2xl text-white">Classic Heritage</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 6: Dark Academia -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="dark academia aesthetic fashion, deep emerald and charcoal tailoring, antique library setting, moody and intellectual style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX2N2Uy4H17x9_J1jTPzSpjEBFHG1YAkiB8gLtUR78ebhbfC6COMaeR2po3NQGWeYOLMJUmQ_V6cDG9VxDh1Pn1d3qiCA7F8n3uiBlp13NjacMnTHaQsRXpe78vl_WSemQhCteITYd_zkQBOr_jbUHZFJcxilVDvOKVZiBH-E0ctv5ASycVPV2-DLqz0bjdjWYUho3bxnTHe1zLTN5v41NcP7UlaHZ8uqd7d3_XYKPt1dkr2Ldm1NsfRO5GtWddUqOwHR6j3diUUXB"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 06</p>
+<h3 class="font-display text-2xl text-white">Nocturnal Scholar</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 7: Ethereal -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="ethereal light fashion photography, model in sheer iridescent fabrics, soft glowing light, heavenly and light mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZrb3gqBCRgrBM3xGN47WFd-TP4p3HP3oL1lz6grQEWpr-SCZduAGzUSs8prsDyGoXODFHZpFDa4b2skViUezI_VPhTlHM8ratXpGjDDKD7_X4uy4l4iJDyoZvEsvkYLG5vYBEcHBk-biYqwYzPT0E6G0gxdgreZV8nKIjgJy4Wg3QkTA0mcjuwzulZuf9NWT2Nh9p_tYY5RfegQFt0kIFZ9yvRzbMAezQ7LFNjtyw8nAssVRv6DgU5CvdFKPoGgRYF0eRyM8sfd_O"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">Option 07</p>
+<h3 class="font-display text-2xl text-white">Ethereal</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 8: Cyber Couture -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="futuristic cyber couture fashion photography, metallic finishes, sleek neoprene, neon violet accents, high tech fashion" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbHmgryV7A8fEdgPSb0Xsc8AnExXwK54WGmNK5PvTF4gkaZaxcz7kPYXTKDhGYQ0rv30RbX1vfZtmKUDhl1VK0OOeTP7p_VR6slbs6f49wbL2cVF7X8Xn3nMOlZo0vJxGEp0JOFXu6Uii6sg94zSGFO2cRxK65lwNQ2QLZf7-xmAbtzO6uUud8YLeRCiR6t1Wsh5vq0LY5WAbsASWprGMONU0PjDloJogCawjkdtWzM58oen2ahx7JTttB7VkO-Wj7XctVrIw7bJXz"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-secondary mb-1 uppercase tracking-tighter">Option 08</p>
+<h3 class="font-display text-2xl text-white">AI Synthetic</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 9: Baroque Pop -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl ghost-border h-[400px] transition-all duration-500 hover:translate-y-[-4px]">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="maximalist baroque fashion editorial, rich velvet, gold embroidery, intense colors, luxurious and crowded composition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ_NmMYmq1GAoIC6UQf3byHZspJNjSh-kxzea3BSQOcb1hxwVpdNY9oduE3xrhTeIKq_oxaX71V7wNaDYG4n6-LgPCZyxxLjuBs2tyaYwtKDFUGP5yP1Ky-ZApdDsnb_OTW9bj3qk5Lnfq6DkxL6VDfUQY8neKBwiIglvs5MS2nX2xmK1l67QnDDny-fblvqGMgPbp4joL1oBApH4iYXECDGp4OvyAUY8Ed8U6NAr8p0yXTdLcR9uNiIWg5VQTAXif-8kVhrwkUmtE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-mono text-[10px] text-tertiary mb-1 uppercase tracking-tighter">Option 09</p>
+<h3 class="font-display text-2xl text-white">Maximalist</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Bar (Sticky Bottom) -->
+<div class="fixed bottom-0 left-0 w-full p-8 flex justify-center z-50">
+<div class="obsidian-glass ghost-border px-8 py-4 rounded-full flex items-center gap-12 shadow-2xl">
+<div class="flex flex-col">
+<span class="font-mono text-[9px] uppercase text-zinc-500">Selections</span>
+<div class="flex gap-1 mt-1">
+<div class="h-1 w-6 bg-primary"></div>
+<div class="h-1 w-6 bg-primary"></div>
+<div class="h-1 w-6 bg-zinc-700"></div>
+</div>
+</div>
+<button class="flex items-center gap-2 group">
+<span class="font-label text-[10px] uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">Previous Archetype</span>
+</button>
+<button class="bg-primary-container text-on-primary px-10 py-3 rounded-full font-headline font-bold uppercase tracking-widest text-[11px] transition-all hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">
+          Continue Analysis
+        </button>
+</div>
+</div>
+</main>
+<!-- Ambient Glow Effects -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[20%] right-[-5%] w-[30%] h-[50%] bg-secondary/5 rounded-full blur-[100px]"></div>
+</div>
+</body></html>

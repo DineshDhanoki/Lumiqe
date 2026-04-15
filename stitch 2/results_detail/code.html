@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500&amp;family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#5e1322",
+                    "on-primary": "#412d00",
+                    "on-secondary-container": "#b5abff",
+                    "surface-variant": "#353437",
+                    "outline-variant": "#4f4537",
+                    "on-surface": "#e5e1e4",
+                    "on-tertiary-container": "#651927",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-dim": "#131315",
+                    "primary": "#f0bf62",
+                    "secondary-fixed": "#e4dfff",
+                    "on-background": "#e5e1e4",
+                    "inverse-primary": "#7c5800",
+                    "on-tertiary-fixed": "#40000f",
+                    "surface-container-high": "#2a2a2c",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "secondary-container": "#44369c",
+                    "on-error": "#690005",
+                    "tertiary": "#ffb2b9",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-secondary": "#2d1a85",
+                    "primary-container": "#c4973e",
+                    "surface-container": "#201f22",
+                    "primary-fixed": "#ffdea7",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "secondary": "#c7bfff",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "tertiary-container": "#e87f8b",
+                    "surface-tint": "#f0bf62",
+                    "inverse-on-surface": "#313032",
+                    "outline": "#9b8f7e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "on-surface-variant": "#d2c5b2",
+                    "primary-fixed-dim": "#f0bf62",
+                    "on-secondary-fixed": "#180065",
+                    "surface-bright": "#39393b",
+                    "surface-container-low": "#1c1b1d",
+                    "surface": "#131315",
+                    "tertiary-fixed": "#ffdadc",
+                    "background": "#131315",
+                    "surface-container-highest": "#353437",
+                    "on-primary-fixed": "#271900",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#483100"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["DM Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #09090B; }
+        .glass-panel { backdrop-filter: blur(16px); }
+        .ghost-border { border: 0.5px solid rgba(196, 151, 62, 0.2); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-surface font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-zinc-950/80 backdrop-blur-lg flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="font-['Cormorant_Garamond'] italic text-2xl tracking-tighter text-[#C4973E]">Lumiqe</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-[#C4973E] border-b-[0.5px] border-[#C4973E]/40 pb-1 hover:text-white transition-colors duration-300" href="#">Seasons</a>
+<a class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-zinc-500 hover:text-white transition-colors duration-300" href="#">Shopping Agent</a>
+<a class="font-['Plus_Jakarta_Sans'] font-medium uppercase tracking-widest text-[10px] text-zinc-500 hover:text-white transition-colors duration-300" href="#">Wishlist</a>
+</div>
+</div>
+<div class="flex items-center gap-5">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">search</span>
+<input class="bg-zinc-900/50 border-none rounded-full py-1.5 pl-10 pr-4 text-[9px] tracking-[0.2em] font-label text-zinc-400 focus:ring-1 focus:ring-[#C4973E]/30 w-48" placeholder="EXPLORE TRENDS" type="text"/>
+</div>
+<span class="material-symbols-outlined text-zinc-400 cursor-pointer hover:text-[#C4973E] transition-colors">account_circle</span>
+<span class="material-symbols-outlined text-zinc-400 cursor-pointer hover:text-[#C4973E] transition-colors">settings</span>
+</div>
+</nav>
+<main class="pt-16 pb-24 min-h-screen">
+<!-- Hero Section -->
+<section class="relative w-full h-[870px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/40 to-transparent z-10"></div>
+<img alt="Autumn Editorial" class="w-full h-full object-cover grayscale-[0.2]" data-alt="Editorial portrait of a woman with warm skin tones in a high-fashion pose against a blurred golden hour forest background, moody and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5MMbRDb-2as1SdoNq3C4ZFi1igKM8xPxoMyqe0_UMB2dWZwGxGRXiSRSGoLUgizjzuK6hMrZQf48uIeebEM17umZTv4d58yoDMSnl1XU5IGgwTemHE8Il7hnQuPjZ2G2b80jDZ9DyC2nyW6iUQfpdD5AfNseNxYrg7wpfwlI9V8UUrhYiFhoE7Xc1khrEufTjjhg2NDmusARJsr5QGiWvubsTCAILa6EAfr688TSQnvyR53kv-VMCsfg7v2JssVmOLXXaJf2ve6t6"/>
+</div>
+<div class="relative z-20 px-12 md:px-24 max-w-4xl">
+<div class="flex items-center gap-3 mb-6">
+<div class="h-[1px] w-12 bg-primary"></div>
+<span class="font-label text-[10px] tracking-[0.4em] uppercase text-primary">Your Seasonal DNA</span>
+</div>
+<h1 class="font-['Cormorant_Garamond'] italic text-7xl md:text-9xl text-white leading-[0.9] tracking-tighter mb-8">
+                    True Autumn
+                </h1>
+<p class="font-body text-zinc-400 text-lg leading-relaxed max-w-lg mb-12">
+                    Defined by depth, warmth, and richness. Your palette mirrors the quiet intensity of an October forest—copper, moss, and warm amber.
+                </p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 font-headline font-bold text-xs uppercase tracking-widest rounded-[10px] hover:opacity-90 transition-opacity">
+                        View Wardrobe Guide
+                    </button>
+<button class="glass-panel ghost-border bg-white/5 text-white px-8 py-4 font-headline font-bold text-xs uppercase tracking-widest rounded-[10px] hover:bg-white/10 transition-all">
+                        Full Analysis
+                    </button>
+</div>
+</div>
+<!-- Signature Swatch -->
+<div class="absolute bottom-12 right-12 flex flex-col items-end gap-2 z-20">
+<div class="w-32 h-48 bg-[#9B4722] rounded-2xl shadow-2xl relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="font-mono text-[9px] text-white/70 block">CODE</span>
+<span class="font-headline font-bold text-white text-xs">BURNT COPPER</span>
+</div>
+</div>
+<span class="font-label text-[8px] tracking-widest text-zinc-500 uppercase">Primary Seasonal Anchor</span>
+</div>
+</section>
+<!-- Stats Grid & Key Insight -->
+<section class="px-12 md:px-24 -mt-20 relative z-30 grid grid-cols-1 lg:grid-cols-12 gap-6 mb-24">
+<!-- 4-Stat Grid -->
+<div class="lg:col-span-7 grid grid-cols-2 gap-4">
+<div class="bg-surface-container/80 glass-panel p-8 rounded-3xl ghost-border">
+<span class="font-mono text-[10px] text-primary block mb-2 uppercase">Chroma</span>
+<div class="text-4xl font-headline font-light text-white mb-2">Muted</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[40%]"></div>
+</div>
+</div>
+<div class="bg-surface-container/80 glass-panel p-8 rounded-3xl ghost-border">
+<span class="font-mono text-[10px] text-primary block mb-2 uppercase">Temperature</span>
+<div class="text-4xl font-headline font-light text-white mb-2">Warm</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</div>
+<div class="bg-surface-container/80 glass-panel p-8 rounded-3xl ghost-border">
+<span class="font-mono text-[10px] text-primary block mb-2 uppercase">Value</span>
+<div class="text-4xl font-headline font-light text-white mb-2">Medium</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[60%]"></div>
+</div>
+</div>
+<div class="bg-surface-container/80 glass-panel p-8 rounded-3xl ghost-border">
+<span class="font-mono text-[10px] text-primary block mb-2 uppercase">Contrast</span>
+<div class="text-4xl font-headline font-light text-white mb-2">Rich</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[75%]"></div>
+</div>
+</div>
+</div>
+<!-- Key Insight Callout -->
+<div class="lg:col-span-5 bg-surface-container-highest/40 glass-panel p-10 rounded-3xl ghost-border flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary text-xl">auto_awesome</span>
+<span class="font-headline font-bold text-[10px] tracking-widest uppercase text-secondary">AI Editorial Insight</span>
+</div>
+<h3 class="font-['Cormorant_Garamond'] text-3xl text-white italic mb-4 leading-snug">
+                        "Eschew pure white for cream; favor gold over silver to ignite your natural radiance."
+                    </h3>
+<p class="font-body text-zinc-400 text-sm leading-relaxed">
+                        Your skin reflects light best when surrounded by earthy, saturated tones. Avoid pastel shades which may wash out your natural depth.
+                    </p>
+</div>
+<div class="mt-8 flex items-center gap-4">
+<div class="h-12 w-12 rounded-full overflow-hidden border border-primary/20">
+<img alt="Lumiqe AI" class="w-full h-full object-cover" data-alt="Close up portrait of a digital human with flawless skin and violet accents in eyes, representing an AI agent." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5sQsJIzKJfvXN3ujXId4vsMebUUxN1IMjIEDZwFN2BxUPlV-iXAoAs_6nFiKh3gM2Gt17xbtiVOnL7VsE_4DJqpXaKnkUL4YAJ3mbwGnklBJtkPXmV9w0xtQNJ_2ObvO688r7oasHkELAz28xtJccIJgh3y_JalPdasP-abNKGnF6t-2Wt-wHuhGCYKZcbjcSnRDuqrAgauB8x5jcPIDDJZomPzZ2OFxWIYY_Mo1Jsz2JCg8ZXCdPBJ8od3LMHjRlFZpxrfhaJvbW"/>
+</div>
+<div>
+<span class="block font-headline font-bold text-[10px] text-white">LUMIQE AGENT</span>
+<span class="block font-mono text-[9px] text-zinc-500 uppercase">Analysis Engine v.4.2</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Full Signature Palette -->
+<section class="px-12 md:px-24 mb-32">
+<div class="flex justify-between items-end mb-10">
+<div>
+<span class="font-label text-[10px] tracking-[0.3em] uppercase text-zinc-500 block mb-2">The Spectrum</span>
+<h2 class="font-headline font-light text-4xl text-white">Signature Palette</h2>
+</div>
+<span class="font-mono text-xs text-primary cursor-pointer hover:underline">Download Pro PDF</span>
+</div>
+<div class="flex flex-nowrap overflow-x-auto gap-4 pb-8 scrollbar-hide">
+<!-- Palette Item -->
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#4A5D23] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Moss Forest</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #4A5D23</span>
+</div>
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#D4813E] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Amber Glow</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #D4813E</span>
+</div>
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#7B3F00] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Cocoa Bean</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #7B3F00</span>
+</div>
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#E5B181] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Soft Sandstone</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #E5B181</span>
+</div>
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#3D2B1F] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Deep Espresso</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #3D2B1F</span>
+</div>
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#8A3324] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Terracotta</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #8A3324</span>
+</div>
+<div class="flex-none w-40">
+<div class="h-64 w-full bg-[#BFAF80] rounded-2xl mb-4 ghost-border"></div>
+<span class="block font-headline font-bold text-xs text-white uppercase tracking-tighter">Sage Gold</span>
+<span class="block font-mono text-[9px] text-zinc-500">HEX #BFAF80</span>
+</div>
+</div>
+</section>
+<!-- Comparison Bento Grid -->
+<section class="px-12 md:px-24">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="relative group">
+<div class="aspect-[4/5] rounded-3xl overflow-hidden ghost-border">
+<img alt="Wardrobe" class="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="Fashion editorial showing layers of warm textured fabrics like wool, silk, and leather in autumn colors, high-end luxury feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_n8onIRJVEKrIW1QQEwl1etnk-ZfwadUxtjMhy_gwL6lBq-gn0_qi12lnB5N4rc3PBqbuU1tOwaFKm-btpoBvKr84Fk-rTWQRd8v_YZ2MYtZiKJJiRLvFwIg0ijSWal1RaGO4fUbNYgQ6Ny6txg3kK-nV976DH7Y_FdT7FQZEOx9xqoPpSB2bOD_3O-aKnZwhrdeUXGk8DsAbjGRGkS4s7zGymM-Btr68Ff7wfJqgGCgXcppEtCW7fv2atNLnJm_pnxZjqj5am0eK"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent flex flex-col justify-end p-12">
+<h4 class="font-headline text-3xl text-white mb-2">Texture Guide</h4>
+<p class="font-body text-zinc-400 text-sm max-w-xs">Matte textures work best. Velvet, suede, and heavy linens anchor your look.</p>
+</div>
+</div>
+<div class="space-y-12">
+<div>
+<span class="font-label text-[10px] tracking-[0.3em] uppercase text-tertiary block mb-4">Harmony Check</span>
+<h2 class="font-['Cormorant_Garamond'] text-5xl text-white italic leading-tight mb-6">Mastering Your Contrast Levels</h2>
+<p class="font-body text-zinc-400 leading-relaxed mb-8">
+                            Because True Autumn sits in the middle of the value scale, your most flattering outfits maintain a medium contrast. Avoid head-to-toe black which can appear too harsh, or all-cream which may feel too light.
+                        </p>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container p-6 rounded-2xl">
+<span class="material-symbols-outlined text-green-500 mb-4">check_circle</span>
+<p class="font-headline font-bold text-[11px] text-white uppercase mb-2">Ideal Pairings</p>
+<p class="font-body text-xs text-zinc-500">Teal + Mustard<br/>Olive + Rust</p>
+</div>
+<div class="bg-surface-container p-6 rounded-2xl">
+<span class="material-symbols-outlined text-red-500 mb-4">cancel</span>
+<p class="font-headline font-bold text-[11px] text-white uppercase mb-2">Avoid These</p>
+<p class="font-body text-xs text-zinc-500">Magenta + White<br/>Neon + Silver</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-6 bg-zinc-950/90 backdrop-blur-xl border-t border-[#C4973E]/20 z-50 rounded-t-2xl shadow-[0_-10px_40px_rgba(196,151,62,0.05)] md:hidden">
+<div class="flex flex-col items-center justify-center text-[#C4973E] scale-110 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Discover</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-600 hover:text-zinc-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">AI Agent</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-600 hover:text-zinc-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">checkroom</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Try-On</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-600 hover:text-zinc-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Wishlist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-600 hover:text-zinc-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['DM_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Me</span>
+</div>
+</nav>
+</body></html>

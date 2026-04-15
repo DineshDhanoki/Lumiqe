@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUMIQE | Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;700;800&amp;family=Inter:wght@400;500&amp;family=DM+Sans:wght@400;500&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#201f22",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "surface-bright": "#39393b",
+                        "secondary-fixed": "#e4dfff",
+                        "surface-tint": "#f0bf62",
+                        "on-secondary-container": "#b5abff",
+                        "on-secondary-fixed": "#180065",
+                        "primary-fixed": "#ffdea7",
+                        "on-tertiary-fixed-variant": "#7c2a37",
+                        "on-primary-container": "#483100",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb2b9",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-secondary-fixed-variant": "#44369c",
+                        "inverse-primary": "#7c5800",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdadc",
+                        "surface-container-highest": "#353437",
+                        "on-surface-variant": "#d2c5b2",
+                        "inverse-on-surface": "#313032",
+                        "on-background": "#e5e1e4",
+                        "error-container": "#93000a",
+                        "on-secondary": "#2d1a85",
+                        "background": "#131315",
+                        "surface": "#131315",
+                        "secondary-fixed-dim": "#c7bfff",
+                        "on-primary": "#412d00",
+                        "on-error": "#690005",
+                        "surface-dim": "#131315",
+                        "primary": "#f0bf62",
+                        "on-tertiary": "#5e1322",
+                        "on-tertiary-container": "#651927",
+                        "surface-variant": "#353437",
+                        "outline": "#9b8f7e",
+                        "surface-container-high": "#2a2a2c",
+                        "on-primary-fixed": "#271900",
+                        "tertiary": "#ffb2b9",
+                        "primary-fixed-dim": "#f0bf62",
+                        "outline-variant": "#4f4537",
+                        "secondary-container": "#44369c",
+                        "secondary": "#c7bfff",
+                        "primary-container": "#c4973e",
+                        "inverse-surface": "#e5e1e4",
+                        "on-surface": "#e5e1e4",
+                        "surface-container-low": "#1c1b1d",
+                        "tertiary-container": "#e87f8b",
+                        "on-tertiary-fixed": "#40000f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "editorial": ["Cormorant Garamond"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-obsidian-gradient {
+            background: radial-gradient(circle at top right, #18181F, #09090B);
+        }
+        .ghost-border {
+            border: 1px solid rgba(196, 151, 62, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-[#09090B] text-on-surface font-body min-h-screen">
+<!-- Top Navigation Bar -->
+<nav class="bg-[#09090B]/80 backdrop-blur-lg fixed top-0 w-full z-50 flex justify-between items-center px-8 py-6 w-full max-w-none">
+<div class="text-2xl font-['Cormorant_Garamond'] italic font-bold text-[#C4973E]">LUMIQE</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-white/60 hover:text-[#C4973E] transition-colors duration-300 font-['Plus_Jakarta_Sans'] tracking-widest uppercase text-xs" href="#">Editorial</a>
+<a class="text-[#C4973E] font-bold font-['Plus_Jakarta_Sans'] tracking-widest uppercase text-xs" href="#">Analysis</a>
+<a class="text-white/60 hover:text-[#C4973E] transition-colors duration-300 font-['Plus_Jakarta_Sans'] tracking-widest uppercase text-xs" href="#">Wardrobe</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#C4973E] cursor-pointer scale-95 transition-transform" data-icon="flare">flare</span>
+<span class="material-symbols-outlined text-[#C4973E] cursor-pointer scale-95 transition-transform" data-icon="account_circle">account_circle</span>
+</div>
+</nav>
+<!-- Sidebar (Web only) -->
+<aside class="hidden md:flex flex-col w-64 h-screen fixed left-0 top-0 py-10 px-6 bg-[#111116] border-r border-[#C4973E]/10 z-40">
+<div class="mt-16 mb-12">
+<h2 class="text-xl font-['Cormorant_Garamond'] text-[#C4973E]">The Atelier</h2>
+<p class="text-white/40 font-['Plus_Jakarta_Sans'] font-light text-xs tracking-tight">Premium Member</p>
+</div>
+<nav class="space-y-6">
+<div class="flex items-center gap-3 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-2 rounded cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light tracking-tight">Editorial</span>
+</div>
+<div class="flex items-center gap-3 text-[#C4973E] border-l-2 border-[#C4973E] pl-4 py-2 cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="center_focus_weak">center_focus_weak</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light tracking-tight">Analysis</span>
+</div>
+<div class="flex items-center gap-3 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-2 rounded cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="checkroom">checkroom</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light tracking-tight">Wardrobe</span>
+</div>
+<div class="flex items-center gap-3 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-2 rounded cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="auto_stories">auto_stories</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light tracking-tight">Gallery</span>
+</div>
+<div class="flex items-center gap-3 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-2 rounded cursor-pointer mt-auto">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light tracking-tight">Settings</span>
+</div>
+</nav>
+<div class="mt-auto pt-8">
+<button class="w-full py-3 bg-[#C4973E]/10 text-[#C4973E] border border-[#C4973E]/20 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#C4973E]/20 transition-all">Upgrade to Pro</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-20 md:pl-72 md:pt-32 px-6 md:px-12 max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="mb-16">
+<h1 class="text-6xl md:text-8xl font-editorial italic text-on-surface leading-none mb-6">Analysis</h1>
+<p class="max-w-2xl text-on-surface-variant font-headline font-light text-lg md:text-xl leading-relaxed">
+                Precision skin intelligence starts here. Upload or scan for a medical-grade aesthetic breakdown.
+            </p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Main Section (8 Columns) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Main Upload Dropzone -->
+<div class="relative group cursor-pointer aspect-video md:aspect-[16/9] bg-surface-container rounded-[24px] border-2 border-dashed border-primary/20 hover:border-primary/50 transition-all flex flex-col items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-obsidian-gradient opacity-50 group-hover:opacity-30 transition-opacity"></div>
+<img class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20 transition-transform duration-700 group-hover:scale-105" data-alt="abstract close-up of high-tech glass surface with microscopic textures and warm golden cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALiYhwn8gYNCsJb68G2fJI9NEL1h9_q1c6qBWTYd4UUHC5OYYYq9D9lkpsoy3R0zQXCyYcF3UeNsQSEb4lP3tgz19xD4wMoMs0fiZysdl1L2hSXuC2NR3MwhVAYFfdaPWRGjvCSuQug-6n44yTMNs6EugCJmtgxtDjo8QM-kKZHFPH8ZfVKCBJZGH9KZLXAYwtb_vClasj4BTkFuGwQ4Ec2cOsMyyIHdSh9SDxLwFYJLVU_d9orYJLmaiAJVmU8X5OV8tBFjehlKS6"/>
+<div class="relative z-10 flex flex-col items-center animate-pulse">
+<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 ghost-border">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="camera">camera</span>
+</div>
+<p class="font-headline text-primary font-bold tracking-widest uppercase text-sm">Drop scan or click to upload</p>
+<p class="font-label text-white/40 text-xs mt-2">RAW, JPG, or PNG up to 25MB</p>
+</div>
+</div>
+<!-- Secondary Action Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Action Card 1 -->
+<div class="bg-surface-container-high rounded-[20px] p-6 hover:bg-surface-container-highest transition-all group cursor-pointer relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-error/5 rounded-full blur-2xl group-hover:bg-error/10 transition-all"></div>
+<span class="material-symbols-outlined text-error text-3xl mb-4" data-icon="videocam">videocam</span>
+<h3 class="font-headline text-on-surface font-bold text-base mb-1">Start Live Camera</h3>
+<p class="text-on-surface-variant text-xs font-label leading-tight">Instant AI analysis via your HD webcam.</p>
+</div>
+<!-- Action Card 2 -->
+<div class="bg-surface-container-high rounded-[20px] p-6 hover:bg-surface-container-highest transition-all group cursor-pointer relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all"></div>
+<span class="material-symbols-outlined text-primary text-3xl mb-4" data-icon="schedule">schedule</span>
+<h3 class="font-headline text-on-surface font-bold text-base mb-1">Past Scans</h3>
+<p class="text-on-surface-variant text-xs font-label leading-tight">Review your journey and progress metrics.</p>
+</div>
+<!-- Action Card 3 (PRO) -->
+<div class="bg-surface-container-high rounded-[20px] p-6 hover:bg-surface-container-highest transition-all group cursor-pointer relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-all"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="collections">collections</span>
+<span class="bg-secondary/20 text-secondary text-[10px] font-mono px-2 py-0.5 rounded-full tracking-tighter">PRO</span>
+</div>
+<h3 class="font-headline text-on-surface font-bold text-base mb-1">Multi-Photo</h3>
+<p class="text-on-surface-variant text-xs font-label leading-tight">Upload 360° angles for complete mapping.</p>
+</div>
+</div>
+</div>
+<!-- Sidebar (4 Columns) -->
+<div class="lg:col-span-4 space-y-8 lg:sticky lg:top-32">
+<!-- System Status Panel -->
+<div class="bg-surface-container rounded-[20px] p-8 ghost-border">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline text-xs tracking-widest uppercase text-white/40">System Status</h4>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse"></span>
+<span class="font-mono text-[10px] text-[#4ADE80]">READY</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="text-xs font-label text-white/40">Engine Intensity</span>
+<span class="text-xs font-mono text-primary">v4.2.0-LUM</span>
+</div>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="w-[88%] h-full bg-primary/60"></div>
+</div>
+<p class="text-[10px] font-mono text-on-surface-variant/60 leading-relaxed uppercase">
+                            NEURAL NETWORK IS SYNCED WITH BIOMETRIC DATA CLUSTERS. AWAITING INPUT.
+                        </p>
+</div>
+</div>
+<!-- Precision Protocol Tips -->
+<div class="bg-surface-container-low rounded-[20px] overflow-hidden">
+<div class="p-8">
+<h4 class="font-headline text-xs tracking-widest uppercase text-primary mb-8">Precision Protocol</h4>
+<ul class="space-y-8">
+<li class="flex gap-4">
+<span class="font-mono text-primary/40 text-sm">01</span>
+<div>
+<h5 class="text-sm font-bold font-headline text-on-surface mb-1">Natural Lighting</h5>
+<p class="text-xs text-on-surface-variant font-label leading-relaxed">Avoid harsh shadows. Indirect sunlight provides the most accurate skin-texture mapping.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="font-mono text-primary/40 text-sm">02</span>
+<div>
+<h5 class="text-sm font-bold font-headline text-on-surface mb-1">Clean Canvas</h5>
+<p class="text-xs text-on-surface-variant font-label leading-relaxed">Ensure face is free of products or accessories for a deep-pore intelligence scan.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="font-mono text-primary/40 text-sm">03</span>
+<div>
+<h5 class="text-sm font-bold font-headline text-on-surface mb-1">Steady Frame</h5>
+<p class="text-xs text-on-surface-variant font-label leading-relaxed">Use a tripod or steady surface. Motion blur reduces analysis confidence scores.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Decorative Imagery in Sidebar -->
+<div class="relative h-40 mt-4 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-30 mix-blend-screen" data-alt="luxury skincare laboratory aesthetic with glass vials and soft focus botanical shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG_lqpytbX6Rk9r_7nQRa6aazW1dvvpuZxKFmBx-Uq0X6KOEojTnHXVi1nGqmpNn4Y6kjphVRZXgu4geGREZjevZiBOTyUDavF0yXNsmVEMaLrc2BvXFT8fg1Ogezvy64xQGUuHoj-7KvNjovSg2JaQKFB289rewNZO59sweqszqpfHoF1wkA7CwWZ3dJ9LkLEDbGfKdryNrNKg1djhDc3v4dHCemP1OLjS3Ko54h794XcfNPx_BMfueBDK4ZbYe0nf7MA02o5C1BT"/>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-[#09090B]/90 backdrop-blur-xl flex justify-around items-center px-4 pb-8 pt-4 rounded-t-3xl border-t border-white/5 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-white/30 hover:text-white/80 transition-all">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#C4973E] bg-[#C4973E]/10 rounded-full px-4 py-1 active:scale-90 duration-150">
+<span class="material-symbols-outlined" data-icon="camera">camera</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 hover:text-white/80 transition-all">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Closet</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30 hover:text-white/80 transition-all">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Circle</span>
+</div>
+</nav>
+</body></html>

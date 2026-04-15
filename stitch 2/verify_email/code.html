@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;family=DM+Sans:wght@100;200;300;400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary": "#5e1322",
+                        "on-primary": "#412d00",
+                        "on-secondary-container": "#b5abff",
+                        "surface-variant": "#353437",
+                        "outline-variant": "#4f4537",
+                        "on-surface": "#e5e1e4",
+                        "on-tertiary-container": "#651927",
+                        "inverse-surface": "#e5e1e4",
+                        "surface-dim": "#131315",
+                        "primary": "#f0bf62",
+                        "secondary-fixed": "#e4dfff",
+                        "on-background": "#e5e1e4",
+                        "inverse-primary": "#7c5800",
+                        "on-tertiary-fixed": "#40000f",
+                        "surface-container-high": "#2a2a2c",
+                        "secondary-fixed-dim": "#c7bfff",
+                        "secondary-container": "#44369c",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb2b9",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-secondary": "#2d1a85",
+                        "primary-container": "#c4973e",
+                        "surface-container": "#201f22",
+                        "primary-fixed": "#ffdea7",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb2b9",
+                        "secondary": "#c7bfff",
+                        "on-secondary-fixed-variant": "#44369c",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "tertiary-container": "#e87f8b",
+                        "surface-tint": "#f0bf62",
+                        "inverse-on-surface": "#313032",
+                        "outline": "#9b8f7e",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#7c2a37",
+                        "on-surface-variant": "#d2c5b2",
+                        "primary-fixed-dim": "#f0bf62",
+                        "on-secondary-fixed": "#180065",
+                        "surface-bright": "#39393b",
+                        "surface-container-low": "#1c1b1d",
+                        "surface": "#131315",
+                        "tertiary-fixed": "#ffdadc",
+                        "background": "#131315",
+                        "surface-container-highest": "#353437",
+                        "on-primary-fixed": "#271900",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#483100"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "display": ["Cormorant Garamond"],
+                        "mono": ["JetBrains Mono"],
+                        "micro": ["DM Sans"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.2);
+        }
+        .glass-panel {
+            background: rgba(19, 19, 21, 0.6);
+            backdrop-filter: blur(16px);
+        }
+        .editorial-shadow {
+            box-shadow: 0 40px 60px -20px rgba(196, 151, 62, 0.05);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(240, 191, 98, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-[#09090B] text-on-surface font-body overflow-hidden selection:bg-primary/30">
+<!-- Ambient Background Elements -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+<div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[120px]"></div>
+<div class="absolute top-[40%] -right-[15%] w-[50%] h-[50%] rounded-full bg-secondary-container/15 blur-[100px]"></div>
+<div class="absolute -bottom-[10%] left-[20%] w-[40%] h-[40%] rounded-full bg-tertiary-container/10 blur-[120px]"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 min-h-screen flex items-center justify-center p-6">
+<!-- Identity Branding (Floating Anchor) -->
+<div class="absolute top-12 left-0 w-full flex justify-center">
+<h1 class="font-display italic text-3xl tracking-tighter text-primary">Lumiqe</h1>
+</div>
+<!-- Verification Glass Card -->
+<div class="glass-panel ghost-border rounded-3xl w-full max-w-lg p-12 md:p-16 flex flex-col items-center text-center editorial-shadow">
+<!-- Hero Icon Moment -->
+<div class="relative mb-10">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
+<div class="relative flex items-center justify-center w-24 h-24 rounded-full bg-surface-container-high ghost-border">
+<span class="material-symbols-outlined text-5xl text-primary" data-icon="mail" style="font-variation-settings: 'wght' 300;">mail</span>
+</div>
+<!-- Decorative Gold Sparkles -->
+<span class="material-symbols-outlined absolute -top-2 -right-2 text-primary/60 text-xl" data-icon="auto_awesome">auto_awesome</span>
+<span class="material-symbols-outlined absolute bottom-0 -left-4 text-primary/40 text-lg" data-icon="sparkles">colors_spark</span>
+</div>
+<!-- Typography Cluster -->
+<div class="space-y-4 mb-12">
+<h2 class="font-display text-4xl md:text-5xl text-white tracking-tight leading-tight">
+                    Verify your <span class="italic text-primary">elegance.</span>
+</h2>
+<p class="text-on-surface-variant font-light leading-relaxed max-w-sm mx-auto">
+                    Check your inbox for a verification link. We’ve sent an invitation to join our exclusive digital atelier.
+                </p>
+</div>
+<!-- Action Area -->
+<div class="w-full space-y-6">
+<!-- Status Badge -->
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low ghost-border">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-primary-fixed-dim">Waiting for confirmation</span>
+</div>
+<!-- Primary Action -->
+<div class="pt-4">
+<button class="group relative w-full overflow-hidden rounded-xl py-5 transition-all duration-500 hover:scale-[1.02] active:scale-95">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container to-primary opacity-90 group-hover:opacity-100 transition-opacity"></div>
+<span class="relative font-headline font-bold text-on-primary uppercase tracking-widest text-xs">Open Mail App</span>
+</button>
+</div>
+<!-- Secondary Action with Timer -->
+<div class="flex flex-col items-center gap-4">
+<button class="ghost-border w-full py-4 rounded-xl font-headline font-medium text-xs uppercase tracking-[0.15em] text-on-surface-variant hover:text-white hover:bg-white/5 transition-all duration-300">
+                        Resend Email
+                    </button>
+<div class="flex items-center gap-2">
+<span class="font-mono text-[11px] text-outline tracking-tighter">COOLDOWN ACTIVE:</span>
+<span class="font-mono text-[11px] text-primary font-bold">00:59</span>
+</div>
+</div>
+</div>
+<!-- Footer Details -->
+<div class="mt-12 flex flex-col gap-6 w-full opacity-60">
+<div class="h-[0.5px] w-full bg-gradient-to-r from-transparent via-outline-variant to-transparent"></div>
+<div class="flex justify-between items-center px-2">
+<a class="font-micro text-[10px] uppercase tracking-widest hover:text-primary transition-colors" href="#">Support</a>
+<a class="font-micro text-[10px] uppercase tracking-widest hover:text-primary transition-colors" href="#">Logout</a>
+</div>
+</div>
+</div>
+<!-- Decorative UI Elements -->
+<div class="absolute bottom-12 right-12 hidden lg:block">
+<div class="flex items-center gap-4 rotate-90 origin-right">
+<span class="h-[1px] w-12 bg-primary/30"></span>
+<p class="font-mono text-[9px] uppercase tracking-[0.4em] text-outline-variant">Lumiqe Authentication System v2.0.4</p>
+</div>
+</div>
+</main>
+<!-- Perspective Visual (Top Right) -->
+<div class="fixed top-24 right-24 w-64 h-96 opacity-20 pointer-events-none blur-sm grayscale hover:grayscale-0 transition-all duration-1000">
+<img class="w-full h-full object-cover rounded-3xl ghost-border" data-alt="high fashion editorial close up of textured luxury fabric with dramatic golden light hitting the obsidian black fibers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxPnPgkRvBofyY_dWPFagH3Fmg4B9_QvQb7wFBAHfkqc3VacJISXNnXuDpkhiErqYBu0--4hxPK7YmLlElCso88dkMfmTkIgvNAYTtGOEd15SdpcRaJaMxDVhDdf2zINSKJGdhzxh-jMr4saG_3xzORbH8vv0-3rYyW2_LKXlm5LyE3nT24DO0IcAO8HUmpLjYVroVsGy7L93cSkHHk1LT2Cc10P5uj0c75AsX52JrY18sitTppLrBd35UHiZ5oLh1ycNDdnAAxDtM"/>
+</div>
+</body></html>

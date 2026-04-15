@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUMIQE | Discover Your True Colors</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb2b9",
+                    "surface-bright": "#39393b",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#e4dfff",
+                    "background": "#09090B",
+                    "outline": "#9b8f7e",
+                    "on-error": "#690005",
+                    "surface-container": "#201f22",
+                    "inverse-surface": "#e5e1e4",
+                    "secondary-fixed-dim": "#c7bfff",
+                    "on-primary-container": "#483100",
+                    "on-background": "#e5e1e4",
+                    "on-primary-fixed-variant": "#5e4200",
+                    "on-secondary": "#2d1a85",
+                    "surface-container-high": "#2a2a2c",
+                    "primary-fixed-dim": "#f0bf62",
+                    "tertiary": "#ffb2b9",
+                    "on-primary": "#412d00",
+                    "on-surface": "#e5e1e4",
+                    "outline-variant": "#4f4537",
+                    "surface-tint": "#f0bf62",
+                    "inverse-on-surface": "#313032",
+                    "on-error-container": "#ffdad6",
+                    "surface-variant": "#353437",
+                    "surface-container-low": "#1c1b1d",
+                    "surface-container-lowest": "#0e0e10",
+                    "primary-container": "#c4973e",
+                    "surface-dim": "#131315",
+                    "on-tertiary-fixed-variant": "#7c2a37",
+                    "on-tertiary": "#5e1322",
+                    "secondary-container": "#44369c",
+                    "secondary": "#c7bfff",
+                    "tertiary-container": "#e87f8b",
+                    "on-secondary-fixed": "#180065",
+                    "on-secondary-fixed-variant": "#44369c",
+                    "tertiary-fixed": "#ffdadc",
+                    "inverse-primary": "#7c5800",
+                    "surface-container-highest": "#353437",
+                    "surface": "#131315",
+                    "on-tertiary-container": "#651927",
+                    "on-primary-fixed": "#271900",
+                    "primary": "#f0bf62",
+                    "on-secondary-container": "#b5abff",
+                    "primary-fixed": "#ffdea7",
+                    "error": "#ffb4ab",
+                    "on-surface-variant": "#d2c5b2",
+                    "on-tertiary-fixed": "#40000f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["DM Sans"],
+                    "display": ["Cormorant Garamond"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #09090B;
+    color: #e5e1e4;
+    overflow-x: hidden
+    }
+.grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDcoHTTvSc0USmO4vioYaVIILnwpaNHnMRSoMZ8YjGDTKu956Tg9xmMv-24ifkH9emjVQs9zFtgRHE2kVwcHVxo5HzzllVDP3wZSyaS0IraJaE9LM9gLYaVelpl375NhUonDaxGbUUTLDlXlFIvfcfP42OOOAYLHeP_AmHWJB7iMpJjhJ_d6BZnYT1k9HHjSFibCK_y3Lw0Pk5bg6AsnfO5W_oxyvFQvLZJ_YKKNWrUkUYFlEK3Gi1ZWrMzGP-Yh-a1TbzPGjgyXnpH);
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 100
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+.editorial-shadow {
+    box-shadow: 0 40px 60px -15px rgba(196, 151, 62, 0.08)
+    }</style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<div class="grain-overlay"></div>
+<!-- Shared TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-[#09090B]/80 backdrop-blur-lg">
+<div class="text-2xl font-['Cormorant_Garamond'] italic font-bold text-[#C4973E]">LUMIQE</div>
+<div class="hidden md:flex gap-12">
+<a class="text-[#C4973E] font-bold border-b-2 border-[#C4973E] pb-1 font-['Plus_Jakarta_Sans'] tracking-tight transition-all duration-300" href="#">Analysis</a>
+<a class="text-zinc-400 font-medium font-['Plus_Jakarta_Sans'] tracking-tight hover:text-white transition-colors duration-300" href="#">Wardrobe</a>
+<a class="text-zinc-400 font-medium font-['Plus_Jakarta_Sans'] tracking-tight hover:text-white transition-colors duration-300" href="#">Stylist</a>
+<a class="text-zinc-400 font-medium font-['Plus_Jakarta_Sans'] tracking-tight hover:text-white transition-colors duration-300" href="#">Gallery</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-all active:scale-95" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-all active:scale-95" data-icon="account_circle">account_circle</button>
+</div>
+</nav>
+<main class="max-w-[1280px] mx-auto px-6 pt-32 pb-24">
+<!-- Hero Section -->
+<section class="relative grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-32">
+<div class="z-10">
+<h1 class="text-7xl md:text-8xl font-display leading-[0.9] mb-8 tracking-tighter">
+                    Discover Your <br/>
+<span class="text-[#C4973E] italic">True Colors</span>
+</h1>
+<p class="text-xl text-on-surface-variant max-w-lg mb-10 leading-relaxed font-light">
+                    The world's first luxury AI atelier that decodes your biological color profile through clinical-grade pigment analysis.
+                </p>
+<div class="flex flex-col sm:flex-row gap-6">
+<button class="px-10 py-5 bg-[#C4973E] text-on-primary-container rounded-lg font-headline font-bold text-lg tracking-wide hover:opacity-90 active:scale-95 transition-all shadow-xl">
+                        Analyze My Colors
+                    </button>
+<button class="px-10 py-5 bg-transparent border border-[#C4973E]/30 text-[#C4973E] rounded-lg font-headline font-semibold text-lg backdrop-blur-md hover:bg-[#C4973E]/5 transition-all">
+                        View Sample Report
+                    </button>
+</div>
+</div>
+<div class="relative flex justify-center items-center">
+<div class="absolute inset-0 bg-primary-container/10 rounded-full blur-[120px] scale-75"></div>
+<div class="relative w-full max-w-[420px] aspect-[9/19] rounded-[3rem] p-4 bg-surface-container-highest border border-outline-variant/20 editorial-shadow">
+<div class="w-full h-full rounded-[2.5rem] overflow-hidden bg-background relative">
+<img alt="AI Fashion Analysis" class="w-full h-full object-cover" data-alt="Close-up of a high-fashion model wearing deep autumn colors with professional studio lighting and clean minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsYpD7TnqJzGQXeMmUHhZ0Jvi-WlfQCuvEbi6X5qESgD2XmB3GhHK-77r4U-jNqZqOvjtzLFqPp5_N5zu3y4hPE1GMBW8sSDNVWSgcECO1AM_BrYWrTT1fbBGT18461E_rd2c_OnDaqvE_CPuLNJHb-6qNQiQGswweWt_0OeVOuJXz24JSMnoKF3J4T0Zkwg8eEJ0W435bemhyfC66NxBXfjJL27Y453O7nc-xNqDq4zXOn2Lh2IVVtFQOO8OlW-aGa1Kt_1sLN1iP"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
+<div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
+<p class="font-mono text-[10px] text-primary uppercase tracking-[0.2em] mb-1">Analysis Complete</p>
+<p class="font-display text-2xl">Deep Winter</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Bar -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 mb-32 bg-surface-container-low/50 backdrop-blur-sm rounded-2xl border border-outline-variant/10">
+<div class="text-center px-8 border-r border-outline-variant/20 last:border-0">
+<p class="text-4xl font-headline font-extrabold text-primary mb-1">50K+</p>
+<p class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Active Global Users</p>
+</div>
+<div class="text-center px-8 border-r border-outline-variant/20 last:border-0">
+<p class="text-4xl font-headline font-extrabold text-primary mb-1">12</p>
+<p class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Seasonal Profiles</p>
+</div>
+<div class="text-center px-8 border-r border-outline-variant/20 last:border-0">
+<p class="text-4xl font-headline font-extrabold text-primary mb-1">98%</p>
+<p class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Analysis Accuracy</p>
+</div>
+</section>
+<!-- How it Works -->
+<section class="mb-32">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div>
+<span class="font-mono text-secondary text-sm uppercase tracking-[0.3em]">The Process</span>
+<h2 class="text-5xl font-display mt-4">Precision Engineering</h2>
+</div>
+<p class="max-w-md text-on-surface-variant font-light text-lg">Our three-step methodology combines dermatologist-approved color theory with proprietary neural networks.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-8 border border-outline-variant/20 group-hover:bg-primary-container transition-all duration-500">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container" data-icon="upload_file">upload_file</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-4">01. Upload</h3>
+<p class="text-on-surface-variant leading-relaxed">Provide a natural light selfie. Our system detects over 200 data points across your skin, eyes, and hair.</p>
+</div>
+<div class="group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-8 border border-outline-variant/20 group-hover:bg-secondary-container transition-all duration-500">
+<span class="material-symbols-outlined text-secondary group-hover:text-white" data-icon="neurology" data-weight="fill">neurology</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-4">02. AI Analyzes</h3>
+<p class="text-on-surface-variant leading-relaxed">Our AI simulates thousands of lighting conditions and drape combinations to find your perfect contrast ratio.</p>
+</div>
+<div class="group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-8 border border-outline-variant/20 group-hover:bg-tertiary-container transition-all duration-500">
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-tertiary-container" data-icon="palette">palette</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-4">03. Discover Palette</h3>
+<p class="text-on-surface-variant leading-relaxed">Receive a curated 60-color digital lookbook and bespoke styling advice tailored exclusively to you.</p>
+</div>
+</div>
+</section>
+<!-- Demo Preview / Bento Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-32 auto-rows-[300px]">
+<!-- Main Preview Card -->
+<div class="lg:col-span-8 lg:row-span-2 rounded-3xl bg-surface-container overflow-hidden relative border border-outline-variant/10">
+<img class="absolute inset-0 w-full h-full object-cover opacity-50" data-alt="Elegant close up portrait of woman with warm skin tone and gold jewelry against deep mahogany background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA07Q8pPGLzS1F6ZA_YeZ9K0Vt4oz2Ue4Lq6nIblRHb88mcKeiekCnB65vIU2G6BW3b9mg5RqXAPFM8S-oOMIXI1yrxWJOkZw1Oxhw5OlnQ3otft1HbDdJVlUryZBhWlIaazQ1BrA1rItUlTD2vemqXVt1RaRg-lG3IsdKGYYp5kvMOFjBTspCQvcdgxRC134nWBMuVr6K4utNfEe4cvhHlZrHdafGPbuwXctEqL0AeNHcbL-q6bUMf3dG93_3EicxOZxMj5f2z5t47"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container via-surface-container/60 to-transparent p-12 flex flex-col justify-center">
+<div class="max-w-md backdrop-blur-xl bg-surface-container-lowest/40 p-8 rounded-2xl border border-white/5 editorial-shadow">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="font-mono text-xs text-primary mb-1 tracking-widest">REAL-TIME ANALYSIS</h4>
+<p class="text-3xl font-display">Skin Metric V2.1</p>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="flare">flare</span>
+</div>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Undertone</span>
+<span class="text-primary font-bold">Warm Gold</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-4/5 h-full bg-primary"></div>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Value (Depth)</span>
+<span class="text-secondary font-bold">Rich Deep</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-secondary"></div>
+</div>
+</div>
+<div class="flex gap-2">
+<div class="w-10 h-10 rounded-full bg-[#3d2b1f] border border-white/10"></div>
+<div class="w-10 h-10 rounded-full bg-[#C4973E] border border-white/10"></div>
+<div class="w-10 h-10 rounded-full bg-[#63462d] border border-white/10"></div>
+<div class="w-10 h-10 rounded-full bg-[#18181F] border border-white/10"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Sub-cards -->
+<div class="lg:col-span-4 lg:row-span-1 rounded-3xl bg-surface-container-high p-8 flex flex-col justify-between border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="dry_cleaning">dry_cleaning</span>
+<div>
+<h4 class="text-xl font-headline font-bold mb-2">Wardrobe Matching</h4>
+<p class="text-sm text-on-surface-variant">Instantly verify if any garment matches your season with AR overlay.</p>
+</div>
+</div>
+<div class="lg:col-span-4 lg:row-span-1 rounded-3xl bg-secondary-container/20 p-8 flex flex-col justify-between border border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl" data-icon="smart_toy">smart_toy</span>
+<div>
+<h4 class="text-xl font-headline font-bold mb-2">AI Personal Stylist</h4>
+<p class="text-sm text-on-surface-variant">24/7 expert advice for events, interviews, and daily curation.</p>
+</div>
+</div>
+</section>
+<!-- Pricing Comparison -->
+<section class="mb-32">
+<div class="text-center mb-16">
+<h2 class="text-5xl font-display mb-4">Invest In Your Aura</h2>
+<p class="text-on-surface-variant">Choose the depth of your personal color transformation.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+<!-- Free Tier -->
+<div class="p-10 rounded-3xl bg-surface-container border border-outline-variant/10 flex flex-col h-full">
+<div class="mb-8">
+<h3 class="text-xl font-headline font-bold mb-2">Discovery</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-headline font-extrabold">Free</span>
+</div>
+</div>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="check_circle">check_circle</span>
+                            Basic Seasonal Analysis
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="check_circle">check_circle</span>
+                            Essential 10-Color Palette
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="cancel">cancel</span>
+<span class="opacity-40">AI Stylist Access</span>
+</li>
+</ul>
+<button class="w-full py-4 rounded-xl border border-outline-variant font-bold hover:bg-white/5 transition-all">Get Started</button>
+</div>
+<!-- Pro Tier -->
+<div class="p-10 rounded-3xl bg-surface-container-highest border border-primary/30 editorial-shadow flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-6 right-8 bg-primary/20 text-primary text-[10px] font-mono tracking-widest px-3 py-1 rounded-full uppercase">Most Popular</div>
+<div class="mb-8">
+<h3 class="text-xl font-headline font-bold mb-2">Elite Atelier</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-headline font-extrabold">$29</span>
+<span class="text-on-surface-variant text-sm">/one-time</span>
+</div>
+</div>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+                            Ultra-HD Deep Tissue Analysis
+                        </li>
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+                            Complete 60-Color Lookbook
+                        </li>
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+                            Unlimited Wardrobe Matching
+                        </li>
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+                            Priority AI Stylist Concierge
+                        </li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-primary text-on-primary-container font-bold hover:opacity-90 active:scale-95 transition-all">Unlock Elite Access</button>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="rounded-[3rem] bg-gradient-to-br from-surface-container-high to-background p-16 text-center border border-outline-variant/10 relative overflow-hidden">
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"></div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-secondary/10 rounded-full blur-[80px]"></div>
+<h2 class="text-5xl md:text-6xl font-display mb-8 relative z-10">Ready to Meet Your <br/>Better Half?</h2>
+<p class="max-w-xl mx-auto text-on-surface-variant text-lg mb-12 relative z-10">Stop guessing and start glowing. Join the elite who have mastered their visual identity through data.</p>
+<button class="relative z-10 px-12 py-6 bg-white text-black font-headline font-extrabold rounded-full tracking-tighter hover:scale-105 active:scale-95 transition-all">START FREE ANALYSIS</button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="max-w-[1280px] mx-auto px-8 py-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="text-xl font-display italic font-bold text-primary">LUMIQE</div>
+<div class="flex gap-8 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Science</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<p class="text-[10px] font-mono text-zinc-600">© 2024 LUMIQE ATELIER. ALL RIGHTS RESERVED.</p>
+</footer>
+<!-- Mobile Navigation Shell (BottomNavBar) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 md:hidden bg-[#09090B]/90 backdrop-blur-xl border-t border-[#C4973E]/15 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-[24px]">
+<div class="flex flex-col items-center justify-center text-[#C4973E] scale-110">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 opacity-60">
+<span class="material-symbols-outlined" data-icon="camera">camera</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold">Analyze</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 opacity-60">
+<span class="material-symbols-outlined" data-icon="checkroom">checkroom</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold">Wardrobe</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 opacity-60">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold">AI Chat</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 opacity-60">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold">Profile</span>
+</div>
+</nav>
+</body></html>

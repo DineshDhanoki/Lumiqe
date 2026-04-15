@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUMIQE | True Autumn Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(17, 17, 22, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(196, 151, 62, 0.15);
+        }
+        body {
+            background-color: #09090B;
+            color: #e5e1e4;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#201f22",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "surface-bright": "#39393b",
+                        "secondary-fixed": "#e4dfff",
+                        "surface-tint": "#f0bf62",
+                        "on-secondary-container": "#b5abff",
+                        "on-secondary-fixed": "#180065",
+                        "primary-fixed": "#ffdea7",
+                        "on-tertiary-fixed-variant": "#7c2a37",
+                        "on-primary-container": "#483100",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb2b9",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-secondary-fixed-variant": "#44369c",
+                        "inverse-primary": "#7c5800",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdadc",
+                        "surface-container-highest": "#353437",
+                        "on-surface-variant": "#d2c5b2",
+                        "inverse-on-surface": "#313032",
+                        "on-background": "#e5e1e4",
+                        "error-container": "#93000a",
+                        "on-secondary": "#2d1a85",
+                        "background": "#131315",
+                        "surface": "#131315",
+                        "secondary-fixed-dim": "#c7bfff",
+                        "on-primary": "#412d00",
+                        "on-error": "#690005",
+                        "surface-dim": "#131315",
+                        "primary": "#f0bf62",
+                        "on-tertiary": "#5e1322",
+                        "on-tertiary-container": "#651927",
+                        "surface-variant": "#353437",
+                        "outline": "#9b8f7e",
+                        "surface-container-high": "#2a2a2c",
+                        "on-primary-fixed": "#271900",
+                        "tertiary": "#ffb2b9",
+                        "primary-fixed-dim": "#f0bf62",
+                        "outline-variant": "#4f4537",
+                        "secondary-container": "#44369c",
+                        "secondary": "#c7bfff",
+                        "primary-container": "#c4973e",
+                        "inverse-surface": "#e5e1e4",
+                        "on-surface": "#e5e1e4",
+                        "surface-container-low": "#1c1b1d",
+                        "tertiary-container": "#e87f8b",
+                        "on-tertiary-fixed": "#40000f"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "serif": ["Cormorant Garamond"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-body selection:bg-primary/30">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-[#09090B]/80 backdrop-blur-lg flex justify-between items-center px-8 py-6 w-full max-w-none">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-['Cormorant_Garamond'] italic font-bold text-[#C4973E]">LUMIQE</span>
+</div>
+<div class="hidden md:flex items-center space-x-12">
+<a class="text-[#C4973E] font-bold font-['Plus_Jakarta_Sans'] tracking-widest uppercase text-xs" href="#">Editorial</a>
+<a class="text-white/60 hover:text-[#C4973E] transition-colors duration-300 font-['Plus_Jakarta_Sans'] tracking-widest uppercase text-xs" href="#">Analysis</a>
+<a class="text-white/60 hover:text-[#C4973E] transition-colors duration-300 font-['Plus_Jakarta_Sans'] tracking-widest uppercase text-xs" href="#">Wardrobe</a>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-white/60 hover:text-[#C4973E] cursor-pointer transition-colors" data-icon="flare">flare</span>
+<span class="material-symbols-outlined text-[#C4973E] cursor-pointer" data-icon="account_circle">account_circle</span>
+</div>
+</nav>
+<main class="pt-24 pb-32">
+<!-- Hero Section -->
+<section class="relative px-8 md:px-20 py-16 flex flex-col items-center text-center overflow-hidden">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute top-1/2 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-[100px]"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="mb-8 flex gap-3">
+<span class="px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-[10px] uppercase tracking-widest font-headline font-bold">Warm Undertone</span>
+<span class="px-4 py-1.5 rounded-full border border-tertiary/20 bg-tertiary/5 text-tertiary-container text-[10px] uppercase tracking-widest font-headline font-bold">94% Confidence</span>
+</div>
+<h1 class="text-7xl md:text-9xl font-serif italic text-white leading-none mb-6 tracking-tight">True Autumn</h1>
+<div class="group relative flex flex-col items-center">
+<div class="w-32 h-32 md:w-48 md:h-48 rounded-full shadow-[0_0_60px_rgba(205,133,63,0.3)] transition-transform duration-500 hover:scale-105" style="background-color: #CD853F;"></div>
+<span class="mt-4 font-mono text-xs tracking-tighter text-white/40 uppercase">Signature: #CD853F</span>
+</div>
+</div>
+</section>
+<!-- Sticky Tabs -->
+<div class="sticky top-[80px] z-40 glass-panel border-y border-white/5 px-8">
+<div class="max-w-7xl mx-auto flex overflow-x-auto no-scrollbar py-1 gap-8 md:justify-center">
+<button class="py-5 text-primary font-bold border-b-2 border-primary text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Overview</button>
+<button class="py-5 text-white/40 hover:text-white transition-colors text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Colors</button>
+<button class="py-5 text-white/40 hover:text-white transition-colors text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Occasions</button>
+<button class="py-5 text-white/40 hover:text-white transition-colors text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Wardrobe</button>
+<button class="py-5 text-white/40 hover:text-white transition-colors text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Celebrities</button>
+<button class="py-5 text-white/40 hover:text-white transition-colors text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Beauty</button>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 mt-16 space-y-24">
+<!-- Overview Grid -->
+<section class="space-y-12" id="overview">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-8 rounded-xl ghost-border flex flex-col justify-between h-48">
+<span class="text-[10px] font-mono text-white/30 uppercase tracking-widest">Profile Type</span>
+<span class="text-2xl font-headline text-white font-light">Warm &amp; Rich</span>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl ghost-border flex flex-col justify-between h-48">
+<span class="text-[10px] font-mono text-white/30 uppercase tracking-widest">Undertone</span>
+<span class="text-2xl font-headline text-white font-light">Pure Golden</span>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl ghost-border flex flex-col justify-between h-48">
+<span class="text-[10px] font-mono text-white/30 uppercase tracking-widest">Contrast</span>
+<span class="text-2xl font-headline text-white font-light">Medium-High</span>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl ghost-border flex flex-col justify-between h-48">
+<span class="text-[10px] font-mono text-white/30 uppercase tracking-widest">Best Metal</span>
+<span class="text-2xl font-headline text-primary font-light">Antique Gold</span>
+</div>
+</div>
+<!-- Insight Callout -->
+<div class="relative bg-surface-container-highest/30 p-10 rounded-2xl overflow-hidden group">
+<div class="absolute top-0 right-0 p-8">
+<span class="material-symbols-outlined text-primary/40 text-7xl" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div class="relative z-10 max-w-2xl">
+<h3 class="font-headline text-xl text-white font-bold mb-4">The Atelier Insight</h3>
+<p class="text-white/70 leading-relaxed font-body text-lg italic">
+                            Your skin possesses a remarkable golden glow that thrives in high-chroma, earthy environments. To maximize your natural radiance, focus on textures like silk velvet and brushed suede which catch the light in ways that mimic your skin's own luminosity.
+                        </p>
+</div>
+</div>
+</section>
+<!-- Colors Section -->
+<section class="space-y-20" id="colors">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-l border-primary/20 pl-8">
+<div>
+<h2 class="text-5xl font-serif italic text-white mb-2">Signature Palette</h2>
+<p class="text-white/40 font-headline uppercase tracking-widest text-[10px]">Curated Autumnal Harmonies</p>
+</div>
+<span class="text-primary font-mono text-xs">SC-772 / WARM COLLECTION</span>
+</div>
+<!-- Bento Grid Palette -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square rounded-full shadow-lg" style="background-color: #8B4513;"></div>
+<div class="text-center">
+<p class="text-white text-xs font-bold font-headline uppercase tracking-tighter">Saddle Brown</p>
+<p class="text-white/30 font-mono text-[9px] mt-1">#8B4513</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square rounded-full shadow-lg" style="background-color: #D2691E;"></div>
+<div class="text-center">
+<p class="text-white text-xs font-bold font-headline uppercase tracking-tighter">Cinnamon</p>
+<p class="text-white/30 font-mono text-[9px] mt-1">#D2691E</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square rounded-full shadow-lg" style="background-color: #556B2F;"></div>
+<div class="text-center">
+<p class="text-white text-xs font-bold font-headline uppercase tracking-tighter">Olive Drab</p>
+<p class="text-white/30 font-mono text-[9px] mt-1">#556B2F</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square rounded-full shadow-lg" style="background-color: #DAA520;"></div>
+<div class="text-center">
+<p class="text-white text-xs font-bold font-headline uppercase tracking-tighter">Goldenrod</p>
+<p class="text-white/30 font-mono text-[9px] mt-1">#DAA520</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square rounded-full shadow-lg" style="background-color: #E9967A;"></div>
+<div class="text-center">
+<p class="text-white text-xs font-bold font-headline uppercase tracking-tighter">Dark Salmon</p>
+<p class="text-white/30 font-mono text-[9px] mt-1">#E9967A</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square rounded-full shadow-lg" style="background-color: #800000;"></div>
+<div class="text-center">
+<p class="text-white text-xs font-bold font-headline uppercase tracking-tighter">Maroon</p>
+<p class="text-white/30 font-mono text-[9px] mt-1">#800000</p>
+</div>
+</div>
+</div>
+<!-- Avoid Section -->
+<div class="mt-32 p-12 bg-surface-container-low rounded-3xl border border-white/5">
+<div class="flex flex-col items-center mb-12">
+<h3 class="text-3xl font-serif text-white/80 italic mb-2">Discordant Tones</h3>
+<p class="text-white/30 font-headline uppercase tracking-[0.3em] text-[9px]">Colors to Avoid</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-4xl mx-auto">
+<div class="flex flex-col items-center gap-3">
+<div class="w-20 h-20 rounded-full grayscale opacity-40" style="background-color: #E0FFFF;"></div>
+<p class="text-white/40 text-[10px] font-mono">ICEY BLUE</p>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="w-20 h-20 rounded-full grayscale opacity-40" style="background-color: #FFB6C1;"></div>
+<p class="text-white/40 text-[10px] font-mono">COOL PINK</p>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="w-20 h-20 rounded-full grayscale opacity-40" style="background-color: #D3D3D3;"></div>
+<p class="text-white/40 text-[10px] font-mono">LIGHT GREY</p>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="w-20 h-20 rounded-full grayscale opacity-40" style="background-color: #FFFFFF;"></div>
+<p class="text-white/40 text-[10px] font-mono">PURE WHITE</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Editorial Card -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 rounded-3xl overflow-hidden">
+<div class="relative h-[500px] overflow-hidden">
+<img alt="Editorial" class="w-full h-full object-cover" data-alt="Editorial close-up portrait of a woman with warm skin tones and auburn hair, dramatic autumnal lighting, rich orange and brown background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt0VSN1ONTtIOhewF60tuZQzLyFz3LNfS4bmLjxlf51zuzrCX9hgPUDTXnull9Bjt9uUlGyS5CvKyfVL-QHqLHPy6OgKEeRojmFdL-Esg1C2T0WAYWAXKZlkxrNp_sYaf0u4Y9zvhDUPa-pBm-B36FHOZttLdTiZ1RE6MzQur_4DPIcZI-ykhfbfG8e01D1JL0DKAnZwPfbReTzVPdIU4UB9VBjBb7PR6IKGKPymwXu42zVS1fIFOb7cTP5Z5FdsECWRVaFUteYLVU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-10 left-10">
+<span class="text-primary font-mono text-[10px] uppercase tracking-widest">Seasonal Aesthetic</span>
+<h4 class="text-3xl font-serif text-white italic mt-2">The Gilded Hour</h4>
+</div>
+</div>
+<div class="bg-surface-container p-12 flex flex-col justify-center">
+<span class="text-primary font-mono text-xs uppercase mb-4 tracking-tighter">Analysis Deep Dive</span>
+<h2 class="text-4xl font-headline text-white font-light leading-tight mb-6">Mastering the Contrast of Earth and Gold</h2>
+<p class="text-white/60 font-body leading-relaxed mb-8">
+                        Your True Autumn profile is characterized by high warmth and low saturation. Unlike the Spring palette which is bright and clear, yours is muted and deep. This requires a shift in fabric choice—matte finishes like crepe and linen will always outperform high-gloss synthetics.
+                    </p>
+<button class="w-fit px-8 py-4 bg-primary text-on-primary text-xs uppercase font-bold font-headline tracking-widest rounded-lg hover:brightness-110 transition-all">
+                        View Wardrobe Guide
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Nav (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 bg-[#09090B]/90 backdrop-blur-xl rounded-t-3xl border-t border-white/5 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-white/30">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#C4973E] bg-[#C4973E]/10 rounded-full px-4 py-1">
+<span class="material-symbols-outlined" data-icon="camera" style="font-variation-settings: 'FILL' 1;">camera</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter font-bold">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Closet</span>
+</div>
+<div class="flex flex-col items-center justify-center text-white/30">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-['DM_Sans'] text-[10px] tracking-tighter">Circle</span>
+</div>
+</nav>
+<!-- Side Nav (Web Only) -->
+<div class="hidden md:flex flex-col w-64 h-screen fixed left-0 top-0 py-10 px-6 bg-[#111116] border-r border-[#C4973E]/10 z-30">
+<div class="mb-12">
+<span class="text-xl font-['Cormorant_Garamond'] text-[#C4973E]">The Atelier</span>
+<p class="text-[10px] text-white/40 font-['Plus_Jakarta_Sans'] uppercase tracking-widest mt-1">Premium Member</p>
+</div>
+<div class="flex-1 space-y-6">
+<a class="flex items-center gap-4 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-3 rounded-lg" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light text-sm">Editorial</span>
+</a>
+<a class="flex items-center gap-4 text-[#C4973E] border-l-2 border-[#C4973E] pl-4 py-3 bg-[#C4973E]/5 rounded-r-lg" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="center_focus_weak" style="font-variation-settings: 'FILL' 1;">center_focus_weak</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light text-sm">Analysis</span>
+</a>
+<a class="flex items-center gap-4 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-3 rounded-lg" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="checkroom">checkroom</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light text-sm">Wardrobe</span>
+</a>
+<a class="flex items-center gap-4 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-3 rounded-lg" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="auto_stories">auto_stories</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light text-sm">Gallery</span>
+</a>
+<a class="flex items-center gap-4 text-white/40 pl-4 hover:bg-[#C4973E]/5 hover:text-white transition-all py-3 rounded-lg" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] font-light text-sm">Settings</span>
+</a>
+</div>
+<div class="mt-auto">
+<button class="w-full py-4 bg-primary/10 text-primary text-[10px] uppercase font-bold tracking-widest rounded-lg border border-primary/20">
+                Upgrade to Pro
+            </button>
+</div>
+</div>
+</body></html>
