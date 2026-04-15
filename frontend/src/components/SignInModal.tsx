@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -201,7 +200,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                 onClick={handleClose}
                                 className="p-2 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors"
                             >
-                                <X className="w-5 h-5" />
+                                <span className="material-symbols-outlined text-xl">close</span>
                             </button>
                         </div>
 
@@ -209,7 +208,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                         <div className="p-6">
                             {error && (
                                 <div role="alert" aria-live="polite" className="mb-5 p-4 rounded-xl bg-primary/5 border border-primary/20 flex items-start gap-3 text-primary text-sm">
-                                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                                    <span className="material-symbols-outlined text-xl shrink-0 mt-0.5">error</span>
                                     <p>{error}</p>
                                 </div>
                             )}
@@ -266,7 +265,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                 {/* Email */}
                                 <div>
                                     <div className="relative flex items-center">
-                                        <Mail className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
+                                        <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">mail</span>
                                         <input
                                             type="email"
                                             placeholder={t('authEmail')}
@@ -287,7 +286,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                 {/* Password */}
                                 <div>
                                     <div className="relative flex items-center">
-                                        <Lock className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
+                                        <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">lock</span>
                                         <input
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder={t('authPassword')}
@@ -306,7 +305,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             className="absolute right-3.5 text-on-surface-variant hover:text-on-surface transition-colors"
                                             aria-label={showPassword ? t('authHidePassword') : t('authShowPassword')}
                                         >
-                                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            {showPassword ? <span className="material-symbols-outlined text-base">visibility_off</span> : <span className="material-symbols-outlined text-base">visibility</span>}
                                         </button>
                                     </div>
                                     {fieldErrors.password && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.password}</p>}

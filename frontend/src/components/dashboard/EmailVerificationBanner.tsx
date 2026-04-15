@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MailCheck, X, Loader2, CheckCircle } from 'lucide-react';
 
 const DISMISS_KEY = 'lumiqe-verify-banner-dismissed';
 
@@ -47,23 +46,23 @@ export default function EmailVerificationBanner() {
 
     return (
         <div className="mx-4 mt-4 flex items-center gap-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl px-4 py-3 text-sm text-amber-300">
-            <MailCheck className="w-4 h-4 flex-shrink-0" />
+            <span className="material-symbols-outlined text-base flex-shrink-0">mark_email_read</span>
             <span className="flex-1">
                 Please verify your email address to unlock all features.
             </span>
 
             {sent ? (
-                <span className="flex items-center gap-1 text-green-400 text-xs font-medium">
-                    <CheckCircle className="w-3.5 h-3.5" />
-                    Sent!
-                </span>
+                    <span className="flex items-center gap-1 text-green-400 text-xs font-medium">
+                        <span className="material-symbols-outlined text-sm text-green-400" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                        Sent!
+                    </span>
             ) : (
                 <button
                     onClick={handleResend}
                     disabled={sending}
                     className="flex items-center gap-1 text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 disabled:opacity-50 whitespace-nowrap"
                 >
-                    {sending && <Loader2 className="w-3 h-3 animate-spin" />}
+                    {sending && <span className="material-symbols-outlined text-xs animate-spin">progress_activity</span>}
                     Resend email
                 </button>
             )}
@@ -73,7 +72,7 @@ export default function EmailVerificationBanner() {
                 aria-label="Dismiss"
                 className="text-on-surface-variant/50 hover:text-on-surface-variant transition-colors ml-1"
             >
-                <X className="w-4 h-4" />
+                <span className="material-symbols-outlined text-base text-on-surface-variant/50 hover:text-on-surface-variant transition-colors ml-1">close</span>
             </button>
         </div>
     );
