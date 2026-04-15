@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Camera, Upload, Images } from 'lucide-react';
 import { t } from '@/lib/i18n';
 
 interface Props {
@@ -26,7 +25,7 @@ export default function ModeChooser({ lang, onSelectCamera, onSelectUpload, onSe
                     className="flex flex-col items-center gap-4 p-8 rounded-3xl border-2 border-outline-variant/20 bg-surface-container/30 hover:bg-surface-container/50 hover:border-primary/50 transition-all group"
                 >
                     <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <Camera className="w-8 h-8 text-primary" />
+                        <span className="material-symbols-outlined text-4xl text-primary">photo_camera</span>
                     </div>
                     <div className="text-center">
                         <p className="text-on-surface font-semibold text-sm">{t(lang, 'liveCamera')}</p>
@@ -42,7 +41,7 @@ export default function ModeChooser({ lang, onSelectCamera, onSelectUpload, onSe
                     className="flex flex-col items-center gap-4 p-8 rounded-3xl border-2 border-outline-variant/20 bg-surface-container/30 hover:bg-surface-container/50 hover:border-outline-variant/50 transition-all group"
                 >
                     <div className="w-16 h-16 rounded-2xl bg-surface-container/50 flex items-center justify-center group-hover:bg-surface-container transition-colors">
-                        <Upload className="w-8 h-8 text-on-surface-variant" />
+                        <span className="material-symbols-outlined text-4xl text-on-surface-variant">upload</span>
                     </div>
                     <div className="text-center">
                         <p className="text-on-surface font-semibold text-sm">{t(lang, 'uploadPhoto')}</p>
@@ -57,7 +56,7 @@ export default function ModeChooser({ lang, onSelectCamera, onSelectUpload, onSe
                 className="w-full flex items-center gap-4 p-4 rounded-2xl border border-outline-variant/20 bg-surface-container/30 hover:bg-surface-container/50 hover:border-primary/30 transition-all group"
             >
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0">
-                    <Images className="w-6 h-6 text-primary" />
+                    <span className="material-symbols-outlined text-3xl text-primary">photo_library</span>
                 </div>
                 <div className="text-left">
                     <p className="text-on-surface font-semibold text-sm">Multi-Photo Analysis</p>

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { t } from '@/lib/i18n';
 
@@ -48,7 +47,7 @@ export default function UploadDropzone({ lang, error, onFile, onBack }: Props) {
             >
                 <div className="flex flex-col items-center gap-6 p-8 w-full justify-center">
                     <div className="p-4 rounded-full bg-surface-container/50">
-                        <Upload className="w-10 h-10 text-on-surface" />
+                        <span className="material-symbols-outlined text-5xl text-on-surface">upload</span>
                     </div>
                     <div className="text-center space-y-2">
                         <h3 className="text-lg font-medium text-on-surface">{t(lang, 'tapToUpload')}</h3>
@@ -66,7 +65,7 @@ export default function UploadDropzone({ lang, error, onFile, onBack }: Props) {
 
                 {error && (
                     <div className="absolute bottom-6 flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-full text-sm">
-                        <AlertCircle className="w-4 h-4" />
+                        <span className="material-symbols-outlined text-base text-primary">error</span>
                         {error}
                     </div>
                 )}

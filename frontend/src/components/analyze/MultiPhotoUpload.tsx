@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Images, X, Plus, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { t } from '@/lib/i18n';
 
@@ -64,7 +63,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
         >
             <div className="bg-surface-container/30 border border-outline-variant/20 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2">
-                    <Images className="w-5 h-5 text-primary" />
+                    <span className="material-symbols-outlined text-xl text-primary">photo_library</span>
                     <h3 className="text-sm font-semibold text-on-surface">Multi-Photo Analysis</h3>
                 </div>
                 <p className="text-xs text-on-surface-variant">
@@ -87,7 +86,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                             onClick={() => removeFile(index)}
                             className="absolute top-1.5 right-1.5 p-1 bg-black/70 rounded-full text-on-surface-variant hover:text-primary transition-colors"
                         >
-                            <X className="w-3.5 h-3.5" />
+                            <span className="material-symbols-outlined text-sm text-on-surface-variant group-hover:text-primary transition-colors">close</span>
                         </button>
                         <div className="absolute bottom-1.5 left-1.5 bg-black/70 rounded-full px-2 py-0.5 text-[10px] font-medium text-on-surface">
                             {index + 1}
@@ -97,7 +96,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
 
                 {files.length < MAX_FILES && (
                     <label className="relative aspect-square rounded-2xl border-2 border-dashed border-outline-variant/20 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-surface-container/30 transition-all">
-                        <Plus className="w-6 h-6 text-on-surface-variant" />
+                        <span className="material-symbols-outlined text-3xl text-on-surface-variant">add_photo_alternate</span>
                         <span className="text-[10px] text-on-surface-variant/50 mt-1">Add photo</span>
                         <input
                             type="file"
@@ -118,7 +117,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
 
             {displayError && (
                 <div className="flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-xl text-sm">
-                    <AlertCircle className="w-4 h-4" />
+                    <span className="material-symbols-outlined text-base text-primary">error</span>
                     {displayError}
                 </div>
             )}
@@ -133,7 +132,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                         : 'bg-surface-container/30 text-on-surface-variant/30 cursor-not-allowed'
                 )}
             >
-                <Images className="w-4 h-4" />
+                <span className="material-symbols-outlined text-base">photo_library</span>
                 Analyze {files.length} {files.length === 1 ? 'Photo' : 'Photos'}
             </button>
 
