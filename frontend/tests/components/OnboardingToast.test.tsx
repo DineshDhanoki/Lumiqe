@@ -5,15 +5,7 @@ import OnboardingToast from '../../src/components/OnboardingToast';
 describe('OnboardingToast Component', () => {
     beforeEach(() => {
         // Clear localStorage so the toast is visible
-        const store: Record<string, string> = {};
-        vi.spyOn(Storage.prototype, 'getItem').mockImplementation(
-            (key: string) => store[key] ?? null
-        );
-        vi.spyOn(Storage.prototype, 'setItem').mockImplementation(
-            (key: string, value: string) => {
-                store[key] = value;
-            }
-        );
+        window.localStorage.clear();
     });
 
     it('renders first step title', () => {

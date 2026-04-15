@@ -3,18 +3,8 @@ import { render, screen } from '@testing-library/react';
 import ScanGuide from '../../src/components/ScanGuide';
 
 describe('ScanGuide Component', () => {
-    let store: Record<string, string>;
-
     beforeEach(() => {
-        store = {};
-        vi.spyOn(Storage.prototype, 'getItem').mockImplementation(
-            (key: string) => store[key] ?? null
-        );
-        vi.spyOn(Storage.prototype, 'setItem').mockImplementation(
-            (key: string, value: string) => {
-                store[key] = value;
-            }
-        );
+        window.localStorage.clear();
     });
 
     it('renders three steps', () => {
@@ -38,7 +28,7 @@ describe('ScanGuide Component', () => {
 
     it('does not render if already dismissed (mock localStorage)', () => {
         // Pre-set the dismissed key
-        store['lumiqe-scan-guide-seen'] = 'true';
+        window.localStorage.setItem('lumiqe-scan-guide-seen', 'true');
 
         render(<ScanGuide />);
 
