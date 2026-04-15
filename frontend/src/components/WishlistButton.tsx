@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Heart } from 'lucide-react';
 
 interface WishlistButtonProps {
     productId: string;
@@ -111,13 +110,14 @@ function WishlistButtonInner({
             aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
             className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-surface/80 backdrop-blur-sm shadow-sm transition-all hover:scale-110 hover:bg-surface disabled:opacity-50"
         >
-            <Heart
-                className={`h-4 w-4 transition-colors ${
+            <span
+                className={`material-symbols-outlined text-base transition-colors ${
                     wishlisted
-                        ? 'fill-primary text-primary'
-                        : 'fill-none text-gray-600'
+                        ? 'text-primary'
+                        : 'text-gray-600'
                 }`}
-            />
+                style={wishlisted ? { fontVariationSettings: "'FILL' 1" } : undefined}
+            >favorite</span>
         </button>
     );
 }

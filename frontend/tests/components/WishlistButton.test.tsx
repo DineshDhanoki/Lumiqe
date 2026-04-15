@@ -26,10 +26,10 @@ describe('WishlistButton Component', () => {
 
     it('renders heart icon', async () => {
         render(<WishlistButton {...defaultProps} />);
-        // The button should be present with the Heart icon (rendered as svg)
+        // The button should be present with the favorite MS icon (rendered as span)
         const button = await screen.findByRole('button');
-        const svg = button.querySelector('svg');
-        expect(svg).toBeTruthy();
+        const icon = button.querySelector('span.material-symbols-outlined');
+        expect(icon).toBeTruthy();
     });
 
     it('has aria-label for accessibility', async () => {
@@ -54,9 +54,9 @@ describe('WishlistButton Component', () => {
             expect(button).toBeInTheDocument();
         });
 
-        // The svg should have the fill-primary class (Obsidian Luxe token)
-        const svg = screen.getByRole('button').querySelector('svg');
-        expect(svg?.classList.toString()).toContain('fill-primary');
+        // The span should have text-primary class when wishlisted
+        const icon = screen.getByRole('button').querySelector('span.material-symbols-outlined');
+        expect(icon?.classList.toString()).toContain('text-primary');
     });
 
     it('shows outline heart when not wishlisted', async () => {
@@ -67,8 +67,8 @@ describe('WishlistButton Component', () => {
             expect(button).toBeInTheDocument();
         });
 
-        const svg = screen.getByRole('button').querySelector('svg');
-        expect(svg?.classList.toString()).toContain('fill-none');
+        const icon = screen.getByRole('button').querySelector('span.material-symbols-outlined');
+        expect(icon?.classList.toString()).toContain('text-gray-600');
     });
 
     it('calls fetch on click', async () => {

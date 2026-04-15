@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Lightbulb, Sparkles } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 
 interface StylingTipsProps {
@@ -67,12 +66,12 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
             {/* Header */}
             <div className="flex items-center gap-3 mb-5">
                 <div className="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
-                    <Lightbulb className="w-5 h-5 text-yellow-400" />
+                    <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>lightbulb</span>
                 </div>
                 <div>
                     <h3 className="text-xl font-bold text-on-surface tracking-tight">Styling Tips</h3>
                     <div className="flex items-center gap-1.5">
-                        <Sparkles className="w-3 h-3 text-yellow-500/60" />
+                        <span className="material-symbols-outlined text-xs text-yellow-500/60" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         <span className="text-[10px] font-medium text-yellow-500/60 uppercase tracking-widest">
                             AI-Powered
                         </span>

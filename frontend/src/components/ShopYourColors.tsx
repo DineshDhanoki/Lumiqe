@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
 
 interface ShopProduct {
     id: string;
@@ -52,7 +51,7 @@ const ShopYourColors = React.memo(function ShopYourColors({ season, palette }: S
     return (
         <section className="bg-surface-container/50 border border-primary/10 p-6 md:p-8 rounded-3xl">
             <div className="flex items-center gap-2 mb-2">
-                <ShoppingBag className="w-5 h-5 text-primary" />
+                <span className="material-symbols-outlined text-xl text-primary">shopping_bag</span>
                 <h3 className="text-xl font-bold text-on-surface">Shop Your Colors</h3>
             </div>
             <p className="text-on-surface-variant mb-6 text-sm">Products that match your {season} palette</p>
@@ -86,7 +85,7 @@ const ShopYourColors = React.memo(function ShopYourColors({ season, palette }: S
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
-                                                <ShoppingBag className="w-8 h-8 text-on-surface-variant/20" />
+                                                <span className="material-symbols-outlined text-4xl text-on-surface-variant/20">shopping_bag</span>
                                             </div>
                                         )}
                                         {product.match_score > 0 && (
@@ -108,16 +107,16 @@ const ShopYourColors = React.memo(function ShopYourColors({ season, palette }: S
                     </div>
                     <div className="mt-5 text-center">
                         <Link href={feedUrl} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
-                            Browse all matches <ArrowRight className="w-4 h-4" />
+                        Browse all matches <span className="material-symbols-outlined text-base">arrow_forward</span>
                         </Link>
                     </div>
                 </>
             ) : (
                 <div className="text-center py-8">
-                    <ShoppingBag className="w-10 h-10 text-on-surface-variant/20 mx-auto mb-3" />
+                    <span className="material-symbols-outlined text-5xl text-on-surface-variant/20 mx-auto mb-3 block">shopping_bag</span>
                     <p className="text-on-surface-variant text-sm mb-4">Products coming soon for your season</p>
                     <Link href={feedUrl} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
-                        Save palette &amp; browse later <ArrowRight className="w-4 h-4" />
+                        Save palette &amp; browse later <span className="material-symbols-outlined text-base">arrow_forward</span>
                     </Link>
                 </div>
             )}
