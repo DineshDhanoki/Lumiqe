@@ -1,6 +1,5 @@
 'use client';
 
-import { User, Phone } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface SignUpFieldsProps {
@@ -34,7 +33,7 @@ export default function SignUpFields({
             <div className="grid grid-cols-2 gap-3">
                 <div>
                     <div className="relative flex items-center">
-                        <User className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
+                        <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">person</span>
                         <input
                             type="text"
                             placeholder={t('authFirstName')}
@@ -48,7 +47,7 @@ export default function SignUpFields({
                 </div>
                 <div>
                     <div className="relative flex items-center">
-                        <User className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
+                        <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">person</span>
                         <input
                             type="text"
                             placeholder={t('authLastName')}
@@ -65,7 +64,7 @@ export default function SignUpFields({
             {/* Phone */}
             <div>
                 <div className="relative flex items-center">
-                    <Phone className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
+                    <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">phone</span>
                     <input
                         type="tel"
                         placeholder={t('authPhone')}
@@ -81,7 +80,7 @@ export default function SignUpFields({
             {/* Age */}
             <div>
                 <div className="relative flex items-center">
-                    <User className="absolute left-3.5 w-4 h-4 text-on-surface-variant" />
+                    <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">person</span>
                     <input
                         type="number"
                         inputMode="numeric"

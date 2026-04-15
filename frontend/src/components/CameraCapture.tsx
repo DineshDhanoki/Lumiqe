@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Sun, AlertCircle, CheckCircle2, Zap, Camera } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { useCameraStream } from '@/lib/hooks/useCameraStream';
 import { useLightingAnalysis } from '@/lib/hooks/useLightingAnalysis';
@@ -118,10 +117,10 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
         : 'bg-white/30';
 
     const lightingConfig = {
-        good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <CheckCircle2 className="w-4 h-4" />, label: t(lang, 'goodLighting') },
-        dark: { color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', icon: <Sun className="w-4 h-4" />, label: t(lang, 'tooDark') },
-        bright: { color: 'text-orange-400', bg: 'bg-orange-500/20 border-orange-500/30', icon: <Zap className="w-4 h-4" />, label: t(lang, 'tooBright') },
-        checking: { color: 'text-on-surface-variant', bg: 'bg-surface-container/30 border-outline-variant/10', icon: <Camera className="w-4 h-4" />, label: t(lang, 'checkingLight') },
+        good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>, label: t(lang, 'goodLighting') },
+        dark: { color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', icon: <span className="material-symbols-outlined text-base">wb_sunny</span>, label: t(lang, 'tooDark') },
+        bright: { color: 'text-orange-400', bg: 'bg-orange-500/20 border-orange-500/30', icon: <span className="material-symbols-outlined text-base">bolt</span>, label: t(lang, 'tooBright') },
+        checking: { color: 'text-on-surface-variant', bg: 'bg-surface-container/30 border-outline-variant/10', icon: <span className="material-symbols-outlined text-base">photo_camera</span>, label: t(lang, 'checkingLight') },
     };
     const currentLighting = lightingConfig[lightingStatus];
 
@@ -136,8 +135,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
             <div className="relative w-full rounded-3xl overflow-hidden bg-black" style={{ aspectRatio: '3/4' }}>
                 {cameraError ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center bg-surface-container">
-                        <AlertCircle className="w-12 h-12 text-primary" />
-                        <p className="text-on-surface-variant text-sm leading-relaxed">{cameraError}</p>
+                        <span className="material-symbols-outlined text-5xl text-primary">error</span>                        <p className="text-on-surface-variant text-sm leading-relaxed">{cameraError}</p>
                         <button onClick={onCancel} className="text-sm text-primary underline underline-offset-2">
                             Upload a photo instead
                         </button>
@@ -161,7 +159,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
                                     className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/40 backdrop-blur-sm"
                                 >
-                                    <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                    <span className="material-symbols-outlined text-base text-green-400" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                     <span className="text-green-400 text-xs font-semibold">
                                         {heldStill ? 'Perfect! Hold still...' : 'Face detected — hold still'}
                                     </span>
@@ -172,7 +170,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                             {isActive && lightingStatus === 'dark' && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
                                     className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-yellow-500/20 border border-yellow-500/40 backdrop-blur-sm">
-                                    <Sun className="w-4 h-4 text-yellow-400" />
+                                    <span className="material-symbols-outlined text-base text-yellow-400">wb_sunny</span>
                                     <span className="text-yellow-400 text-xs font-semibold">Move closer to a window</span>
                                 </motion.div>
                             )}
@@ -181,7 +179,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                             {isActive && lightingStatus === 'bright' && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
                                     className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-orange-500/20 border border-orange-500/40 backdrop-blur-sm">
-                                    <Zap className="w-4 h-4 text-orange-400" />
+                                    <span className="material-symbols-outlined text-base text-orange-400">bolt</span>
                                     <span className="text-orange-400 text-xs font-semibold">Move away from the light source</span>
                                 </motion.div>
                             )}
@@ -211,7 +209,7 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                         {/* Flip camera */}
                         <button onClick={flipCamera} aria-label="Flip camera"
                             className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
-                            <RotateCcw className="w-4 h-4" />
+                            <span className="material-symbols-outlined text-base text-white">flip_camera_ios</span>
                         </button>
 
                         {/* Lighting badge */}

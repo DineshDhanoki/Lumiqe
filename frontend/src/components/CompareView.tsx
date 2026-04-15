@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeftRight } from 'lucide-react';
 
 interface AnalysisPoint {
     id: string;
@@ -92,7 +91,7 @@ export default function CompareView({ analyses }: Props) {
                         </option>
                     ))}
                 </select>
-                <ArrowLeftRight className="w-5 h-5 text-on-surface-variant/50 flex-shrink-0" />
+                <span className="material-symbols-outlined text-xl text-on-surface-variant/50 flex-shrink-0">swap_horiz</span>
                 <select
                     value={rightIdx}
                     onChange={(e) => setRightIdx(Number(e.target.value))}
