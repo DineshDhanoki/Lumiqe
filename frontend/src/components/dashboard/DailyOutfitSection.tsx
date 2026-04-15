@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Sun, Shirt, ChevronRight } from 'lucide-react';
 
 interface DailyOutfitSlot {
     dominant_color: string;
@@ -39,7 +38,7 @@ const DailyOutfitSection = React.memo(function DailyOutfitSection({
             {dailyOutfit && dailyOutfit.filled_count > 0 ? (
                 <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
                     <div className="flex items-center gap-2 mb-4">
-                        <Sun className="w-5 h-5 text-yellow-400" />
+                        <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>wb_sunny</span>
                         <p className="text-on-surface font-semibold text-sm">Your outfit for {dailyOutfit.date}</p>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -62,12 +61,12 @@ const DailyOutfitSection = React.memo(function DailyOutfitSection({
                         })}
                     </div>
                     <Link href="/wardrobe" className="mt-4 flex items-center gap-1 text-primary text-xs font-semibold hover:text-primary/80 transition-colors">
-                        View full outfit <ChevronRight className="w-3 h-3" />
+                        View full outfit <span className="material-symbols-outlined text-xs">chevron_right</span>
                     </Link>
                 </div>
             ) : dailyOutfitEmpty ? (
                 <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 text-center">
-                    <Shirt className="w-8 h-8 text-on-surface-variant/20 mx-auto mb-3" />
+                        <span className="material-symbols-outlined text-4xl text-on-surface-variant/20 mx-auto mb-3 block">checkroom</span>
                     <p className="text-on-surface-variant text-sm mb-3">Add items to your wardrobe to get daily outfits</p>
                     <Link href="/wardrobe" className="inline-flex items-center gap-1.5 text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full font-semibold hover:bg-primary/20 transition-colors">
                         Go to Wardrobe

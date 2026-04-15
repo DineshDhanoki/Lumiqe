@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, ExternalLink } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { apiFetch } from '@/lib/api';
@@ -57,7 +56,7 @@ export default function DailyOutfit() {
         >
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                    <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                     <h3 className="text-on-surface font-bold">Today&apos;s Outfit</h3>
                 </div>
                 <span className="text-on-surface-variant/50 text-xs">{outfit.date}</span>
@@ -87,7 +86,7 @@ export default function DailyOutfit() {
                             <p className="text-on-surface text-xs font-medium truncate">{item.name}</p>
                             <div className="flex items-center justify-between mt-1">
                                 <span className="text-on-surface-variant text-xs">{item.brand}</span>
-                                <ExternalLink className="w-3 h-3 text-on-surface-variant/20 group-hover:text-primary transition-colors" />
+                                <span className="material-symbols-outlined text-xs text-on-surface-variant/20 group-hover:text-primary transition-colors">open_in_new</span>
                             </div>
                         </div>
                     </a>

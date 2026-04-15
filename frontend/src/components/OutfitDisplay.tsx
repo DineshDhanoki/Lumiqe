@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ExternalLink, ShoppingBag, Sparkles, ArrowUpRight } from 'lucide-react';
 
 interface ProductItem {
     name: string;
@@ -117,15 +116,15 @@ const OutfitItemCard = React.memo(function OutfitItemCard({
                             className="w-12 h-12 rounded-full flex items-center justify-center border border-[#d4af37]/30 mb-3"
                             style={{ boxShadow: '0 0 20px rgba(212,175,55,0.15)' }}
                         >
-                            <ShoppingBag className="w-5 h-5 text-[#d4af37]/70" strokeWidth={1.5} />
+                            <span className="material-symbols-outlined text-xl text-[#d4af37]/70">shopping_bag</span>
                         </div>
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#d4af37]/80 mb-1">
                             {label}
                         </span>
                         <div className="flex items-center gap-1.5 text-[9px] font-bold tracking-wider text-[#d4af37]/50 uppercase">
-                            <Sparkles className="w-2.5 h-2.5" />
+                            <span className="material-symbols-outlined text-[10px]" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                             Visit Store
-                            <ArrowUpRight className="w-2.5 h-2.5" />
+                            <span className="material-symbols-outlined text-[10px]">arrow_outward</span>
                         </div>
                     </div>
                 )}
@@ -147,7 +146,7 @@ const OutfitItemCard = React.memo(function OutfitItemCard({
                 {/* Hover link icon */}
                 {!isPlaceholder && (
                     <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <ExternalLink className="w-3.5 h-3.5 text-white" />
+                        <span className="material-symbols-outlined text-base text-white">open_in_new</span>
                     </div>
                 )}
             </div>
