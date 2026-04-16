@@ -30,25 +30,21 @@ export default function Home() {
 
       <HeroSection onOpenAuth={() => openAuth()} />
 
-      {/* Analytics Counter Banner (Social Proof) */}
+      {/* Stats Bar */}
       <ScrollReveal delay={0.1}>
-        <section className="border-y border-primary/10 bg-surface-container/30 backdrop-blur-md py-8">
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">50K+</h4>
-              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Faces Analyzed</p>
+        <section className="px-6">
+          <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 py-12 bg-surface-container-low/50 backdrop-blur-sm rounded-2xl border border-outline-variant/10">
+            <div className="text-center px-8 border-b md:border-b-0 md:border-r border-outline-variant/20 pb-8 md:pb-0">
+              <p className="text-4xl font-headline font-extrabold text-primary mb-1">50K+</p>
+              <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">Active Global Users</p>
             </div>
-            <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">12</h4>
-              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Color Seasons</p>
+            <div className="text-center px-8 border-b md:border-b-0 md:border-r border-outline-variant/20 pb-8 md:pb-0">
+              <p className="text-4xl font-headline font-extrabold text-primary mb-1">12</p>
+              <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">Seasonal Profiles</p>
             </div>
-            <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">&lt; 3s</h4>
-              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Speed</p>
-            </div>
-            <div className="text-center">
-              <h4 className="text-2xl sm:text-3xl font-bold text-on-surface mb-1">100%</h4>
-              <p className="text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider">Private</p>
+            <div className="text-center px-8">
+              <p className="text-4xl font-headline font-extrabold text-primary mb-1">98%</p>
+              <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">Analysis Accuracy</p>
             </div>
           </div>
         </section>

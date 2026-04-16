@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { AuroraBackground } from '@/components/ui/aurora-background';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface HeroSectionProps {
@@ -12,62 +11,108 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
     const { t } = useTranslation();
 
     return (
-        <AuroraBackground className="p-6 text-center relative overflow-hidden">
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="flex flex-col items-center gap-6 max-w-4xl w-full z-10"
-            >
-                <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block">
-                    AI Color Analysis
-                </span>
-
-                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display leading-[0.95] tracking-tight text-on-surface drop-shadow-2xl">
-                    {t('heroDiscoverYour')} <br className="hidden sm:block" />
-                    <span className="italic text-primary">
-                        {t('heroTrueColors')}
-                    </span>
-                </h1>
-
-                <p className="max-w-2xl text-base sm:text-lg md:text-xl text-on-surface-variant leading-relaxed drop-shadow-md px-2 font-light">
-                    {t('heroSubtitle')}
-                </p>
-
+        <section className="relative pt-32 pb-32 px-6 overflow-hidden">
+            <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                {/* Left: text */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.5 }}
-                    className="flex flex-col sm:flex-row items-center gap-4 mt-8 w-full sm:w-auto"
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className="z-10"
                 >
-                    <button
-                        onClick={onOpenAuth}
-                        className="group relative flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary font-label font-bold text-sm uppercase tracking-widest py-4 px-8 shadow-[0_0_40px_-10px_rgba(240,191,98,0.3)] hover:shadow-[0_0_60px_-15px_rgba(240,191,98,0.5)] hover:opacity-90 active:scale-[0.98] transition-all"
-                    >
-                        <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-                        {t('heroStartFreeTrial')}
-                        <span className="material-symbols-outlined text-base group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
-                    </button>
+                    <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-4">
+                        AI Color Analysis
+                    </span>
 
-                    <a
-                        href="#demo"
-                        aria-label={t('heroSeeLiveDemo')}
-                        className="flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-surface-container/50 hover:bg-surface-container text-on-surface font-label font-medium text-sm uppercase tracking-widest py-4 px-8 border border-outline-variant/20 hover:border-primary/30 backdrop-blur-md transition-all"
+                    <h1 className="text-7xl md:text-8xl font-display leading-[0.9] mb-8 tracking-tighter text-on-surface">
+                        {t('heroDiscoverYour')} <br />
+                        <span className="italic text-primary">
+                            {t('heroTrueColors')}
+                        </span>
+                    </h1>
+
+                    <p className="text-xl text-on-surface-variant max-w-lg mb-10 leading-relaxed font-light">
+                        {t('heroSubtitle')}
+                    </p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.5 }}
+                        className="flex flex-col sm:flex-row gap-6"
                     >
-                        <span className="material-symbols-outlined text-base opacity-70">play_circle</span>
-                        {t('heroSeeLiveDemo')}
-                    </a>
+                        <button
+                            onClick={onOpenAuth}
+                            className="group flex items-center justify-center gap-2 rounded-full bg-primary-container text-on-primary-container font-headline font-bold text-base tracking-wide px-10 py-5 shadow-xl hover:opacity-90 active:scale-95 transition-all"
+                        >
+                            <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+                            {t('heroStartFreeTrial')}
+                        </button>
+
+                        <a
+                            href="#demo"
+                            className="flex items-center justify-center gap-2 rounded-full bg-transparent border border-primary/30 text-primary font-headline font-semibold text-base px-10 py-5 backdrop-blur-md hover:bg-primary/5 transition-all"
+                        >
+                            <span className="material-symbols-outlined text-base opacity-70">play_circle</span>
+                            {t('heroSeeLiveDemo')}
+                        </a>
+                    </motion.div>
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.6 }}
+                        className="mt-6 text-on-surface-variant text-xs font-mono tracking-wider"
+                    >
+                        {t('heroNoCreditCard')}
+                    </motion.p>
                 </motion.div>
 
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="mt-4 text-on-surface-variant text-xs font-mono tracking-wider"
+                {/* Right: phone mockup */}
+                <motion.div
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+                    className="relative flex justify-center items-center"
                 >
-                    {t('heroNoCreditCard')}
-                </motion.p>
-            </motion.div>
-        </AuroraBackground>
+                    {/* Glow */}
+                    <div className="absolute inset-0 bg-primary-container/10 rounded-full blur-[120px] scale-75 pointer-events-none" />
+
+                    {/* Phone frame */}
+                    <div className="relative w-full max-w-[340px] aspect-[9/19] rounded-[3rem] p-3 bg-surface-container-highest border border-outline-variant/20"
+                        style={{ boxShadow: '0 40px 60px -15px rgba(196, 151, 62, 0.08)' }}>
+                        <div className="w-full h-full rounded-[2.5rem] overflow-hidden relative"
+                            style={{ background: 'linear-gradient(135deg, #2D1B0D 0%, #4A3219 40%, #1A120B 100%)' }}>
+
+                            {/* Subtle pattern overlay */}
+                            <div className="absolute inset-0 opacity-20"
+                                style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(240,191,98,0.3) 0%, transparent 60%)' }} />
+
+                            {/* Center season name */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                                <span className="font-label text-[9px] tracking-[0.3em] uppercase text-primary/60">Your Season</span>
+                                <span className="font-display text-5xl italic text-on-surface leading-none">Deep</span>
+                                <span className="font-display text-5xl italic text-primary leading-none">Winter</span>
+
+                                {/* Palette dots */}
+                                <div className="flex gap-2 mt-4">
+                                    {['#3d2b1f', '#C4973E', '#63462d', '#18181F'].map((c) => (
+                                        <div key={c} className="w-7 h-7 rounded-full border border-white/10" style={{ backgroundColor: c }} />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Bottom overlay card */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 flex flex-col justify-end">
+                                <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
+                                    <p className="font-mono text-[10px] text-primary uppercase tracking-[0.2em] mb-1">Analysis Complete</p>
+                                    <p className="font-display text-xl text-on-surface">Deep Winter</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        </section>
     );
 }

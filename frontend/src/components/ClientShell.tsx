@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 
-const FloatingFashionBackground = dynamic(() => import("@/components/FloatingFashionBackground"), { ssr: false });
 const AnalyticsInit = dynamic(() => import("@/components/AnalyticsInit").then(mod => mod.AnalyticsInit), { ssr: false });
 const ServiceWorkerRegister = dynamic(() => import("@/components/ServiceWorkerRegister").then(mod => mod.ServiceWorkerRegister), { ssr: false });
 
@@ -14,7 +13,6 @@ const ServiceWorkerRegister = dynamic(() => import("@/components/ServiceWorkerRe
 export function ClientShell() {
   return (
     <>
-      <FloatingFashionBackground />
       <AnalyticsInit />
       <ServiceWorkerRegister />
     </>
