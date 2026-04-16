@@ -15,6 +15,14 @@ export default function DemoPreview() {
                     className="lg:col-span-8 lg:row-span-2 rounded-3xl bg-surface-container overflow-hidden relative border border-outline-variant/10"
                     style={{ background: 'linear-gradient(135deg, #201f22 0%, #131315 100%)' }}
                 >
+                    {/* Portrait photo — add /public/bento-portrait.jpg to enable */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/bento-portrait.jpg"
+                        alt="Skin tone analysis"
+                        className="absolute inset-0 w-full h-full object-cover opacity-50"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                    />
                     {/* Warm gradient overlay */}
                     <div className="absolute inset-0 opacity-30"
                         style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(196,151,62,0.25) 0%, transparent 60%)' }} />

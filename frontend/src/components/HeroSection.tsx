@@ -84,26 +84,21 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                         <div className="w-full h-full rounded-[2.5rem] overflow-hidden relative"
                             style={{ background: 'linear-gradient(135deg, #2D1B0D 0%, #4A3219 40%, #1A120B 100%)' }}>
 
+                            {/* Portrait photo — add /public/hero-portrait.jpg to enable */}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src="/hero-portrait.jpg"
+                                alt="AI Fashion Analysis"
+                                className="absolute inset-0 w-full h-full object-cover"
+                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                            />
+
                             {/* Subtle pattern overlay */}
                             <div className="absolute inset-0 opacity-20"
                                 style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(240,191,98,0.3) 0%, transparent 60%)' }} />
 
-                            {/* Center season name */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                                <span className="font-label text-[9px] tracking-[0.3em] uppercase text-primary/60">Your Season</span>
-                                <span className="font-display text-5xl italic text-on-surface leading-none">Deep</span>
-                                <span className="font-display text-5xl italic text-primary leading-none">Winter</span>
-
-                                {/* Palette dots */}
-                                <div className="flex gap-2 mt-4">
-                                    {['#3d2b1f', '#C4973E', '#63462d', '#18181F'].map((c) => (
-                                        <div key={c} className="w-7 h-7 rounded-full border border-white/10" style={{ backgroundColor: c }} />
-                                    ))}
-                                </div>
-                            </div>
-
                             {/* Bottom overlay card */}
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 flex flex-col justify-end">
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-6 flex flex-col justify-end">
                                 <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
                                     <p className="font-mono text-[10px] text-primary uppercase tracking-[0.2em] mb-1">Analysis Complete</p>
                                     <p className="font-display text-xl text-on-surface">Deep Winter</p>

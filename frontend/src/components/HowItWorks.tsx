@@ -45,7 +45,7 @@ export default function HowItWorks() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-100px' }}
-                            className="font-display italic text-4xl sm:text-5xl text-on-surface"
+                            className="font-display text-4xl sm:text-5xl text-on-surface mt-4"
                         >
                             {t('howItWorksTitle')}
                         </motion.h2>
@@ -72,7 +72,7 @@ export default function HowItWorks() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-50px' }}
                             transition={{ delay: index * 0.2, duration: 0.6 }}
-                            className="relative flex flex-col items-center text-center group"
+                            className="relative flex flex-col items-start text-left group"
                         >
                             <div className={`relative w-16 h-16 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center mb-8 ${step.hoverBg} transition-all duration-500`}>
                                 <span
