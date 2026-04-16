@@ -50,7 +50,7 @@ test.describe('Analyze Page', () => {
         if (await multiBtn.isVisible()) {
             await multiBtn.click();
             // Should show multi-photo upload area
-            await expect(page.getByText(/add.*image|at least 2/i)).toBeVisible();
+            await expect(page.getByText(/add photo|upload 2/i).first()).toBeVisible();
         }
     });
 
