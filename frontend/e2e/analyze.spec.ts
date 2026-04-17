@@ -21,13 +21,13 @@ test.describe('Analyze Page', () => {
         const uploadBtn = page.getByRole('button', { name: /upload photo/i });
         await expect(uploadBtn).toBeVisible();
 
-        // "Tap to upload" text is present in the dropzone
-        await expect(page.getByText(/tap to upload/i)).toBeVisible();
+        // Drop zone text is present
+        await expect(page.getByText(/drop scan.*click to upload|click to upload/i)).toBeVisible();
     });
 
     test('upload mode shows file type info', async ({ page }) => {
         // File type info is always visible in the dropzone
-        await expect(page.getByText(/jpeg.*png.*webp/i)).toBeVisible();
+        await expect(page.getByText(/jpg.*png.*webp/i)).toBeVisible();
     });
 
     test('can navigate back from upload mode', async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe('Analyze Page', () => {
     });
 
     test('shows scan guide tips', async ({ page }) => {
-        // Tips section should be visible in the sidebar
-        await expect(page.getByText(/for accurate results/i)).toBeVisible();
+        // Precision Protocol section should be visible in the sidebar
+        await expect(page.getByText(/natural lighting|precision protocol/i).first()).toBeVisible();
     });
 });

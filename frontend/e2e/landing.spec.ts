@@ -6,8 +6,8 @@ test.describe('Landing Page', () => {
     });
 
     test('renders hero section with CTA', async ({ page }) => {
-        await expect(page.locator('h1')).toBeVisible();
-        await expect(page.locator('h1')).toContainText('Discover Your');
+        await expect(page.locator('h1').first()).toBeVisible();
+        await expect(page.locator('h1').first()).toContainText('Discover Your');
 
         const ctaButton = page.getByRole('button', { name: /start free trial/i });
         await expect(ctaButton).toBeVisible();

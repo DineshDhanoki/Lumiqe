@@ -5,8 +5,8 @@ import Pricing from '../../src/components/Pricing';
 describe('Pricing Component', () => {
     it('renders free and premium plan headings', () => {
         render(<Pricing />);
-        expect(screen.getByText('Free Tier')).toBeInTheDocument();
-        expect(screen.getByText('Pro Tier')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Free Tier' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Pro Tier' })).toBeInTheDocument();
     });
 
     it('renders the annual price by default', () => {

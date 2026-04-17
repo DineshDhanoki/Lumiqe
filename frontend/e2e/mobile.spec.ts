@@ -6,7 +6,7 @@ test.describe('Mobile Responsiveness', () => {
     test('landing page hero fits mobile viewport', async ({ page }) => {
         await page.goto('/');
 
-        const hero = page.locator('h1');
+        const hero = page.locator('h1').first();
         await expect(hero).toBeVisible();
 
         // Hero text should not overflow horizontally
@@ -40,7 +40,7 @@ test.describe('Mobile Responsiveness', () => {
 
         // All three pricing tiers should be visible
         await expect(page.getByText(/free/i).first()).toBeVisible();
-        await expect(page.getByText(/premium/i).first()).toBeVisible();
+        await expect(page.getByText(/pro tier|elite/i).first()).toBeVisible();
     });
 
     test('analyze page works on mobile', async ({ page }) => {

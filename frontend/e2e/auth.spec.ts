@@ -74,6 +74,8 @@ test.describe('Auth Modal', () => {
     });
 
     test('has continue with Google button', async ({ page }) => {
+        // Google sign-in is shown on the sign-in form, switch to it first
+        await page.getByText(/already have an account/i).click();
         await expect(page.getByRole('dialog').getByText(/continue with google/i)).toBeVisible();
     });
 

@@ -11,16 +11,14 @@ test.describe('404 Page', () => {
     test('has go home link', async ({ page }) => {
         await page.goto('/this-page-does-not-exist');
 
-        const homeLink = page.getByRole('link', { name: /return home/i });
+        const homeLink = page.getByRole('link', { name: /return to atelier/i });
         await expect(homeLink).toBeVisible();
         await expect(homeLink).toHaveAttribute('href', '/');
     });
 
-    test('has try analysis link', async ({ page }) => {
+    test('has contact link', async ({ page }) => {
         await page.goto('/this-page-does-not-exist');
 
-        const analyzeLink = page.getByRole('link', { name: /start analysis/i });
-        await expect(analyzeLink).toBeVisible();
-        await expect(analyzeLink).toHaveAttribute('href', '/analyze');
+        await expect(page.getByText(/contact style concierge/i)).toBeVisible();
     });
 });
