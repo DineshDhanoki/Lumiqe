@@ -5,13 +5,14 @@ import Pricing from '../../src/components/Pricing';
 describe('Pricing Component', () => {
     it('renders free and premium plan headings', () => {
         render(<Pricing />);
-        expect(screen.getByText('Free')).toBeInTheDocument();
-        expect(screen.getByText('Premium')).toBeInTheDocument();
+        expect(screen.getByText('Free Tier')).toBeInTheDocument();
+        expect(screen.getByText('Pro Tier')).toBeInTheDocument();
     });
 
-    it('renders the monthly price by default', () => {
+    it('renders the annual price by default', () => {
         render(<Pricing />);
-        expect(screen.getByText(/₹149/)).toBeInTheDocument();
+        // isAnnual defaults to true → shows $23
+        expect(screen.getByText('$23')).toBeInTheDocument();
     });
 
     it('shows monthly and annual toggle', () => {
@@ -22,16 +23,16 @@ describe('Pricing Component', () => {
 
     it('renders upgrade button', () => {
         render(<Pricing />);
-        expect(screen.getByText(/Upgrade to Premium/i)).toBeInTheDocument();
+        expect(screen.getByText(/Upgrade to Elite/i)).toBeInTheDocument();
     });
 
     it('renders free plan CTA', () => {
         render(<Pricing />);
-        expect(screen.getByText(/Get Started Free/i)).toBeInTheDocument();
+        expect(screen.getByText(/Begin Journey/i)).toBeInTheDocument();
     });
 
-    it('renders "MOST POPULAR" badge on premium', () => {
+    it('renders "Most Coveted" badge on premium', () => {
         render(<Pricing />);
-        expect(screen.getByText(/MOST POPULAR/i)).toBeInTheDocument();
+        expect(screen.getByText(/Most Coveted/i)).toBeInTheDocument();
     });
 });

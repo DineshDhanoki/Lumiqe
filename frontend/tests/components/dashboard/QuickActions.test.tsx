@@ -14,22 +14,22 @@ describe('QuickActions', () => {
 
     it('new scan links to /analyze', () => {
         render(<QuickActions aiStylistHref="/results?season=Spring" />);
-        expect(screen.getByText('newScan').closest('a')).toHaveAttribute('href', '/analyze');
+        expect(screen.getByText('Scan New').closest('a')).toHaveAttribute('href', '/analyze');
     });
 
-    it('shop colors links to /shopping-agent', () => {
+    it('AI Remix uses the provided aiStylistHref', () => {
         render(<QuickActions aiStylistHref="/results?season=Spring" />);
-        expect(screen.getByText('shopColors').closest('a')).toHaveAttribute('href', '/shopping-agent');
+        expect(screen.getByText('AI Remix').closest('a')).toHaveAttribute('href', '/results?season=Spring');
     });
 
-    it('buy or pass links to /scan', () => {
+    it('Planner links to /wardrobe', () => {
         render(<QuickActions aiStylistHref="/results?season=Spring" />);
-        expect(screen.getByText('buyOrPass').closest('a')).toHaveAttribute('href', '/scan');
+        expect(screen.getByText('Planner').closest('a')).toHaveAttribute('href', '/wardrobe');
     });
 
     it('AI stylist uses the provided aiStylistHref', () => {
         render(<QuickActions aiStylistHref="/results?season=Spring&undertone=warm" />);
-        expect(screen.getByText('aiStylist').closest('a'))
+        expect(screen.getByText('AI Remix').closest('a'))
             .toHaveAttribute('href', '/results?season=Spring&undertone=warm');
     });
 });
