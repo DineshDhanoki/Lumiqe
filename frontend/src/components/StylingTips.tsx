@@ -65,14 +65,14 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
 
             {/* Header */}
             <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>lightbulb</span>
+                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>lightbulb</span>
                 </div>
                 <div>
                     <h3 className="text-xl font-bold text-on-surface tracking-tight">Styling Tips</h3>
                     <div className="flex items-center gap-1.5">
-                        <span className="material-symbols-outlined text-xs text-yellow-500/60" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-                        <span className="text-[10px] font-medium text-yellow-500/60 uppercase tracking-widest">
+                        <span className="material-symbols-outlined text-xs text-primary/60" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+                        <span className="text-[10px] font-medium text-primary/60 uppercase tracking-widest">
                             AI-Powered
                         </span>
                     </div>
@@ -94,14 +94,14 @@ export default function StylingTips({ season, contrastLevel, hexCode, staticTip 
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <p className="text-on-surface/80 text-lg leading-relaxed border-l-2 border-yellow-500/50 pl-5 font-light">
+                    <p className="text-on-surface/80 text-lg leading-relaxed border-l-2 border-primary/30 pl-5 font-light">
                         {displayTip}
                     </p>
 
                     {/* Source badge */}
                     {dynamicTip && (
                         <div className="mt-4 flex items-center gap-1.5">
-                            <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                             <span className="text-[10px] font-medium text-on-surface-variant/50 uppercase tracking-wider">
                                 Generated for your {season} profile
                             </span>

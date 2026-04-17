@@ -2,7 +2,6 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -123,51 +122,46 @@ function FeedContent() {
 
     return (
         <>
-            <div className="w-full max-w-md flex justify-between items-center mb-6 pt-4 z-20 relative">
-                <Link href={session ? '/dashboard' : '/results'} className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
-                    <span className="material-symbols-outlined text-xl text-on-surface">arrow_back</span>
-                </Link>
-                <div className="flex flex-col items-center">
-                    <h1 className="text-lg font-bold text-on-surface capitalize">{t('yourCatalog')}</h1>
-                    <span className="text-xs text-primary font-medium tracking-wide">{season}</span>
-                </div>
-                <button className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10">
-                    <span className="material-symbols-outlined text-xl text-on-surface">filter_list</span>
-                </button>
-            </div>
+            {/* Editorial Header */}
+            <header className="mb-12">
+                <h1 className="font-display text-6xl md:text-8xl text-on-surface mb-4">The Feed</h1>
+                <p className="font-headline text-sm text-on-surface-variant tracking-widest uppercase">
+                    Curated Excellence for Your Aesthetic
+                </p>
+            </header>
 
             {/* Gender Selection — shown before any products */}
             {!gender ? (
-                <div className="w-full max-w-md flex flex-col items-center justify-center mt-16 z-20 relative">
+                <div className="flex flex-col items-center justify-center mt-16">
                     <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                         <span className="material-symbols-outlined text-4xl text-primary">person</span>
                     </div>
-                    <h2 className="text-xl font-bold text-on-surface mb-2">{t('selectYourStyle')}</h2>
+                    <h2 className="font-display text-3xl text-on-surface mb-2">{t('selectYourStyle')}</h2>
                     <p className="text-on-surface-variant text-sm mb-8 text-center">{t('selectYourStyleDesc')}</p>
-                    <div className="flex gap-4 w-full">
+                    <div className="flex gap-4 max-w-sm w-full">
                         <button
                             onClick={() => setGender('male')}
-                            className="flex-1 py-4 rounded-2xl bg-surface-container/30 hover:bg-surface-container/30 border border-primary/10 hover:border-primary/20 text-on-surface font-semibold transition-all text-center"
+                            className="flex-1 py-4 rounded-[10px] bg-surface-container ghost-border hover:border-primary/30 text-on-surface font-headline font-semibold transition-all text-center"
                         >
-                            👨 Men&apos;s
+                            Men&apos;s
                         </button>
                         <button
                             onClick={() => setGender('female')}
-                            className="flex-1 py-4 rounded-2xl bg-surface-container/30 hover:bg-surface-container/30 border border-primary/10 hover:border-primary/20 text-on-surface font-semibold transition-all text-center"
+                            className="flex-1 py-4 rounded-[10px] bg-surface-container ghost-border hover:border-primary/30 text-on-surface font-headline font-semibold transition-all text-center"
                         >
-                            👩 Women&apos;s
+                            Women&apos;s
                         </button>
                     </div>
                 </div>
             ) : (
                 <>
-                    {/* Gender Toggle (compact, after selection) */}
-                    <div className="w-full max-w-md flex items-center justify-center gap-2 mb-4 z-20 relative">
+                    {/* Gender Toggle + Filter row */}
+                    <div className="flex items-center justify-between mb-8">
                         <div className="flex bg-surface-container/30 rounded-full p-1 border border-primary/10">
                             <button
                                 onClick={() => setGender('male')}
-                                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${gender === 'male'
-                                    ? 'bg-primary-container/30 text-primary shadow-sm'
+                                className={`px-5 py-2 rounded-full text-xs font-headline font-semibold uppercase tracking-wider transition-all ${gender === 'male'
+                                    ? 'bg-primary-container text-on-primary shadow-sm'
                                     : 'text-on-surface-variant hover:text-on-surface'
                                     }`}
                             >
@@ -175,39 +169,42 @@ function FeedContent() {
                             </button>
                             <button
                                 onClick={() => setGender('female')}
-                                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${gender === 'female'
-                                    ? 'bg-primary-container/30 text-primary shadow-sm'
+                                className={`px-5 py-2 rounded-full text-xs font-headline font-semibold uppercase tracking-wider transition-all ${gender === 'female'
+                                    ? 'bg-primary-container text-on-primary shadow-sm'
                                     : 'text-on-surface-variant hover:text-on-surface'
                                     }`}
                             >
                                 Women&apos;s
                             </button>
                         </div>
+                        <button className="p-2.5 rounded-full bg-surface-container ghost-border hover:border-primary/30 transition">
+                            <span className="material-symbols-outlined text-xl text-on-surface-variant">filter_list</span>
+                        </button>
                     </div>
 
                     {/* Vibe Selector Tabs */}
-                    <div className="w-full max-w-md mb-8 z-20 relative">
+                    <div className="mb-10 overflow-x-auto pb-2 scrollbar-none">
                         <VibeSelector currentVibe={vibe} onSelectVibe={handleVibeSelect} isPremiumUser={isPremiumUser} />
                     </div>
 
                     {loading ? (
-                        <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-                            {[...Array(6)].map((_, i) => (
-                                <div key={`skeleton-${i}`} className="aspect-[3/4] rounded-3xl bg-surface-container/30 animate-pulse" />
+                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {[...Array(8)].map((_, i) => (
+                                <div key={`skeleton-${i}`} className="aspect-[3/4] rounded-2xl bg-surface-container/30 animate-pulse" />
                             ))}
                         </div>
                     ) : isPlaceholderResponse ? (
                         /* Premium vibe — no real items scraped yet. Show a premium locked grid */
-                        <div className="w-full max-w-md relative z-20">
-                            <div className="grid grid-cols-2 gap-4">
-                                {[...Array(6)].map((_, i) => (
+                        <div className="relative">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {[...Array(8)].map((_, i) => (
                                     <motion.div
                                         key={`ph-${i}`}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.05 }}
                                         onClick={() => setIsModalOpen(true)}
-                                        className="aspect-[3/4] rounded-3xl bg-surface-container/20 border border-primary/5 flex items-center justify-center cursor-pointer hover:bg-surface-container/30 transition-colors"
+                                        className="aspect-[3/4] rounded-2xl bg-surface-container/20 ghost-border flex items-center justify-center cursor-pointer hover:bg-surface-container/30 transition-colors"
                                     >
                                         <div className="w-10 h-10 rounded-full bg-surface/60 backdrop-blur-sm border border-primary/10 flex items-center justify-center">
                                             <span className="material-symbols-outlined text-base text-on-surface-variant">lock</span>
@@ -224,18 +221,18 @@ function FeedContent() {
                                 <p className="text-on-surface-variant text-sm mb-4">{t('thisUnlocksWithPremium')}</p>
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="px-6 py-3 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold text-sm transition-all shadow-[0_0_20px_-5px_rgba(220,38,38,0.4)]"
+                                    className="px-8 py-3 rounded-[10px] bg-primary-container hover:bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-widest transition-all"
                                 >
                                     {t('unlockPremiumVibes')}
                                 </button>
                             </motion.div>
                         </div>
                     ) : products.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-64 text-center mt-12 w-full max-w-md relative z-20">
+                        <div className="flex flex-col items-center justify-center h-64 text-center mt-12">
                             <p className="text-on-surface-variant mb-4">{t('curatingCatalog')}</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-4 w-full max-w-md pb-20 z-20 relative">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
                             {products.map((product, idx) => (
                                 <ProductCard
                                     key={product.id || `product-${idx}`}

@@ -173,37 +173,51 @@ export default function AccountPage() {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="flex items-center justify-between mb-12">
-                        <h1 className="text-4xl font-extrabold flex items-center gap-3">
-                            <span className="material-symbols-outlined text-4xl text-primary">person</span>
-                            {t('yourAccount')}
-                        </h1>
+                        <div>
+                            <h1 className="font-display text-5xl md:text-7xl text-on-surface tracking-tighter leading-none mb-4">Account Settings</h1>
+                            <p className="font-body text-on-surface-variant max-w-xl text-lg font-light leading-relaxed">Manage your digital atelier identity, subscription preferences, and data privacy with precision control.</p>
+                        </div>
                         <button
                             onClick={() => signOut({ callbackUrl: '/' })}
-                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 text-on-surface-variant hover:text-red-400 transition border border-primary/10"
+                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 text-on-surface-variant hover:text-error transition border border-primary/10"
                         >
                             <span className="material-symbols-outlined text-base">logout</span>
                             <span className="text-sm font-medium">{t('logOut')}</span>
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
                         {/* Left Column - Profile & Subscription */}
-                        <div className="md:col-span-1 space-y-6">
+                        <div className="xl:col-span-4 space-y-6">
                             {/* Profile Card */}
-                            <div className="p-6 rounded-3xl bg-surface-container/10 border border-primary/10">
-                                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-2xl font-bold text-primary border border-primary/20">
-                                    {profile.name.charAt(0).toUpperCase()}
+                            <div className="p-8 rounded-[24px] relative overflow-hidden group"
+                                style={{ background: 'rgba(19,19,21,0.7)', backdropFilter: 'blur(16px)', border: '0.5px solid rgba(196,151,62,0.15)' }}>
+                                <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <span className="material-symbols-outlined text-6xl text-primary">auto_awesome</span>
                                 </div>
-                                <h2 className="text-xl font-bold text-on-surface mb-1">{profile.name}</h2>
-                                <p className="text-on-surface-variant text-sm mb-6 truncate">{profile.email}</p>
+                                <div className="flex flex-col items-center text-center">
+                                    <div className="relative mb-6">
+                                        <div className="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center text-4xl font-bold text-primary bg-primary/10"
+                                            style={{ border: '2px solid rgba(196,151,62,0.3)' }}>
+                                            {profile.name.charAt(0).toUpperCase()}
+                                        </div>
+                                    </div>
+                                    <h2 className="font-headline text-2xl font-bold mb-1">{profile.name}</h2>
+                                    <p className="font-mono text-primary text-[10px] uppercase tracking-[0.3em] mb-1">{profile.is_premium ? 'Elite Tier Member' : 'Free Member'}</p>
+                                    <p className="text-on-surface-variant text-sm mb-6 truncate">{profile.email}</p>
 
-                                <div className="text-xs text-on-surface-variant/50 uppercase tracking-widest font-semibold mb-2">{t('memberSince')}</div>
-                                <p className="text-on-surface-variant text-sm">
-                                    {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                                </p>
-
-                                {/* Age & Sex */}
-                                <div className="mt-6 pt-5 border-t border-primary/10">
+                                    <div className="w-full pt-6 mt-2 border-t border-white/5 space-y-3">
+                                        <div className="flex justify-between text-xs uppercase tracking-widest font-label text-on-surface-variant">
+                                            <span>{t('memberSince')}</span>
+                                            <span className="text-on-surface">{new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                                        </div>
+                                        <div className="flex justify-between text-xs uppercase tracking-widest font-label text-on-surface-variant">
+                                            <span>Status</span>
+                                            <span className="text-tertiary">Active</span>
+                                        </div>
+                                    </div>
+                                    {/* Age & Sex */}
+                                    <div className="w-full mt-6 pt-5 border-t border-white/5 text-left">
                                     {!editingProfile ? (
                                         <>
                                             <div className="flex items-center justify-between mb-3">
@@ -266,7 +280,7 @@ export default function AccountPage() {
                                                     ))}
                                                 </div>
                                             </div>
-                                            {editError && <p className="text-red-400 text-xs">{editError}</p>}
+                                            {editError && <p className="text-error text-xs">{editError}</p>}
                                             <div className="flex gap-2">
                                                 <button
                                                     type="button"
@@ -286,6 +300,7 @@ export default function AccountPage() {
                                             </div>
                                         </div>
                                     )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -297,7 +312,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* Right Column - Color Profile & Improvements */}
-                        <div className="md:col-span-2 space-y-6">
+                        <div className="xl:col-span-8 space-y-6">
                             <ColorProfileSection
                                 season={profile.season}
                                 palette={profile.palette}
@@ -313,7 +328,7 @@ export default function AccountPage() {
                             {/* Fashion Insights / Improvement Tracker (Premium) */}
                             <div className="p-8 rounded-3xl bg-surface-container/10 border border-primary/10">
                                 <h3 className="text-xl font-bold text-on-surface mb-2 flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+                                    <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                     {t('fashionInsights')}
                                 </h3>
                                 <p className="text-on-surface-variant text-sm mb-6">{t('fashionInsightsDesc')}</p>
@@ -330,14 +345,14 @@ export default function AccountPage() {
                                             <div className="text-3xl font-extrabold text-on-surface-variant/50 mb-1">&mdash;</div>
                                             <div className="text-xs text-on-surface-variant">Coming soon</div>
                                         </div>
-                                        <div className="col-span-2 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
+                                        <div className="col-span-2 p-5 rounded-2xl bg-primary/5 border border-primary/20">
                                             <div className="flex items-start gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
-                                                    <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+                                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                                    <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                                                 </div>
                                                 <div>
                                                     <h4 className="text-sm font-bold text-on-surface mb-1">{t('aiStylistTip')}</h4>
-                                                    <p className="text-sm text-yellow-100/70">
+                                                    <p className="text-sm text-on-surface-variant/70">
                                                         With {profile.season || 'your'} colors, try pairing deep navy trousers with a crisp white shirt for a high-contrast winter look.
                                                     </p>
                                                 </div>

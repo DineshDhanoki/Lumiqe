@@ -111,15 +111,15 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
     };
 
     const lightingBarPercent = Math.min(100, Math.max(0, (brightness / 255) * 100));
-    const lightingBarColor = lightingStatus === 'good' ? 'bg-green-400'
-        : lightingStatus === 'dark' ? 'bg-yellow-400'
-        : lightingStatus === 'bright' ? 'bg-orange-400'
+    const lightingBarColor = lightingStatus === 'good' ? 'bg-primary'
+        : lightingStatus === 'dark' ? 'bg-secondary'
+        : lightingStatus === 'bright' ? 'bg-tertiary'
         : 'bg-white/30';
 
     const lightingConfig = {
-        good: { color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30', icon: <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>, label: t(lang, 'goodLighting') },
-        dark: { color: 'text-yellow-400', bg: 'bg-yellow-500/20 border-yellow-500/30', icon: <span className="material-symbols-outlined text-base">wb_sunny</span>, label: t(lang, 'tooDark') },
-        bright: { color: 'text-orange-400', bg: 'bg-orange-500/20 border-orange-500/30', icon: <span className="material-symbols-outlined text-base">bolt</span>, label: t(lang, 'tooBright') },
+        good: { color: 'text-primary', bg: 'bg-primary/10 border-primary/20', icon: <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>, label: t(lang, 'goodLighting') },
+        dark: { color: 'text-secondary', bg: 'bg-secondary/10 border-secondary/20', icon: <span className="material-symbols-outlined text-base">wb_sunny</span>, label: t(lang, 'tooDark') },
+        bright: { color: 'text-tertiary', bg: 'bg-tertiary/10 border-tertiary/20', icon: <span className="material-symbols-outlined text-base">bolt</span>, label: t(lang, 'tooBright') },
         checking: { color: 'text-on-surface-variant', bg: 'bg-surface-container/30 border-outline-variant/10', icon: <span className="material-symbols-outlined text-base">photo_camera</span>, label: t(lang, 'checkingLight') },
     };
     const currentLighting = lightingConfig[lightingStatus];
@@ -157,10 +157,10 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                             {isActive && faceDetected && lightingStatus === 'good' && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/40 backdrop-blur-sm"
+                                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm"
                                 >
-                                    <span className="material-symbols-outlined text-base text-green-400" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                    <span className="text-green-400 text-xs font-semibold">
+                                    <span className="material-symbols-outlined text-base text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                    <span className="text-primary text-xs font-semibold">
                                         {heldStill ? 'Perfect! Hold still...' : 'Face detected — hold still'}
                                     </span>
                                 </motion.div>
@@ -169,18 +169,18 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
                         <AnimatePresence>
                             {isActive && lightingStatus === 'dark' && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-yellow-500/20 border border-yellow-500/40 backdrop-blur-sm">
-                                    <span className="material-symbols-outlined text-base text-yellow-400">wb_sunny</span>
-                                    <span className="text-yellow-400 text-xs font-semibold">Move closer to a window</span>
+                                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20 backdrop-blur-sm">
+                                    <span className="material-symbols-outlined text-base text-secondary">wb_sunny</span>
+                                    <span className="text-secondary text-xs font-semibold">Move closer to a window</span>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                         <AnimatePresence>
                             {isActive && lightingStatus === 'bright' && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-orange-500/20 border border-orange-500/40 backdrop-blur-sm">
-                                    <span className="material-symbols-outlined text-base text-orange-400">bolt</span>
-                                    <span className="text-orange-400 text-xs font-semibold">Move away from the light source</span>
+                                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-4 py-2 rounded-full bg-tertiary/10 border border-tertiary/20 backdrop-blur-sm">
+                                    <span className="material-symbols-outlined text-base text-tertiary">bolt</span>
+                                    <span className="text-tertiary text-xs font-semibold">Move away from the light source</span>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -267,8 +267,8 @@ export default function CameraCapture({ onCapture, onCancel, lang = 'en' }: Came
 
             <style>{`
                 @keyframes captureGlow {
-                    0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), 0 0 40px rgba(34, 197, 94, 0.2); }
-                    50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 60px rgba(34, 197, 94, 0.3); }
+                    0%, 100% { box-shadow: 0 0 20px rgba(196,151,62,0.4), 0 0 40px rgba(196,151,62,0.2); }
+                    50% { box-shadow: 0 0 30px rgba(196,151,62,0.6), 0 0 60px rgba(196,151,62,0.3); }
                 }
             `}</style>
 

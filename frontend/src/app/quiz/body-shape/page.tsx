@@ -147,6 +147,15 @@ function calculateShape(answers: Record<string, string>): string {
     return Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
 }
 
+const STAGE_LABELS = [
+    'Stage 01 — Foundation',
+    'Stage 02 — Geometry',
+    'Stage 03 — Proportion',
+    'Stage 04 — Structure',
+    'Stage 05 — Distribution',
+    'Stage 06 — Silhouette',
+];
+
 export default function BodyShapeQuiz() {
     const { data: session } = useSession();
     const [current, setCurrent] = useState(0);
@@ -182,7 +191,7 @@ export default function BodyShapeQuiz() {
 
     return (
         <AppLayout>
-            <div className="max-w-xl mx-auto">
+            <div className="max-w-3xl mx-auto">
                 <AnimatePresence mode="wait">
                     {!result ? (
                         <motion.div
@@ -192,44 +201,58 @@ export default function BodyShapeQuiz() {
                             exit={{ opacity: 0, x: -40 }}
                             transition={{ duration: 0.2 }}
                         >
-                            {/* Header */}
-                            <div className="text-center mb-8">
-                                <p className="text-primary text-xs font-bold tracking-widest uppercase mb-2">
-                                    Body Shape Analysis
-                                </p>
-                                <h1 className="text-3xl font-bold text-on-surface">Question {current + 1} of {QUESTIONS.length}</h1>
-                            </div>
-
-                            {/* Progress bar */}
-                            <div className="w-full bg-surface-container/30 rounded-full h-1.5 mb-8">
-                                <motion.div
-                                    className="bg-primary h-1.5 rounded-full"
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${progress}%` }}
-                                    transition={{ duration: 0.4 }}
-                                />
-                            </div>
-
-                            {/* Question */}
-                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-8 mb-6">
-                                <h2 className="text-xl font-bold text-on-surface mb-6">{question.question}</h2>
-                                <div className="space-y-3">
-                                    {question.options.map((opt) => (
-                                        <button
-                                            key={opt.value}
-                                            onClick={() => handleAnswer(opt.value)}
-                                            className="w-full text-left px-5 py-4 rounded-2xl border border-primary/10 bg-surface-container/30 hover:bg-primary/10 hover:border-primary/30 text-on-surface-variant hover:text-on-surface transition-all font-medium"
-                                        >
-                                            {opt.label}
-                                        </button>
-                                    ))}
+                            {/* Progress */}
+                            <div className="mb-16">
+                                <div className="flex justify-between items-end mb-3">
+                                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                                        {STAGE_LABELS[current] || `Stage ${current + 1}`}
+                                    </span>
+                                    <span className="font-mono text-[10px] text-on-surface-variant/40 tracking-widest">
+                                        {Math.round(progress)}% Complete
+                                    </span>
                                 </div>
+                                <div className="h-[2px] w-full bg-surface-container-high rounded-full overflow-hidden">
+                                    <motion.div
+                                        className="h-full bg-primary-container rounded-full"
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${progress}%` }}
+                                        transition={{ duration: 0.4 }}
+                                        style={{ boxShadow: '0 0 10px rgba(196,151,62,0.4)' }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Heading */}
+                            <div className="text-center mb-12">
+                                <span className="font-label text-[9px] uppercase tracking-[0.3em] text-primary mb-4 block">
+                                    Body Shape Analysis
+                                </span>
+                                <h1 className="font-display text-5xl md:text-6xl text-on-surface mb-6 leading-tight">
+                                    Define your <span className="italic text-primary">silhouette.</span>
+                                </h1>
+                                <p className="text-on-surface-variant text-sm max-w-xl mx-auto leading-relaxed">
+                                    {question.question}
+                                </p>
+                            </div>
+
+                            {/* Options */}
+                            <div className="space-y-3">
+                                {question.options.map((opt) => (
+                                    <button
+                                        key={opt.value}
+                                        onClick={() => handleAnswer(opt.value)}
+                                        className="w-full text-left px-6 py-5 rounded-[10px] bg-surface-container/30 hover:bg-surface-container/60 hover:border-primary/30 text-on-surface-variant hover:text-on-surface transition-all font-headline font-medium text-sm"
+                                        style={{ border: '0.5px solid rgba(196, 151, 62, 0.2)' }}
+                                    >
+                                        {opt.label}
+                                    </button>
+                                ))}
                             </div>
 
                             {current > 0 && (
                                 <button
                                     onClick={() => setCurrent(current - 1)}
-                                    className="text-on-surface-variant hover:text-on-surface text-sm flex items-center gap-1 transition-colors"
+                                    className="mt-8 text-on-surface-variant hover:text-on-surface text-sm flex items-center gap-1 transition-colors"
                                 >
                                     <span className="material-symbols-outlined text-sm">arrow_back</span> Previous question
                                 </button>
@@ -246,19 +269,19 @@ export default function BodyShapeQuiz() {
                             <div className="text-center">
                                 <p className="text-primary text-xs font-bold tracking-widest uppercase mb-3">Your Body Shape</p>
                                 <div className="text-6xl mb-3">{shapeData.emoji}</div>
-                                <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-4">
+                                <h1 className="font-display italic text-5xl text-primary mb-4">
                                     {shapeData.shape}
                                 </h1>
                                 <p className="text-on-surface-variant leading-relaxed max-w-md mx-auto">{shapeData.description}</p>
                             </div>
 
                             {/* Best styles */}
-                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
-                                <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-3">Best Styles For You</p>
+                            <div className="bg-surface-container/50 rounded-3xl p-6" style={{ border: '0.5px solid rgba(196, 151, 62, 0.2)' }}>
+                                <p className="text-primary text-xs font-bold uppercase tracking-wider mb-3">Best Styles For You</p>
                                 <div className="flex flex-wrap gap-2">
                                     {shapeData.bestStyles.map((s) => (
-                                        <span key={s} className="flex items-center gap-1.5 text-sm bg-green-500/15 text-green-300 border border-green-500/25 px-3 py-1.5 rounded-full">
-                                        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                        <span key={s} className="flex items-center gap-1.5 text-sm bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full">
+                                            <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                                             {s}
                                         </span>
                                     ))}
@@ -266,7 +289,7 @@ export default function BodyShapeQuiz() {
                             </div>
 
                             {/* Avoid */}
-                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
+                            <div className="bg-surface-container/50 rounded-3xl p-6" style={{ border: '0.5px solid rgba(196, 151, 62, 0.2)' }}>
                                 <p className="text-primary text-xs font-bold uppercase tracking-wider mb-3">Styles to Avoid</p>
                                 <div className="flex flex-wrap gap-2">
                                     {shapeData.avoidStyles.map((s) => (
@@ -276,7 +299,7 @@ export default function BodyShapeQuiz() {
                             </div>
 
                             {/* Color advice */}
-                            <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6">
+                            <div className="rounded-3xl p-6" style={{ background: 'rgba(196,151,62,0.05)', border: '0.5px solid rgba(196,151,62,0.2)' }}>
                                 <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-2">Color Strategy</p>
                                 <p className="text-on-surface-variant leading-relaxed">{shapeData.colors}</p>
                             </div>
@@ -285,13 +308,14 @@ export default function BodyShapeQuiz() {
                             <div className="flex flex-col sm:flex-row gap-3">
                                 <Link
                                     href="/dashboard"
-                                    className="flex-1 text-center py-3 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold transition-all hover:scale-105"
+                                    className="flex-1 text-center py-3 rounded-[10px] bg-primary-container hover:opacity-90 text-on-primary font-headline font-bold text-xs uppercase tracking-widest transition-all"
                                 >
                                     View Dashboard
                                 </Link>
                                 <Link
                                     href="/quiz/style"
-                                    className="flex-1 text-center py-3 rounded-full bg-surface-container/30 hover:bg-surface-container/50 border border-primary/20 text-on-surface font-bold transition-all"
+                                    className="flex-1 text-center py-3 rounded-[10px] bg-surface-container/30 hover:bg-surface-container/50 text-on-surface font-headline font-bold text-xs uppercase tracking-widest transition-all"
+                                    style={{ border: '0.5px solid rgba(196,151,62,0.2)' }}
                                 >
                                     Take Style Quiz <span className="material-symbols-outlined text-base align-middle">arrow_forward</span>
                                 </Link>

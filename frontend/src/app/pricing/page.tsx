@@ -12,9 +12,7 @@ export default function PricingPage() {
     return (
         <main className="relative min-h-screen text-on-surface font-body selection:bg-primary/20">
             <Navbar />
-            <div className="pt-20">
-                <Pricing onOpenAuth={() => setIsAuthModalOpen(true)} />
-            </div>
+            <Pricing onOpenAuth={() => setIsAuthModalOpen(true)} />
             <Footer />
             <SignInModal
                 isOpen={isAuthModalOpen}

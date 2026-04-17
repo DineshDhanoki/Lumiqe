@@ -62,7 +62,7 @@ export default function ModeChooser({ lang, onSelectCamera, onSelectUpload, onSe
                     <p className="text-on-surface font-semibold text-sm">Multi-Photo Analysis</p>
                     <p className="text-on-surface-variant text-xs mt-0.5">Upload 2-5 selfies for higher accuracy</p>
                 </div>
-                <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full flex-shrink-0">
+                <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full flex-shrink-0">
                     Pro
                 </span>
             </button>

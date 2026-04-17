@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { apiFetch } from '@/lib/api';
 import OutfitDisplay, { CuratedOutfit } from '@/components/OutfitDisplay';
-import AppMenu from '@/components/AppMenu';
 import AppLayout from '@/components/layout/AppLayout';
 
 // Animated loading messages
@@ -63,7 +62,7 @@ function ShoppingAgentContent() {
                 </p>
                 <Link
                     href="/"
-                    className="px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors"
+                    className="px-6 py-3 bg-primary-container rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all"
                 >
                     Scan Your Face First
                 </Link>
@@ -108,37 +107,37 @@ function ShoppingAgentContent() {
     };
 
     return (
-        <div className="flex flex-col w-full max-w-lg mx-auto items-center min-h-screen p-6 relative z-10">
-            {/* Header */}
-            <div className="w-full flex justify-between items-center mb-8 pt-4">
-                <Link
-                    href="/dashboard"
-                    className="p-2 rounded-full bg-surface-container/30 hover:bg-surface-container/30 transition backdrop-blur-md border border-primary/10"
-                >
-                    <span className="material-symbols-outlined text-xl text-on-surface">arrow_back</span>
-                </Link>
-                <div className="flex flex-col items-center">
-                    <h1 className="text-lg font-bold text-on-surface">AI Stylist</h1>
-                    <span className="text-xs text-primary font-medium tracking-wide">
-                        8-Piece Outfit Builder
-                    </span>
+        <div className="w-full">
+            {/* Editorial Header */}
+            <header className="mb-12">
+                <div className="flex items-center gap-3 mb-4">
+                    <span className="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[9px] font-headline font-bold uppercase tracking-[0.2em]">AI Curated</span>
                 </div>
-                <AppMenu />
-            </div>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="max-w-2xl">
+                        <h1 className="font-display text-6xl md:text-8xl leading-tight tracking-tighter text-on-surface mb-4">
+                            Your Curated <br/><span className="italic text-primary">Ensemble</span>
+                        </h1>
+                        <p className="text-on-surface-variant text-lg leading-relaxed max-w-lg">
+                            Our AI agent synthesizes your style profile with current runway silhouettes to generate an 8-piece selection.
+                        </p>
+                    </div>
+                </div>
+            </header>
 
             {/* ── Config Form ─────────────────────────────────── */}
             {!outfit && !loading && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="w-full flex flex-col gap-6"
+                    className="flex flex-col gap-6 max-w-lg"
                 >
                     {/* Palette Preview */}
-                    <div className="flex flex-col gap-3 p-5 rounded-3xl bg-surface-container/30 border border-primary/10 backdrop-blur-md">
-                        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-widest text-center">
+                    <div className="flex flex-col gap-3 p-6 rounded-2xl bg-surface-container ghost-border">
+                        <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/60">
                             Your Palette
                         </h2>
-                        <div className="flex gap-2 justify-center flex-wrap">
+                        <div className="flex gap-2 flex-wrap">
                             {paletteHexes.map((hex, i) => (
                                 <div
                                     key={i}
@@ -151,8 +150,8 @@ function ShoppingAgentContent() {
                     </div>
 
                     {/* Gender */}
-                    <div className="flex flex-col gap-3 p-5 rounded-3xl bg-surface-container/30 border border-primary/10 backdrop-blur-md">
-                        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-widest text-center">
+                    <div className="flex flex-col gap-3 p-6 rounded-2xl bg-surface-container ghost-border">
+                        <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/60">
                             Gender
                         </h2>
                         <div className="flex gap-2">
@@ -160,9 +159,9 @@ function ShoppingAgentContent() {
                                 <button
                                     key={g}
                                     onClick={() => setGender(g)}
-                                    className={`flex-1 py-3 rounded-2xl text-sm font-bold transition-all border ${gender === g
-                                        ? 'bg-on-surface text-surface border-on-surface'
-                                        : 'bg-transparent text-on-surface-variant border-primary/10 hover:border-primary/20'
+                                    className={`flex-1 py-3 rounded-[10px] text-xs font-headline font-bold uppercase tracking-wider transition-all ${gender === g
+                                        ? 'bg-primary-container text-on-primary shadow-sm'
+                                        : 'bg-surface-container-high ghost-border text-on-surface-variant hover:text-on-surface'
                                         }`}
                                 >
                                     {g === 'male' ? "Men's" : "Women's"}
@@ -173,10 +172,10 @@ function ShoppingAgentContent() {
 
                     <button
                         onClick={generateOutfit}
-                        className="w-full py-4 rounded-full bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+                        className="w-full py-4 rounded-[10px] bg-primary-container text-on-primary font-headline font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:opacity-90 active:scale-[0.98] transition-all"
                     >
                         <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-                        Generate Outfit
+                        Generate Ensemble
                     </button>
 
                     {error && (
@@ -186,7 +185,7 @@ function ShoppingAgentContent() {
                             className="flex items-start gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/20"
                         >
                             <span className="material-symbols-outlined text-xl text-primary shrink-0 mt-0.5">error</span>
-                            <p className="text-red-200 text-sm">{error}</p>
+                            <p className="text-primary text-sm">{error}</p>
                         </motion.div>
                     )}
                 </motion.div>
@@ -197,22 +196,24 @@ function ShoppingAgentContent() {
 
             {/* ── Result State ────────────────────────────────── */}
             {outfit && !loading && (
-                <div className="w-full flex flex-col gap-6 pb-20">
+                <div className="w-full flex flex-col gap-8 pb-20">
                     <OutfitDisplay outfit={outfit} />
 
-                    <button
-                        onClick={generateOutfit}
-                        className="mx-auto px-6 py-3 rounded-full border border-primary/20 text-on-surface hover:bg-surface-container/30 transition-all text-sm font-semibold flex items-center gap-2"
-                    >
-                        <span className="material-symbols-outlined text-base">refresh</span>
-                        Generate New Outfit
-                        {outfitCount > 0 && (
-                            <span className="text-on-surface-variant text-xs">#{outfitCount + 1}</span>
-                        )}
-                    </button>
+                    <div className="flex justify-center">
+                        <button
+                            onClick={generateOutfit}
+                            className="px-8 py-4 rounded-[10px] bg-primary-container text-on-primary font-headline font-bold uppercase tracking-widest text-xs flex items-center gap-3 hover:opacity-90 active:scale-95 transition-all"
+                        >
+                            <span className="material-symbols-outlined text-base">refresh</span>
+                            Regenerate Ensemble
+                            {outfitCount > 0 && (
+                                <span className="font-mono text-[10px] opacity-60">#{outfitCount + 1}</span>
+                            )}
+                        </button>
+                    </div>
 
                     {usedProductUrls.length > 0 && (
-                        <p className="text-center text-on-surface-variant/30 text-[10px] tracking-wider">
+                        <p className="text-center text-on-surface-variant/30 font-mono text-[10px] tracking-wider">
                             {usedProductUrls.length} items excluded from next generation
                         </p>
                     )}

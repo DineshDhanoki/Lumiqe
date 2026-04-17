@@ -18,8 +18,8 @@ export default function BestAvoidColors({ bestColors, avoidColors }: BestAvoidCo
                 {/* Wear These */}
                 <div>
                     <div className="flex items-center gap-2 mb-5">
-                        <span className="material-symbols-outlined text-green-400 text-base">check_circle</span>
-                        <p className="font-label text-[10px] font-bold tracking-[0.25em] uppercase text-green-400">Ideal Pairings</p>
+                        <span className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                        <p className="font-label text-[10px] font-bold tracking-[0.25em] uppercase text-primary">Ideal Pairings</p>
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {bestColors.map((hex) => (

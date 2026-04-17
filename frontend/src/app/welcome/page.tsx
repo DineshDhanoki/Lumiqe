@@ -6,46 +6,29 @@ import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
-import AppLayout from '@/components/layout/AppLayout';
 
 const WELCOME_KEY = 'lumiqe-welcome-seen';
 
-const benefits = [
+const features = [
     {
-        icon: 'photo_camera',
-        title: 'AI Skin Analysis',
-        description: 'Get your exact color season in seconds',
+        icon: 'document_scanner',
+        title: 'Vision Scan',
+        description: 'Our AI analyzes your wardrobe\'s DNA to identify silhouette patterns and tonal harmonies.',
+        accentClass: 'bg-primary-container/10 text-primary',
     },
     {
-        icon: 'palette',
-        title: 'Personal Palette',
-        description: 'Know which colors make you glow',
+        icon: 'auto_awesome_motion',
+        title: 'Smart Feed',
+        description: 'Hyper-personalized editorial looks generated specifically for your unique measurements.',
+        accentClass: 'bg-secondary-container/10 text-secondary',
     },
     {
-        icon: 'shopping_bag',
-        title: 'Smart Shopping',
-        description: 'Never buy the wrong shade again',
+        icon: 'forum',
+        title: 'The Atelier',
+        description: 'Connect with elite style architects and share your curated seasonal lookbooks.',
+        accentClass: 'bg-tertiary-container/10 text-tertiary',
     },
 ];
-
-const tips = [
-    { icon: 'wb_sunny', text: 'Use natural daylight' },
-    { icon: 'auto_awesome', text: 'Remove heavy makeup' },
-    { icon: 'visibility', text: 'Face the camera directly' },
-];
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const } },
-};
 
 export default function WelcomePage() {
     const router = useRouter();
@@ -64,8 +47,6 @@ export default function WelcomePage() {
 
     const validateAndProceed = async () => {
         let valid = true;
-
-        // Validate age
         const ageNum = parseInt(age, 10);
         if (!age.trim()) {
             setAgeError('Age is required');
@@ -76,18 +57,14 @@ export default function WelcomePage() {
         } else {
             setAgeError('');
         }
-
-        // Validate sex
         if (!sex) {
             setSexError('Please select an option');
             valid = false;
         } else {
             setSexError('');
         }
-
         if (!valid) return;
 
-        // Save to backend
         setSaving(true);
         try {
             await apiFetch('/api/profile/quiz', {
@@ -95,11 +72,9 @@ export default function WelcomePage() {
                 body: JSON.stringify({ age: ageNum, sex }),
             }, session);
         } catch {
-            // Non-blocking — profile data is supplementary
             console.error('Failed to save profile data');
         }
         setSaving(false);
-
         router.push('/analyze');
     };
 
@@ -112,159 +87,187 @@ export default function WelcomePage() {
     }
 
     return (
-        <AppLayout>
-            <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 py-8">
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="w-full max-w-lg"
-                >
+        <main className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-surface">
+            {/* Ambient blobs */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary-container" style={{ filter: 'blur(80px)', opacity: 0.4 }} />
+                <div className="absolute bottom-[10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-secondary-container" style={{ filter: 'blur(80px)', opacity: 0.4 }} />
+                <div className="absolute top-[30%] left-[20%] w-[300px] h-[300px] rounded-full bg-tertiary-container" style={{ filter: 'blur(80px)', opacity: 0.4 }} />
+            </div>
+
+            {/* Branding top-left */}
+            <div className="fixed top-8 left-8 z-50">
+                <h2 className="font-display text-2xl font-bold tracking-tighter text-primary">LUMIQE</h2>
+            </div>
+
+            {/* Content */}
+            <div className="relative z-10 w-full max-w-6xl px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                {/* Step indicator (desktop) */}
+                <div className="hidden lg:flex lg:col-span-1 flex-col gap-8 items-center">
+                    <div className="flex flex-col gap-4">
+                        <div className="w-1 h-12 bg-primary rounded-full" />
+                        <div className="w-1 h-12 bg-surface-container-highest rounded-full" />
+                        <div className="w-1 h-12 bg-surface-container-highest rounded-full" />
+                    </div>
+                    <span className="font-mono text-[10px] tracking-tighter rotate-90 whitespace-nowrap text-primary/60">PROGRESS_METRIC_01</span>
+                </div>
+
+                {/* Main card */}
+                <div className="lg:col-span-11 xl:col-span-10 space-y-12">
                     {/* Header */}
-                    <motion.div variants={itemVariants} className="text-center mb-10">
-                        <div className="inline-flex items-center gap-2 mb-6">
-                            <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-                            <span className="text-sm font-bold uppercase tracking-widest text-primary">
-                                Lumiqe
-                            </span>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <span className="font-mono text-xs tracking-[0.2em] text-primary uppercase">Identity Verification</span>
+                            <div className="h-[1px] w-12 bg-outline-variant" />
                         </div>
-                        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-                            Discover Your{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">
-                                True Colors
-                            </span>
+                        <h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tighter text-on-surface">
+                            Welcome to <br />
+                            <span className="text-primary italic">Lumiqe</span>
                         </h1>
-                        <p className="text-on-surface-variant text-lg leading-relaxed max-w-md mx-auto">
-                            In 30 seconds, our AI will analyze your skin tone and unlock your
-                            perfect color palette
+                        <p className="text-xl md:text-2xl font-light text-on-surface-variant leading-relaxed max-w-xl">
+                            A curated digital atelier where your unique aesthetic is refined by artificial intelligence and high-fashion heritage.
                         </p>
                     </motion.div>
 
-                    {/* Benefit cards */}
-                    <motion.div variants={itemVariants} className="grid gap-4 mb-8">
-                        {benefits.map((benefit) => (
+                    {/* Feature cards */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                    >
+                        {features.map((f) => (
                             <div
-                                key={benefit.title}
-                                className="flex items-start gap-4 p-4 rounded-2xl bg-surface-container/30 border border-primary/10 hover:border-primary/30 transition-colors"
+                                key={f.title}
+                                className="glass-panel ghost-border p-8 rounded-2xl space-y-6 group hover:bg-surface-container/40 transition-all duration-500"
                             >
-                                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-2xl text-primary">{benefit.icon}</span>
+                                <div className={`w-12 h-12 flex items-center justify-center rounded-xl ${f.accentClass}`}>
+                                    <span className="material-symbols-outlined text-3xl">{f.icon}</span>
                                 </div>
-                                <div>
-                                    <h3 className="font-semibold text-on-surface text-sm">
-                                        {benefit.title}
-                                    </h3>
-                                    <p className="text-on-surface-variant text-sm mt-0.5">
-                                        {benefit.description}
-                                    </p>
+                                <div className="space-y-2">
+                                    <h3 className="font-headline font-bold text-lg uppercase tracking-wider text-on-surface">{f.title}</h3>
+                                    <p className="text-sm text-on-surface-variant leading-snug">{f.description}</p>
                                 </div>
                             </div>
                         ))}
                     </motion.div>
 
-                    {/* Profile Setup */}
+                    {/* Profile setup */}
                     <motion.div
-                        variants={itemVariants}
-                        className="mb-8 p-5 rounded-2xl bg-surface-container/20 border border-primary/10"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className="glass-panel ghost-border p-8 rounded-2xl max-w-lg"
                     >
-                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-5">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-6">
                             Tell us about yourself
                         </p>
 
                         {/* Age */}
-                        <div className="mb-5">
-                            <label htmlFor="age" className="block text-sm font-semibold text-on-surface-variant mb-2">
-                                Age
-                            </label>
+                        <div className="floating-label-group mb-8">
                             <input
-                                id="age"
                                 type="number"
                                 inputMode="numeric"
                                 min={13}
                                 max={100}
-                                placeholder="e.g. 25"
+                                placeholder=" "
+                                id="welcome-age"
                                 value={age}
                                 onChange={(e) => { setAge(e.target.value); setAgeError(''); }}
-                                className="w-full px-4 py-3 rounded-xl bg-surface-container/30 border border-primary/10 text-on-surface placeholder-on-surface-variant/30 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition text-sm"
                             />
-                            {ageError && <p className="text-red-400 text-xs mt-1.5">{ageError}</p>}
+                            <label htmlFor="welcome-age" className="uppercase tracking-widest text-xs">Age</label>
                         </div>
+                        {ageError && <p className="text-primary text-xs mb-4">{ageError}</p>}
 
                         {/* Sex */}
                         <div>
-                            <label className="block text-sm font-semibold text-on-surface-variant mb-2">
-                                Sex
-                            </label>
+                            <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60 mb-3">Sex</p>
                             <div className="grid grid-cols-3 gap-3">
                                 {['Male', 'Female', 'Other'].map((option) => (
                                     <button
                                         key={option}
                                         type="button"
                                         onClick={() => { setSex(option); setSexError(''); }}
-                                        className={`py-3 rounded-xl text-sm font-semibold transition-all border ${
+                                        className={`py-3 rounded-[10px] text-xs font-headline font-semibold uppercase tracking-wider transition-all border ${
                                             sex === option
-                                                ? 'bg-primary-container/30 border-primary/50 text-primary'
-                                                : 'bg-surface-container/30 border-primary/10 text-on-surface-variant hover:bg-surface-container/30 hover:text-on-surface'
+                                                ? 'bg-primary/10 border-primary/40 text-primary'
+                                                : 'bg-transparent border-outline-variant/30 text-on-surface-variant hover:border-primary/30 hover:text-on-surface'
                                         }`}
                                     >
                                         {option}
                                     </button>
                                 ))}
                             </div>
-                            {sexError && <p className="text-red-400 text-xs mt-1.5">{sexError}</p>}
+                            {sexError && <p className="text-primary text-xs mt-2">{sexError}</p>}
                         </div>
 
-                        <p className="text-on-surface-variant/50 text-xs mt-4">
+                        <p className="text-on-surface-variant/40 font-label text-xs mt-4">
                             This helps our AI deliver more accurate color analysis for your skin tone.
                         </p>
                     </motion.div>
 
-                    {/* Tips section */}
+                    {/* CTA footer */}
                     <motion.div
-                        variants={itemVariants}
-                        className="mb-8 p-5 rounded-2xl bg-surface-container/20 border border-primary/10"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.35 }}
+                        className="flex flex-col sm:flex-row items-start sm:items-center gap-8"
                     >
-                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-4">
-                            For best results
-                        </p>
-                        <div className="grid grid-cols-3 gap-3">
-                            {tips.map((tip) => (
-                                <div
-                                    key={tip.text}
-                                    className="flex flex-col items-center text-center gap-2"
-                                >
-                                    <div className="w-10 h-10 rounded-full bg-surface-container/30 flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-xl text-on-surface-variant">{tip.icon}</span>
-                                    </div>
-                                    <p className="text-xs text-on-surface-variant leading-snug">
-                                        {tip.text}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    {/* CTA */}
-                    <motion.div variants={itemVariants} className="space-y-4">
                         <button
                             onClick={validateAndProceed}
                             disabled={saving}
-                            className="w-full py-4 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold text-base transition-colors shadow-[0_0_30px_-5px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_-5px_rgba(220,38,38,0.5)] disabled:opacity-50 flex items-center justify-center gap-2"
+                            className="group relative px-10 py-5 rounded-[10px] overflow-hidden transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+                            style={{ background: 'linear-gradient(to right, #c4973e, #f0bf62)' }}
                         >
-                            {saving && <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>}
-                            {saving ? 'Saving...' : 'Start My Analysis →'}
+                            <span className="relative font-headline font-extrabold uppercase tracking-widest text-xs text-on-primary flex items-center gap-3">
+                                {saving && <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>}
+                                {saving ? 'Saving...' : 'Initiate Analysis'}
+                                {!saving && <span className="material-symbols-outlined text-sm">arrow_forward</span>}
+                            </span>
                         </button>
-                        <div className="text-center">
-                            <Link
-                                href="/dashboard"
-                                className="text-on-surface-variant hover:text-on-surface-variant text-sm transition-colors"
-                            >
-                                Skip for now
-                            </Link>
+
+                        <div className="flex items-center gap-4">
+                            <div className="flex -space-x-3">
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-surface bg-surface-container-high" />
+                                ))}
+                            </div>
+                            <span className="font-label text-xs text-on-surface-variant/40 tracking-wide uppercase">Join 12k+ Elite Curators</span>
                         </div>
                     </motion.div>
-                </motion.div>
+
+                    <div className="text-center sm:text-left">
+                        <Link
+                            href="/dashboard"
+                            className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/40 hover:text-on-surface-variant transition-colors"
+                        >
+                            Skip for now
+                        </Link>
+                    </div>
+                </div>
             </div>
-        </AppLayout>
+
+            {/* Mobile progress bar */}
+            <div className="fixed bottom-0 left-0 w-full p-8 lg:hidden flex justify-center items-center gap-3 z-20">
+                <div className="w-12 h-1 bg-primary rounded-full" />
+                <div className="w-3 h-1 bg-white/10 rounded-full" />
+                <div className="w-3 h-1 bg-white/10 rounded-full" />
+            </div>
+
+            {/* System footnote */}
+            <footer className="absolute bottom-12 right-12 z-10 hidden xl:block">
+                <div className="flex items-center gap-4 text-on-surface/20">
+                    <div className="text-right">
+                        <p className="font-mono text-[10px] uppercase tracking-widest">Protocol Version</p>
+                        <p className="font-mono text-[10px] text-primary/40 tracking-widest">LX-8800.V2</p>
+                    </div>
+                    <div className="w-[1px] h-8 bg-outline-variant" />
+                    <div className="text-right">
+                        <p className="font-mono text-[10px] uppercase tracking-widest">Latency Status</p>
+                        <p className="font-mono text-[10px] text-secondary/40 tracking-widest">OPTIMIZED_12MS</p>
+                    </div>
+                </div>
+            </footer>
+        </main>
     );
 }

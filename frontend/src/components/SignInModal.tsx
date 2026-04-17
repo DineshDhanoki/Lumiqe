@@ -35,6 +35,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +51,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
         setEmail('');
         setPassword('');
         setShowPassword(false);
+        setRememberMe(false);
         setError('');
         setFieldErrors({});
         setIsSignUp(false);
@@ -132,7 +134,6 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
             if (result?.error) {
                 throw new Error(t('authInvalidCredentials'));
             } else {
-                // Save age/sex after successful sign-up
                 if (isSignUp && age && sex) {
                     try {
                         await fetch('/api/proxy/profile/quiz', {
@@ -141,7 +142,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                             body: JSON.stringify({ age: parseInt(age, 10), sex }),
                         });
                     } catch {
-                        // Non-blocking — profile data is supplementary
+                        // Non-blocking
                     }
                 }
                 handleClose();
@@ -157,13 +158,6 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
     const handleGoogleSignIn = () => {
         signIn('google', { callbackUrl });
     };
-
-    const inputClass = (field: string) =>
-        `w-full bg-surface-container/50 border rounded-2xl py-3 pl-10 pr-4 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none focus:ring-1 transition-all ${
-            fieldErrors[field]
-                ? 'border-primary focus:ring-primary'
-                : 'border-outline-variant/30 focus:border-primary focus:ring-primary'
-        }`;
 
     return (
         <AnimatePresence>
@@ -184,56 +178,43 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                         role="dialog"
                         aria-modal="true"
                         aria-label={isSignUp ? t('authCreateAccount') : t('authWelcomeBack')}
-                        className="relative w-full max-w-md bg-surface border border-primary/10 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
+                        className="relative w-full max-w-md rounded-[24px] shadow-2xl overflow-y-auto max-h-[90vh]"
+                        style={{ background: 'rgba(19, 19, 21, 0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '0.5px solid rgba(196, 151, 62, 0.2)' }}
                     >
-                        {/* Header */}
-                        <div className="flex items-center justify-between p-6 border-b border-primary/10">
-                            <div>
-                                <h3 className="font-headline text-xl font-bold text-on-surface">
+                        {/* Close button */}
+                        <button
+                            onClick={handleClose}
+                            className="absolute top-4 right-4 p-2 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors z-10"
+                        >
+                            <span className="material-symbols-outlined text-xl">close</span>
+                        </button>
+
+                        <div className="px-8 md:px-12 pt-10 pb-10">
+                            {/* Logo */}
+                            <div className="flex justify-center mb-12">
+                                <span className="font-display italic text-3xl tracking-tighter text-primary">Lumiqe</span>
+                            </div>
+
+                            {/* Header */}
+                            <div className="mb-10 text-center">
+                                <h3 className="font-display italic text-4xl text-on-surface mb-2">
                                     {isSignUp ? t('authCreateAccount') : t('authWelcomeBack')}
                                 </h3>
-                                <p className="text-on-surface-variant text-sm mt-0.5">
-                                    {isSignUp ? t('authJoinFree') : t('authSignInToAccount')}
+                                <p className="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60">
+                                    {isSignUp ? t('authJoinFree') : 'Enter your credentials to access the atelier'}
                                 </p>
                             </div>
-                            <button
-                                onClick={handleClose}
-                                className="p-2 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors"
-                            >
-                                <span className="material-symbols-outlined text-xl">close</span>
-                            </button>
-                        </div>
 
-                        {/* Body */}
-                        <div className="p-6">
+                            {/* Error */}
                             {error && (
-                                <div role="alert" aria-live="polite" className="mb-5 p-4 rounded-xl bg-primary/5 border border-primary/20 flex items-start gap-3 text-primary text-sm">
+                                <div role="alert" aria-live="polite" className="mb-6 p-4 rounded-xl bg-primary/5 border border-primary/20 flex items-start gap-3 text-primary text-sm">
                                     <span className="material-symbols-outlined text-xl shrink-0 mt-0.5">error</span>
                                     <p>{error}</p>
                                 </div>
                             )}
 
-                            {/* Google */}
-                            <button
-                                onClick={handleGoogleSignIn}
-                                className="w-full flex items-center justify-center gap-3 bg-white text-stone-900 font-semibold px-4 py-3 rounded-full hover:bg-stone-100 transition-colors mb-5 shadow-sm"
-                            >
-                                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                                </svg>
-                                {t('authContinueWithGoogle')}
-                            </button>
-
-                            <div className="relative flex items-center mb-5">
-                                <div className="flex-grow border-t border-primary/10"></div>
-                                <span className="flex-shrink-0 mx-4 text-on-surface-variant/50 text-xs uppercase tracking-wider">{t('authOr')}</span>
-                                <div className="flex-grow border-t border-primary/10"></div>
-                            </div>
-
-                            <form onSubmit={handleAuth} className="space-y-3.5">
+                            <form onSubmit={handleAuth} className="space-y-8">
+                                {/* Sign-up extra fields */}
                                 <AnimatePresence>
                                     {isSignUp && (
                                         <motion.div
@@ -241,7 +222,7 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                             initial={{ opacity: 0, height: 0 }}
                                             animate={{ opacity: 1, height: 'auto' }}
                                             exit={{ opacity: 0, height: 0 }}
-                                            className="space-y-3.5 overflow-hidden"
+                                            className="space-y-8 overflow-hidden"
                                         >
                                             <SignUpFields
                                                 firstName={firstName}
@@ -256,7 +237,6 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                 setAge={setAge}
                                                 setSex={setSex}
                                                 clearFieldError={clearFieldError}
-                                                inputClass={inputClass}
                                             />
                                         </motion.div>
                                     )}
@@ -264,12 +244,11 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
 
                                 {/* Email */}
                                 <div>
-                                    <div className="relative flex items-center">
-                                        <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">mail</span>
+                                    <div className="floating-label-group" style={{ borderBottomColor: fieldErrors.email ? '#f0bf62' : undefined }}>
                                         <input
                                             type="email"
-                                            placeholder={t('authEmail')}
-                                            aria-label={t('authEmail')}
+                                            placeholder=" "
+                                            id="modal-email"
                                             value={email}
                                             onChange={(e) => { setEmail(e.target.value); clearFieldError('email'); }}
                                             onBlur={() => {
@@ -277,63 +256,96 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                                     setFieldErrors(p => ({ ...p, email: t('authValidEmail') }));
                                                 }
                                             }}
-                                            className={inputClass('email')}
+                                            style={{ borderBottomColor: fieldErrors.email ? '#f0bf62' : undefined }}
                                         />
+                                        <label htmlFor="modal-email" className="uppercase tracking-widest text-xs">{t('authEmail')}</label>
                                     </div>
-                                    {fieldErrors.email && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.email}</p>}
+                                    {fieldErrors.email && <p className="mt-1 text-xs text-primary">{fieldErrors.email}</p>}
                                 </div>
 
                                 {/* Password */}
                                 <div>
-                                    <div className="relative flex items-center">
-                                        <span className="material-symbols-outlined text-base text-on-surface-variant absolute left-3.5">lock</span>
+                                    <div className="floating-label-group relative">
                                         <input
                                             type={showPassword ? 'text' : 'password'}
-                                            placeholder={t('authPassword')}
-                                            aria-label={t('authPassword')}
+                                            placeholder=" "
+                                            id="modal-password"
                                             value={password}
                                             onChange={(e) => { setPassword(e.target.value); clearFieldError('password'); }}
-                                            className={`w-full bg-surface-container/50 border rounded-2xl py-3 pl-10 pr-10 text-on-surface text-sm placeholder-on-surface-variant/40 focus:outline-none focus:ring-1 transition-all ${
-                                                fieldErrors.password
-                                                    ? 'border-primary focus:ring-primary'
-                                                    : 'border-outline-variant/30 focus:border-primary focus:ring-primary'
-                                            }`}
+                                            style={{ borderBottomColor: fieldErrors.password ? '#f0bf62' : undefined, paddingRight: '2rem' }}
                                         />
+                                        <label htmlFor="modal-password" className="uppercase tracking-widest text-xs">{t('authPassword')}</label>
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3.5 text-on-surface-variant hover:text-on-surface transition-colors"
+                                            className="absolute right-0 bottom-2 text-on-surface-variant/60 hover:text-primary transition-colors"
                                             aria-label={showPassword ? t('authHidePassword') : t('authShowPassword')}
                                         >
-                                            {showPassword ? <span className="material-symbols-outlined text-base">visibility_off</span> : <span className="material-symbols-outlined text-base">visibility</span>}
+                                            <span className="material-symbols-outlined text-[20px]">
+                                                {showPassword ? 'visibility_off' : 'visibility'}
+                                            </span>
                                         </button>
                                     </div>
-                                    {fieldErrors.password && <p className="mt-1 ml-2 text-xs text-primary">{fieldErrors.password}</p>}
-
+                                    {fieldErrors.password && <p className="mt-1 text-xs text-primary">{fieldErrors.password}</p>}
                                     {isSignUp && (
-                                        <PasswordStrengthMeter
-                                            password={password}
-                                            label={passwordStrength.label}
-                                            color={passwordStrength.color}
-                                            score={passwordStrength.score}
-                                            passwordLabel={t('authPasswordLabel')}
-                                        />
+                                        <div className="mt-3">
+                                            <PasswordStrengthMeter
+                                                password={password}
+                                                label={passwordStrength.label}
+                                                color={passwordStrength.color}
+                                                score={passwordStrength.score}
+                                                passwordLabel={t('authPasswordLabel')}
+                                            />
+                                        </div>
                                     )}
                                 </div>
 
+                                {/* Remember me + Forgot password (sign-in only) */}
                                 {!isSignUp && (
-                                    <div className="text-right">
-                                        <Link href="/forgot-password" onClick={handleClose} className="text-on-surface-variant hover:text-on-surface text-xs transition-colors">
+                                    <div className="flex items-center justify-between font-label text-[10px] uppercase tracking-widest">
+                                        <label className="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                type="checkbox"
+                                                checked={rememberMe}
+                                                onChange={(e) => setRememberMe(e.target.checked)}
+                                                className="w-3 h-3 bg-transparent border-outline-variant/50 rounded-sm text-primary focus:ring-offset-0 focus:ring-0"
+                                            />
+                                            <span className="text-on-surface-variant/60 group-hover:text-on-surface-variant transition-colors">Remember me</span>
+                                        </label>
+                                        <Link
+                                            href="/forgot-password"
+                                            onClick={handleClose}
+                                            className="text-primary/70 hover:text-primary transition-colors"
+                                        >
                                             {t('authForgotPassword')}
                                         </Link>
                                     </div>
                                 )}
 
-                                <div className="pt-1">
+                                {/* Terms (sign-up only) */}
+                                {isSignUp && (
+                                    <div className="flex items-start gap-3">
+                                        <input
+                                            type="checkbox"
+                                            id="terms"
+                                            required
+                                            className="w-4 h-4 mt-0.5 bg-transparent border-outline-variant/50 rounded-sm text-primary focus:ring-0 focus:ring-offset-0"
+                                        />
+                                        <label htmlFor="terms" className="text-[11px] text-on-surface-variant/60 font-label leading-relaxed uppercase tracking-wider">
+                                            {t('authAgreeToTerms')}{' '}
+                                            <Link href="/terms" onClick={handleClose} className="text-primary hover:text-primary-container transition-colors">{t('authTerms')}</Link>
+                                            {' '}{t('authAnd')}{' '}
+                                            <Link href="/privacy" onClick={handleClose} className="text-primary hover:text-primary-container transition-colors">{t('authPrivacyPolicy')}</Link>
+                                        </label>
+                                    </div>
+                                )}
+
+                                {/* Submit */}
+                                <div className="pt-2">
                                     <button
                                         type="submit"
                                         disabled={isLoading}
-                                        className="w-full flex items-center justify-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-label font-semibold py-3 rounded-full transition-colors shadow-[0_0_20px_-5px_rgba(240,191,98,0.2)] disabled:opacity-60 disabled:cursor-not-allowed"
+                                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary-container to-primary text-on-primary font-headline font-bold py-4 rounded-[10px] uppercase tracking-[0.15em] text-xs transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
                                     >
                                         {isLoading ? (
                                             <>
@@ -347,27 +359,47 @@ export default function SignInModal({ isOpen, onClose, callbackUrl = '/analyze',
                                     </button>
                                 </div>
 
-                                {isSignUp && (
-                                    <p className="text-center text-on-surface-variant/50 text-xs">
-                                        {t('authAgreeToTerms')}{' '}
-                                        <Link href="/terms" onClick={handleClose} className="text-on-surface-variant hover:text-on-surface underline">{t('authTerms')}</Link>
-                                        {' '}{t('authAnd')}{' '}
-                                        <Link href="/privacy" onClick={handleClose} className="text-on-surface-variant hover:text-on-surface underline">{t('authPrivacyPolicy')}</Link>
-                                    </p>
+                                {/* Divider + Google (sign-in only) */}
+                                {!isSignUp && (
+                                    <>
+                                        <div className="relative flex items-center">
+                                            <div className="flex-grow border-t border-outline-variant/30" />
+                                            <span className="flex-shrink mx-4 font-label text-[9px] uppercase tracking-[0.3em] text-on-surface-variant/50">Or continue with</span>
+                                            <div className="flex-grow border-t border-outline-variant/30" />
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={handleGoogleSignIn}
+                                            className="w-full flex items-center justify-center gap-3 bg-white/5 py-4 rounded-[10px] font-headline font-semibold uppercase tracking-[0.1em] text-xs text-on-surface hover:bg-white/10 transition-colors"
+                                            style={{ border: '0.5px solid rgba(196,151,62,0.2)' }}
+                                        >
+                                            <svg className="w-4 h-4" viewBox="0 0 24 24">
+                                                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                            </svg>
+                                            {t('authContinueWithGoogle')}
+                                        </button>
+                                    </>
                                 )}
                             </form>
 
-                            <div className="mt-5 pt-4 border-t border-primary/10 flex flex-col items-center gap-3">
-                                <button
-                                    onClick={() => { setIsSignUp(!isSignUp); setError(''); setFieldErrors({}); }}
-                                    className="text-on-surface-variant hover:text-on-surface text-sm transition-colors"
-                                >
-                                    {isSignUp ? t('authAlreadyHaveAccount') : t('authDontHaveAccount')}
-                                    <span className="text-primary font-semibold">{isSignUp ? t('authSignInLink') : t('authSignUpLink')}</span>
-                                </button>
+                            {/* Footer */}
+                            <div className="mt-12 pt-6 border-t border-primary/10 text-center space-y-3">
+                                <p className="font-label text-xs text-on-surface-variant/60">
+                                    {isSignUp ? t('authAlreadyHaveAccount') : t('authDontHaveAccount')}{' '}
+                                    <button
+                                        onClick={() => { setIsSignUp(!isSignUp); setError(''); setFieldErrors({}); }}
+                                        className="text-primary font-semibold ml-1 hover:underline underline-offset-4 decoration-primary/30 transition-all"
+                                    >
+                                        {isSignUp ? t('authSignInLink') : t('authSignUpLink')}
+                                    </button>
+                                </p>
                                 <button
                                     onClick={() => { onClose(); router.push('/analyze'); }}
-                                    className="text-on-surface-variant/50 hover:text-on-surface-variant text-xs transition-colors"
+                                    className="text-on-surface-variant/40 hover:text-on-surface-variant text-xs transition-colors font-label uppercase tracking-wider"
                                 >
                                     {t('authContinueAsGuest')}
                                 </button>

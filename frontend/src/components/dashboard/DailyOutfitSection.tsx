@@ -38,7 +38,7 @@ const DailyOutfitSection = React.memo(function DailyOutfitSection({
             {dailyOutfit && dailyOutfit.filled_count > 0 ? (
                 <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
                     <div className="flex items-center gap-2 mb-4">
-                        <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>wb_sunny</span>
+                        <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>wb_sunny</span>
                         <p className="text-on-surface font-semibold text-sm">Your outfit for {dailyOutfit.date}</p>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

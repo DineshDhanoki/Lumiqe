@@ -25,12 +25,12 @@ export default function VibeSelector({ currentVibe, onSelectVibe, isPremiumUser 
                         <button
                             key={vibe.id}
                             onClick={() => onSelectVibe(vibe.id)}
+                            style={!isActive ? { border: '0.5px solid rgba(196,151,62,0.2)' } : undefined}
                             className={`
-                                relative flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300
-                                border
+                                relative flex items-center gap-2 px-8 py-3 rounded-full text-xs font-headline font-bold uppercase tracking-widest transition-all duration-300
                                 ${isActive
-                                    ? 'bg-primary/10 text-primary border-primary/40 shadow-[0_0_15px_rgba(240,191,98,0.2)]'
-                                    : 'bg-surface-container/30 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50 border-outline-variant/20'
+                                    ? 'bg-primary-container text-on-primary shadow-[0_0_15px_rgba(240,191,98,0.2)]'
+                                    : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                                 }
                             `}
                         >

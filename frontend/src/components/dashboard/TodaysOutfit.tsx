@@ -33,7 +33,7 @@ export default function TodaysOutfit({ dailyOutfit, isEmpty, isError, onRetry }:
                 <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider mb-4">Today&apos;s Outfit</p>
                 <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
                     <div className="flex items-center gap-2 mb-4">
-                        <span className="material-symbols-outlined text-xl text-yellow-400">wb_sunny</span>
+                        <span className="material-symbols-outlined text-xl text-primary">wb_sunny</span>
                         <p className="text-on-surface font-label font-semibold text-sm">Your outfit for {dailyOutfit.date}</p>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

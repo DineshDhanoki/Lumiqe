@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '@/components/Navbar';
 import { Skeleton } from '@/components/ui/Skeleton';
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -51,17 +50,17 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function getScoreColor(score: number): string {
-    if (score >= 80) return 'text-emerald-400';
-    if (score >= 60) return 'text-yellow-400';
-    if (score >= 40) return 'text-orange-400';
-    return 'text-red-400';
+    if (score >= 80) return 'text-primary';
+    if (score >= 60) return 'text-secondary';
+    if (score >= 40) return 'text-on-surface-variant';
+    return 'text-tertiary';
 }
 
 function getScoreBg(score: number): string {
-    if (score >= 80) return 'bg-emerald-500/10 border-emerald-500/20';
-    if (score >= 60) return 'bg-yellow-500/10 border-yellow-500/20';
-    if (score >= 40) return 'bg-orange-500/10 border-orange-500/20';
-    return 'bg-red-500/10 border-red-500/20';
+    if (score >= 80) return 'bg-primary/10 border-primary/20';
+    if (score >= 60) return 'bg-secondary/10 border-secondary/20';
+    if (score >= 40) return 'bg-surface-container border-primary/10';
+    return 'bg-tertiary/10 border-tertiary/20';
 }
 
 export default function WardrobePage() {
@@ -154,36 +153,53 @@ export default function WardrobePage() {
         <AppLayout>
             <main className="max-w-6xl mx-auto">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                    <div className="flex items-center gap-3">
-                        <span className="material-symbols-outlined text-primary text-3xl">inventory_2</span>
-                        <h1 className="font-display text-3xl font-bold text-on-surface">Your Wardrobe</h1>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+                    <div>
+                        <h1 className="font-display text-5xl md:text-6xl text-on-surface mb-2 tracking-tight">
+                            The Digital <span className="italic text-primary">Atelier</span>
+                        </h1>
+                        <p className="font-label text-sm text-on-surface-variant max-w-md">Your curated collection, analyzed and optimized by Lumiqe AI.</p>
                     </div>
                     <button
                         onClick={() => { setShowAddForm(true); setEditingItem(null); }}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-primary-container hover:bg-primary text-on-primary-container rounded-full font-label font-medium transition-colors"
+                        className="group relative flex items-center gap-3 bg-primary-container px-8 py-4 rounded-[10px] text-on-primary font-headline font-bold uppercase tracking-widest text-[11px] hover:brightness-110 transition-all"
                     >
-                        <span className="material-symbols-outlined text-base">add</span>
-                        Add Item
+                        <span className="material-symbols-outlined text-sm">add</span>
+                        <span>Add Item</span>
                     </button>
                 </div>
 
                 {/* Stats Bar */}
                 {!loading && items.length > 0 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
-                        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-4">
-                            <p className="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Total Items</p>
-                            <p className="text-2xl font-bold text-on-surface">{stats.count}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+                        <div className="bg-surface-container-low ghost-border p-6 rounded-[16px] flex items-center justify-between">
+                            <div>
+                                <p className="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant/60 mb-1">Total Items</p>
+                                <p className="font-headline text-3xl font-extrabold text-on-surface">{stats.count}</p>
+                            </div>
+                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary">checkroom</span>
+                            </div>
                         </div>
-                        <div className={`rounded-2xl p-4 border ${getScoreBg(stats.avg_match_score)}`}>
-                            <p className="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Avg Match</p>
-                            <p className={`text-2xl font-bold ${getScoreColor(stats.avg_match_score)}`}>
-                                {stats.avg_match_score}%
-                            </p>
+                        <div className="bg-surface-container-low ghost-border p-6 rounded-[16px] flex items-center justify-between">
+                            <div>
+                                <p className="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant/60 mb-1">Avg Match Score</p>
+                                <p className={`font-headline text-3xl font-extrabold ${getScoreColor(stats.avg_match_score)}`}>
+                                    {stats.avg_match_score}%
+                                </p>
+                            </div>
+                            <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+                                <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>insights</span>
+                            </div>
                         </div>
-                        <div className="bg-surface-container/50 border border-primary/10 rounded-2xl p-4 col-span-2 sm:col-span-1">
-                            <p className="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Categories</p>
-                            <p className="text-2xl font-bold text-on-surface">{Object.keys(categoryCounts).length}</p>
+                        <div className="bg-surface-container-low ghost-border p-6 rounded-[16px] flex items-center justify-between">
+                            <div>
+                                <p className="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant/60 mb-1">Active Categories</p>
+                                <p className="font-headline text-3xl font-extrabold text-tertiary">{Object.keys(categoryCounts).length}</p>
+                            </div>
+                            <div className="w-12 h-12 bg-tertiary/10 rounded-full flex items-center justify-center">
+                                <span className="material-symbols-outlined text-tertiary">category</span>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -211,11 +227,12 @@ export default function WardrobePage() {
                     <div className="flex flex-wrap gap-2 mb-6">
                         <button
                             onClick={() => setFilterCategory('all')}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                            className={`px-5 py-2 rounded-full text-xs font-headline font-bold uppercase tracking-widest transition-colors ${
                                 filterCategory === 'all'
-                                    ? 'bg-primary text-on-primary-container'
-                                    : 'bg-surface-container/30 text-on-surface-variant hover:bg-surface-container/30'
+                                    ? 'bg-primary text-on-primary'
+                                    : 'text-on-surface/60 hover:text-primary transition-colors'
                             }`}
+                            style={filterCategory !== 'all' ? { background: 'rgba(32,31,34,1)', border: '0.5px solid rgba(196,151,62,0.15)' } : {}}
                         >
                             All ({items.length})
                         </button>
@@ -223,11 +240,12 @@ export default function WardrobePage() {
                             <button
                                 key={cat}
                                 onClick={() => setFilterCategory(cat)}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                                className={`px-5 py-2 rounded-full text-xs font-headline font-bold uppercase tracking-widest transition-colors ${
                                     filterCategory === cat
-                                        ? 'bg-primary text-on-primary-container'
-                                        : 'bg-surface-container/30 text-on-surface-variant hover:bg-surface-container/30'
+                                        ? 'bg-primary text-on-primary'
+                                        : 'text-on-surface/60 hover:text-primary transition-colors'
                                 }`}
+                                style={filterCategory !== cat ? { background: 'rgba(32,31,34,1)', border: '0.5px solid rgba(196,151,62,0.15)' } : {}}
                             >
                                 {CATEGORY_LABELS[cat]} ({categoryCounts[cat]})
                             </button>
@@ -288,7 +306,7 @@ export default function WardrobePage() {
                         {items.length === 0 && (
                             <button
                                 onClick={() => setShowAddForm(true)}
-                                className="mt-2 px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors"
+                                className="mt-2 px-6 py-3 bg-primary-container rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all"
                             >
                                 Add Your First Item
                             </button>
@@ -296,7 +314,7 @@ export default function WardrobePage() {
                     </div>
                 ) : (
                     /* Items Grid */
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredItems.map((item) => (
                             <motion.div
                                 key={item.id}
@@ -304,65 +322,93 @@ export default function WardrobePage() {
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                className="bg-surface-container/50 border border-primary/10 rounded-2xl p-5 group hover:border-primary/20 transition-colors"
+                                className="group bg-surface-container-low rounded-[24px] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2"
+                                style={{ border: '0.5px solid rgba(196,151,62,0.15)' }}
                             >
-                                <div className="flex items-start justify-between mb-3">
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-sm font-semibold text-on-surface truncate">{item.name}</h3>
-                                        <p className="text-xs text-on-surface-variant mt-0.5">
-                                            {CATEGORY_LABELS[item.category] || item.category}
-                                            {item.brand && ` · ${item.brand}`}
-                                        </p>
+                                {/* Image / Color area */}
+                                <div className="relative aspect-[4/5] overflow-hidden">
+                                    {item.image_url ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img
+                                            src={item.image_url}
+                                            alt={item.name}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                    ) : (
+                                        <div
+                                            className="w-full h-full flex items-center justify-center"
+                                            style={{ backgroundColor: item.color_hex || 'rgba(32,31,34,0.8)' }}
+                                        >
+                                            <span className="material-symbols-outlined text-5xl text-white/20">checkroom</span>
+                                        </div>
+                                    )}
+                                    {/* Match score badge */}
+                                    <div
+                                        className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 rounded-full"
+                                        style={{ background: 'rgba(19,19,21,0.8)', backdropFilter: 'blur(8px)', border: '0.5px solid rgba(196,151,62,0.2)' }}
+                                    >
+                                        <span
+                                            className="material-symbols-outlined text-primary"
+                                            style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}
+                                        >
+                                            bolt
+                                        </span>
+                                        <span className="font-mono text-xs text-primary font-bold">{item.match_score}%</span>
                                     </div>
-                                    <div className="flex items-center gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    {/* Edit/delete on hover */}
+                                    <div className="absolute top-4 left-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={() => setEditingItem(item)}
-                                            className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 rounded-lg transition-colors"
+                                            className="p-1.5 rounded-lg transition-colors"
+                                            style={{ background: 'rgba(19,19,21,0.8)', backdropFilter: 'blur(8px)' }}
                                             aria-label={`Edit ${item.name}`}
                                         >
-                                            <span className="material-symbols-outlined text-sm">edit</span>
+                                            <span className="material-symbols-outlined text-sm text-on-surface-variant">edit</span>
                                         </button>
                                         <button
                                             onClick={() => handleDelete(item.id)}
                                             disabled={deletingId === item.id}
-                                            className="p-1.5 text-on-surface-variant hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+                                            className="p-1.5 rounded-lg transition-colors disabled:opacity-50"
+                                            style={{ background: 'rgba(19,19,21,0.8)', backdropFilter: 'blur(8px)' }}
                                             aria-label={`Delete ${item.name}`}
                                         >
-                                            <span className="material-symbols-outlined text-sm">delete</span>
+                                            <span className="material-symbols-outlined text-sm text-on-surface-variant">delete</span>
                                         </button>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-3 mb-3">
-                                    {item.color_hex ? (
-                                        <div
-                                            className="w-10 h-10 rounded-xl border border-primary/10 flex-shrink-0"
-                                            style={{ backgroundColor: item.color_hex }}
-                                            title={item.color_hex}
-                                        />
-                                    ) : (
-                                        <div className="w-10 h-10 rounded-xl border border-primary/10 bg-surface-container/30 flex items-center justify-center flex-shrink-0">
-                                            <span className="material-symbols-outlined text-base text-on-surface-variant/30">palette</span>
+                                {/* Card body */}
+                                <div className="p-6">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="min-w-0 flex-1">
+                                            {item.brand && (
+                                                <p className="font-label text-[10px] uppercase tracking-widest text-primary/70 font-bold mb-1 truncate">
+                                                    {item.brand}
+                                                </p>
+                                            )}
+                                            <h3 className="font-headline text-base font-medium text-on-surface truncate">{item.name}</h3>
+                                            <p className="text-xs text-on-surface-variant mt-0.5">
+                                                {CATEGORY_LABELS[item.category] || item.category}
+                                            </p>
                                         </div>
-                                    )}
-                                    <div>
-                                        <p className="text-xs text-on-surface-variant">Color</p>
-                                        <p className="text-sm text-on-surface font-mono">
-                                            {item.color_hex || 'Not set'}
-                                        </p>
+                                    </div>
+
+                                    <div className="flex items-center justify-between">
+                                        {/* Color swatches */}
+                                        <div className="flex gap-1.5">
+                                            {item.color_hex && (
+                                                <div
+                                                    className="w-5 h-5 rounded-full ring-1 ring-white/10 shadow-inner"
+                                                    style={{ backgroundColor: item.color_hex }}
+                                                    title={item.color_hex}
+                                                />
+                                            )}
+                                        </div>
+                                        {item.notes && (
+                                            <p className="font-mono text-[10px] text-on-surface-variant truncate max-w-[120px]">{item.notes}</p>
+                                        )}
                                     </div>
                                 </div>
-
-                                <div className={`flex items-center justify-between px-3 py-2 rounded-xl border ${getScoreBg(item.match_score)}`}>
-                                    <span className="text-xs text-on-surface-variant">Palette Match</span>
-                                    <span className={`text-sm font-bold ${getScoreColor(item.match_score)}`}>
-                                        {item.match_score}%
-                                    </span>
-                                </div>
-
-                                {item.notes && (
-                                    <p className="text-xs text-on-surface-variant/50 mt-2 line-clamp-2">{item.notes}</p>
-                                )}
                             </motion.div>
                         ))}
                     </div>
@@ -373,7 +419,7 @@ export default function WardrobePage() {
                     <div className="mt-8 text-center">
                         <Link
                             href="/analyze"
-                            className="text-sm text-on-surface-variant hover:text-red-400 transition-colors"
+                            className="text-sm text-on-surface-variant hover:text-primary transition-colors font-mono text-[11px] uppercase tracking-widest"
                         >
                             Run a color analysis to improve your match scores →
                         </Link>
@@ -631,7 +677,7 @@ function WardrobeItemForm({ editItem, onClose, onAdded, onUpdated }: WardrobeIte
                     <button
                         type="submit"
                         disabled={submitting}
-                        className="w-full py-3 bg-primary-container hover:bg-primary disabled:bg-primary-container/50 disabled:cursor-not-allowed rounded-xl text-on-primary-container font-medium transition-colors flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-primary-container hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
                     >
                         {submitting ? (
                             <>

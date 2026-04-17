@@ -26,8 +26,6 @@ interface ProductCardProps {
 export default function ProductCard({ product, idx, onLockedClick }: ProductCardProps) {
     const isLocked = product.is_locked;
 
-    // ─── Resilient Image State ───────────────────────────────
-    // Route external images through our proxy to bypass CDN hotlink blocks
     const proxyUrl = product.image_url && !product.image_url.startsWith('/')
         ? `/api/image-proxy?url=${encodeURIComponent(product.image_url)}`
         : product.image_url;
@@ -47,23 +45,15 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            onClick={() => {
-                if (isLocked) onLockedClick();
-            }}
-            className={`
-                group relative flex flex-col gap-3 rounded-3xl border p-3 transition-colors overflow-hidden
-                ${isLocked
-                    ? 'bg-surface/60 border-primary/5 cursor-pointer'
-                    : 'bg-surface-container/30 backdrop-blur-md border-primary/10 hover:bg-surface-container/50'
-                }
-            `}
+            onClick={() => { if (isLocked) onLockedClick(); }}
+            className="group relative flex flex-col bg-surface-container-low rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]"
         >
-            {/* ── Product Image Box ─────────────────────────── */}
-            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-surface-container/30">
+            {/* ── Product Image ─────────────────────────── */}
+            <div className="relative aspect-[3/4] overflow-hidden">
                 {imgFailed ? (
-                    /* ── Premium Gold Fallback — "Visit Store" CTA ── */
+                    /* Fallback when image fails to load */
                     <div
-                        className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer overflow-hidden border border-[#d4af37]/30 shadow-[inset_0_0_40px_rgba(212,175,55,0.15)] rounded-2xl"
+                        className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden"
                         style={{
                             background: `
                                 radial-gradient(circle at 30% 20%, rgba(212,175,55,0.15) 0%, transparent 60%),
@@ -72,7 +62,6 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                             `,
                         }}
                     >
-                        {/* Animated gold shimmer overlay */}
                         <div
                             className="absolute inset-0 opacity-[0.2]"
                             style={{
@@ -81,117 +70,89 @@ export default function ProductCard({ product, idx, onLockedClick }: ProductCard
                                 animation: 'shimmer 3s ease-in-out infinite',
                             }}
                         />
-
-                        {/* Subtle gold grid pattern */}
-                        <div
-                            className="absolute inset-0 opacity-[0.05]"
-                            style={{
-                                backgroundImage: `
-                                    linear-gradient(rgba(212,175,55,1) 1px, transparent 1px),
-                                    linear-gradient(90deg, rgba(212,175,55,1) 1px, transparent 1px)
-                                `,
-                                backgroundSize: '24px 24px',
-                            }}
-                        />
-
-                        {/* Brand badge */}
                         <div className="relative z-10 flex flex-col items-center gap-4">
-                            {/* Glowing gold icon ring */}
                             <div
-                                className="w-16 h-16 rounded-full flex items-center justify-center border transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"
+                                className="w-16 h-16 rounded-full flex items-center justify-center border transition-transform duration-500 group-hover:scale-110"
                                 style={{
                                     background: `linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.02))`,
                                     borderColor: `rgba(212,175,55,0.4)`,
                                     boxShadow: `0 0 30px rgba(212,175,55,0.2), inset 0 0 20px rgba(212,175,55,0.1)`,
                                 }}
                             >
-                                <span className="material-symbols-outlined text-base transition-all duration-300 group-hover:-translate-y-0.5" style={{ color: `#e6c27a` }}>shopping_bag</span>
+                                <span className="material-symbols-outlined text-base" style={{ color: `#e6c27a` }}>shopping_bag</span>
                             </div>
-
-                            {/* Brand name */}
-                            <span
-                                className="text-[11px] font-black uppercase tracking-[0.3em] drop-shadow-md"
-                                style={{ color: '#d4af37' }}
-                            >
-                                {product.brand}
-                            </span>
-
-                            {/* CTA */}
-                            <div
-                                className="flex items-center gap-2 px-4 py-2 mt-2 rounded-full border text-[10px] font-bold tracking-widest uppercase transition-all duration-500 group-hover:gap-3 group-hover:bg-[#d4af37]/20"
-                                style={{
-                                    borderColor: `rgba(212,175,55,0.3)`,
-                                    color: `#f9f29f`,
-                                    background: `rgba(212,175,55,0.1)`,
-                                    boxShadow: `0 4px 15px rgba(0,0,0,0.5)`,
-                                }}
-                            >
-                                <span className="material-symbols-outlined text-sm" style={{ color: '#d4af37' }}>auto_awesome</span>
-                                Visit Store
-                                <span className="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#d4af37' }}>arrow_outward</span>
-                            </div>
+                            <span className="text-[11px] font-black uppercase tracking-[0.3em]" style={{ color: '#d4af37' }}>{product.brand}</span>
                         </div>
                     </div>
                 ) : (
-                    /* ── Next.js Image with unoptimized bypass ── */
                     <Image
                         src={imgSrc}
                         alt={`${product.name} by ${product.brand}`}
                         fill
                         unoptimized={true}
-                        className={`object-cover transition-transform duration-500
-                            ${isLocked ? 'blur-md brightness-[0.3]' : 'group-hover:scale-110'}
-                        `}
+                        className={`object-cover transition-transform duration-700 ${isLocked ? 'grayscale opacity-30' : 'group-hover:scale-110'}`}
                         onError={handleImageError}
                     />
                 )}
 
-                {/* Lock Overlay */}
+                {/* Locked overlay */}
                 {isLocked && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-12 h-12 rounded-full bg-surface/80 backdrop-blur-sm border border-primary/10 flex items-center justify-center shadow-lg">
-                            <span className="material-symbols-outlined text-xl text-on-surface-variant">lock</span>
-                        </div>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/80 backdrop-blur-md z-10 px-6 text-center">
+                        <span className="material-symbols-outlined text-primary text-4xl mb-4">lock</span>
+                        <h4 className="font-display text-2xl font-bold text-on-surface mb-2">Premium Access</h4>
+                        <p className="font-label text-[10px] text-on-surface-variant/40 uppercase tracking-widest mb-6 leading-relaxed">
+                            Exclusive access for premium tier members
+                        </p>
+                        <button
+                            onClick={onLockedClick}
+                            className="px-6 py-2 font-headline text-[10px] font-bold uppercase tracking-widest rounded-full transition-all hover:bg-primary hover:text-on-primary"
+                            style={{ background: 'rgba(196,151,62,0.1)', color: '#f0bf62', border: '1px solid rgba(196,151,62,0.3)' }}
+                        >
+                            Unlock Access
+                        </button>
                     </div>
                 )}
 
-                {/* Match Score Badge — top-left, AI MATCH % in JetBrains Mono */}
+                {/* Match Score Badge */}
                 {!isLocked && (
-                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface/80 backdrop-blur-sm text-[9px] font-mono font-bold text-primary border border-primary/15 uppercase tracking-wider">
-                        AI {Math.round(product.match_score)}%
+                    <div
+                        className="absolute top-4 left-4 bg-background/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5"
+                        style={{ border: '0.5px solid rgba(196,151,62,0.2)' }}
+                    >
+                        <span className="material-symbols-outlined text-primary text-xs" style={{ fontVariationSettings: "'FILL' 1", fontSize: '14px' }}>auto_awesome</span>
+                        <span className="font-mono text-[10px] text-primary font-bold">{Math.round(product.match_score)}% MATCH</span>
                     </div>
                 )}
             </div>
 
-            {/* ── Details ───────────────────────────────────── */}
-            <div className="px-1 space-y-1">
-                <h3 className={`text-sm font-semibold leading-tight line-clamp-2 ${isLocked ? 'text-on-surface-variant' : 'text-on-surface'}`}>
+            {/* ── Details ─────────────────────────────── */}
+            <div className="p-6 flex flex-col flex-grow">
+                <span className="font-headline text-[10px] text-on-surface-variant/40 uppercase tracking-[0.2em] mb-1">
+                    {isLocked ? 'Premium Brand' : product.brand}
+                </span>
+                <h3 className="font-display text-xl font-bold text-on-surface mb-4 line-clamp-2">
                     {product.name}
                 </h3>
-                <div className="flex justify-between items-center text-xs">
-                    <span className={isLocked ? 'text-on-surface-variant/50' : 'text-on-surface-variant'}>
-                        {isLocked ? 'Premium Brand' : product.brand}
-                    </span>
+                <div className="mt-auto flex items-center justify-between">
                     {!isLocked && (
-                        <span className="text-on-surface font-medium">{product.price}</span>
+                        <span className="font-headline text-sm font-semibold text-on-surface-variant">{product.price}</span>
+                    )}
+                    {!isLocked && product.purchase_link && (
+                        <a
+                            href={product.purchase_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Buy ${product.name}`}
+                            className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary transition-all hover:bg-primary hover:text-on-primary"
+                            style={{ border: '0.5px solid rgba(196,151,62,0.2)' }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <span className="material-symbols-outlined text-sm">shopping_bag</span>
+                        </a>
                     )}
                 </div>
             </div>
 
-            {/* ── Link Overlay for Unlocked Items ────────── */}
-            {!isLocked && product.purchase_link && (
-                <a
-                    href={product.purchase_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Buy ${product.name}`}
-                    className="absolute inset-0 z-10"
-                >
-                    <span className="sr-only">Buy {product.name}</span>
-                </a>
-            )}
-
-            {/* ── Shimmer Keyframes ──────────────────────── */}
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @keyframes shimmer {

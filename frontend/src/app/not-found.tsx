@@ -2,39 +2,75 @@ import Link from 'next/link';
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-6">
-            <div className="max-w-md w-full text-center space-y-8">
-                {/* Editorial 404 heading */}
-                <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.5em] text-primary/60 mb-4">
-                        Error 404
-                    </p>
-                    <h1 className="font-display text-[8rem] font-bold text-on-surface leading-none tracking-tighter">
-                        404
-                    </h1>
-                    <p className="font-headline text-xl font-semibold text-on-surface mt-2">
-                        The Atelier is Lost
-                    </p>
-                    <p className="text-on-surface-variant text-sm mt-3 leading-relaxed max-w-xs mx-auto">
-                        The page you&apos;re looking for doesn&apos;t exist or has been moved.
-                    </p>
-                </div>
+        <main className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+            {/* Ambient glow */}
+            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
+            </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            {/* Large ghost 404 background text */}
+            <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none z-0">
+                <h1 className="font-display italic text-[40vw] leading-none text-primary opacity-[0.03] tracking-tighter">404</h1>
+            </div>
+
+            {/* Main content card */}
+            <div className="relative z-10 max-w-xl w-full px-6">
+                <div
+                    className="ghost-border bg-surface-container/60 backdrop-blur-xl p-12 md:p-20 flex flex-col items-center text-center rounded-[24px]"
+                    style={{ boxShadow: '0 -10px 40px rgba(196,151,62,0.03)' }}
+                >
+                    {/* Brand anchor */}
+                    <div className="mb-12">
+                        <span className="font-display italic text-3xl tracking-tighter text-primary">Lumiqe</span>
+                    </div>
+
+                    {/* Editorial headline */}
+                    <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-on-surface mb-6 tracking-tight">
+                        The atelier is lost
+                    </h2>
+
+                    {/* Error description */}
+                    <div className="space-y-4 mb-12">
+                        <p className="text-on-surface-variant font-light text-lg leading-relaxed max-w-md">
+                            The silhouette you are seeking has vanished from our seasonal archive. Perhaps the thread was broken or the collection has moved.
+                        </p>
+                        <p className="font-mono text-[10px] text-primary uppercase tracking-[0.2em] opacity-60">
+                            Error Code: 0x404_NULL_REFERENCE
+                        </p>
+                    </div>
+
+                    {/* Action button */}
                     <Link
                         href="/"
-                        className="px-6 py-3 bg-primary-container text-on-primary-container rounded-full font-label font-bold text-sm tracking-widest uppercase hover:bg-primary transition-colors"
+                        className="group relative inline-flex items-center justify-center px-10 py-4 bg-primary-container hover:bg-primary-container/90 text-on-primary font-headline font-bold text-xs uppercase tracking-widest transition-all duration-300 rounded-[10px]"
                     >
-                        Return Home
+                        <span className="relative z-10">Return to Atelier</span>
                     </Link>
-                    <Link
-                        href="/analyze"
-                        className="px-6 py-3 border border-outline-variant rounded-full text-on-surface-variant font-label font-medium text-sm hover:border-primary/40 hover:text-on-surface transition-colors ghost-border"
-                    >
-                        Start Analysis
-                    </Link>
+
+                    {/* Fine print link */}
+                    <div className="mt-12">
+                        <a
+                            href="/"
+                            className="font-label text-[10px] text-on-surface-variant/50 hover:text-primary uppercase tracking-widest transition-colors duration-300"
+                        >
+                            Contact Style Concierge
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {/* Decorative ghost fabric image bottom-right */}
+            <div className="absolute bottom-0 right-0 w-1/3 h-1/2 opacity-20 pointer-events-none z-0 hidden lg:block">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    alt="Luxury fashion"
+                    className="w-full h-full object-cover grayscale brightness-50"
+                    src="/404-fabric.jpg"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-l from-background via-transparent to-transparent" />
+            </div>
+        </main>
     );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
 import { useLumiqeStore } from '@/lib/store';
 import { useTranslation } from '@/lib/hooks/useTranslation';
@@ -173,20 +174,45 @@ export default function Dashboard() {
             <div className="max-w-7xl mx-auto space-y-8">
                 {status === 'authenticated' && <EmailVerificationBanner />}
 
-                {/* Page header */}
-                <motion.div
+                {/* Editorial Hero Section */}
+                <motion.section
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
+                    className="relative h-[420px] md:h-[480px] rounded-[32px] overflow-hidden flex items-end p-8 md:p-10 group"
                 >
-                    <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary mb-2">
-                        {t('dashboardSubtitle')}
-                    </p>
-                    <h1 className="font-display text-5xl md:text-6xl font-bold text-on-surface leading-none">
-                        {t('dashboardTitle')} <br />
-                        <span className="italic text-primary">Continues</span>
-                    </h1>
-                </motion.div>
+                    <div className="absolute inset-0 z-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/dashboard-hero.jpg"
+                            alt=""
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                        />
+                        <div
+                            className="absolute inset-0"
+                            style={{ background: 'linear-gradient(to top, #09090B 0%, rgba(9,9,11,0.5) 50%, transparent 100%)' }}
+                        />
+                    </div>
+                    <div className="relative z-10 max-w-2xl">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary mb-4 block">
+                            {t('dashboardSubtitle')}
+                        </span>
+                        <h1 className="font-display text-6xl md:text-7xl text-on-surface leading-none mb-6">
+                            {t('dashboardTitle')} <br />
+                            <span className="italic text-primary">Continues</span>
+                        </h1>
+                        <p className="text-on-surface-variant text-base leading-relaxed mb-8 max-w-md">
+                            Our AI has refined your palette based on your recent scans. Ready for the transformation?
+                        </p>
+                        <Link
+                            href="/analyze"
+                            className="inline-block bg-primary-container text-on-primary px-8 py-4 rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
+                        >
+                            Begin Daily Refinement
+                        </Link>
+                    </div>
+                </motion.section>
 
                 {lastAnalysis && rescanDaysAgo >= RESCAN_THRESHOLD_DAYS && (
                     <RescanNudge daysAgo={rescanDaysAgo} />
@@ -196,12 +222,6 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
                     {/* Left / center column */}
                     <div className="xl:col-span-8 space-y-10">
-                        <StyleIdentityCards
-                            lastAnalysis={lastAnalysis}
-                            bodyShape={bodyShape}
-                            stylePersonality={stylePersonality}
-                        />
-
                         {status === 'authenticated' && (
                             <TodaysOutfit
                                 dailyOutfit={dailyOutfit}
@@ -224,8 +244,16 @@ export default function Dashboard() {
                         {!lastAnalysis && <EmptyCTA />}
                     </div>
 
-                    {/* Right column — quick actions */}
+                    {/* Right column — DNA cards + quick actions */}
                     <div className="xl:col-span-4 space-y-6">
+                        <div>
+                            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-on-surface-variant/40 mb-6 px-2">Your Signature DNA</p>
+                            <StyleIdentityCards
+                                lastAnalysis={lastAnalysis}
+                                bodyShape={bodyShape}
+                                stylePersonality={stylePersonality}
+                            />
+                        </div>
                         <QuickActions aiStylistHref={aiStylistHref} />
                     </div>
                 </div>

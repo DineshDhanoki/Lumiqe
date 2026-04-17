@@ -35,8 +35,8 @@ export function getPasswordStrength(password: string, t: (key: string) => string
     if (/[A-Z]/.test(password)) score++;
     if (/[0-9]/.test(password)) score++;
     if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(password)) score++;
-    if (score <= 2) return { score, label: t('authPasswordWeak'), color: 'bg-red-500' };
-    if (score <= 3) return { score, label: t('authPasswordFair'), color: 'bg-yellow-500' };
-    if (score <= 4) return { score, label: t('authPasswordGood'), color: 'bg-blue-500' };
-    return { score, label: t('authPasswordStrong'), color: 'bg-green-500' };
+    if (score <= 2) return { score, label: t('authPasswordWeak'), color: 'bg-error' };
+    if (score <= 3) return { score, label: t('authPasswordFair'), color: 'bg-secondary' };
+    if (score <= 4) return { score, label: t('authPasswordGood'), color: 'bg-tertiary' };
+    return { score, label: t('authPasswordStrong'), color: 'bg-primary' };
 }

@@ -173,12 +173,11 @@ export default function OverviewTab({
             {/* Metal + Makeup */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gradient-to-br from-surface-container/50 to-transparent border border-primary/10 p-8 rounded-3xl flex flex-col items-center justify-center text-center">
-                    <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-2xl ${
-                        metal.toLowerCase() === 'gold'
-                            ? 'bg-gradient-to-tr from-yellow-600 via-yellow-400 to-yellow-200 border border-yellow-300'
-                            : 'bg-gradient-to-tr from-stone-400 via-stone-300 to-white border border-stone-200'
-                    }`}>
-                        <span className={`material-symbols-outlined text-2xl ${metal.toLowerCase() === 'gold' ? 'text-yellow-800' : 'text-stone-800'}`} style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+                    <div
+                        className="w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-2xl bg-primary-container/30"
+                        style={{ border: '0.5px solid rgba(196,151,62,0.3)' }}
+                    >
+                        <span className="material-symbols-outlined text-2xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                     </div>
                     <p className="text-on-surface-variant font-label tracking-wider text-sm font-semibold uppercase mb-2">{t('bestMetal')}</p>
                     <h4 className="font-headline text-3xl font-bold text-on-surface">{metal}</h4>

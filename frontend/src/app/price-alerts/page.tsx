@@ -85,10 +85,15 @@ export default function PriceAlertsPage() {
         <AppLayout>
             <main className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="flex items-center gap-3 mb-8">
-                    <span className="material-symbols-outlined text-primary text-3xl">notifications_active</span>
-                    <h1 className="font-display text-3xl font-bold text-on-surface">Price Alerts</h1>
-                </div>
+                <header className="mb-12">
+                    <span className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase block mb-3">Market Intelligence</span>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                            <h1 className="font-display text-5xl md:text-7xl text-on-surface tracking-tighter leading-none mb-3">Price Alerts</h1>
+                            <p className="text-on-surface-variant max-w-md text-sm leading-relaxed">Automated monitoring for your curated wishlists. Real-time insights into valuation shifts.</p>
+                        </div>
+                    </div>
+                </header>
 
                 {/* Error */}
                 {error && (
@@ -124,7 +129,7 @@ export default function PriceAlertsPage() {
                         </p>
                         <Link
                             href="/shopping-agent"
-                            className="mt-2 px-6 py-3 bg-primary-container rounded-full text-on-primary-container font-medium hover:bg-primary transition-colors"
+                            className="mt-2 px-6 py-3 bg-primary-container rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all"
                         >
                             Browse Shopping Agent
                         </Link>
@@ -134,7 +139,7 @@ export default function PriceAlertsPage() {
                         {/* Triggered Alerts */}
                         {triggeredAlerts.length > 0 && (
                             <section>
-                                <h2 className="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <h2 className="text-sm font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
                                     <span className="material-symbols-outlined text-base">trending_down</span>
                                     Price Dropped ({triggeredAlerts.length})
                                 </h2>
@@ -199,65 +204,69 @@ function PriceAlertCard({ alert, isDeleting, onDelete }: PriceAlertCardProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className={`border rounded-2xl p-5 transition-colors ${
-                alert.is_triggered
-                    ? 'bg-emerald-500/5 border-emerald-500/20'
-                    : 'bg-surface-container/50 border-primary/10 hover:border-primary/20'
-            }`}
+            className="flex flex-col md:flex-row items-center gap-8 group rounded-2xl p-6 transition-all duration-500 hover:bg-surface-container-high/60"
+            style={{ background: 'rgba(32,31,34,0.4)', backdropFilter: 'blur(12px)', border: '0.5px solid rgba(196,151,62,0.2)' }}
         >
-            <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                        {alert.is_triggered && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">
-                                Dropped
-                            </span>
-                        )}
-                        <h3 className="text-sm font-semibold text-on-surface truncate">
-                            {alert.product_name}
-                        </h3>
-                    </div>
+            {/* Product icon placeholder */}
+            <div className="w-16 h-16 shrink-0 rounded-xl bg-surface-container flex items-center justify-center"
+                style={{ border: '0.5px solid rgba(196,151,62,0.15)' }}>
+                <span className="material-symbols-outlined text-2xl text-on-surface-variant/40">shopping_bag</span>
+            </div>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
-                        <div>
-                            <span className="text-xs text-on-surface-variant">Original: </span>
-                            <span className="text-sm text-on-surface-variant">{formatCents(alert.original_price_cents)}</span>
-                        </div>
-                        <div>
-                            <span className="text-xs text-on-surface-variant">Alert at: </span>
-                            <span className="text-sm font-semibold text-primary">
-                                {formatCents(targetPrice)} (-{alert.target_drop_percent}%)
-                            </span>
-                        </div>
-                    </div>
-
+            {/* Product info */}
+            <div className="flex-1 space-y-1 min-w-0">
+                <h3 className="font-headline font-semibold text-lg text-on-surface truncate">
+                    {alert.product_name}
+                </h3>
+                <div className="flex items-center gap-4 text-xs font-mono text-on-surface-variant">
+                    <span>Original: {formatCents(alert.original_price_cents)}</span>
                     {alert.created_at && (
-                        <p className="text-xs text-on-surface-variant/30 mt-2">
-                            Set on {formatDate(alert.created_at)}
-                        </p>
+                        <>
+                            <span className="text-primary/40">•</span>
+                            <span>Set {formatDate(alert.created_at)}</span>
+                        </>
                     )}
                 </div>
+            </div>
 
-                <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Target price */}
+            <div className="flex flex-col items-center md:items-end gap-1 px-8 border-x border-primary/10">
+                <span className="text-[10px] font-mono text-primary/60 uppercase tracking-widest">Target Price</span>
+                <div className="font-mono text-2xl text-primary font-medium tracking-tighter">
+                    {formatCents(targetPrice)}
+                </div>
+                <span className="font-mono text-[10px] text-on-surface-variant">-{alert.target_drop_percent}%</span>
+            </div>
+
+            {/* Status + actions */}
+            <div className="flex flex-col md:flex-row items-center gap-4">
+                <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
+                    alert.is_triggered
+                        ? 'bg-tertiary/10 text-tertiary border border-tertiary/20'
+                        : 'bg-primary/10 text-primary border border-primary/20'
+                }`}>
+                    {alert.is_triggered ? 'Triggered' : 'Active'}
+                </span>
+                <div className="flex items-center gap-2">
                     <a
                         href={alert.product_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container/30 rounded-lg transition-colors"
+                        className="p-2 text-on-surface-variant hover:text-primary transition-colors"
                         aria-label={`View ${alert.product_name}`}
                     >
-                        <span className="material-symbols-outlined text-base">open_in_new</span>
+                        <span className="material-symbols-outlined text-lg">open_in_new</span>
                     </a>
                     <button
                         onClick={onDelete}
                         disabled={isDeleting}
-                        className="p-2 text-on-surface-variant hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+                        className="p-2 text-on-surface-variant hover:text-error transition-colors disabled:opacity-50"
                         aria-label={`Delete alert for ${alert.product_name}`}
                     >
                         {isDeleting ? (
                             <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
                         ) : (
-                            <span className="material-symbols-outlined text-base">delete</span>
+                            <span className="material-symbols-outlined text-lg">delete</span>
                         )}
                     </button>
                 </div>

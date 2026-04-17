@@ -52,8 +52,8 @@ export default function EmailVerificationBanner() {
             </span>
 
             {sent ? (
-                    <span className="flex items-center gap-1 text-green-400 text-xs font-medium">
-                        <span className="material-symbols-outlined text-sm text-green-400" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                    <span className="flex items-center gap-1 text-primary text-xs font-medium">
+                        <span className="material-symbols-outlined text-sm text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                         Sent!
                     </span>
             ) : (

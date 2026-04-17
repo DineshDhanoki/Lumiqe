@@ -150,10 +150,10 @@ export default function ColorProfileDeep({
                 <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-4">Pattern Guide</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-2">Best Patterns</p>
+                        <p className="text-primary text-xs font-bold uppercase tracking-wider mb-2">Best Patterns</p>
                         <div className="flex flex-wrap gap-2 mb-2">
                             {patterns.best?.map((p, i) => (
-                                <span key={i} className="text-xs bg-green-500/20 text-green-300 border border-green-500/30 px-3 py-1 rounded-full">
+                                <span key={i} className="text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full">
                                     {p}
                                 </span>
                             ))}

@@ -60,14 +60,14 @@ function ResetPasswordForm() {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center p-6">
                 <div className="max-w-md w-full bg-surface-container/50 border border-primary/10 rounded-2xl p-8 text-center space-y-6">
-                    <span className="material-symbols-outlined text-6xl text-green-500 block mx-auto" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                    <h1 className="text-2xl font-bold text-on-surface">Password Reset!</h1>
-                    <p className="text-on-surface/60">
+                    <span className="material-symbols-outlined text-6xl text-primary block mx-auto" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                    <h1 className="text-2xl font-display italic text-on-surface">Password Reset!</h1>
+                    <p className="text-on-surface-variant/60">
                         Your password has been successfully reset. You can now sign in with your new password.
                     </p>
                     <Link
                         href="/"
-                        className="inline-block px-6 py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors"
+                        className="inline-block px-6 py-3 bg-primary-container rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all"
                     >
                         Go to Sign In
                     </Link>
@@ -146,7 +146,7 @@ function ResetPasswordForm() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-3 bg-primary-container rounded-full text-on-surface font-medium hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 bg-primary-container rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? 'Resetting...' : 'Reset Password'}
                     </button>

@@ -130,7 +130,7 @@ export default function SharePageClient({ token }: { token: string }) {
                 <span className="material-symbols-outlined text-6xl text-primary mb-6" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 <h1 className="font-display italic text-4xl text-on-surface mb-4">Analysis Not Found</h1>
                 <p className="text-on-surface-variant text-sm mb-8 max-w-sm">This shared link may have expired or doesn&apos;t exist.</p>
-                <Link href="/" className="px-8 py-3 bg-primary-container text-on-primary-container font-label font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 transition-all active:scale-95">
+                <Link href="/" className="px-8 py-3 bg-primary-container text-on-primary font-label font-bold text-xs uppercase tracking-widest rounded-[10px] hover:opacity-90 transition-all active:scale-95">
                     Discover Your Colors
                 </Link>
             </div>
@@ -243,7 +243,7 @@ export default function SharePageClient({ token }: { token: string }) {
                 >
                     <button
                         onClick={copyLink}
-                        className="flex items-center gap-3 bg-primary-container text-on-primary font-headline font-bold text-xs uppercase tracking-widest px-12 py-5 rounded-lg shadow-lg shadow-primary/10 hover:opacity-90 transition-all active:scale-95"
+                        className="flex items-center gap-3 bg-primary-container text-on-primary font-headline font-bold text-xs uppercase tracking-widest px-12 py-5 rounded-[10px] shadow-lg shadow-primary/10 hover:opacity-90 transition-all active:scale-95"
                     >
                         {copied
                             ? <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
@@ -322,7 +322,7 @@ export default function SharePageClient({ token }: { token: string }) {
                     </p>
                     <Link
                         href="/analyze"
-                        className="inline-flex items-center gap-2 bg-primary-container text-on-primary font-headline font-bold text-xs uppercase tracking-widest px-10 py-4 rounded-lg hover:opacity-90 transition-all active:scale-95"
+                        className="inline-flex items-center gap-2 bg-primary-container text-on-primary font-headline font-bold text-xs uppercase tracking-widest px-10 py-4 rounded-[10px] hover:opacity-90 transition-all active:scale-95"
                     >
                         Analyze My Colors
                         <span className="material-symbols-outlined text-sm">arrow_forward</span>

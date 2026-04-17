@@ -29,8 +29,8 @@ const TYPE_ICON: Record<Notification['type'], string> = {
 };
 
 const TYPE_COLOR: Record<Notification['type'], string> = {
-    success: 'text-green-400',
-    warning: 'text-yellow-400',
+    success: 'text-primary',
+    warning: 'text-secondary',
     price_alert: 'text-primary',
     digest: 'text-secondary',
     info: 'text-on-surface-variant',

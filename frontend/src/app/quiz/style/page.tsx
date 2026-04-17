@@ -7,118 +7,101 @@ import { useSession } from 'next-auth/react';
 import { apiFetch } from '@/lib/api';
 import AppLayout from '@/components/layout/AppLayout';
 
-const QUESTIONS = [
+// Visual archetype cards — mapped to underlying personality types
+const ARCHETYPES = [
     {
-        id: 'weekend',
-        question: 'On a free weekend, you\'re most likely wearing:',
-        options: [
-            { label: 'Well-fitted jeans and a crisp white shirt', value: 'classic' },
-            { label: 'A flowy midi dress with delicate details', value: 'romantic' },
-            { label: 'A leather jacket, ripped jeans, and boots', value: 'edgy' },
-            { label: 'Linen trousers, an oversized linen top, sandals', value: 'boho' },
-            { label: 'Tailored joggers and a quality minimal tee', value: 'minimalist' },
-        ],
+        id: 'minimalist',
+        number: '01',
+        label: 'The Minimalist',
+        personality: 'minimalist' as const,
+        gradient: 'linear-gradient(135deg, #1C1C1E 0%, #2A2A2C 80%, #1A1A1C 100%)',
+        iconGradient: 'rgba(240,191,98,0.08)',
+        icon: 'crop_square',
+        iconColor: 'text-primary/40',
     },
     {
-        id: 'closet',
-        question: 'Your wardrobe is mostly:',
-        options: [
-            { label: 'Timeless pieces in neutrals — navy, white, camel', value: 'classic' },
-            { label: 'Soft colors, florals, and feminine silhouettes', value: 'romantic' },
-            { label: 'Black, dark tones, and statement pieces', value: 'edgy' },
-            { label: 'Earthy tones, prints, and vintage finds', value: 'boho' },
-            { label: 'Clean lines, muted palette, no clutter', value: 'minimalist' },
-        ],
+        id: 'avant-garde',
+        number: '02',
+        label: 'Avant-Garde',
+        personality: 'edgy' as const,
+        gradient: 'linear-gradient(135deg, #0A0A0E 0%, #1A0A14 70%, #0F0810 100%)',
+        iconGradient: 'rgba(139,127,232,0.12)',
+        icon: 'auto_awesome',
+        iconColor: 'text-secondary/40',
     },
     {
-        id: 'dream_outfit',
-        question: 'Your dream outfit for a dinner out is:',
-        options: [
-            { label: 'A sharp blazer with straight-leg trousers', value: 'classic' },
-            { label: 'A silk wrap dress with strappy heels', value: 'romantic' },
-            { label: 'A sleek all-black look with a bold accessory', value: 'edgy' },
-            { label: 'Flowy wide-leg pants and embroidered blouse', value: 'boho' },
-            { label: 'One beautiful oversized piece in a clean cut', value: 'minimalist' },
-        ],
+        id: 'bohemian',
+        number: '03',
+        label: 'Neo-Bohemian',
+        personality: 'boho' as const,
+        gradient: 'linear-gradient(135deg, #2A1A0A 0%, #3D2315 70%, #2A1A0A 100%)',
+        iconGradient: 'rgba(196,151,62,0.1)',
+        icon: 'eco',
+        iconColor: 'text-primary/30',
     },
     {
-        id: 'accessories',
-        question: 'Your accessories are typically:',
-        options: [
-            { label: 'A quality watch, simple gold pieces', value: 'classic' },
-            { label: 'Delicate layered necklaces, pearl earrings', value: 'romantic' },
-            { label: 'Chunky rings, studs, bold hardware', value: 'edgy' },
-            { label: 'Natural stones, layered beads, woven pieces', value: 'boho' },
-            { label: 'One minimal piece — nothing more', value: 'minimalist' },
-        ],
+        id: 'street-luxe',
+        number: '04',
+        label: 'Street Luxe',
+        personality: 'edgy' as const,
+        gradient: 'linear-gradient(135deg, #0E0E12 0%, #1A1A20 60%, #111118 100%)',
+        iconGradient: 'rgba(255,255,255,0.04)',
+        icon: 'style',
+        iconColor: 'text-on-surface/20',
     },
     {
-        id: 'icon',
-        question: 'Which style icon resonates most with you?',
-        options: [
-            { label: 'Audrey Hepburn or Grace Kelly', value: 'classic' },
-            { label: 'Zoe Kravitz or Florence Welch', value: 'romantic' },
-            { label: 'Rihanna or Billie Eilish', value: 'edgy' },
-            { label: 'Sienna Miller or Vanessa Hudgens', value: 'boho' },
-            { label: 'Rosé or Jennie from BLACKPINK', value: 'minimalist' },
-        ],
+        id: 'classic',
+        number: '05',
+        label: 'Classic Heritage',
+        personality: 'classic' as const,
+        gradient: 'linear-gradient(135deg, #0A0A18 0%, #181828 60%, #10101E 100%)',
+        iconGradient: 'rgba(196,151,62,0.07)',
+        icon: 'workspace_premium',
+        iconColor: 'text-primary/35',
     },
     {
-        id: 'shopping',
-        question: 'When shopping, you look for:',
-        options: [
-            { label: 'Investment pieces that last 10 years', value: 'classic' },
-            { label: 'Soft textures, lace, floral prints', value: 'romantic' },
-            { label: 'Unexpected cuts, unusual details, attitude', value: 'edgy' },
-            { label: 'Artisan fabrics, unique vintage, handmade', value: 'boho' },
-            { label: 'Perfect fit, quality fabric, nothing unnecessary', value: 'minimalist' },
-        ],
+        id: 'nocturnal',
+        number: '06',
+        label: 'Nocturnal Scholar',
+        personality: 'classic' as const,
+        gradient: 'linear-gradient(135deg, #0A1410 0%, #0F2018 70%, #0A1810 100%)',
+        iconGradient: 'rgba(100,200,120,0.07)',
+        icon: 'school',
+        iconColor: 'text-tertiary/30',
     },
     {
-        id: 'pattern',
-        question: 'Your go-to pattern is:',
-        options: [
-            { label: 'Subtle stripe or check', value: 'classic' },
-            { label: 'Floral or ditsy prints', value: 'romantic' },
-            { label: 'Graphic, abstract, or geometric', value: 'edgy' },
-            { label: 'Paisley, tribal, or ikat', value: 'boho' },
-            { label: 'Solid — pattern is rarely needed', value: 'minimalist' },
-        ],
+        id: 'ethereal',
+        number: '07',
+        label: 'Ethereal',
+        personality: 'romantic' as const,
+        gradient: 'linear-gradient(135deg, #1A1228 0%, #201632 70%, #1A1228 100%)',
+        iconGradient: 'rgba(199,191,255,0.1)',
+        icon: 'cloud',
+        iconColor: 'text-secondary/40',
     },
     {
-        id: 'shoes',
-        question: 'Your most-worn shoes are:',
-        options: [
-            { label: 'Classic loafers or pointed-toe heels', value: 'classic' },
-            { label: 'Strappy sandals or kitten heels', value: 'romantic' },
-            { label: 'Chunky boots or platform sneakers', value: 'edgy' },
-            { label: 'Suede ankle boots or leather sandals', value: 'boho' },
-            { label: 'Clean white trainers or simple mules', value: 'minimalist' },
-        ],
+        id: 'ai-synthetic',
+        number: '08',
+        label: 'AI Synthetic',
+        personality: 'minimalist' as const,
+        gradient: 'linear-gradient(135deg, #080810 0%, #0F0F18 70%, #080812 100%)',
+        iconGradient: 'rgba(139,127,232,0.1)',
+        icon: 'memory',
+        iconColor: 'text-secondary/35',
     },
     {
-        id: 'compliment',
-        question: 'The compliment you most want to receive is:',
-        options: [
-            { label: '"You always look so put-together"', value: 'classic' },
-            { label: '"You look so beautiful and feminine"', value: 'romantic' },
-            { label: '"You\'re so bold — I love your style"', value: 'edgy' },
-            { label: '"You have such an effortless cool vibe"', value: 'boho' },
-            { label: '"Your style is so clean and refined"', value: 'minimalist' },
-        ],
+        id: 'maximalist',
+        number: '09',
+        label: 'Maximalist',
+        personality: 'boho' as const,
+        gradient: 'linear-gradient(135deg, #1A0A12 0%, #2A1020 70%, #1A0A15 100%)',
+        iconGradient: 'rgba(232,127,139,0.1)',
+        icon: 'diamond',
+        iconColor: 'text-tertiary/40',
     },
-    {
-        id: 'color',
-        question: 'If you had to wear one color family every day:',
-        options: [
-            { label: 'Navy, white, and camel', value: 'classic' },
-            { label: 'Blush, lavender, and dusty rose', value: 'romantic' },
-            { label: 'Black, charcoal, and deep red', value: 'edgy' },
-            { label: 'Rust, terracotta, and olive', value: 'boho' },
-            { label: 'Stone, cream, and soft grey', value: 'minimalist' },
-        ],
-    },
-];
+] as const;
+
+const MAX_SELECTIONS = 3;
 
 const PERSONALITIES: Record<string, {
     name: string;
@@ -182,42 +165,43 @@ const PERSONALITIES: Record<string, {
     },
 };
 
-function calculatePersonality(answers: Record<string, string>): string {
+function calculatePersonality(selectedIds: string[]): string {
     const scores: Record<string, number> = {
         classic: 0, romantic: 0, edgy: 0, boho: 0, minimalist: 0,
     };
-    Object.values(answers).forEach(v => { if (scores[v] !== undefined) scores[v]++; });
+    selectedIds.forEach((id) => {
+        const archetype = ARCHETYPES.find((a) => a.id === id);
+        if (archetype) scores[archetype.personality]++;
+    });
     return Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
 }
 
 export default function StyleQuiz() {
     const { data: session } = useSession();
-    const [current, setCurrent] = useState(0);
-    const [answers, setAnswers] = useState<Record<string, string>>({});
+    const [selected, setSelected] = useState<string[]>([]);
     const [result, setResult] = useState<string | null>(null);
 
-    const question = QUESTIONS[current];
-    const progress = (current / QUESTIONS.length) * 100;
+    const toggleArchetype = (id: string) => {
+        setSelected((prev) => {
+            if (prev.includes(id)) return prev.filter((s) => s !== id);
+            if (prev.length >= MAX_SELECTIONS) return prev;
+            return [...prev, id];
+        });
+    };
 
-    const handleAnswer = (value: string) => {
-        const newAnswers = { ...answers, [question.id]: value };
-        setAnswers(newAnswers);
-        if (current + 1 < QUESTIONS.length) {
-            setCurrent(current + 1);
-        } else {
-            const personality = calculatePersonality(newAnswers);
-            setResult(personality);
-            try {
-                // eslint-disable-next-line react-hooks/purity
-                localStorage.setItem('lumiqe-style-personality', JSON.stringify({ personality, timestamp: Date.now() }));
-            } catch { /* ignore */ }
-            if (session) {
-                apiFetch('/api/profile/quiz', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ style_personality: personality }),
-                }, session).catch(() => { /* ignore — localStorage already saved */ });
-            }
+    const handleConfirm = () => {
+        if (selected.length === 0) return;
+        const personality = calculatePersonality(selected);
+        setResult(personality);
+        try {
+            localStorage.setItem('lumiqe-style-personality', JSON.stringify({ personality, timestamp: Date.now() }));
+        } catch { /* ignore */ }
+        if (session) {
+            apiFetch('/api/profile/quiz', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ style_personality: personality }),
+            }, session).catch(() => { /* ignore — localStorage already saved */ });
         }
     };
 
@@ -225,69 +209,174 @@ export default function StyleQuiz() {
 
     return (
         <AppLayout>
-            <div className="max-w-xl mx-auto">
+            <div className="max-w-6xl mx-auto pb-32">
                 <AnimatePresence mode="wait">
                     {!result ? (
                         <motion.div
-                            key={current}
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -40 }}
-                            transition={{ duration: 0.2 }}
+                            key="quiz"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                         >
-                            <div className="text-center mb-8">
-                                <p className="text-primary text-xs font-bold tracking-widest uppercase mb-2">Style Personality Quiz</p>
-                                <h1 className="text-3xl font-bold text-on-surface">Question {current + 1} of {QUESTIONS.length}</h1>
-                            </div>
-
-                            <div className="w-full bg-surface-container/30 rounded-full h-1.5 mb-8">
-                                <motion.div
-                                    className="bg-primary h-1.5 rounded-full"
-                                    animate={{ width: `${progress}%` }}
-                                    transition={{ duration: 0.4 }}
-                                />
-                            </div>
-
-                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-8 mb-6">
-                                <h2 className="text-xl font-bold text-on-surface mb-6">{question.question}</h2>
-                                <div className="space-y-3">
-                                    {question.options.map((opt) => (
-                                        <button
-                                            key={opt.value}
-                                            onClick={() => handleAnswer(opt.value)}
-                                            className="w-full text-left px-5 py-4 rounded-2xl border border-primary/10 bg-surface-container/30 hover:bg-primary/10 hover:border-primary/30 text-on-surface-variant hover:text-on-surface transition-all font-medium"
-                                        >
-                                            {opt.label}
-                                        </button>
-                                    ))}
+                            {/* Progress */}
+                            <div className="mb-12">
+                                <div className="flex justify-between items-end mb-3">
+                                    <span className="font-mono text-[10px] tracking-tighter text-primary uppercase">
+                                        Analysis Stage 01: Aesthetic Foundations
+                                    </span>
+                                    <span className="font-mono text-[10px] tracking-tighter text-on-surface-variant/40">
+                                        Step 1 of 1
+                                    </span>
+                                </div>
+                                <div className="h-[2px] w-full bg-surface-container-high rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full rounded-full transition-all duration-500"
+                                        style={{
+                                            width: selected.length === 0 ? '5%' : `${(selected.length / MAX_SELECTIONS) * 100}%`,
+                                            background: '#c4973e',
+                                            boxShadow: '0 0 10px rgba(196,151,62,0.5)',
+                                        }}
+                                    />
                                 </div>
                             </div>
 
-                            {current > 0 && (
-                                <button
-                                    onClick={() => setCurrent(current - 1)}
-                                    className="text-on-surface-variant hover:text-on-surface text-sm flex items-center gap-1 transition-colors"
+                            {/* Editorial Header */}
+                            <section className="mb-12 text-center max-w-4xl mx-auto">
+                                <span className="font-label text-[9px] uppercase tracking-[0.3em] text-primary mb-4 block">Personal Curation</span>
+                                <h1 className="font-display text-5xl md:text-7xl font-light mb-6 tracking-tight text-on-surface">
+                                    Define your <span className="italic text-primary-container">Visual Language</span>
+                                </h1>
+                                <p className="text-on-surface-variant max-w-xl mx-auto leading-relaxed text-sm">
+                                    Select up to <span className="text-on-surface font-medium">three archetypes</span> that resonate with your current silhouette preference. Our AI will synthesize these selections to build your signature profile.
+                                </p>
+                            </section>
+
+                            {/* Bento Mood Board Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {ARCHETYPES.map((archetype, idx) => {
+                                    const isSelected = selected.includes(archetype.id);
+                                    const isDisabled = !isSelected && selected.length >= MAX_SELECTIONS;
+                                    return (
+                                        <motion.button
+                                            key={archetype.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.05, duration: 0.4 }}
+                                            onClick={() => !isDisabled && toggleArchetype(archetype.id)}
+                                            className={`relative group overflow-hidden rounded-xl h-[400px] text-left transition-all duration-500 ${
+                                                isSelected
+                                                    ? 'shadow-[0_0_30px_rgba(196,151,62,0.15)]'
+                                                    : isDisabled
+                                                    ? 'opacity-40 cursor-not-allowed'
+                                                    : 'hover:-translate-y-1'
+                                            }`}
+                                            style={{
+                                                background: archetype.gradient,
+                                                border: isSelected
+                                                    ? '1px solid #C4973E'
+                                                    : '0.5px solid rgba(196, 151, 62, 0.2)',
+                                            }}
+                                        >
+                                            {/* Background accent glow */}
+                                            <div
+                                                className="absolute inset-0 opacity-60"
+                                                style={{ background: `radial-gradient(ellipse at 30% 30%, ${archetype.iconGradient}, transparent 70%)` }}
+                                            />
+
+                                            {/* Center icon */}
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <span
+                                                    className={`material-symbols-outlined text-[80px] transition-all duration-700 ${archetype.iconColor} ${
+                                                        isSelected ? 'opacity-60' : 'opacity-30 group-hover:opacity-50'
+                                                    }`}
+                                                >
+                                                    {archetype.icon}
+                                                </span>
+                                            </div>
+
+                                            {/* Bottom gradient overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
+
+                                            {/* Selection check badge */}
+                                            {isSelected && (
+                                                <motion.div
+                                                    initial={{ scale: 0 }}
+                                                    animate={{ scale: 1 }}
+                                                    className="absolute top-4 right-4 h-8 w-8 bg-primary rounded-full flex items-center justify-center shadow-lg z-10"
+                                                >
+                                                    <span
+                                                        className="material-symbols-outlined text-on-primary text-base"
+                                                        style={{ fontVariationSettings: "'FILL' 1" }}
+                                                    >
+                                                        check_circle
+                                                    </span>
+                                                </motion.div>
+                                            )}
+
+                                            {/* Label */}
+                                            <div className="absolute bottom-0 left-0 p-6 z-10">
+                                                <p className="font-mono text-[10px] text-primary mb-1 uppercase tracking-tighter">
+                                                    Option {archetype.number}
+                                                </p>
+                                                <h3 className="font-display text-2xl text-on-surface">{archetype.label}</h3>
+                                            </div>
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Sticky Action Bar */}
+                            <div className="fixed bottom-0 left-0 w-full p-6 flex justify-center z-50 pointer-events-none">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: selected.length > 0 ? 1 : 0, y: selected.length > 0 ? 0 : 20 }}
+                                    className="pointer-events-auto flex items-center gap-10 px-8 py-4 rounded-full shadow-2xl"
+                                    style={{
+                                        background: 'rgba(19, 19, 21, 0.8)',
+                                        backdropFilter: 'blur(16px)',
+                                        border: '0.5px solid rgba(196, 151, 62, 0.2)',
+                                    }}
                                 >
-                                    <span className="material-symbols-outlined text-sm">arrow_back</span> Previous question
-                                </button>
-                            )}
+                                    {/* Selection dots */}
+                                    <div className="flex flex-col">
+                                        <span className="font-mono text-[9px] uppercase text-on-surface-variant/50 mb-1">Selections</span>
+                                        <div className="flex gap-1.5">
+                                            {[0, 1, 2].map((i) => (
+                                                <div
+                                                    key={i}
+                                                    className="h-1 w-6 rounded-full transition-all duration-300"
+                                                    style={{ background: i < selected.length ? '#c4973e' : 'rgba(255,255,255,0.1)' }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={handleConfirm}
+                                        disabled={selected.length === 0}
+                                        className="bg-primary-container text-on-primary px-10 py-3 rounded-full font-headline font-bold uppercase tracking-widest text-[11px] transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(196,151,62,0.3)]"
+                                    >
+                                        Continue Analysis
+                                    </button>
+                                </motion.div>
+                            </div>
                         </motion.div>
                     ) : data ? (
                         <motion.div
                             key="result"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="space-y-6"
+                            className="space-y-6 max-w-3xl mx-auto"
                         >
                             <div className="text-center">
                                 <p className="text-primary text-xs font-bold tracking-widest uppercase mb-3">Your Style Personality</p>
                                 <div className="text-6xl mb-3">{data.emoji}</div>
-                                <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-200 via-rose-300 to-white mb-2">{data.name}</h1>
+                                <h1 className="font-display italic text-5xl text-primary mb-2">{data.name}</h1>
                                 <p className="text-on-surface-variant italic mb-4">{data.tagline}</p>
                                 <p className="text-on-surface-variant leading-relaxed max-w-md mx-auto">{data.description}</p>
                             </div>
 
-                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
+                            <div className="bg-surface-container/50 rounded-3xl p-6" style={{ border: '0.5px solid rgba(196, 151, 62, 0.2)' }}>
                                 <p className="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-3">Style Icons</p>
                                 <div className="flex flex-wrap gap-2">
                                     {data.icons.map((icon) => (
@@ -298,33 +387,33 @@ export default function StyleQuiz() {
                                 </div>
                             </div>
 
-                            <div className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6">
-                                <p className="text-green-400 text-xs font-bold uppercase tracking-wider mb-3">Your Key Pieces</p>
+                            <div className="bg-surface-container/50 rounded-3xl p-6" style={{ border: '0.5px solid rgba(196, 151, 62, 0.2)' }}>
+                                <p className="text-primary text-xs font-bold uppercase tracking-wider mb-3">Your Key Pieces</p>
                                 <ul className="space-y-2">
                                     {data.keyPieces.map((piece) => (
                                         <li key={piece} className="flex items-center gap-2 text-sm text-on-surface-variant">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
                                             {piece}
                                         </li>
                                     ))}
                                 </ul>
                             </div>
 
-                            <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6">
+                            <div className="rounded-3xl p-6" style={{ background: 'rgba(196,151,62,0.05)', border: '0.5px solid rgba(196,151,62,0.2)' }}>
                                 <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-2">Color Advice for Your Personality</p>
                                 <p className="text-on-surface-variant leading-relaxed">{data.colorAdvice}</p>
                             </div>
 
-                            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-3xl p-6">
-                                <p className="text-yellow-400 text-xs font-bold uppercase tracking-wider mb-2">Style Trap to Avoid</p>
+                            <div className="rounded-3xl p-6" style={{ background: 'rgba(240,191,98,0.05)', border: '0.5px solid rgba(240,191,98,0.15)' }}>
+                                <p className="text-primary text-xs font-bold uppercase tracking-wider mb-2">Style Trap to Avoid</p>
                                 <p className="text-on-surface-variant leading-relaxed">{data.avoidTrap}</p>
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-3">
-                                <Link href="/dashboard" className="flex-1 text-center py-3 rounded-full bg-primary-container hover:bg-primary text-on-primary-container font-bold transition-all hover:scale-105">
+                                <Link href="/dashboard" className="flex-1 text-center py-3 rounded-[10px] bg-primary-container hover:opacity-90 text-on-primary font-headline font-bold text-xs uppercase tracking-widest transition-all">
                                     View Dashboard
                                 </Link>
-                                <Link href="/analyze" className="flex-1 text-center py-3 rounded-full bg-surface-container/30 hover:bg-surface-container/50 border border-primary/20 text-on-surface font-bold transition-all">
+                                <Link href="/analyze" className="flex-1 text-center py-3 rounded-[10px] bg-surface-container/30 hover:bg-surface-container/50 text-on-surface font-headline font-bold text-xs uppercase tracking-widest transition-all" style={{ border: '0.5px solid rgba(196,151,62,0.2)' }}>
                                     Scan Your Colors
                                 </Link>
                             </div>

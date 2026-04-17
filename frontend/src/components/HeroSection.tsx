@@ -43,17 +43,15 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                     >
                         <button
                             onClick={onOpenAuth}
-                            className="group flex items-center justify-center gap-2 rounded-full bg-primary-container text-on-primary-container font-headline font-bold text-base tracking-wide px-10 py-5 shadow-xl hover:opacity-90 active:scale-95 transition-all"
+                            className="group flex items-center justify-center gap-2 rounded-[10px] bg-primary-container text-on-primary font-headline font-bold text-lg tracking-wide px-10 py-5 shadow-xl hover:opacity-90 active:scale-95 transition-all"
                         >
-                            <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                             {t('heroStartFreeTrial')}
                         </button>
 
                         <a
                             href="#demo"
-                            className="flex items-center justify-center gap-2 rounded-full bg-transparent border border-primary/30 text-primary font-headline font-semibold text-base px-10 py-5 backdrop-blur-md hover:bg-primary/5 transition-all"
+                            className="flex items-center justify-center gap-2 rounded-[10px] bg-transparent border border-primary/30 text-primary font-headline font-semibold text-lg px-10 py-5 backdrop-blur-md hover:bg-primary/5 transition-all"
                         >
-                            <span className="material-symbols-outlined text-base opacity-70">play_circle</span>
                             {t('heroSeeLiveDemo')}
                         </a>
                     </motion.div>

@@ -237,14 +237,11 @@ export default function AnalyzePage() {
                 <AppLayout>
                     <div className="max-w-7xl mx-auto">
                         {/* Page header */}
-                        <header className="mb-10">
-                            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary mb-2">
-                                Skin Intelligence
-                            </p>
-                            <h1 className="font-display text-5xl md:text-7xl font-bold text-on-surface leading-none mb-3">
-                                Color Analysis
+                        <header className="mb-16">
+                            <h1 className="font-display italic text-6xl md:text-8xl text-on-surface leading-none mb-6">
+                                Analysis
                             </h1>
-                            <p className="text-on-surface-variant text-lg max-w-xl leading-relaxed">
+                            <p className="max-w-2xl text-on-surface-variant font-headline font-light text-lg md:text-xl leading-relaxed">
                                 Precision skin intelligence starts here. Upload or scan for a medical-grade aesthetic breakdown.
                             </p>
                         </header>
@@ -258,10 +255,10 @@ export default function AnalyzePage() {
                                     role="button"
                                     tabIndex={0}
                                     aria-label="Upload Photo"
-                                    className={`relative aspect-video bg-surface-container rounded-2xl flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ghost-border ${
+                                    className={`relative aspect-video bg-surface-container rounded-[24px] flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ${
                                         isDragging
                                             ? 'border-primary/70 bg-primary/5 scale-[1.01]'
-                                            : 'border-outline-variant/40 hover:border-primary/40'
+                                            : 'border-primary/20 hover:border-primary/50'
                                     }`}
                                     onDragOver={onDragOver}
                                     onDragLeave={onDragLeave}
@@ -269,29 +266,19 @@ export default function AnalyzePage() {
                                     onClick={() => fileInputRef.current?.click()}
                                     onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
                                 >
+                                    {/* Background gradient */}
+                                    <div className="absolute inset-0 opacity-50 group-hover:opacity-30 transition-opacity" style={{ background: 'radial-gradient(circle at top right, #18181F, #09090B)' }} />
+
                                     {/* Scanner sweep on hover */}
                                     <div className="absolute left-0 w-full h-0.5 z-10 opacity-0 group-hover:opacity-100 scanner-animate scanner-line" />
 
                                     {/* Upload prompt */}
-                                    <div className="relative z-10 flex flex-col items-center text-center p-8">
-                                        <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform ghost-border">
-                                            <span className="material-symbols-outlined text-5xl text-primary">upload</span>
+                                    <div className="relative z-10 flex flex-col items-center animate-pulse">
+                                        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 ghost-border">
+                                            <span className="material-symbols-outlined text-primary text-4xl">camera</span>
                                         </div>
-                                        <h3 className="font-headline text-2xl font-bold mb-2 text-on-surface">
-                                            Upload Photo
-                                        </h3>
-                                        <p className="text-on-surface-variant mb-8 max-w-sm text-sm">
-                                            Tap to upload or drag and drop a high-resolution portrait.
-                                        </p>
-                                        <button
-                                            onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                                            className="bg-primary-container text-on-primary-container px-10 py-4 rounded-full font-headline font-bold text-sm tracking-widest uppercase shadow-lg hover:scale-105 active:scale-95 transition-all hover:bg-primary"
-                                        >
-                                            Choose Image
-                                        </button>
-                                        <p className="text-on-surface-variant/40 text-xs mt-3 font-mono">
-                                            JPEG · PNG · WebP — max 5 MB · Natural lighting recommended
-                                        </p>
+                                        <p className="font-headline text-primary font-bold tracking-widest uppercase text-sm">Drop scan or click to upload</p>
+                                        <p className="font-label text-on-surface-variant/40 text-xs mt-2">JPG, PNG or WebP up to 5MB</p>
                                     </div>
 
                                     {/* Hidden file input */}
@@ -314,138 +301,90 @@ export default function AnalyzePage() {
                                 </div>
 
                                 {/* Secondary Action Cards */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     {/* Live Camera */}
                                     <button
                                         onClick={() => setMode('camera')}
-                                        className="bg-surface-container-low p-5 rounded-2xl flex items-center justify-between group hover:bg-surface-container transition-colors cursor-pointer text-left ghost-border"
+                                        className="bg-surface-container-high rounded-[20px] p-6 hover:bg-surface-container-highest transition-all group cursor-pointer text-left relative overflow-hidden"
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-11 h-11 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <span className="material-symbols-outlined text-xl text-secondary">videocam</span>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-headline font-bold text-sm text-on-surface">
-                                                    Start Live Camera
-                                                </h4>
-                                                <p className="text-on-surface-variant text-xs mt-0.5">Instant real-time analysis</p>
-                                            </div>
-                                        </div>
-                                        <span className="material-symbols-outlined text-base text-on-surface-variant/40 group-hover:text-secondary transition-colors flex-shrink-0 ml-2">arrow_forward</span>
+                                        <div className="absolute -right-4 -top-4 w-24 h-24 bg-error/5 rounded-full blur-2xl group-hover:bg-error/10 transition-all" />
+                                        <span className="material-symbols-outlined text-error text-3xl mb-4 block">videocam</span>
+                                        <h4 className="font-headline text-on-surface font-bold text-base mb-1">Start Live Camera</h4>
+                                        <p className="text-on-surface-variant text-xs font-label leading-tight">Instant AI analysis via your HD webcam.</p>
                                     </button>
 
                                     {/* Past Scans */}
                                     <Link
                                         href="/results"
-                                        className="bg-surface-container-low p-5 rounded-2xl flex items-center justify-between group hover:bg-surface-container transition-colors ghost-border"
+                                        className="bg-surface-container-high rounded-[20px] p-6 hover:bg-surface-container-highest transition-all group relative overflow-hidden"
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <span className="material-symbols-outlined text-xl text-primary">schedule</span>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-headline font-bold text-sm text-on-surface">
-                                                    Past Scans
-                                                </h4>
-                                                <p className="text-on-surface-variant text-xs mt-0.5">View skin evolution</p>
-                                            </div>
-                                        </div>
-                                        <span className="material-symbols-outlined text-base text-on-surface-variant/40 group-hover:text-primary transition-colors flex-shrink-0 ml-2">arrow_forward</span>
+                                        <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all" />
+                                        <span className="material-symbols-outlined text-primary text-3xl mb-4 block">schedule</span>
+                                        <h4 className="font-headline text-on-surface font-bold text-base mb-1">Past Scans</h4>
+                                        <p className="text-on-surface-variant text-xs font-label leading-tight">Review your journey and progress metrics.</p>
                                     </Link>
 
                                     {/* Multi-Photo */}
                                     <button
                                         onClick={() => setMode('multi')}
-                                        className="bg-surface-container-low p-5 rounded-2xl flex items-center justify-between group hover:bg-surface-container transition-colors cursor-pointer text-left ghost-border"
+                                        className="bg-surface-container-high rounded-[20px] p-6 hover:bg-surface-container-highest transition-all group cursor-pointer text-left relative overflow-hidden"
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-11 h-11 bg-tertiary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <span className="material-symbols-outlined text-xl text-tertiary">photo_library</span>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-headline font-bold text-sm text-on-surface">
-                                                    Multi-Photo
-                                                </h4>
-                                                <p className="text-on-surface-variant text-xs mt-0.5">2–5 selfies, higher accuracy</p>
-                                            </div>
+                                        <div className="absolute -right-4 -top-4 w-24 h-24 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-all" />
+                                        <div className="flex justify-between items-start mb-4">
+                                            <span className="material-symbols-outlined text-secondary text-3xl">collections</span>
+                                            <span className="bg-secondary/20 text-secondary text-[10px] font-mono px-2 py-0.5 rounded-full tracking-tighter">PRO</span>
                                         </div>
-                                        <span className="text-[10px] font-label font-bold uppercase tracking-wider text-tertiary bg-tertiary/10 border border-tertiary/20 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
-                                            Pro
-                                        </span>
+                                        <h4 className="font-headline text-on-surface font-bold text-base mb-1">Multi-Photo</h4>
+                                        <p className="text-on-surface-variant text-xs font-label leading-tight">Upload 360° angles for complete mapping.</p>
                                     </button>
                                 </div>
                             </section>
 
                             {/* ── Sidebar (4 cols) ── */}
-                            <aside className="lg:col-span-4 flex flex-col gap-6">
-                                {/* Precision Protocol */}
-                                <div className="bg-surface-container rounded-2xl p-6 ghost-border">
-                                    <h3 className="font-headline text-base font-bold mb-5 flex items-center gap-3 text-on-surface">
-                                        <span className="material-symbols-outlined text-base text-primary flex-shrink-0">lightbulb</span>
-                                        Precision Protocol
-                                    </h3>
-                                    <ul className="space-y-4">
-                                        {[
-                                            { n: 1, title: 'Natural Lighting.', body: 'Face a window during daylight for the most accurate texture capture.' },
-                                            { n: 2, title: 'Clean Canvas.', body: 'Ensure your skin is free of makeup, SPF, and heavy moisturizers.' },
-                                            { n: 3, title: 'Steady Frame.', body: 'Hold your phone at eye level, approximately 12 inches from your face.' },
-                                        ].map(({ n, title, body }) => (
-                                            <li key={n} className="flex gap-4">
-                                                <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex-shrink-0 flex items-center justify-center text-xs font-bold text-primary">
-                                                    {n}
-                                                </div>
-                                                <p className="text-on-surface-variant text-sm leading-relaxed">
-                                                    <span className="text-on-surface font-semibold">{title}</span> {body}
-                                                </p>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
+                            <aside className="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-32">
                                 {/* System Status */}
-                                <div className="bg-surface-container-lowest rounded-2xl p-6 ghost-border">
-                                    <div className="flex items-center justify-between mb-5">
-                                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/50 font-bold">System Status</span>
+                                <div className="bg-surface-container rounded-[20px] p-8 ghost-border">
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h4 className="font-headline text-xs tracking-widest uppercase text-on-surface-variant/50">System Status</h4>
                                         <div className="flex items-center gap-2">
                                             <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
                                             <span className="font-mono text-[10px] text-[#4ade80] font-bold uppercase">Ready</span>
                                         </div>
                                     </div>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between text-xs">
-                                            <span className="text-on-surface-variant/60">Processing Engine</span>
-                                            <span className="font-mono text-on-surface">Lumiqe-V4.2</span>
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-end">
+                                            <span className="text-xs font-label text-on-surface-variant/60">Engine Intensity</span>
+                                            <span className="text-xs font-mono text-primary">v4.2.0-LUM</span>
                                         </div>
-                                        <div className="flex justify-between text-xs">
-                                            <span className="text-on-surface-variant/60">Analysis Depth</span>
-                                            <span className="font-mono text-on-surface">256-bit Spectral</span>
+                                        <div className="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+                                            <div className="w-[88%] h-full bg-primary/60 rounded-full" />
                                         </div>
-                                        <div className="w-full bg-surface-container-high h-1 rounded-full overflow-hidden mt-3">
-                                            <div className="bg-primary w-2/3 h-full rounded-full" />
-                                        </div>
+                                        <p className="text-[10px] font-mono text-on-surface-variant/60 leading-relaxed uppercase">
+                                            Neural network synced with biometric data clusters. Awaiting input.
+                                        </p>
                                     </div>
                                 </div>
 
-                                {/* Tips — For accurate results */}
-                                <div className="bg-surface-container rounded-2xl p-6 ghost-border">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <span className="material-symbols-outlined text-base text-secondary flex-shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-                                        <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60">
-                                            For accurate results
-                                        </span>
+                                {/* Precision Protocol */}
+                                <div className="bg-surface-container-low rounded-[20px] overflow-hidden">
+                                    <div className="p-8">
+                                        <h4 className="font-headline text-xs tracking-widest uppercase text-primary mb-8">Precision Protocol</h4>
+                                        <ul className="space-y-8">
+                                            {[
+                                                { n: '01', title: 'Natural Lighting', body: 'Avoid harsh shadows. Indirect sunlight provides the most accurate skin-texture mapping.' },
+                                                { n: '02', title: 'Clean Canvas', body: 'Ensure face is free of products or accessories for a deep-pore intelligence scan.' },
+                                                { n: '03', title: 'Steady Frame', body: 'Use a tripod or steady surface. Motion blur reduces analysis confidence scores.' },
+                                            ].map(({ n, title, body }) => (
+                                                <li key={n} className="flex gap-4">
+                                                    <span className="font-mono text-primary/40 text-sm flex-shrink-0">{n}</span>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold font-headline text-on-surface mb-1">{title}</h5>
+                                                        <p className="text-xs text-on-surface-variant font-label leading-relaxed">{body}</p>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
-                                    <ul className="space-y-2">
-                                        {[
-                                            { icon: '☀️', text: 'Natural lighting — no dark rooms' },
-                                            { icon: '👤', text: 'Face centered, no sunglasses' },
-                                            { icon: '🚫', text: 'No heavy filters or beauty mode' },
-                                            { icon: '📷', text: 'Well-lit selfie or portrait works best' },
-                                        ].map(({ icon, text }) => (
-                                            <li key={text} className="flex items-center gap-2 text-xs text-on-surface-variant/70">
-                                                <span>{icon}</span> {text}
-                                            </li>
-                                        ))}
-                                    </ul>
                                 </div>
 
                                 {/* Language Switcher */}

@@ -50,7 +50,7 @@ export default function StyleIdentityCards({ lastAnalysis, bodyShape, stylePerso
         : '#';
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-6">
             {/* Color Season */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}

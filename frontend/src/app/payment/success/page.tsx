@@ -39,9 +39,9 @@ function SuccessContent() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                    className="w-20 h-20 mx-auto mb-8 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center"
+                    className="w-20 h-20 mx-auto mb-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center"
                 >
-                    <span className="material-symbols-outlined text-5xl text-green-400" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                    <span className="material-symbols-outlined text-5xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                 </motion.div>
 
                 <motion.div
@@ -50,8 +50,8 @@ function SuccessContent() {
                     transition={{ delay: 0.4 }}
                 >
                     <div className="flex items-center justify-center gap-2 mb-4">
-                        <span className="material-symbols-outlined text-xl text-yellow-400" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
-                        <span className="text-sm font-bold text-yellow-400 uppercase tracking-widest">
+                        <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
+                        <span className="text-sm font-bold text-primary uppercase tracking-widest">
                             Premium Activated
                         </span>
                     </div>
@@ -66,7 +66,7 @@ function SuccessContent() {
 
                     <Link
                         href="/analyze"
-                        className="group inline-flex items-center gap-2 bg-primary-container hover:bg-primary text-on-primary-container font-bold px-8 py-4 rounded-full shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)] transition-all"
+                        className="group inline-flex items-center gap-2 bg-primary-container hover:opacity-90 text-on-primary font-bold px-8 py-4 rounded-[10px] transition-all"
                     >
                         <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                         Start Analyzing
