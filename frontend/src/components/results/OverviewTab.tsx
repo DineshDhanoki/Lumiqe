@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { type Session } from 'next-auth';
 import SkinProfileCard from '@/components/SkinProfileCard';
 import BestAvoidColors from '@/components/BestAvoidColors';

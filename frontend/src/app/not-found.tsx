@@ -49,12 +49,12 @@ export default function NotFound() {
 
                     {/* Fine print link */}
                     <div className="mt-12">
-                        <a
+                        <Link
                             href="/"
                             className="font-label text-[10px] text-on-surface-variant/50 hover:text-primary uppercase tracking-widest transition-colors duration-300"
                         >
                             Contact Style Concierge
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,6 @@ export default function NotFound() {
                     alt="Luxury fashion"
                     className="w-full h-full object-cover grayscale brightness-50"
                     src="/404-fabric.jpg"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-l from-background via-transparent to-transparent" />

@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { apiFetch } from '@/lib/api';
 import { useLumiqeStore } from '@/lib/store';
-import { t } from '@/lib/i18n';
 import { compressImage, storeThumbnail } from '@/lib/imageUtils';
 import CameraCapture from '@/components/CameraCapture';
 import LanguageSwitcher from '@/components/LanguageSwitcher';

@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '@/components/Navbar';
 import { Skeleton } from '@/components/ui/Skeleton';
 import AppLayout from '@/components/layout/AppLayout';
 

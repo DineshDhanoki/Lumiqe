@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { apiFetch } from '@/lib/api';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 import SubscriptionPanel from '@/components/account/SubscriptionPanel';
