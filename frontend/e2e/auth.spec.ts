@@ -21,7 +21,9 @@ test.describe('Auth Modal', () => {
     });
 
     test('validates empty form submission', async ({ page }) => {
-        // Submit without filling anything
+        // Must check the required terms checkbox first — otherwise browser native
+        // validation blocks the form before React's validate() runs.
+        await page.locator('#terms').check();
         const submitBtn = page.getByRole('dialog').getByRole('button', { name: /create account/i });
         await submitBtn.click();
 
@@ -50,6 +52,8 @@ test.describe('Auth Modal', () => {
         await emailInput.fill('test@example.com');
         await passwordInput.fill('short');
 
+        // Check terms to bypass browser native validation
+        await page.locator('#terms').check();
         const submitBtn = page.getByRole('dialog').getByRole('button', { name: /create account/i });
         await submitBtn.click();
 
@@ -64,18 +68,18 @@ test.describe('Auth Modal', () => {
     });
 
     test('toggles between sign in and sign up', async ({ page }) => {
-        // Currently on sign up, click to switch to sign in
-        await page.getByText(/already have an account/i).click();
+        // Click the inner "Sign In" toggle button (not the <p> wrapper which won't trigger it)
+        await page.getByRole('dialog').getByRole('button', { name: 'Sign In' }).click();
         await expect(page.getByRole('dialog')).toContainText(/welcome back/i);
 
         // Switch back to sign up
-        await page.getByText(/don.t have an account/i).click();
+        await page.getByRole('dialog').getByRole('button', { name: 'Sign Up' }).click();
         await expect(page.getByRole('dialog')).toContainText(/create account/i);
     });
 
     test('has continue with Google button', async ({ page }) => {
-        // Google sign-in is shown on the sign-in form, switch to it first
-        await page.getByText(/already have an account/i).click();
+        // Google sign-in is shown on the sign-in form — switch to sign-in first
+        await page.getByRole('dialog').getByRole('button', { name: 'Sign In' }).click();
         await expect(page.getByRole('dialog').getByText(/continue with google/i)).toBeVisible();
     });
 
@@ -90,8 +94,8 @@ test.describe('Auth Modal', () => {
     });
 
     test('forgot password link visible on sign in', async ({ page }) => {
-        // Switch to sign in mode
-        await page.getByText(/already have an account/i).click();
+        // Switch to sign in mode via the inner toggle button
+        await page.getByRole('dialog').getByRole('button', { name: 'Sign In' }).click();
         await expect(page.getByText(/forgot password/i)).toBeVisible();
     });
 });
