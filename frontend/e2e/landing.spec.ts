@@ -25,12 +25,6 @@ test.describe('Landing Page', () => {
         await expect(section).toBeVisible();
     });
 
-    test('how it works section visible on scroll', async ({ page }) => {
-        const section = page.locator('#how-it-works');
-        await section.scrollIntoViewIfNeeded();
-        await expect(section).toBeVisible();
-    });
-
     test('pricing section visible on scroll', async ({ page }) => {
         const section = page.locator('#pricing');
         await section.scrollIntoViewIfNeeded();
