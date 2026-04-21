@@ -45,25 +45,16 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                             onClick={onOpenAuth}
                             className="group flex items-center justify-center gap-2 rounded-[10px] bg-primary-container text-on-primary font-headline font-bold text-lg tracking-wide px-10 py-5 shadow-xl hover:opacity-90 active:scale-95 transition-all"
                         >
-                            {t('heroStartFreeTrial')}
+                            Analyze My Colors
                         </button>
 
                         <a
                             href="#demo"
                             className="flex items-center justify-center gap-2 rounded-[10px] bg-transparent border border-primary/30 text-primary font-headline font-semibold text-lg px-10 py-5 backdrop-blur-md hover:bg-primary/5 transition-all"
                         >
-                            {t('heroSeeLiveDemo')}
+                            View Sample Report
                         </a>
                     </motion.div>
-
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.6 }}
-                        className="mt-6 text-on-surface-variant text-xs font-mono tracking-wider"
-                    >
-                        {t('heroNoCreditCard')}
-                    </motion.p>
                 </motion.div>
 
                 {/* Right: phone mockup */}
@@ -77,7 +68,7 @@ export default function HeroSection({ onOpenAuth }: HeroSectionProps) {
                     <div className="absolute inset-0 bg-primary-container/10 rounded-full blur-[120px] scale-75 pointer-events-none" />
 
                     {/* Phone frame */}
-                    <div className="relative w-full max-w-[340px] aspect-[9/19] rounded-[3rem] p-3 bg-surface-container-highest border border-outline-variant/20"
+                    <div className="relative w-full max-w-[420px] aspect-[9/19] rounded-[3rem] p-4 bg-surface-container-highest border border-outline-variant/20"
                         style={{ boxShadow: '0 40px 60px -15px rgba(196, 151, 62, 0.08)' }}>
                         <div className="w-full h-full rounded-[2.5rem] overflow-hidden relative"
                             style={{ background: 'linear-gradient(135deg, #2D1B0D 0%, #4A3219 40%, #1A120B 100%)' }}>

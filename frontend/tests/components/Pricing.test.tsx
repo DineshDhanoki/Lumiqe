@@ -5,34 +5,38 @@ import Pricing from '../../src/components/Pricing';
 describe('Pricing Component', () => {
     it('renders free and premium plan headings', () => {
         render(<Pricing />);
-        expect(screen.getByRole('heading', { name: 'Free Tier' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { name: 'Pro Tier' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Discovery' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Elite Atelier' })).toBeInTheDocument();
     });
 
-    it('renders the annual price by default', () => {
+    it('renders section heading', () => {
         render(<Pricing />);
-        // isAnnual defaults to true → shows $23
-        expect(screen.getByText('$23')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: /Invest In Your Aura/i })).toBeInTheDocument();
     });
 
-    it('shows monthly and annual toggle', () => {
+    it('renders free tier price', () => {
         render(<Pricing />);
-        expect(screen.getByText('Monthly')).toBeInTheDocument();
-        expect(screen.getByText('Annual')).toBeInTheDocument();
+        expect(screen.getByText('Free')).toBeInTheDocument();
+    });
+
+    it('renders pro tier price', () => {
+        render(<Pricing />);
+        expect(screen.getByText('$29')).toBeInTheDocument();
+        expect(screen.getByText('/one-time')).toBeInTheDocument();
     });
 
     it('renders upgrade button', () => {
         render(<Pricing />);
-        expect(screen.getByText(/Upgrade to Elite/i)).toBeInTheDocument();
+        expect(screen.getByText(/Unlock Elite Access/i)).toBeInTheDocument();
     });
 
     it('renders free plan CTA', () => {
         render(<Pricing />);
-        expect(screen.getByText(/Begin Journey/i)).toBeInTheDocument();
+        expect(screen.getByText(/Get Started/i)).toBeInTheDocument();
     });
 
-    it('renders "Most Coveted" badge on premium', () => {
+    it('renders "Most Popular" badge on premium', () => {
         render(<Pricing />);
-        expect(screen.getByText(/Most Coveted/i)).toBeInTheDocument();
+        expect(screen.getByText(/Most Popular/i)).toBeInTheDocument();
     });
 });

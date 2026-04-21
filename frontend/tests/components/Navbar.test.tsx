@@ -10,14 +10,14 @@ describe('Navbar Component', () => {
 
     it('contains navigation links', () => {
         render(<Navbar />);
-        expect(screen.getByText('How It Works')).toBeInTheDocument();
-        expect(screen.getByText('Features')).toBeInTheDocument();
-        expect(screen.getByText('Pricing')).toBeInTheDocument();
+        expect(screen.getByText('Analysis')).toBeInTheDocument();
+        expect(screen.getByText('Wardrobe')).toBeInTheDocument();
+        expect(screen.getByText('Gallery')).toBeInTheDocument();
     });
 
-    it('contains Login and Sign Up buttons', () => {
+    it('contains icon buttons for unauthenticated state', () => {
         render(<Navbar />);
-        expect(screen.getByRole('button', { name: /Log In/i })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Notifications/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Sign in/i })).toBeInTheDocument();
     });
 });

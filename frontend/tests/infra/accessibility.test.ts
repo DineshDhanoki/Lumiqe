@@ -8,19 +8,18 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 
-describe('Pricing toggle — accessibility', () => {
+describe('Pricing — accessibility', () => {
     const pricingPath = path.resolve(
         __dirname, '../../src/components/Pricing.tsx'
     );
     const source = fs.readFileSync(pricingPath, 'utf-8');
 
-    it('billing toggle button must have aria-label', () => {
-        // The toggle switch must be labeled for screen readers
-        expect(source).toMatch(/aria-label.*[Bb]illing|aria-label.*[Aa]nnual|role.*switch/);
+    it('upgrade button must be disableable for loading state', () => {
+        expect(source).toContain('disabled');
     });
 
-    it('billing toggle must have aria-checked state', () => {
-        expect(source).toContain('aria-checked');
+    it('checkout error must be rendered as text', () => {
+        expect(source).toContain('checkoutError');
     });
 });
 

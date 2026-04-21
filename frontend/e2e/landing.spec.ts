@@ -9,7 +9,7 @@ test.describe('Landing Page', () => {
         await expect(page.locator('h1').first()).toBeVisible();
         await expect(page.locator('h1').first()).toContainText('Discover Your');
 
-        const ctaButton = page.getByRole('button', { name: /start free trial/i });
+        const ctaButton = page.getByRole('button', { name: /analyze my colors/i });
         await expect(ctaButton).toBeVisible();
     });
 
@@ -45,7 +45,7 @@ test.describe('Landing Page', () => {
     });
 
     test('clicking CTA opens auth modal', async ({ page }) => {
-        const ctaButton = page.getByRole('button', { name: /start free trial/i });
+        const ctaButton = page.getByRole('button', { name: /analyze my colors/i });
         await ctaButton.click();
 
         const dialog = page.getByRole('dialog');

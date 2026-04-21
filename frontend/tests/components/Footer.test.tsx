@@ -10,13 +10,13 @@ describe('Footer Component', () => {
 
     it('renders footer links', () => {
         render(<Footer />);
-        expect(screen.getByText(/Privacy Policy/i)).toBeInTheDocument();
-        expect(screen.getByText(/Terms of Service/i)).toBeInTheDocument();
-        expect(screen.getByText(/Contact Support/i)).toBeInTheDocument();
+        expect(screen.getByText('Privacy')).toBeInTheDocument();
+        expect(screen.getByText('Terms')).toBeInTheDocument();
+        expect(screen.getByText('Contact')).toBeInTheDocument();
     });
 
     it('renders copyright text', () => {
         render(<Footer />);
-        expect(screen.getByText(/All rights reserved/i)).toBeInTheDocument();
+        expect(screen.getByText(/ALL RIGHTS RESERVED/i)).toBeInTheDocument();
     });
 });

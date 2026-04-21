@@ -14,17 +14,15 @@ describe('HeroSection Component', () => {
 
     it('renders CTAs', () => {
         render(<HeroSection onOpenAuth={() => { }} />);
-        expect(screen.getByRole('button', { name: /Start Free Trial/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /See Live Demo/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Analyze My Colors/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /View Sample Report/i })).toBeInTheDocument();
     });
 
-    it('calls onOpenAuth when Free Trial is clicked', async () => {
+    it('calls onOpenAuth when CTA is clicked', async () => {
         const handleOpenAuth = vi.fn();
         render(<HeroSection onOpenAuth={handleOpenAuth} />);
 
-        // We cannot easily test userEvent if it's an interactive Framer motion element 
-        // unless wait for it, but screen.getByRole works.
-        const btn = screen.getByRole('button', { name: /Start Free Trial/i });
+        const btn = screen.getByRole('button', { name: /Analyze My Colors/i });
         btn.click();
         expect(handleOpenAuth).toHaveBeenCalledTimes(1);
     });

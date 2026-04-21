@@ -5,33 +5,30 @@ import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { events } from '@/lib/analytics';
 import { apiFetch } from '@/lib/api';
-import { useTranslation } from '@/lib/hooks/useTranslation';
 
 interface PricingProps {
     onOpenAuth?: () => void;
 }
 
 export default function Pricing({ onOpenAuth }: PricingProps) {
-    const { t } = useTranslation();
-    const [isAnnual, setIsAnnual] = useState(true);
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [checkoutError, setCheckoutError] = useState('');
     const { data: session } = useSession();
 
-    const handleSubscribe = async (plan: 'monthly' | 'annual') => {
+    const handleSubscribe = async () => {
         if (!session) {
             onOpenAuth?.();
             return;
         }
 
-        setLoadingPlan(plan);
+        setLoadingPlan('annual');
         setCheckoutError('');
-        events.checkoutStarted(plan);
+        events.checkoutStarted('annual');
 
         try {
             const res = await apiFetch('/api/stripe/checkout', {
                 method: 'POST',
-                body: JSON.stringify({ plan }),
+                body: JSON.stringify({ plan: 'annual' }),
             });
 
             if (!res.ok) {
@@ -42,218 +39,112 @@ export default function Pricing({ onOpenAuth }: PricingProps) {
             if (typeof window !== 'undefined') window.location.href = data.checkout_url;
         } catch (err: unknown) {
             console.error('Checkout error:', err);
-            setCheckoutError(err instanceof Error ? err.message : t('pricingPaymentError'));
+            setCheckoutError(err instanceof Error ? err.message : 'Payment error. Please try again.');
             setLoadingPlan(null);
         }
     };
 
     return (
-        <section id="pricing" className="pt-32 pb-24 px-4 md:px-8 max-w-7xl mx-auto min-h-screen"
-            style={{ background: 'radial-gradient(circle at top right, #18181F 0%, #09090B 100%)' }}>
-
-            {/* Hero header */}
-            <motion.header
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-16 space-y-6"
-            >
-                <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight text-on-surface">
-                    Elevate Your Presence.
-                </h1>
-                <p className="max-w-2xl mx-auto text-on-surface-variant text-lg leading-relaxed">
-                    Choose the tier that reflects your ambition. Our AI-curated digital atelier is designed for those who view style as a science.
-                </p>
-
-                {/* Monthly / Annual toggle */}
-                <div className="flex items-center justify-center gap-4 pt-4">
-                    <span className={`font-label text-sm transition-colors ${!isAnnual ? 'text-on-surface' : 'text-on-surface-variant'}`}>Monthly</span>
-                    <button
-                        role="switch"
-                        aria-checked={isAnnual}
-                        onClick={() => setIsAnnual(!isAnnual)}
-                        className="relative w-14 h-7 bg-surface-container-highest rounded-full p-1 transition-all duration-300"
-                    >
-                        <div className={`absolute top-1 w-5 h-5 bg-primary rounded-full shadow-sm transition-all duration-300 ${isAnnual ? 'right-1' : 'left-1'}`} />
-                    </button>
-                    <span className={`font-label text-sm transition-colors ${isAnnual ? 'text-on-surface' : 'text-on-surface-variant'}`}>
-                        Annual{' '}
-                        <span className="text-primary-container font-mono ml-1 text-xs">(-20%)</span>
-                    </span>
-                </div>
-            </motion.header>
-
-            {checkoutError && (
-                <p className="text-primary text-sm text-center mb-8">{checkoutError}</p>
-            )}
-
-            {/* Pricing cards — 2-column */}
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
-
-                {/* Free Tier */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="bg-surface-container-low rounded-3xl p-10 flex flex-col justify-between border border-white/5 hover:border-white/10 transition-all duration-500"
-                >
-                    <div>
-                        <h3 className="font-headline font-bold text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-4">Essentials</h3>
-                        <h2 className="font-display text-4xl font-bold text-on-surface mb-2">Free Tier</h2>
-                        <div className="flex items-baseline gap-1 mb-8">
-                            <span className="text-3xl font-headline font-bold text-on-surface">$0</span>
-                            <span className="text-on-surface-variant font-label text-sm">/ forever</span>
-                        </div>
-                        <ul className="space-y-4 mb-12">
-                            {[
-                                { text: 'Basic Skin Tone Analysis', included: true },
-                                { text: 'Digital Wardrobe (Up to 25 items)', included: true },
-                                { text: 'Seasonal Color Palette (Static)', included: true },
-                                { text: 'AI Personal Stylist', included: false },
-                            ].map((f) => (
-                                <li key={f.text} className={`flex items-center gap-3 ${f.included ? 'text-on-surface-variant' : 'text-on-surface/20'}`}>
-                                    {f.included ? (
-                                        <span className="material-symbols-outlined text-primary text-lg">check_circle</span>
-                                    ) : (
-                                        <span className="material-symbols-outlined text-lg">block</span>
-                                    )}
-                                    <span className="font-label text-sm">{f.text}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <button
-                        onClick={() => onOpenAuth?.()}
-                        className="w-full py-4 rounded-[10px] border border-outline-variant text-on-surface font-label font-medium hover:bg-white/5 transition-all"
-                    >
-                        Begin Journey
-                    </button>
-                </motion.div>
-
-                {/* Pro Tier */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                    className="relative bg-surface-container rounded-3xl p-10 flex flex-col justify-between border border-primary/30 transition-all duration-500 overflow-hidden"
-                    style={{ boxShadow: '0 0 40px -10px rgba(196,151,62,0.2)' }}
-                >
-                    {/* Background accent */}
-                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-[80px]" />
-                    <div className="relative z-10">
-                        <div className="flex justify-between items-start mb-4">
-                            <h3 className="font-headline font-bold text-xs uppercase tracking-[0.2em] text-primary">Elite Access</h3>
-                            <span className="bg-primary/20 text-primary-container text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider">Most Coveted</span>
-                        </div>
-                        <h2 className="font-display text-4xl font-bold text-on-surface mb-2">Pro Tier</h2>
-                        <div className="flex items-baseline gap-1 mb-8">
-                            <span className="text-3xl font-headline font-bold text-on-surface">
-                                {isAnnual ? '$23' : '$29'}
-                            </span>
-                            <span className="text-on-surface-variant font-label text-sm">
-                                {isAnnual ? '/ month billed annually' : '/ month'}
-                            </span>
-                        </div>
-                        <ul className="space-y-4 mb-12">
-                            {[
-                                'Deep Neural Tone Mapping',
-                                'Unlimited Vault Capacity',
-                                'Real-time AI Style Consultation',
-                                'VIP Community & Drops Access',
-                            ].map((text) => (
-                                <li key={text} className="flex items-center gap-3 text-on-surface">
-                                    <span className="material-symbols-outlined text-primary text-lg">verified</span>
-                                    <span className="font-label text-sm">{text}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <button
-                        onClick={() => handleSubscribe(isAnnual ? 'annual' : 'monthly')}
-                        disabled={loadingPlan === 'monthly' || loadingPlan === 'annual'}
-                        className="relative z-10 w-full py-4 rounded-[10px] bg-primary text-on-primary font-label font-bold hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-lg flex items-center justify-center gap-2"
-                    >
-                        {loadingPlan === 'monthly' || loadingPlan === 'annual' ? (
-                            <>
-                                <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
-                                Opening checkout...
-                            </>
-                        ) : (
-                            'Upgrade to Elite'
-                        )}
-                    </button>
-                </motion.div>
-            </div>
-
-            {/* Comparison table */}
-            <section className="max-w-5xl mx-auto">
+        <section id="pricing" className="py-16 md:py-24 px-4 sm:px-6">
+            <div className="max-w-[1280px] mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-12"
+                    className="text-center mb-16"
                 >
-                    <h2 className="font-display text-3xl font-bold text-on-surface">A Closer Look</h2>
-                    <p className="font-label text-on-surface-variant text-sm">The technical specifications of your digital transformation.</p>
+                    <h2 className="font-display text-5xl text-on-surface mb-4">Invest In Your Aura</h2>
+                    <p className="text-on-surface-variant">Choose the depth of your personal color transformation.</p>
                 </motion.div>
-                <div className="overflow-hidden rounded-2xl border border-white/5 bg-surface-container-low/50 backdrop-blur-sm">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="border-b border-white/5">
-                                <th className="p-6 font-headline text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Feature</th>
-                                <th className="p-6 font-headline text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Essentials</th>
-                                <th className="p-6 font-headline text-xs uppercase tracking-widest text-primary font-semibold">Pro Tier</th>
-                            </tr>
-                        </thead>
-                        <tbody className="font-label text-sm">
-                            {[
-                                { feature: 'Wardrobe Size', free: '25 Items', pro: 'Infinite' },
-                                { feature: 'Color Analysis', free: '12-Point Analysis', pro: 'Spectral Skin Mapping' },
-                                { feature: 'AI Suggestions', free: '3 Daily', pro: 'Real-time / Unlimited' },
-                                { feature: 'Style History', free: '7 Days', pro: 'Full Archive' },
-                            ].map((row, i) => (
-                                <tr key={row.feature} className={i < 3 ? 'border-b border-white/5' : ''}>
-                                    <td className="p-6 text-on-surface font-medium">{row.feature}</td>
-                                    <td className="p-6 text-on-surface-variant">{row.free}</td>
-                                    <td className="p-6 text-primary">{row.pro}</td>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td className="p-6 text-on-surface font-medium">Priority Support</td>
-                                <td className="p-6 text-on-surface-variant">
-                                    <span className="material-symbols-outlined text-on-surface/10">horizontal_rule</span>
-                                </td>
-                                <td className="p-6 text-primary">
-                                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
 
-            {/* Aesthetic imagery */}
-            <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="mt-24 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto"
-            >
-                {['/pricing-img-1.jpg', '/pricing-img-2.jpg', '/pricing-img-3.jpg'].map((src) => (
-                    <div key={src} className="h-64 rounded-3xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 bg-surface-container-high">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src={src}
-                            alt=""
-                            className="w-full h-full object-cover"
-                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                        />
-                    </div>
-                ))}
-            </motion.section>
+                {checkoutError && (
+                    <p className="text-primary text-sm text-center mb-8">{checkoutError}</p>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    {/* Discovery — Free */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="p-10 rounded-3xl bg-surface-container border border-outline-variant/10 flex flex-col h-full"
+                    >
+                        <div className="mb-8">
+                            <h3 className="font-headline text-xl font-bold mb-2">Discovery</h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-headline font-extrabold">Free</span>
+                            </div>
+                        </div>
+                        <ul className="space-y-4 mb-12 flex-grow">
+                            <li className="flex items-center gap-3 text-on-surface-variant">
+                                <span className="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+                                Basic Seasonal Analysis
+                            </li>
+                            <li className="flex items-center gap-3 text-on-surface-variant">
+                                <span className="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+                                Essential 10-Color Palette
+                            </li>
+                            <li className="flex items-center gap-3 text-on-surface-variant opacity-40">
+                                <span className="material-symbols-outlined text-zinc-600 text-sm">cancel</span>
+                                AI Stylist Access
+                            </li>
+                        </ul>
+                        <button
+                            onClick={() => onOpenAuth?.()}
+                            className="w-full py-4 rounded-xl border border-outline-variant font-bold hover:bg-white/5 transition-all"
+                        >
+                            Get Started
+                        </button>
+                    </motion.div>
+
+                    {/* Elite Atelier — Pro */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="p-10 rounded-3xl bg-surface-container-highest border border-primary/30 flex flex-col h-full relative overflow-hidden"
+                        style={{ boxShadow: '0 40px 60px -15px rgba(196,151,62,0.08)' }}
+                    >
+                        <div className="absolute top-6 right-8 bg-primary/20 text-primary text-[10px] font-mono tracking-widest px-3 py-1 rounded-full uppercase">Most Popular</div>
+                        <div className="mb-8">
+                            <h3 className="font-headline text-xl font-bold mb-2">Elite Atelier</h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-headline font-extrabold">$29</span>
+                                <span className="text-on-surface-variant text-sm">/one-time</span>
+                            </div>
+                        </div>
+                        <ul className="space-y-4 mb-12 flex-grow">
+                            {[
+                                'Ultra-HD Deep Tissue Analysis',
+                                'Complete 60-Color Lookbook',
+                                'Unlimited Wardrobe Matching',
+                                'Priority AI Stylist Concierge',
+                            ].map((text) => (
+                                <li key={text} className="flex items-center gap-3 text-on-surface">
+                                    <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                    {text}
+                                </li>
+                            ))}
+                        </ul>
+                        <button
+                            onClick={handleSubscribe}
+                            disabled={loadingPlan === 'annual'}
+                            className="w-full py-4 rounded-xl bg-primary text-on-primary-container font-bold hover:opacity-90 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                        >
+                            {loadingPlan === 'annual' ? (
+                                <>
+                                    <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>
+                                    Opening checkout...
+                                </>
+                            ) : (
+                                'Unlock Elite Access'
+                            )}
+                        </button>
+                    </motion.div>
+                </div>
+            </div>
         </section>
     );
 }

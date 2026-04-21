@@ -27,11 +27,10 @@ export default function Navbar() {
     });
 
     const navLinks = [
-        { name: t('navHowItWorks'), href: '#how-it-works' },
-        { name: t('navFeatures'), href: '#features' },
-        { name: t('navDashboard'), href: '/dashboard' },
-        { name: t('navScanner'), href: '/scan' },
-        { name: t('navPricing'), href: '#pricing' },
+        { name: 'Analysis', href: '/analyze' },
+        { name: 'Wardrobe', href: '/wardrobe' },
+        { name: 'Stylist', href: '/shopping-agent' },
+        { name: 'Gallery', href: '/feed' },
     ];
 
     return (
@@ -50,7 +49,7 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <span className="font-display text-2xl font-bold tracking-tighter text-primary-container group-hover:text-primary transition-colors">LUMIQE</span>
+                        <span className="font-display text-2xl italic font-bold text-primary-container group-hover:text-primary transition-colors">LUMIQE</span>
                     </Link>
 
                     {/* Desktop Nav */}
@@ -67,7 +66,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop Auth */}
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden md:flex items-center gap-6">
                         {status === 'authenticated' ? (
                             <>
                                 <NotificationBell />
@@ -100,11 +99,19 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <button onClick={openLogin} className="text-sm font-label font-medium text-on-surface-variant hover:text-on-surface px-4 py-2 transition-colors">
-                                    {t('navLogIn')}
+                                <button
+                                    onClick={openLogin}
+                                    className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all active:scale-95"
+                                    aria-label="Notifications"
+                                >
+                                    notifications
                                 </button>
-                                <button onClick={openSignUp} className="text-sm font-label font-bold bg-primary-container hover:bg-primary text-on-primary-container px-5 py-2 rounded-full transition-colors">
-                                    {t('navSignUp')}
+                                <button
+                                    onClick={openLogin}
+                                    className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all active:scale-95"
+                                    aria-label="Sign in"
+                                >
+                                    account_circle
                                 </button>
                             </>
                         )}
@@ -177,10 +184,10 @@ export default function Navbar() {
                             ) : (
                                 <>
                                     <button onClick={() => { setIsMobileMenuOpen(false); openLogin(); }} className="text-base font-medium text-on-surface-variant w-full py-2 text-left">
-                                        {t('navLogIn')}
+                                        Sign In
                                     </button>
                                     <button onClick={() => { setIsMobileMenuOpen(false); openSignUp(); }} className="text-base font-medium bg-primary-container text-on-primary-container w-full py-2 rounded-full text-center">
-                                        {t('navSignUp')}
+                                        Sign Up
                                     </button>
                                 </>
                             )}

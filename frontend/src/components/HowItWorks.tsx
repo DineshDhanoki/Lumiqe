@@ -1,53 +1,50 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/lib/hooks/useTranslation';
 
 const STEPS = [
     {
         icon: 'upload_file',
-        number: '01',
         colorClass: 'text-primary',
-        hoverBg: 'group-hover:bg-primary/20 group-hover:border-primary/40',
-        titleKey: 'howItWorksStep1Title' as const,
-        descKey: 'howItWorksStep1Desc' as const,
+        hoverBg: 'group-hover:bg-primary-container',
+        hoverIcon: 'group-hover:text-on-primary-container',
+        title: '01. Upload',
+        desc: 'Provide a natural light selfie. Our system detects over 200 data points across your skin, eyes, and hair.',
     },
     {
         icon: 'neurology',
-        number: '02',
         colorClass: 'text-secondary',
-        hoverBg: 'group-hover:bg-secondary/20 group-hover:border-secondary/40',
-        titleKey: 'howItWorksStep2Title' as const,
-        descKey: 'howItWorksStep2Desc' as const,
+        hoverBg: 'group-hover:bg-secondary-container',
+        hoverIcon: 'group-hover:text-white',
+        title: '02. AI Analyzes',
+        desc: 'Our AI simulates thousands of lighting conditions and drape combinations to find your perfect contrast ratio.',
     },
     {
         icon: 'palette',
-        number: '03',
         colorClass: 'text-tertiary',
-        hoverBg: 'group-hover:bg-tertiary/20 group-hover:border-tertiary/40',
-        titleKey: 'howItWorksStep3Title' as const,
-        descKey: 'howItWorksStep3Desc' as const,
+        hoverBg: 'group-hover:bg-tertiary-container',
+        hoverIcon: 'group-hover:text-on-tertiary-container',
+        title: '03. Discover Palette',
+        desc: 'Receive a curated 60-color digital lookbook and bespoke styling advice tailored exclusively to you.',
     },
 ];
 
 export default function HowItWorks() {
-    const { t } = useTranslation();
-
     return (
         <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 relative bg-surface-container/20 border-y border-primary/5">
             <div className="max-w-6xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div>
-                        <span className="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/60 block mb-3">
+                        <span className="font-mono text-secondary text-sm uppercase tracking-[0.3em] block">
                             The Process
                         </span>
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-100px' }}
-                            className="font-display text-4xl sm:text-5xl text-on-surface mt-4"
+                            className="font-display text-5xl text-on-surface mt-4"
                         >
-                            {t('howItWorksTitle')}
+                            Precision Engineering
                         </motion.h2>
                     </div>
                     <motion.p
@@ -55,9 +52,9 @@ export default function HowItWorks() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-100px' }}
                         transition={{ delay: 0.1 }}
-                        className="text-on-surface-variant font-light text-base max-w-md"
+                        className="text-on-surface-variant font-light text-lg max-w-md"
                     >
-                        {t('howItWorksSubtitle')}
+                        Our three-step methodology combines dermatologist-approved color theory with proprietary neural networks.
                     </motion.p>
                 </div>
 
@@ -75,21 +72,16 @@ export default function HowItWorks() {
                             className="relative flex flex-col items-start text-left group"
                         >
                             <div className={`relative w-16 h-16 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center mb-8 ${step.hoverBg} transition-all duration-500`}>
-                                <span
-                                    className={`material-symbols-outlined text-2xl ${step.colorClass}`}
-                                >
+                                <span className={`material-symbols-outlined text-2xl ${step.colorClass} ${step.hoverIcon}`}>
                                     {step.icon}
                                 </span>
-                                <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary-container text-on-primary font-mono text-[9px] font-bold flex items-center justify-center border-2 border-background">
-                                    {step.number}
-                                </div>
                             </div>
 
                             <h3 className="font-headline text-xl font-bold text-on-surface mb-4">
-                                {t(step.titleKey)}
+                                {step.title}
                             </h3>
                             <p className="text-on-surface-variant leading-relaxed text-sm max-w-sm">
-                                {t(step.descKey)}
+                                {step.desc}
                             </p>
                         </motion.div>
                     ))}

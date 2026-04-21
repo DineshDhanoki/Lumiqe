@@ -7,8 +7,6 @@ import HeroSection from '../components/HeroSection';
 
 const HowItWorks = dynamic(() => import('../components/HowItWorks'));
 const DemoPreview = dynamic(() => import('../components/DemoPreview'));
-const Features = dynamic(() => import('../components/Features'));
-const Testimonials = dynamic(() => import('../components/Testimonials'));
 const FreeTrial = dynamic(() => import('../components/FreeTrial'));
 const Pricing = dynamic(() => import('../components/Pricing'));
 const Footer = dynamic(() => import('../components/Footer'));
@@ -59,14 +57,6 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal delay={0.2}>
-        <Features />
-      </ScrollReveal>
-
-      <ScrollReveal delay={0.2}>
-        <Testimonials />
-      </ScrollReveal>
-
-      <ScrollReveal delay={0.2}>
         <Pricing onOpenAuth={() => openAuth('/pricing')} />
       </ScrollReveal>
 
@@ -86,3 +76,4 @@ export default function Home() {
     </main>
   );
 }
+
