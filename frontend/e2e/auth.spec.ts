@@ -8,12 +8,16 @@ test.describe('Auth Modal', () => {
         const menuBtn = page.getByLabel(/open menu/i);
         if (await menuBtn.isVisible()) {
             await menuBtn.click();
+            // Mobile menu has a Sign Up button — opens modal in sign-up mode directly
+            await page.getByRole('button', { name: 'Sign Up' }).click();
+        } else {
+            // Desktop: click account icon (opens sign-in mode), then switch to sign-up
+            await page.getByRole('button', { name: /sign in/i }).first().click();
+            await expect(page.getByRole('dialog')).toBeVisible();
+            await page.getByRole('dialog').getByRole('button', { name: 'Sign Up' }).click();
         }
-
-        // Open sign-up modal via navbar
-        const signUpBtn = page.getByRole('button', { name: /sign up/i }).first();
-        await signUpBtn.click();
         await expect(page.getByRole('dialog')).toBeVisible();
+        await expect(page.getByRole('dialog')).toContainText(/create account/i);
     });
 
     test('shows create account form by default when opened via sign up', async ({ page }) => {

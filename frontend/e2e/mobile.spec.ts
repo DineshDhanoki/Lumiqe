@@ -27,8 +27,8 @@ test.describe('Mobile Responsiveness', () => {
             await menuBtn.click();
 
             // Mobile menu should appear with nav links
-            await expect(page.getByText(/how it works/i).last()).toBeVisible();
-            await expect(page.getByText(/features/i).last()).toBeVisible();
+            await expect(page.getByText(/analysis/i).last()).toBeVisible();
+            await expect(page.getByText(/wardrobe/i).last()).toBeVisible();
         }
     });
 
