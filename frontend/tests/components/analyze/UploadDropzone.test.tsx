@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import UploadDropzone from '../../../src/components/analyze/UploadDropzone';
 
 vi.mock('@/lib/i18n', () => ({
@@ -14,15 +15,16 @@ describe('UploadDropzone', () => {
         onBack: vi.fn(),
     };
 
-    it('has role="button" on the drop zone for keyboard accessibility', () => {
+    it('does not expose an inert button role on the dropzone wrapper', () => {
         render(<UploadDropzone {...defaultProps} />);
-        expect(screen.getByRole('button', { name: /upload a selfie/i })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /upload a selfie/i })).not.toBeInTheDocument();
     });
 
-    it('has tabIndex on the drop zone', () => {
+    it('reaches the native file input by keyboard', async () => {
+        const user = userEvent.setup();
         render(<UploadDropzone {...defaultProps} />);
-        const zone = screen.getByRole('button', { name: /upload a selfie/i });
-        expect(zone).toHaveAttribute('tabindex', '0');
+        await user.tab();
+        expect(document.activeElement).toHaveAttribute('aria-label', 'Choose a photo to upload');
     });
 
     it('renders upload labels from i18n keys', () => {
@@ -42,6 +44,18 @@ describe('UploadDropzone', () => {
     it('shows error message when error prop is set', () => {
         render(<UploadDropzone {...defaultProps} error="File too large" />);
         expect(screen.getByText('File too large')).toBeInTheDocument();
+    });
+
+    it('announces errors through a live region', () => {
+        render(<UploadDropzone {...defaultProps} error="File too large" />);
+        const live = screen.getByRole('status');
+        expect(live).toHaveAttribute('aria-live', 'polite');
+        expect(live).toHaveTextContent('File too large');
+    });
+
+    it('keeps the live region mounted when there is no error', () => {
+        render(<UploadDropzone {...defaultProps} />);
+        expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
     it('does not show error when error is null', () => {

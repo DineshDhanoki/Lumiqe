@@ -37,6 +37,21 @@ describe('MultiPhotoUpload', () => {
         expect(screen.getByText('Upload failed')).toBeInTheDocument();
     });
 
+    it('announces API errors through a live region', () => {
+        render(<MultiPhotoUpload {...defaultProps} apiError="Upload failed" />);
+        const live = screen.getByRole('status');
+        expect(live).toHaveAttribute('aria-live', 'polite');
+        expect(live).toHaveTextContent('Upload failed');
+    });
+
+    it('announces validation errors through the same live region', () => {
+        render(<MultiPhotoUpload {...defaultProps} />);
+        const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+        const pdf = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+        fireEvent.change(input, { target: { files: [pdf] } });
+        expect(screen.getByRole('status')).toHaveTextContent(/valid image/i);
+    });
+
     it('calls onBack when back button is clicked', () => {
         const onBack = vi.fn();
         render(<MultiPhotoUpload {...defaultProps} onBack={onBack} />);

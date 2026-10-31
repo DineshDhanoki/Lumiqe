@@ -115,12 +115,14 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                 {files.length}/5 photos added · Minimum 2 required
             </p>
 
-            {displayError && (
-                <div className="flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-xl text-sm">
-                    <span className="material-symbols-outlined text-base text-primary">error</span>
-                    {displayError}
-                </div>
-            )}
+            <div aria-live="polite" role="status">
+                {displayError && (
+                    <div className="flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-xl text-sm">
+                        <span className="material-symbols-outlined text-base text-primary">error</span>
+                        {displayError}
+                    </div>
+                )}
+            </div>
 
             <button
                 onClick={() => onAnalyze(files)}
