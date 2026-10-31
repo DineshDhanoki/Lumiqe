@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible problem without posting private photos or account data.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Remove tokens and personal data from logs. For an exploitable security issue, follow [SECURITY.md](../../SECURITY.md) instead.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the behavior and what you expected.
+      placeholder: "On the results page, ..."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include only synthetic or consented test data.
+      placeholder: "1. Open ... 2. Select ... 3. Observe ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Frontend
+        - API
+        - Color analysis
+        - Local setup
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser or OS, local or hosted app, and relevant version or commit.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Safe evidence
+      description: Redacted logs, a screenshot with no personal data, or a synthetic fixture.

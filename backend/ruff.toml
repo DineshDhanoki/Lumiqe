@@ -4,3 +4,8 @@
 exclude = [
     "face-parsing",
 ]
+
+# Keep the existing error/pyflakes baseline explicit across Ruff releases.
+# Broader rules can be enabled incrementally after existing findings are fixed.
+[lint]
+select = ["E4", "E7", "E9", "F"]

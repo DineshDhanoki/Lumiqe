@@ -1,0 +1,30 @@
+name: Feature or improvement
+description: Suggest a focused improvement and explain whom it helps.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What problem should this solve?
+      description: Tell us who experiences it and why it matters.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: A small, testable first step is ideal.
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: How would we know it works?
+      description: Describe observable acceptance criteria, including accessibility or privacy where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or open questions
