@@ -37,7 +37,7 @@ export default function UploadDropzone({ lang, error, onFile, onBack }: Props) {
                     isDragging
                         ? 'border-primary bg-primary/10 scale-[1.02]'
                         : 'border-outline-variant/30 bg-surface-container/30 backdrop-blur-md',
-                    'focus-within:border-primary/60'
+                    'focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30'
                 )}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}

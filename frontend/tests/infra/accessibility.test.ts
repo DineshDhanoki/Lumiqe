@@ -64,8 +64,12 @@ describe('Analyze page — upload area', () => {
     );
     const source = fs.readFileSync(analyzePath, 'utf-8');
 
-    it('upload area must have role="button" or be a label/button element', () => {
-        // The upload drop zone should be keyboard accessible
-        expect(source).toMatch(/role=.*button|<label|<button.*[Uu]pload|tabIndex/);
+    it('upload control must be a natively keyboard-operable file input with an accessible name', () => {
+        // Issue #6: the upload control is the native <input type="file">
+        // (no inert role="button" wrapper around it).
+        expect(source).toMatch(/<input[^>]*type="file"/);
+        expect(source).toMatch(/aria-label=/);
+        // Visible keyboard focus indicator on the dropzone tile.
+        expect(source).toMatch(/focus-within:/);
     });
 });

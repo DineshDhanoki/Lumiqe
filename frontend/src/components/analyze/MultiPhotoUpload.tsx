@@ -95,7 +95,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                 ))}
 
                 {files.length < MAX_FILES && (
-                    <label className="relative aspect-square rounded-2xl border-2 border-dashed border-outline-variant/20 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-surface-container/30 transition-all">
+                    <label className="relative aspect-square rounded-2xl border-2 border-dashed border-outline-variant/20 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-surface-container/30 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/40 focus-within:bg-surface-container/30 transition-all">
                         <span className="material-symbols-outlined text-3xl text-on-surface-variant">add_photo_alternate</span>
                         <span className="text-[10px] text-on-surface-variant/50 mt-1">Add photo</span>
                         <input

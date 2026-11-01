@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, createEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UploadDropzone from '../../../src/components/analyze/UploadDropzone';
 
@@ -77,5 +77,41 @@ describe('UploadDropzone', () => {
         const file = new File(['img'], 'selfie.jpg', { type: 'image/jpeg' });
         fireEvent.change(input, { target: { files: [file] } });
         expect(onFile).toHaveBeenCalledWith(file);
+    });
+
+    it('selecting a file after keyboard focus fires the file-selection callback', async () => {
+        // Full activation path: Tab reaches the native input, then the standard
+        // file-pick interaction (user-event upload) drives the change pipeline.
+        const user = userEvent.setup();
+        const onFile = vi.fn();
+        render(<UploadDropzone {...defaultProps} onFile={onFile} />);
+        await user.tab();
+        const input = document.activeElement as HTMLInputElement;
+        expect(input).toHaveAttribute('type', 'file');
+        const file = new File(['img'], 'selfie.jpg', { type: 'image/jpeg' });
+        await user.upload(input, file);
+        expect(onFile).toHaveBeenCalledWith(file);
+    });
+
+    it('keeps drag and drop working', () => {
+        const onFile = vi.fn();
+        render(<UploadDropzone {...defaultProps} onFile={onFile} />);
+        const file = new File(['img'], 'dropped.png', { type: 'image/png' });
+        fireEvent.dragOver(screen.getByLabelText('Choose a photo to upload').closest('div.relative') as HTMLElement);
+        // The dragOver state change re-renders the tile; re-query before dropping.
+        const tile = screen.getByLabelText('Choose a photo to upload').closest('div.relative') as HTMLElement;
+        // jsdom's DragEvent init does not carry dataTransfer; attach it explicitly.
+        const dropEvent = createEvent.drop(tile);
+        Object.defineProperty(dropEvent, 'dataTransfer', { value: { files: [file] } });
+        fireEvent(tile, dropEvent);
+        expect(onFile).toHaveBeenCalledWith(file);
+    });
+
+    it('shows a visible keyboard focus indicator on the dropzone tile', () => {
+        render(<UploadDropzone {...defaultProps} />);
+        const input = screen.getByLabelText('Choose a photo to upload');
+        const tile = input.closest('div.relative') as HTMLElement;
+        expect(tile.className).toMatch(/focus-within:border-primary/);
+        expect(tile.className).toMatch(/focus-within:ring/);
     });
 });

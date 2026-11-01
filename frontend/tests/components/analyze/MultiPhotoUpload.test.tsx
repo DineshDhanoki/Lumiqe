@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import MultiPhotoUpload from '../../../src/components/analyze/MultiPhotoUpload';
 
 vi.mock('@/lib/i18n', () => ({
@@ -100,5 +101,26 @@ describe('MultiPhotoUpload', () => {
         fireEvent.click(screen.getByRole('button', { name: /Analyze 2 Photos/i }));
         expect(onAnalyze).toHaveBeenCalledOnce();
         expect(onAnalyze.mock.calls[0][0]).toHaveLength(2);
+    });
+
+    it('reaches the add-photo input by keyboard and selecting a file adds it', async () => {
+        // Activation path for the wrapped label/input: Tab focuses the native
+        // input, a standard file pick (user-event upload) adds the photo.
+        const user = userEvent.setup();
+        render(<MultiPhotoUpload {...defaultProps} />);
+        await user.tab();
+        const input = document.activeElement as HTMLInputElement;
+        expect(input).toHaveAttribute('type', 'file');
+        const file = new File(['img'], 'photo.jpg', { type: 'image/jpeg' });
+        await user.upload(input, file);
+        expect(screen.getByText('1/5 photos added · Minimum 2 required')).toBeInTheDocument();
+    });
+
+    it('shows a visible keyboard focus indicator on the add-photo tile', () => {
+        render(<MultiPhotoUpload {...defaultProps} />);
+        const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+        const tile = input.closest('label') as HTMLLabelElement;
+        expect(tile.className).toMatch(/focus-within:border-primary/);
+        expect(tile.className).toMatch(/focus-within:ring/);
     });
 });
