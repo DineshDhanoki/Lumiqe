@@ -1,57 +1,106 @@
+<div align="center">
+
 # Lumiqe
 
-### What if the colors in your wardrobe felt like *you*?
+### Colour is personal. Your tools should be, too.
 
-You are getting dressed for something that matters. You hold two shirts up to the mirror. Both fit. One makes you feel alive; the other somehow does not. Most of us know that moment, but few of us can explain why.
+**An open-source personal-colour companion that turns a thoughtful photo into a palette you can actually use.**
 
-**Lumiqe is an open source experiment in making that choice easier.** Give it a clear photo, and it estimates a seasonal color palette. Then explore outfit ideas, compare a clothing item with your palette, and carry a color card when you shop. We want to build a more useful starting point for personal style, improved by people with different skin tones, cameras, lighting, and perspectives.
+[Explore Lumiqe](https://www.lumiqe.in/) · [Read the contribution guide](CONTRIBUTING.md) · [Choose an issue](https://github.com/DineshDhanoki/Lumiqe/issues) · [Star the project](https://github.com/DineshDhanoki/Lumiqe)
 
-[Try Lumiqe](https://www.lumiqe.in/) · [Explore the code](#how-it-works) · [Find a contribution](https://github.com/DineshDhanoki/Lumiqe/issues) · [Contributor guide](CONTRIBUTING.md)
+![CI](https://github.com/DineshDhanoki/Lumiqe/actions/workflows/ci.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-1a1a1a.svg?style=flat-square)](LICENSE)
 
-![CI](https://github.com/DineshDhanoki/Lumiqe/actions/workflows/ci.yml/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+</div>
 
-> **A useful guide, not a verdict.** Seasonal color analysis is subjective, and a photo changes with lighting, camera processing, makeup, and screen settings. Lumiqe's season and confidence score are model outputs, not a professionally validated diagnosis or a guarantee that a color will suit you. Try the palette, keep what you love, and help us measure where the model falls short.
+> *You know the feeling: two outfits fit, but only one makes you feel entirely like yourself.*
+>
+> Lumiqe exists for the space between “I like this colour” and “I know how to wear it.” It is a collaborative attempt to make personal colour analysis more practical, more transparent, and more welcoming to every person in front of the camera.
 
-## See the idea
+<br />
 
-1. **Start with a selfie.** The API accepts JPEG, PNG, and WebP images up to 10 MB. A clear, evenly lit face helps.
-2. **Explore a palette.** The backend detects a face, estimates skin color, and maps its measurements to one of 12 seasonal categories. It returns colors and styling suggestions.
-3. **Make it your own.** The app includes a palette card, item scanner, wardrobe, shopping ideas, and an optional AI stylist. Some features need an account, external services, or a configured product catalog.
+## A small moment. A more confident wardrobe.
 
-The [live app](https://www.lumiqe.in/) is a hosted experience. You can also run the project locally and contribute to its frontend, API, computer vision pipeline, documentation, tests, and accessibility.
+Getting dressed should not require a second-guessing spiral, a drawer full of “maybe” purchases, or a rigid rule about what someone else says you can wear. Lumiqe starts with a clear photo and gives you a place to explore: a likely colour season, a portable palette, styling prompts, and ways to compare the colours already in your life.
 
-## How it works
+It is not here to tell anyone who they are. It is here to help them notice what feels good—and to make the next choice a little easier.
+
+| Begin with a photo | Find a direction | Take it into real life |
+| :--- | :--- | :--- |
+| Upload a clear selfie or use the camera. | Explore a 12-season colour estimate and a palette. | Compare items, save ideas, and shop with more intention. |
+
+<details>
+<summary><strong>What does Lumiqe currently include?</strong></summary>
+
+<br />
+
+- A photo-based colour-analysis flow with face detection, skin segmentation, colour measurements, and a 12-season estimate.
+- Palette cards, outfit and beauty guidance, a wardrobe area, colour/item scanning, and shareable results.
+- Optional account, shopping, and AI-stylist experiences where their required services are configured.
+- A Next.js frontend, FastAPI backend, PostgreSQL/Redis services, and a contributor-friendly test suite.
+
+</details>
+
+## Built for curiosity, not certainty.
+
+Personal colour analysis is subjective. A camera, lighting, makeup, image processing, and display settings can all change what a photo says about colour. Lumiqe's season and confidence value are model outputs—not a professional diagnosis, a beauty standard, or a promise that a shade will suit everyone in the same way.
+
+That is a feature of the project, not a footnote. We want to make the system better in the open: test it across real-world lighting and skin tones, explain its limits plainly, and leave room for a person's own taste to have the final word.
+
+## Follow the light
 
 ```text
-Photo → face detection → skin segmentation → color correction
-      → color measurements → season estimate → palette and recommendations
+your photo
+    ↓
+face detection + skin segmentation
+    ↓
+colour correction + CIE Lab measurements
+    ↓
+12-season estimate
+    ↓
+a palette, ideas, and a starting point for your own eye
 ```
 
-The frontend uses **Next.js, React, TypeScript, and Tailwind CSS**. The **FastAPI** backend uses OpenCV, MediaPipe, PyTorch, and color measurements in CIE Lab. PostgreSQL stores accounts and saved data; Redis supports rate limiting and other stateful features. Optional integrations include Groq, Stripe, Resend, and product data services. Browse [frontend/src](frontend/src), [backend/app](backend/app), and the API docs at `http://localhost:8000/docs` when running locally.
+Behind that simple journey is a project with room for many kinds of builders. The frontend is built with **Next.js, React, TypeScript, and Tailwind CSS**. The API uses **FastAPI**, OpenCV, MediaPipe, PyTorch, and colour measurements in CIE Lab. PostgreSQL stores account data; Redis supports rate limiting and other stateful services. Optional integrations include Groq, Stripe, Resend, and product-data providers.
 
-The color pipeline is an **estimate under real-world photo conditions**. We have not published a representative accuracy, fairness, or latency benchmark. Better evaluation across lighting and skin tones is an important contribution area. Please do not describe its results as exact or lighting invariant without evidence.
+The code is only half the work. The other half is making a colour tool that deserves people’s trust.
 
-## Run it locally
+## Try Lumiqe
 
-**You need:** Python 3.12, Node.js 22, and npm. PostgreSQL with pgvector and Redis are needed for account and stateful features. Docker Compose can start those services.
+Visit **[lumiqe.in](https://www.lumiqe.in/)** to experience the hosted app.
 
-**Current setup blocker:** The BiSeNet checkpoint `backend/79999_iter.pth` is not included in this repository, and the sample configuration has no public download URL. Backend startup requires you to obtain a compatible checkpoint from a source you are permitted to use and place it at that path, or set `BISENET_WEIGHTS_URL` to a direct download URL in `backend/.env`. The smaller MediaPipe face model downloads automatically. We are tracking a documented, license-checked model setup as a contributor task. Frontend-only work can proceed without running the analysis API.
+For the most useful first result, choose a clear, evenly lit image with your face visible. The analysis endpoint accepts JPEG, PNG, and WebP images up to 10 MB. Before uploading any image, please read the hosted app’s [privacy page](https://www.lumiqe.in/privacy). Use your own images, and never share other people’s photos in public issues or pull requests.
+
+## Bring it to your machine
+
+Lumiqe is a full-stack project, but you do not need to run every service to make a meaningful contribution. Frontend, documentation, design, accessibility, and many test improvements can begin without the analysis API.
+
+### The honest setup note
+
+The BiSeNet checkpoint expected at `backend/79999_iter.pth` is **not included** in this repository, and the sample configuration does not provide a public download URL. To start the analysis backend, use a compatible checkpoint you are permitted to use at that path, or set a direct `BISENET_WEIGHTS_URL` in `backend/.env`. The smaller MediaPipe face model downloads automatically.
+
+We are actively interested in a documented, licence-checked model setup. If that is your kind of problem, [start a conversation](https://github.com/DineshDhanoki/Lumiqe/issues).
+
+### Local quickstart
+
+You will need **Python 3.12**, **Node.js 22**, and **npm**. PostgreSQL with pgvector and Redis support the account and stateful features; Docker Compose can start them locally.
 
 ```bash
 git clone https://github.com/DineshDhanoki/Lumiqe.git
 cd Lumiqe
 cp backend/.env.example backend/.env
-```
-
-Generate a random secret with `python3 -c "import secrets; print(secrets.token_urlsafe(48))"` and put it in `backend/.env` as `JWT_SECRET_KEY`. Set `DATABASE_URL` for your PostgreSQL instance. Optional service keys can remain unset while working on independent parts of the app.
-
-From the **repository root**, start the database services if you use Docker:
-
-```bash
 docker compose up -d postgres redis
 ```
 
-In one terminal:
+Generate a value for `JWT_SECRET_KEY` with:
+
+```bash
+python3 -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+Add it to `backend/.env`, set `DATABASE_URL` for your PostgreSQL instance, and configure the permitted BiSeNet checkpoint as described above. Optional service keys can remain unset while you work on an independent area.
+
+Then start the backend:
 
 ```bash
 cd backend
@@ -62,53 +111,67 @@ alembic upgrade head
 uvicorn app.main:app --reload --port 8000
 ```
 
-In a **new terminal from the repository root**:
+In a second terminal, start the frontend:
 
 ```bash
 cd frontend
 npm ci
 ```
 
-Create `frontend/.env.local` with `NEXTAUTH_SECRET` (generate one with `openssl rand -base64 32`), `NEXTAUTH_URL=http://localhost:3000`, and `NEXT_PUBLIC_BACKEND_URL=http://localhost:8000`. Then run `npm run dev` and open <http://localhost:3000>.
-
-The app has many integrations. If you are contributing to one area, you do not need to configure every service. Some screens and API routes will be unavailable until their dependencies are configured. Never commit `.env` files, API keys, or real user photos.
-
-## Find your first contribution
-
-There is more to build than another feature:
-
-- **Make it welcoming:** clearer errors, keyboard navigation, screen reader labels, mobile polish, and translations.
-- **Make it trustworthy:** reproducible evaluation across lighting and skin tones, privacy tests, and honest confidence reporting.
-- **Make it easier to run:** smaller local setup, fixture data, and isolated component previews.
-- **Make it useful:** better palette explanations, wardrobe flows, and product matching.
-
-Look for [good first issues](https://github.com/DineshDhanoki/Lumiqe/labels/good%20first%20issue) or [open issues](https://github.com/DineshDhanoki/Lumiqe/issues). If you have another idea, open an issue before a large implementation. Design feedback and careful bug reports are contributions too.
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests, and the pull request process. Read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community expectations. Report vulnerabilities privately using [SECURITY.md](SECURITY.md).
-
-## Project status and boundaries
-
-Lumiqe is an active open source project, not a finished or clinically validated styling service. The repository includes features that depend on commercial APIs; their keys, hosted accounts, and product catalogs are not part of the source release. A green CI run checks code health, not the real-world quality of color recommendations. Feedback from users and contributors is how we improve that.
-
-**Photo privacy:** images are sent to the backend for analysis. Use your own test images or synthetic fixtures, and avoid posting faces, access tokens, or personal account data in public issues. For details of the hosted app's data handling, review its [privacy page](https://www.lumiqe.in/privacy) before uploading a photo.
-
-## Development checks
+Create `frontend/.env.local` with:
 
 ```bash
-# from frontend/
+NEXTAUTH_SECRET=<generate with: openssl rand -base64 32>
+NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+Then run `npm run dev` and open <http://localhost:3000>. The API reference is available at <http://localhost:8000/docs> when the backend is running.
+
+## Help write the next chapter
+
+The most valuable contribution may not be a new feature. It may be the sentence that makes setup clearer, the keyboard path that makes a screen usable, the test that reveals a blind spot, or the evaluation plan that stops us from making a claim we cannot support.
+
+| If you care about… | Lumiqe needs help with… |
+| :--- | :--- |
+| **Experience** | Mobile polish, keyboard navigation, screen-reader support, visual clarity, and translations. |
+| **Trust** | Reproducible evaluation across lighting and skin tones, privacy tests, and honest confidence reporting. |
+| **Developer experience** | Smaller local setup, fixtures, component previews, documentation, and clearer errors. |
+| **Utility** | Palette explanations, wardrobe flows, product matching, and tools that help people act on a result. |
+
+**Ready to make a first mark?** Pick a [good first issue](https://github.com/DineshDhanoki/Lumiqe/labels/good%20first%20issue), browse [all open issues](https://github.com/DineshDhanoki/Lumiqe/issues), or open an issue to discuss a larger idea before implementing it. Thoughtful design feedback, bug reports, and documentation improvements are contributions too.
+
+Please read the [contribution guide](CONTRIBUTING.md), [code of conduct](CODE_OF_CONDUCT.md), and [security policy](SECURITY.md) before you begin. Maintainers review pull requests before merging; feedback is how we make the work stronger together.
+
+## Quality bar
+
+Run the checks for the part of the project you touch:
+
+```bash
+# frontend/
 npm run lint
 npm run typecheck
 npm test -- --run
 
-# from backend/ with dev dependencies installed
+# backend/ (with development dependencies installed)
 ruff check app/
 pytest tests/ -q
 ```
 
-GitHub Actions also runs frontend, end-to-end, and backend checks on pull requests. See [.github/workflows/ci.yml](.github/workflows/ci.yml) for the exact commands.
+GitHub Actions also runs frontend, end-to-end, and backend checks for pull requests. See [.github/workflows/ci.yml](.github/workflows/ci.yml) for the exact commands. A green check means the code met its automated checks; it does not prove that a colour recommendation is accurate, fair, or lighting-invariant.
 
-## License
+## Open source, with care
 
-Lumiqe's source code is available under the [MIT License](LICENSE). Dependencies, model weights, fonts, images, and other third-party assets may have separate licenses; check their source before reusing them outside this project.
+Lumiqe is an active experiment, not a finished or clinically validated styling service. Some experiences rely on commercial APIs, hosted accounts, or product catalogues that are not included in the source release. Never commit secrets, API keys, or real user photos.
 
-Built by [Dinesh Dhanoki](https://github.com/DineshDhanoki) and Kanishk, with room for you. If Lumiqe helps you or you want to follow its progress, [star the repository](https://github.com/DineshDhanoki/Lumiqe) and come build with us.
+The source code is available under the [MIT License](LICENSE). Model weights, fonts, images, and other third-party materials may carry their own licences—check their source before redistributing them.
+
+---
+
+<div align="center">
+
+**Lumiqe is being built in public by [Dinesh Dhanoki](https://github.com/DineshDhanoki), Kanishk, and contributors who believe personal style can be more curious than prescriptive.**
+
+If this is the kind of tool you want to exist, [star the repository](https://github.com/DineshDhanoki/Lumiqe) and help shape what it becomes.
+
+</div>
