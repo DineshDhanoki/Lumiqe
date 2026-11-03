@@ -32,14 +32,12 @@ export default function UploadDropzone({ lang, error, onFile, onBack }: Props) {
             className="space-y-4"
         >
             <div
-                role="button"
-                tabIndex={0}
-                aria-label="Upload a selfie"
                 className={cn(
                     'relative flex flex-col items-center justify-center w-full min-h-[340px] rounded-3xl border-2 border-dashed transition-all duration-300 overflow-hidden',
                     isDragging
                         ? 'border-primary bg-primary/10 scale-[1.02]'
-                        : 'border-outline-variant/30 bg-surface-container/30 backdrop-blur-md'
+                        : 'border-outline-variant/30 bg-surface-container/30 backdrop-blur-md',
+                    'focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30'
                 )}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
@@ -63,12 +61,14 @@ export default function UploadDropzone({ lang, error, onFile, onBack }: Props) {
                     />
                 </div>
 
-                {error && (
-                    <div className="absolute bottom-6 flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-full text-sm">
-                        <span className="material-symbols-outlined text-base text-primary">error</span>
-                        {error}
-                    </div>
-                )}
+                <div aria-live="polite" role="status" className="absolute bottom-6 max-w-full px-4">
+                    {error && (
+                        <div className="inline-flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-full text-sm">
+                            <span className="material-symbols-outlined text-base text-primary">error</span>
+                            {error}
+                        </div>
+                    )}
+                </div>
             </div>
 
             <button

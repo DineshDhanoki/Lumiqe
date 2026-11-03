@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, createEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import UploadDropzone from '../../../src/components/analyze/UploadDropzone';
 
 vi.mock('@/lib/i18n', () => ({
@@ -14,15 +15,16 @@ describe('UploadDropzone', () => {
         onBack: vi.fn(),
     };
 
-    it('has role="button" on the drop zone for keyboard accessibility', () => {
+    it('does not expose an inert button role on the dropzone wrapper', () => {
         render(<UploadDropzone {...defaultProps} />);
-        expect(screen.getByRole('button', { name: /upload a selfie/i })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /upload a selfie/i })).not.toBeInTheDocument();
     });
 
-    it('has tabIndex on the drop zone', () => {
+    it('reaches the native file input by keyboard', async () => {
+        const user = userEvent.setup();
         render(<UploadDropzone {...defaultProps} />);
-        const zone = screen.getByRole('button', { name: /upload a selfie/i });
-        expect(zone).toHaveAttribute('tabindex', '0');
+        await user.tab();
+        expect(document.activeElement).toHaveAttribute('aria-label', 'Choose a photo to upload');
     });
 
     it('renders upload labels from i18n keys', () => {
@@ -44,6 +46,18 @@ describe('UploadDropzone', () => {
         expect(screen.getByText('File too large')).toBeInTheDocument();
     });
 
+    it('announces errors through a live region', () => {
+        render(<UploadDropzone {...defaultProps} error="File too large" />);
+        const live = screen.getByRole('status');
+        expect(live).toHaveAttribute('aria-live', 'polite');
+        expect(live).toHaveTextContent('File too large');
+    });
+
+    it('keeps the live region mounted when there is no error', () => {
+        render(<UploadDropzone {...defaultProps} />);
+        expect(screen.getByRole('status')).toBeInTheDocument();
+    });
+
     it('does not show error when error is null', () => {
         render(<UploadDropzone {...defaultProps} error={null} />);
         expect(screen.queryByText('File too large')).not.toBeInTheDocument();
@@ -63,5 +77,41 @@ describe('UploadDropzone', () => {
         const file = new File(['img'], 'selfie.jpg', { type: 'image/jpeg' });
         fireEvent.change(input, { target: { files: [file] } });
         expect(onFile).toHaveBeenCalledWith(file);
+    });
+
+    it('selecting a file after keyboard focus fires the file-selection callback', async () => {
+        // Full activation path: Tab reaches the native input, then the standard
+        // file-pick interaction (user-event upload) drives the change pipeline.
+        const user = userEvent.setup();
+        const onFile = vi.fn();
+        render(<UploadDropzone {...defaultProps} onFile={onFile} />);
+        await user.tab();
+        const input = document.activeElement as HTMLInputElement;
+        expect(input).toHaveAttribute('type', 'file');
+        const file = new File(['img'], 'selfie.jpg', { type: 'image/jpeg' });
+        await user.upload(input, file);
+        expect(onFile).toHaveBeenCalledWith(file);
+    });
+
+    it('keeps drag and drop working', () => {
+        const onFile = vi.fn();
+        render(<UploadDropzone {...defaultProps} onFile={onFile} />);
+        const file = new File(['img'], 'dropped.png', { type: 'image/png' });
+        fireEvent.dragOver(screen.getByLabelText('Choose a photo to upload').closest('div.relative') as HTMLElement);
+        // The dragOver state change re-renders the tile; re-query before dropping.
+        const tile = screen.getByLabelText('Choose a photo to upload').closest('div.relative') as HTMLElement;
+        // jsdom's DragEvent init does not carry dataTransfer; attach it explicitly.
+        const dropEvent = createEvent.drop(tile);
+        Object.defineProperty(dropEvent, 'dataTransfer', { value: { files: [file] } });
+        fireEvent(tile, dropEvent);
+        expect(onFile).toHaveBeenCalledWith(file);
+    });
+
+    it('shows a visible keyboard focus indicator on the dropzone tile', () => {
+        render(<UploadDropzone {...defaultProps} />);
+        const input = screen.getByLabelText('Choose a photo to upload');
+        const tile = input.closest('div.relative') as HTMLElement;
+        expect(tile.className).toMatch(/focus-within:border-primary/);
+        expect(tile.className).toMatch(/focus-within:ring/);
     });
 });

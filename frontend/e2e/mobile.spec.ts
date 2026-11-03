@@ -47,11 +47,11 @@ test.describe('Mobile Responsiveness', () => {
         await page.goto('/analyze');
 
         await expect(page.getByText(/live camera/i)).toBeVisible();
-        await expect(page.getByRole('button', { name: /upload photo/i })).toBeVisible();
+        await expect(page.getByLabel(/choose a photo to upload/i)).toBeVisible();
 
         // Buttons should be tappable (min 44px height)
-        const uploadBtn = page.getByRole('button', { name: /upload photo/i });
-        const box = await uploadBtn.boundingBox();
+        const uploadInput = page.getByLabel(/choose a photo to upload/i);
+        const box = await uploadInput.boundingBox();
         if (box) {
             expect(box.height).toBeGreaterThanOrEqual(40);
         }
