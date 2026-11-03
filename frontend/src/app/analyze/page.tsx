@@ -28,7 +28,6 @@ export default function AnalyzePage() {
     const [error, setError] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [lang, setLang] = useState('en');
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const saved = localStorage.getItem('lumiqe-lang');
@@ -251,19 +250,14 @@ export default function AnalyzePage() {
                             <section className="lg:col-span-8 flex flex-col gap-6">
                                 {/* Drop Zone */}
                                 <div
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label="Upload Photo"
                                     className={`relative aspect-video bg-surface-container rounded-[24px] flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden group cursor-pointer ${
                                         isDragging
                                             ? 'border-primary/70 bg-primary/5 scale-[1.01]'
                                             : 'border-primary/20 hover:border-primary/50'
-                                    }`}
+                                    } focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/40`}
                                     onDragOver={onDragOver}
                                     onDragLeave={onDragLeave}
                                     onDrop={onDrop}
-                                    onClick={() => fileInputRef.current?.click()}
-                                    onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
                                 >
                                     {/* Background gradient */}
                                     <div className="absolute inset-0 opacity-50 group-hover:opacity-30 transition-opacity" style={{ background: 'radial-gradient(circle at top right, #18181F, #09090B)' }} />
@@ -282,21 +276,22 @@ export default function AnalyzePage() {
 
                                     {/* Hidden file input */}
                                     <input
-                                        ref={fileInputRef}
                                         type="file"
                                         accept="image/*"
                                         aria-label="Choose a photo to upload"
-                                        className="hidden"
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                                         onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
                                     />
 
                                     {/* Error banner */}
-                                    {error && (
-                                        <div className="absolute bottom-6 flex items-center gap-2 text-error-container bg-error/20 border border-error/30 px-4 py-2 rounded-full text-sm z-20">
-                                            <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
-                                            {error}
-                                        </div>
-                                    )}
+                                    <div aria-live="polite" role="status" className="absolute bottom-6 max-w-full px-4 z-30 pointer-events-none">
+                                        {error && (
+                                            <div className="flex items-center gap-2 text-error-container bg-error/20 border border-error/30 px-4 py-2 rounded-full text-sm">
+                                                <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
+                                                {error}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Secondary Action Cards */}

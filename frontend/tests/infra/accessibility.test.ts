@@ -58,18 +58,22 @@ describe('Dashboard history — pagination', () => {
 });
 
 describe('Analyze page — upload area', () => {
-    // Upload dropzone logic lives in the extracted UploadDropzone component
-    const analyzePath = path.resolve(
-        __dirname, '../../src/components/analyze/UploadDropzone.tsx'
-    );
-    const source = fs.readFileSync(analyzePath, 'utf-8');
+    const uploadImplementations = [
+        '../../src/app/analyze/page.tsx',
+        '../../src/components/analyze/UploadDropzone.tsx',
+    ];
 
-    it('upload control must be a natively keyboard-operable file input with an accessible name', () => {
-        // Issue #6: the upload control is the native <input type="file">
-        // (no inert role="button" wrapper around it).
+    it.each(uploadImplementations)('%s uses one native, visibly focused upload control', (relativePath) => {
+        const source = fs.readFileSync(path.resolve(__dirname, relativePath), 'utf-8');
         expect(source).toMatch(/<input[^>]*type="file"/);
         expect(source).toMatch(/aria-label=/);
-        // Visible keyboard focus indicator on the dropzone tile.
         expect(source).toMatch(/focus-within:/);
+        expect(source).not.toContain('role="button"');
+    });
+
+    it.each(uploadImplementations)('%s exposes upload errors through a live status region', (relativePath) => {
+        const source = fs.readFileSync(path.resolve(__dirname, relativePath), 'utf-8');
+        expect(source).toMatch(/aria-live="polite"/);
+        expect(source).toMatch(/role="status"/);
     });
 });

@@ -12,17 +12,32 @@ test.describe('Analyze Page', () => {
     test('renders mode selection screen', async ({ page }) => {
         // Should show upload and camera options
         await expect(page.getByText(/live camera/i)).toBeVisible();
-        await expect(page.getByRole('button', { name: /upload photo/i })).toBeVisible();
+        await expect(page.getByLabel(/choose a photo to upload/i)).toBeVisible();
     });
 
     test('can switch to upload mode', async ({ page }) => {
         // Upload dropzone is the primary zone — clicking it opens the file picker.
         // The dropzone itself serves as the upload area (always visible).
-        const uploadBtn = page.getByRole('button', { name: /upload photo/i });
-        await expect(uploadBtn).toBeVisible();
+        const uploadInput = page.getByLabel(/choose a photo to upload/i);
+        await expect(uploadInput).toBeVisible();
 
         // Drop zone text is present
         await expect(page.getByText(/drop scan.*click to upload|click to upload/i)).toBeVisible();
+    });
+
+    test('single-photo upload is keyboard reachable and announces validation errors', async ({ page }) => {
+        const uploadInput = page.getByLabel(/choose a photo to upload/i);
+        for (let i = 0; i < 12 && !(await uploadInput.evaluate((el) => document.activeElement === el)); i += 1) {
+            await page.keyboard.press('Tab');
+        }
+        await expect(uploadInput).toBeFocused();
+
+        await uploadInput.setInputFiles({
+            name: 'not-an-image.txt',
+            mimeType: 'text/plain',
+            buffer: Buffer.from('not an image'),
+        });
+        await expect(page.getByRole('status')).toContainText(/valid image/i);
     });
 
     test('upload mode shows file type info', async ({ page }) => {
