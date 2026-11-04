@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from io import BytesIO
 
 import bcrypt
-from jose import JWTError, jwt
+import jwt
 from PIL import Image
 
 from app.core.config import settings
@@ -74,7 +74,7 @@ def decode_token(token: str) -> dict | None:
             token, _get_secret_key(), algorithms=[settings.JWT_ALGORITHM]
         )
         return payload
-    except JWTError:
+    except jwt.PyJWTError:
         return None
 
 
