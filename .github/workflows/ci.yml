@@ -133,7 +133,11 @@ jobs:
       - name: Audit Python dependencies for vulnerabilities
         run: |
           pip install pip-audit
-          pip-audit --strict --desc
+          # Torch's PT2 loading advisory is local-only and has no published
+          # fixed release yet. Keep the audit strict for every actionable,
+          # remotely reachable dependency finding and track this exception in
+          # Lumiqe issue #3 for removal when Torch publishes a fix.
+          pip-audit --strict --desc --ignore PYSEC-2026-139
       - name: Run tests with coverage
         timeout-minutes: 10
         run: >-
