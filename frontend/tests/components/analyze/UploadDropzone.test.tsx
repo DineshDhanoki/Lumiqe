@@ -39,14 +39,14 @@ describe('UploadDropzone', () => {
         expect(input).toHaveAttribute('accept', 'image/*');
     });
 
-    it('shows error message when error prop is set', () => {
-        render(<UploadDropzone {...defaultProps} error="File too large" />);
-        expect(screen.getByText('File too large')).toBeInTheDocument();
+    it('shows a helpful error message when a photo upload is rejected', () => {
+        render(<UploadDropzone {...defaultProps} error="Please use a valid image (JPEG, PNG, WebP)." />);
+        expect(screen.getByText('Please use a valid image (JPEG, PNG, WebP).')).toBeInTheDocument();
     });
 
     it('does not show error when error is null', () => {
         render(<UploadDropzone {...defaultProps} error={null} />);
-        expect(screen.queryByText('File too large')).not.toBeInTheDocument();
+        expect(screen.queryByText('Please use a valid image (JPEG, PNG, WebP).')).not.toBeInTheDocument();
     });
 
     it('calls onBack when back button is clicked', () => {
