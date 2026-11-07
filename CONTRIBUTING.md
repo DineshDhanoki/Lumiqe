@@ -23,12 +23,13 @@ npm run typecheck
 npm test -- --run
 ```
 
-Before opening a frontend pull request, also verify the change on a narrow viewport:
+Before opening a frontend pull request, also verify the change on a narrow viewport. Use browser device emulation or a real phone and record the viewport and any limitations in the pull request:
 
-- Test at a viewport around `375px` wide (for example, a mobile phone preset).
-- Check that content does not overflow horizontally and that text and controls remain readable.
-- Exercise at least one touch interaction, such as opening a menu, tapping a button, or selecting the photo upload control.
+- Test a portrait viewport around `375 × 667` pixels (or another narrow phone-sized viewport).
+- Check that the page has no horizontal scrolling and that text, cards, dialogs, and controls remain readable and reachable.
+- Exercise at least one touch interaction, such as opening a menu, tapping a button, dismissing a dialog, or selecting the photo upload control.
 - Confirm that the success, loading, and error states you changed remain usable on the narrow layout.
+- If the change affects orientation or responsive layout, repeat the check in landscape and at one wider phone width.
 
 ```bash
 cd backend
