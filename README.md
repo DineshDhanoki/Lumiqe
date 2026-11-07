@@ -77,9 +77,43 @@ Lumiqe is a full-stack project, but you do not need to run every service to make
 
 ### The honest setup note
 
-The BiSeNet checkpoint expected at `backend/79999_iter.pth` is **not included** in this repository, and the sample configuration does not provide a public download URL. To start the analysis backend, use a compatible checkpoint you are permitted to use at that path, or set a direct `BISENET_WEIGHTS_URL` in `backend/.env`. The smaller MediaPipe face model downloads automatically.
+The BiSeNet checkpoint expected at `backend/79999_iter.pth` is **not included** in this repository, and the sample configuration does not provide a public download URL. To start the analysis backend, use a compatible checkpoint you are permitted to use at that path, or set a direct `BISENET_WEIGHTS_URL` as described below. The smaller MediaPipe face model downloads automatically.
 
 We are actively interested in a documented, licence-checked model setup. If that is your kind of problem, [start a conversation](https://github.com/DineshDhanoki/Lumiqe/issues).
+
+### Model weights
+
+On startup the backend runs `ensure_models()` from `backend/download_models.py`, which checks for two files in the `backend/` directory:
+
+| File | Expected path | How it gets there |
+| :--- | :--- | :--- |
+| BiSeNet face-parsing checkpoint | `backend/79999_iter.pth` | Place it there yourself, or let it download from `BISENET_WEIGHTS_URL`. |
+| MediaPipe face detector | `backend/blaze_face_short_range.tflite` | Downloaded automatically from the MediaPipe CDN if missing. |
+
+You have two options for the BiSeNet checkpoint:
+
+1. **Local file** — copy a compatible checkpoint you are permitted to use to `backend/79999_iter.pth` (exactly this filename, directly inside `backend/`). If the file exists, no download is attempted.
+2. **`BISENET_WEIGHTS_URL`** — set this to a *direct* download link for the `.pth` file (for example a Hugging Face, GitHub Releases, or other CDN URL you control or are permitted to use). If `backend/79999_iter.pth` is missing, it is downloaded to that path on startup. `download_models.py` reads the value from the process environment, so export it in the shell that starts the backend:
+
+   ```bash
+   export BISENET_WEIGHTS_URL="https://example.com/path/to/79999_iter.pth"
+   ```
+
+   You can also fetch the files ahead of time with `python download_models.py` from the `backend/` directory.
+
+   **Important:** `download_models.py` reads `BISENET_WEIGHTS_URL` with `os.getenv()` when it is imported. Put the variable in your deployment environment or export it before starting the backend; placing it only in `backend/.env` is not sufficient for the downloader in the current implementation.
+
+   For example, a local backend startup with a hosted checkpoint looks like this:
+
+   ```bash
+   cd backend
+   export BISENET_WEIGHTS_URL="https://example.com/path/to/79999_iter.pth"
+   uvicorn app.main:app --reload --port 8000
+   ```
+
+   Use an HTTPS URL from a trusted source, confirm that it serves the raw `.pth` file (not an HTML download page), and verify the checkpoint's licence and integrity before using it in production.
+
+**Troubleshooting a missing checkpoint:** if startup fails with `79999_iter.pth is missing and BISENET_WEIGHTS_URL env var is not set` (or the analysis endpoint reports `Model weights not found at ...`), check that the file is at `backend/79999_iter.pth` with that exact name, or that `BISENET_WEIGHTS_URL` is exported in the environment of the process running `uvicorn`. If you see `Failed to download 79999_iter.pth`, make sure the URL is reachable and returns the raw file rather than an HTML page; a partial download is deleted automatically, so you can simply retry.
 
 ### Local quickstart
 
