@@ -101,6 +101,18 @@ You have two options for the BiSeNet checkpoint:
 
    You can also fetch the files ahead of time with `python download_models.py` from the `backend/` directory.
 
+   **Important:** `download_models.py` reads `BISENET_WEIGHTS_URL` with `os.getenv()` when it is imported. Put the variable in your deployment environment or export it before starting the backend; placing it only in `backend/.env` is not sufficient for the downloader in the current implementation.
+
+   For example, a local backend startup with a hosted checkpoint looks like this:
+
+   ```bash
+   cd backend
+   export BISENET_WEIGHTS_URL="https://example.com/path/to/79999_iter.pth"
+   uvicorn app.main:app --reload --port 8000
+   ```
+
+   Use an HTTPS URL from a trusted source, confirm that it serves the raw `.pth` file (not an HTML download page), and verify the checkpoint's licence and integrity before using it in production.
+
 **Troubleshooting a missing checkpoint:** if startup fails with `79999_iter.pth is missing and BISENET_WEIGHTS_URL env var is not set` (or the analysis endpoint reports `Model weights not found at ...`), check that the file is at `backend/79999_iter.pth` with that exact name, or that `BISENET_WEIGHTS_URL` is exported in the environment of the process running `uvicorn`. If you see `Failed to download 79999_iter.pth`, make sure the URL is reachable and returns the raw file rather than an HTML page; a partial download is deleted automatically, so you can simply retry.
 
 ### Local quickstart
