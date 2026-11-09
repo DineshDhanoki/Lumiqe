@@ -145,6 +145,31 @@ alembic upgrade head
 uvicorn app.main:app --reload --port 8000
 ```
 
+### Verify the local API
+
+With the backend running, check its public health endpoint:
+
+```bash
+curl -fsS http://localhost:8000/api/health
+```
+
+The endpoint returns HTTP `200` with a JSON response like this:
+
+```json
+{
+  "status": "degraded",
+  "version": "3.0.0",
+  "dependencies": {
+    "database": {"status": "connected", "latency_ms": 2.1},
+    "redis": {"status": "connected", "latency_ms": 0.8},
+    "cv_engine": {"status": "not_loaded", "model": "BiSeNet"}
+  },
+  "uptime_seconds": 12.4
+}
+```
+
+`status` is `healthy` when all dependencies are ready; it is `degraded` when a dependency is disconnected, unavailable, or not loaded. A `degraded` response is still useful during local setup because it shows which service needs attention. Once the backend is running, browse the interactive [OpenAPI documentation](http://localhost:8000/docs) for the available endpoints.
+
 In a second terminal, start the frontend:
 
 ```bash
