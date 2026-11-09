@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { t } from '@/lib/i18n';
+import PhotoPrivacyReminder from './PhotoPrivacyReminder';
 
 interface Props {
     lang: string;
@@ -51,6 +52,7 @@ export default function UploadDropzone({ lang, error, onFile, onBack }: Props) {
                         <h3 className="text-lg font-medium text-on-surface">{t(lang, 'tapToUpload')}</h3>
                         <p className="text-sm text-on-surface-variant">{t(lang, 'dragDrop')}</p>
                         <p className="text-xs text-on-surface-variant/50">{t(lang, 'maxSize')}</p>
+                        <PhotoPrivacyReminder />
                     </div>
                     <input
                         type="file"

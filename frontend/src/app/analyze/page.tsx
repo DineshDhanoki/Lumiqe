@@ -13,6 +13,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import AppLayout from '@/components/layout/AppLayout';
 import AnalyzingSpinner from '@/components/analyze/AnalyzingSpinner';
 import MultiPhotoUpload from '@/components/analyze/MultiPhotoUpload';
+import PhotoPrivacyReminder from '@/components/analyze/PhotoPrivacyReminder';
 import ScanGuide from '@/components/ScanGuide';
 
 type Mode = 'choose' | 'camera' | 'multi';
@@ -272,6 +273,7 @@ export default function AnalyzePage() {
                                         </div>
                                         <p className="font-headline text-primary font-bold tracking-widest uppercase text-sm">Drop scan or click to upload</p>
                                         <p className="font-label text-on-surface-variant/40 text-xs mt-2">JPG, PNG or WebP up to 5MB</p>
+                                        <PhotoPrivacyReminder />
                                     </div>
 
                                     {/* Hidden file input */}
