@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { t } from '@/lib/i18n';
+import PhotoPrivacyReminder from './PhotoPrivacyReminder';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_FILES = 5;
@@ -70,6 +71,7 @@ export default function MultiPhotoUpload({ lang, apiError, onAnalyze, onBack }: 
                     Upload 2-5 selfies in different lighting. We analyze each independently
                     and average the results for higher accuracy.
                 </p>
+                <PhotoPrivacyReminder />
             </div>
 
             {/* Image Grid */}
