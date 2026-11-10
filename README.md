@@ -119,6 +119,40 @@ You have two options for the BiSeNet checkpoint:
 
 You will need **Python 3.12**, **Node.js 22**, and **npm**. PostgreSQL with pgvector and Redis support the account and stateful features; Docker Compose can start them locally.
 
+### Frontend-only quickstart
+
+You can work on the landing pages, layouts, accessibility, and most component tests without installing Python, PostgreSQL, Redis, model weights, or backend credentials.
+
+```bash
+git clone https://github.com/DineshDhanoki/Lumiqe.git
+cd Lumiqe/frontend
+npm ci
+```
+
+Create `frontend/.env.local` with these local values:
+
+```bash
+NEXTAUTH_SECRET=<paste the output of: openssl rand -base64 32>
+NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+`NEXTAUTH_SECRET` is required by the NextAuth middleware, while `NEXTAUTH_URL` identifies the local callback origin. `NEXT_PUBLIC_API_URL` points API requests at the backend; it can remain `http://localhost:8000` while you work on frontend-only areas. Google OAuth and other provider credentials are optional until you work on sign-in or the related integration.
+
+Start the frontend:
+
+```bash
+npm run dev
+```
+
+Open <http://localhost:3000>. Without a running backend, pages that need API data—such as photo analysis, authentication, account data, dashboards, shopping data, and saved results—cannot complete their requests. The landing page, static content, responsive layouts, upload UI, and frontend component tests remain available for development. Run the local frontend checks before opening a pull request:
+
+```bash
+npm run lint
+npm run typecheck
+npm test -- --run
+```
+
 ```bash
 git clone https://github.com/DineshDhanoki/Lumiqe.git
 cd Lumiqe
