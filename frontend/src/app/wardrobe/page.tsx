@@ -293,25 +293,45 @@ export default function WardrobePage() {
                     </div>
                 ) : filteredItems.length === 0 ? (
                     /* Empty State */
-                    <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                        <span className="material-symbols-outlined text-7xl text-on-surface-variant/30">checkroom</span>
-                        <h2 className="text-xl font-semibold text-on-surface">
-                            {items.length === 0 ? 'Your wardrobe is empty' : 'No items in this category'}
-                        </h2>
-                        <p className="text-on-surface-variant max-w-sm">
-                            {items.length === 0
-                                ? 'Add your clothing items to see how well they match your color palette.'
-                                : 'Try a different category filter.'}
-                        </p>
-                        {items.length === 0 && (
-                            <button
-                                onClick={() => setShowAddForm(true)}
-                                className="mt-2 px-6 py-3 bg-primary-container rounded-[10px] text-on-primary font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all"
-                            >
-                                Add Your First Item
-                            </button>
-                        )}
-                    </div>
+                    items.length === 0 ? (
+                        <section
+                            aria-labelledby="wardrobe-empty-title"
+                            className="mx-auto flex max-w-2xl flex-col items-center justify-center rounded-[24px] border border-primary/15 bg-surface-container-low px-6 py-16 text-center shadow-[0_18px_60px_rgba(0,0,0,0.08)] sm:px-12"
+                        >
+                            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
+                                <span className="material-symbols-outlined text-5xl text-primary" aria-hidden="true">checkroom</span>
+                            </div>
+                            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Your collection starts here</p>
+                            <h2 id="wardrobe-empty-title" className="font-display text-3xl italic text-on-surface sm:text-4xl">
+                                Your wardrobe is ready for its first piece
+                            </h2>
+                            <p className="mt-4 max-w-lg text-sm leading-relaxed text-on-surface-variant">
+                                No items have been saved yet. Add something you already own or explore a new piece to start building a collection that works with your color palette.
+                            </p>
+                            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
+                                <button
+                                    onClick={() => setShowAddForm(true)}
+                                    className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-primary-container px-6 py-3 text-xs font-bold uppercase tracking-widest text-on-primary transition-all hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                >
+                                    <span className="material-symbols-outlined text-base" aria-hidden="true">add</span>
+                                    Add Your First Item
+                                </button>
+                                <Link
+                                    href="/shopping-agent"
+                                    className="inline-flex items-center justify-center gap-2 rounded-[10px] border border-primary/25 px-6 py-3 text-xs font-bold uppercase tracking-widest text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                >
+                                    Explore New Pieces
+                                    <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+                                </Link>
+                            </div>
+                        </section>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
+                            <span className="material-symbols-outlined text-7xl text-on-surface-variant/30" aria-hidden="true">checkroom</span>
+                            <h2 className="text-xl font-semibold text-on-surface">No items in this category</h2>
+                            <p className="text-on-surface-variant max-w-sm">Try a different category filter.</p>
+                        </div>
+                    )
                 ) : (
                     /* Items Grid */
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
