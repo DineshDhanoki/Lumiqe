@@ -88,7 +88,7 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
                                 {/* CTAs */}
                                 <div className="w-full space-y-3">
                                     <Link
-                                        href="/upgrade"
+                                        href="/pricing"
                                         onClick={onClose}
                                         aria-label="Upgrade to premium"
                                         className="flex items-center justify-center gap-2 w-full py-4 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary font-label font-bold text-xs uppercase tracking-widest hover:opacity-90 active:scale-[0.98] transition-all shadow-[0_0_20px_-5px_rgba(240,191,98,0.3)]"
