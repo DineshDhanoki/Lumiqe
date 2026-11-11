@@ -55,7 +55,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # GitHub-hosted Ubuntu runners already provide Chromium's native
+        # libraries. Avoid --with-deps here: it invokes apt against external
+        # mirrors and can fail before E2E tests start during mirror/DNS outages.
+        run: npx playwright install chromium
       - name: Build Next.js app
         run: npm run build
         env:
