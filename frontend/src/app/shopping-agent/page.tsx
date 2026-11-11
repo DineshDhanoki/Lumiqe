@@ -7,6 +7,10 @@ import { apiFetch } from '@/lib/api';
 import OutfitDisplay, { CuratedOutfit } from '@/components/OutfitDisplay';
 import AppLayout from '@/components/layout/AppLayout';
 
+// Cache versioning for outfit restoration
+const CACHE_VERSION = '2';
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 // Animated loading messages
 const LOADING_STEPS = [
     { text: 'Scanning trending styles…', icon: '🔍' },
@@ -23,7 +27,37 @@ function extractProductUrls(outfit: CuratedOutfit): string[] {
     return slots
         .map((s) => outfit[s]?.product_url || '')
         .filter((url) => url !== '');
+}
 
+// ── Helper: create a versioned cache envelope ──
+function makeCacheEnvelope(outfit: CuratedOutfit, palette: string[], gender: string): string {
+    const envelope = {
+        version: CACHE_VERSION,
+        timestamp: Date.now(),
+        palette,
+        gender,
+        outfit,
+    };
+    return JSON.stringify(envelope);
+}
+
+// ── Helper: parse and validate a versioned cache envelope ──
+function tryParseCacheEnvelope(str: string): { version: string; timestamp: number; palette: string[]; gender: string; outfit: CuratedOutfit } | null {
+    try {
+        const parsed = JSON.parse(str) as {
+            version: string;
+            timestamp: number;
+            palette: string[];
+            gender: string;
+            outfit: CuratedOutfit;
+        };
+        // Validate version and required fields
+        if (parsed.version !== CACHE_VERSION) return null;
+        if (!parsed.palette || !parsed.gender || !parsed.outfit) return null;
+        return parsed;
+    } catch {
+        return null;
+    }
 }
 
 function ShoppingAgentContent() {
@@ -38,16 +72,23 @@ function ShoppingAgentContent() {
     const [usedProductUrls, setUsedProductUrls] = useState<string[]>([]);
     const [outfitCount, setOutfitCount] = useState(0);
 
-    // Restore cached outfit from sessionStorage on mount
+    // Restore cached outfit from sessionStorage on mount, with versioning and context validation
     useEffect(() => {
         try {
             const cached = sessionStorage.getItem('lumiqe-outfit');
             if (cached) {
-                const parsed = JSON.parse(cached) as CuratedOutfit;
-                setOutfit(parsed);
+                const parsed = tryParseCacheEnvelope(cached);
+                if (parsed && parsed.palette.length > 0 && parsed.gender === gender) {
+                    // Check palette match and TTL
+                    const paletteMatch = parsed.palette.some((h) => paletteHexes.includes(h));
+                    const isWithinTTL = Date.now() - parsed.timestamp < CACHE_TTL_MS;
+                    if (paletteMatch && isWithinTTL) {
+                        setOutfit(parsed.outfit);
+                    }
+                }
             }
         } catch { /* ignore */ }
-    }, []);
+    }, [gender, paletteHexes]);
 
     // No palette → send user back
     if (paletteHexes.length === 0) {
@@ -90,9 +131,9 @@ function ShoppingAgentContent() {
             setOutfit(data);
             setOutfitCount((prev) => prev + 1);
 
-            // Persist outfit to sessionStorage so it survives refresh
+            // Persist outfit to sessionStorage with versioned envelope so it survives refresh
             try {
-                sessionStorage.setItem('lumiqe-outfit', JSON.stringify(data));
+                sessionStorage.setItem('lumiqe-outfit', makeCacheEnvelope(data, paletteHexes, gender));
             } catch { /* ignore */ }
 
             // Track used product URLs for dedup
@@ -202,7 +243,7 @@ function ShoppingAgentContent() {
                     <div className="flex justify-center">
                         <button
                             onClick={generateOutfit}
-                            className="px-8 py-4 rounded-[10px] bg-primary-container text-on-primary font-headline font-bold uppercase tracking-widest text-xs flex items-center gap-3 hover:opacity-90 active:scale-95 transition-all"
+                            className="px-8 py-4 rounded-[10px] bg-primary-container text-on-primary font-headline font-bold uppercase tracking-widest text-xs flex items-center gap-3 hover:opacity-90 active:scale-[0.98] transition-all"
                         >
                             <span className="material-symbols-outlined text-base">refresh</span>
                             Regenerate Ensemble
@@ -211,21 +252,11 @@ function ShoppingAgentContent() {
                             )}
                         </button>
                     </div>
-
-                    {usedProductUrls.length > 0 && (
-                        <p className="text-center text-on-surface-variant/30 font-mono text-[10px] tracking-wider">
-                            {usedProductUrls.length} items excluded from next generation
-                        </p>
-                    )}
                 </div>
             )}
         </div>
     );
 }
-
-// ═══════════════════════════════════════════════════════════════
-//    STYLIST LOADER — Premium animated loading experience
-// ═══════════════════════════════════════════════════════════════
 
 import { motion } from 'framer-motion';
 
@@ -282,9 +313,9 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
                         />
                     );
                 })}
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-4xl text-on-surface-variant animate-spin">progress_activity</span>
-                </div>
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+                <span className="material-symbols-outlined text-4xl text-on-surface-variant animate-spin">progress_activity</span>
             </div>
 
             {/* Animated step text */}
@@ -308,7 +339,6 @@ function StylistLoader({ paletteHexes }: { paletteHexes: string[] }) {
                         key={i}
                         className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i <= stepIdx ? 'bg-primary scale-100' : 'bg-surface-container/30 scale-75'
                             }`}
-                    />
                 ))}
             </div>
         </motion.div>
