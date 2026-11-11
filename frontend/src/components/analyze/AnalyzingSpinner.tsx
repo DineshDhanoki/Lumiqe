@@ -17,6 +17,7 @@ export default function AnalyzingSpinner({ lang, previewUrl }: Props) {
             exit={{ opacity: 0 }}
             role="status"
             aria-live="polite"
+            aria-busy="true"
             className="flex flex-col items-center gap-6 py-16"
         >
             <div className="relative">

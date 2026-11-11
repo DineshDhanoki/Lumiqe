@@ -25,6 +25,7 @@ export default function AnalyzePage() {
     const [mode, setMode] = useState<Mode>('choose');
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const previewUrlRef = useRef<string | null>(null);
+    const analysisInFlightRef = useRef(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -62,17 +63,19 @@ export default function AnalyzePage() {
     }
 
     const handleMultiAnalyze = async (files: File[]) => {
+        if (analysisInFlightRef.current) return;
+        analysisInFlightRef.current = true;
         setError(null);
         setIsAnalyzing(true);
         if (files[0]) storeThumbnail(files[0]);
 
-        const formData = new FormData();
-        const compressed = await Promise.all(files.map((f) => compressImage(f)));
-        compressed.forEach((file) => formData.append('images', file));
-        if (user?.age) formData.append('age', user.age.toString());
-        if (user?.sex) formData.append('sex', user.sex);
-
         try {
+            const formData = new FormData();
+            const compressed = await Promise.all(files.map((f) => compressImage(f)));
+            compressed.forEach((file) => formData.append('images', file));
+            if (user?.age) formData.append('age', user.age.toString());
+            if (user?.sex) formData.append('sex', user.sex);
+
             const res = await apiFetch('/api/analyze/multi', { method: 'POST', body: formData }, session);
             if (!res.ok) {
                 let errorMsg = 'Multi-photo analysis failed. Please try again.';
@@ -95,10 +98,12 @@ export default function AnalyzePage() {
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
             setIsAnalyzing(false);
+            analysisInFlightRef.current = false;
         }
     };
 
     const handleFile = async (selectedFile: File) => {
+        if (analysisInFlightRef.current) return;
         if (!selectedFile.type.startsWith('image/')) {
             setError('Please use a valid image (JPEG, PNG, WebP).');
             return;
@@ -115,6 +120,7 @@ export default function AnalyzePage() {
         storeThumbnail(selectedFile);
         setError(null);
         setIsAnalyzing(true);
+        analysisInFlightRef.current = true;
 
         const formData = new FormData();
         formData.append('image', selectedFile);
@@ -145,6 +151,7 @@ export default function AnalyzePage() {
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
             setIsAnalyzing(false);
+            analysisInFlightRef.current = false;
             setPreviewUrl(null);
         }
     };
@@ -178,6 +185,8 @@ export default function AnalyzePage() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
+                        aria-busy="true"
+                        aria-label="Analysis in progress"
                     >
                         <AnalyzingSpinner lang={lang} previewUrl={previewUrl} />
                     </motion.div>

@@ -17,6 +17,11 @@ describe('AnalyzingSpinner', () => {
         expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
     });
 
+    it('marks the status as busy while analysis is running', () => {
+        render(<AnalyzingSpinner lang="en" previewUrl={null} />);
+        expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true');
+    });
+
     it('renders i18n analyzing key', () => {
         render(<AnalyzingSpinner lang="en" previewUrl={null} />);
         expect(screen.getByText('analyzing')).toBeInTheDocument();
