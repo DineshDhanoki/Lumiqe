@@ -115,7 +115,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (status !== 'authenticated') return;
-        apiFetch('/api/daily-outfit')
+        fetchDailyOutfit()
             .then((res) => {
                 if (res.status === 404) { setDailyOutfitEmpty(true); return null; }
                 return res.ok ? res.json() : null;
@@ -123,6 +123,11 @@ export default function Dashboard() {
             .then((data: DailyOutfitData | null) => { if (data) setDailyOutfit(data); })
             .catch((err) => { console.error('[dashboard] Daily outfit fetch failed:', err); setDailyOutfitError(true); });
     }, [status]);
+
+    const fetchDailyOutfit = async () => {
+        const res = await apiFetch('/api/daily-outfit');
+        return res;
+    };
 
     const _loadFromLocalStorage = useCallback(() => {
         try {
@@ -227,7 +232,7 @@ export default function Dashboard() {
                                 dailyOutfit={dailyOutfit}
                                 isEmpty={dailyOutfitEmpty}
                                 isError={dailyOutfitError}
-                                onRetry={() => { setDailyOutfitError(false); setDailyOutfit(null); }}
+                                onRetry={fetchDailyOutfit}
                             />
                         )}
 
