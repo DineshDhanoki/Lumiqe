@@ -2,24 +2,24 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
 /**
  * Lightweight internal-link regression guard.
  *
- * A hard-coded internal `href="/..."` in the app is only valid when a matching
- * route exists under `src/app`. This test walks the real route tree and the real
- * JSX, so a CTA that points at a page nobody created (the `/upgrade` class of
- * bug) fails CI instead of silently routing users to the 404 page.
+ * A hard-coded internal JSX href is only valid when a matching page exists
+ * under `src/app`. This catches CTAs that would send users to a 404 page.
  *
  * `KNOWN_DEAD_LINKS` is a ratchet baseline: the links below are tracked
- * separately, so they must not be re-introduced *or* quietly extended. Remove an
- * entry once its page ships; never add one without a tracking issue.
+ * separately. Both the path and its existing source locations are fixed, so
+ * adding another CTA to a known dead path fails too. Remove an entry once its
+ * page ships; never add one without a tracking issue.
  */
-const KNOWN_DEAD_LINKS: Record<string, string> = {
-    '/contact': 'Footer.tsx — tracked separately (no legal/contact page yet)',
-    '/privacy': 'Footer.tsx, SignInModal.tsx — tracked separately (no legal page yet)',
-    '/science': 'Footer.tsx — tracked separately (no science page yet)',
-    '/terms': 'Footer.tsx, SignInModal.tsx — tracked separately (no legal page yet)',
+const KNOWN_DEAD_LINKS: Record<string, string[]> = {
+    '/contact': ['src/components/Footer.tsx'],
+    '/privacy': ['src/components/Footer.tsx', 'src/components/SignInModal.tsx'],
+    '/science': ['src/components/Footer.tsx'],
+    '/terms': ['src/components/Footer.tsx', 'src/components/SignInModal.tsx'],
 };
 
 const FRONTEND_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -36,12 +36,12 @@ function walk(dir: string): string[] {
     return out;
 }
 
-/** Every routable path the App Router exposes (page or route handler). */
+/** Every page the App Router exposes. API route handlers are not CTA pages. */
 export function collectRoutePatterns(appDir: string = APP_DIR): string[] {
     const patterns: string[] = [];
     for (const file of walk(appDir)) {
         const base = path.basename(file);
-        if (base !== 'page.tsx' && base !== 'route.ts') continue;
+        if (base !== 'page.tsx') continue;
         const rel = path.relative(appDir, path.dirname(file));
         const segments = rel === '' ? [] : rel.split(path.sep);
         // Route groups `(marketing)` and parallel slots `@modal` do not appear in the URL.
@@ -58,31 +58,44 @@ function segmentToRegex(segment: string): string {
     return segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-/** True when a static href resolves to a real route (exact, dynamic, or parent). */
+/** True when a static href resolves to a page (exact or dynamic). */
 export function routeExists(href: string, patterns: string[]): boolean {
     const clean = href.length > 1 ? href.replace(/\/+$/, '') : href;
     return patterns.some((pattern) => {
         if (pattern === clean) return true;
         const regex = new RegExp('^/' + pattern.split('/').filter(Boolean).map(segmentToRegex).join('/') + '$');
-        if (regex.test(clean)) return true;
-        // A parent path is reachable when a child route exists below it.
-        return clean !== '/' && pattern.startsWith(clean + '/');
+        return regex.test(clean);
     });
 }
 
-/** All hard-coded internal hrefs in the JSX/TS source, with the files that use them. */
+/** Literal internal JSX hrefs, including quoted and expression-wrapped strings. */
 export function collectInternalHrefs(srcDir: string = SRC_DIR): Map<string, string[]> {
     const hrefs = new Map<string, string[]>();
     for (const file of walk(srcDir)) {
         if (!file.endsWith('.tsx') && !file.endsWith('.ts')) continue;
         const source = fs.readFileSync(file, 'utf8');
-        for (const match of source.matchAll(/href="(\/[^"#?]*)"/g)) {
-            const href = match[1];
-            if (!href.startsWith('/')) continue;
-            const files = hrefs.get(href) ?? [];
-            files.push(path.relative(FRONTEND_ROOT, file));
-            hrefs.set(href, files);
-        }
+        const syntaxTree = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+        const visit = (node: ts.Node) => {
+            if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+                for (const prop of node.attributes.properties) {
+                    if (!ts.isJsxAttribute(prop) || !ts.isIdentifier(prop.name) || prop.name.text !== 'href') continue;
+                    const initializer = prop.initializer;
+                    const expression = initializer && ts.isJsxExpression(initializer) ? initializer.expression : undefined;
+                    const value = initializer && ts.isStringLiteral(initializer)
+                        ? initializer.text
+                        : expression && (ts.isStringLiteral(expression) || ts.isNoSubstitutionTemplateLiteral(expression))
+                            ? expression.text
+                            : null;
+                    if (!value?.startsWith('/') || value.startsWith('//')) continue;
+                    const href = value.split(/[?#]/, 1)[0] || '/';
+                    const files = hrefs.get(href) ?? [];
+                    files.push(path.relative(FRONTEND_ROOT, file));
+                    hrefs.set(href, files);
+                }
+            }
+            ts.forEachChild(node, visit);
+        };
+        visit(syntaxTree);
     }
     return hrefs;
 }
@@ -111,23 +124,31 @@ describe('internal link regression guard', () => {
         expect(routeExists('/upgrade', patterns)).toBe(false);
         expect(routeExists('/seasons/winter', patterns)).toBe(true);
         expect(routeExists('/pricing/', patterns)).toBe(true);
+        expect(patterns).not.toContain('/quiz');
+        expect(routeExists('/quiz', patterns)).toBe(false);
+        expect(routeExists('/api/image-proxy', patterns)).toBe(false);
     });
 
-    it('has no hard-coded internal link outside the tracked baseline', () => {
-        const dead = findDeadLinks(collectInternalHrefs(), patterns);
-        const unexpected = dead.filter(({ href }) => !(href in KNOWN_DEAD_LINKS));
-        const stale = Object.keys(KNOWN_DEAD_LINKS).filter(
-            (href) => !dead.some((entry) => entry.href === href),
-        );
-
-        expect(unexpected, `Dead internal links must point at a real route:\n${
-            unexpected.map(({ href, files }) => `  ${href} <- ${files.join(', ')}`).join('\n')
-        }`).toEqual([]);
-
-        // Informational only: a shipped page should be dropped from the baseline.
-        if (stale.length > 0) {
-            console.warn(`internal-link baseline is stale for: ${stale.join(', ')} — remove those entries.`);
+    it('recognizes common hard-coded JSX href forms', () => {
+        const fixtureDir = fs.mkdtempSync(path.join(FRONTEND_ROOT, 'link-guard-fixture-'));
+        try {
+            fs.writeFileSync(path.join(fixtureDir, 'Links.tsx'), `
+                <><a href="/upgrade" /><a href='/quiz' />
+                <a href={'/missing?source=cta'} /><a href={\`/another#section\`} />
+                <a href="https://example.com" /><a href="//example.com/path" /></>
+            `);
+            expect([...collectInternalHrefs(fixtureDir).keys()].sort()).toEqual([
+                '/another', '/missing', '/quiz', '/upgrade',
+            ]);
+        } finally {
+            fs.rmSync(fixtureDir, { recursive: true, force: true });
         }
+    });
+
+    it('has exactly the tracked dead links at their original locations', () => {
+        const dead = findDeadLinks(collectInternalHrefs(), patterns);
+        const actual = Object.fromEntries(dead.map(({ href, files }) => [href, files.sort()]));
+        expect(actual).toEqual(KNOWN_DEAD_LINKS);
     });
 
     it('keeps the premium CTA pointed at the canonical pricing route', () => {
