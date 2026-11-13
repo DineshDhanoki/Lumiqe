@@ -29,6 +29,22 @@ It is not here to tell anyone who they are. It is here to help them notice what 
 | :--- | :--- | :--- |
 | Upload a clear selfie or use the camera. | Explore a 12-season colour estimate and a palette. | Compare items, save ideas, and shop with more intention. |
 
+## Take a visual tour
+
+These captures show the current frontend on a mobile viewport and desktop. The result screen uses synthetic URL data only—no uploaded photo, account, or personal result. Its confidence value and styling note are illustrative UI content, not a measured accuracy claim. The season guide is generic built-in guidance; shopping results depend on the configured backend and catalogue. Screenshots show the interface, not the validity of an analysis.
+
+### 1. Start from the landing page
+
+[![Mobile landing page with the Analyze My Colors and View Sample Report actions](docs/assets/readme-tour/landing.png)](frontend/src/components/HeroSection.tsx)
+
+### 2. Explore a sample palette
+
+[![Synthetic Deep Autumn result with warm undertone details and a six-colour palette](docs/assets/readme-tour/result-palette.png)](frontend/src/components/ResultsView.tsx)
+
+### 3. Browse the season styling guide
+
+[![Deep Autumn guide with styling principles and occasion outfit formulas](docs/assets/readme-tour/season-styling-guide.png)](frontend/src/app/seasons/%5Bseason%5D/page.tsx)
+
 <details>
 <summary><strong>What does Lumiqe currently include?</strong></summary>
 
