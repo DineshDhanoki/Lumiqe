@@ -14,9 +14,16 @@ describe('SubscriptionModal', () => {
         expect(screen.getByText(/Unlock Premium Vibes/i)).toBeInTheDocument();
     });
 
-    it('renders upgrade CTA linking to /upgrade', () => {
+    it('renders upgrade CTA linking to the existing /pricing page', () => {
         render(<SubscriptionModal isOpen={true} onClose={vi.fn()} />);
-        expect(screen.getByRole('link', { name: /Upgrade to premium/i })).toHaveAttribute('href', '/upgrade');
+        expect(screen.getByRole('link', { name: /Upgrade to premium/i })).toHaveAttribute('href', '/pricing');
+    });
+
+    it('closes the modal when the upgrade CTA is followed', () => {
+        const onClose = vi.fn();
+        render(<SubscriptionModal isOpen={true} onClose={onClose} />);
+        fireEvent.click(screen.getByRole('link', { name: /Upgrade to premium/i }));
+        expect(onClose).toHaveBeenCalledOnce();
     });
 
     it('renders all premium perks', () => {
