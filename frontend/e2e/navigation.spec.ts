@@ -22,6 +22,17 @@ test.describe('Protected Routes', () => {
         await page.waitForURL(/\/\?callbackUrl/);
         expect(page.url()).toContain('callbackUrl');
     });
+
+    for (const path of ['/price-alerts', '/price-alerts/history']) {
+        test(`${path} redirects unauthenticated users and preserves the return path`, async ({ page }) => {
+            await page.goto(path);
+
+            await page.waitForURL(/\/\?callbackUrl/);
+            const redirected = new URL(page.url());
+            expect(redirected.pathname).toBe('/');
+            expect(redirected.searchParams.get('callbackUrl')).toBe(path);
+        });
+    }
 });
 
 test.describe('Public Routes', () => {

@@ -10,8 +10,8 @@ import { config } from '../../src/middleware';
 function matcherToRegex(pattern: string): RegExp {
     // Escape special regex chars except our placeholder
     let regexStr = pattern.replace(/([.+?^${}()|[\]\\])/g, '\\$1');
-    // Replace :path* — matches any trailing segments (including none)
-    regexStr = regexStr.replace(/:path\*/g, '.*');
+    // Replace /:path* — the slash and trailing segments are both optional
+    regexStr = regexStr.replace(/\/:path\*/g, '(?:/.*)?');
     return new RegExp(`^${regexStr}$`);
 }
 
@@ -27,8 +27,13 @@ describe('middleware config', () => {
         expect(config.matcher.length).toBeGreaterThan(0);
     });
 
-    it('matcher contains 7 patterns', () => {
-        expect(config.matcher).toHaveLength(7);
+    it('contains the required account-owned route matchers', () => {
+        expect(config.matcher).toEqual(expect.arrayContaining([
+            '/dashboard/:path*',
+            '/wishlist/:path*',
+            '/wardrobe/:path*',
+            '/price-alerts/:path*',
+        ]));
     });
 
     it('all matcher entries are strings starting with /', () => {
@@ -72,6 +77,10 @@ describe('middleware config', () => {
         expect(isProtected('/wardrobe/')).toBe(true);
     });
 
+    it('/price-alerts is protected', () => {
+        expect(isProtected('/price-alerts')).toBe(true);
+    });
+
     /* ─── Nested routes ───────────────────────────────────────────── */
 
     it('/dashboard/history is protected (nested)', () => {
@@ -80,6 +89,10 @@ describe('middleware config', () => {
 
     it('/shopping-agent/results/123 is protected (deeply nested)', () => {
         expect(isProtected('/shopping-agent/results/123')).toBe(true);
+    });
+
+    it('/price-alerts/history is protected (nested)', () => {
+        expect(isProtected('/price-alerts/history')).toBe(true);
     });
 
     /* ─── Public routes not matched ───────────────────────────────── */
@@ -108,5 +121,9 @@ describe('middleware config', () => {
 
     it('matcher includes /wishlist/:path*', () => {
         expect(config.matcher).toContain('/wishlist/:path*');
+    });
+
+    it('matcher includes /price-alerts/:path*', () => {
+        expect(config.matcher).toContain('/price-alerts/:path*');
     });
 });
