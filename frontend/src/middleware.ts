@@ -28,6 +28,7 @@ export const config = {
         '/quiz/:path*',
         '/wishlist/:path*',
         '/wardrobe/:path*',
+        '/price-alerts/:path*',
         '/admin/:path*',
     ],
 };
