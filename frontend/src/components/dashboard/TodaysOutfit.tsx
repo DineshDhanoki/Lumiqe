@@ -23,10 +23,11 @@ interface Props {
     dailyOutfit: DailyOutfitData | null;
     isEmpty: boolean;
     isError: boolean;
+    isLoading: boolean;
     onRetry: () => void;
 }
 
-export default function TodaysOutfit({ dailyOutfit, isEmpty, isError, onRetry }: Props) {
+export default function TodaysOutfit({ dailyOutfit, isEmpty, isError, isLoading, onRetry }: Props) {
     if (dailyOutfit && dailyOutfit.filled_count > 0) {
         return (
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
@@ -58,6 +59,22 @@ export default function TodaysOutfit({ dailyOutfit, isEmpty, isError, onRetry }:
                     <Link href="/wardrobe" className="mt-4 flex items-center gap-1 text-primary text-xs font-label font-semibold hover:text-primary/80 transition-colors">
                         View full outfit <span className="material-symbols-outlined text-sm">chevron_right</span>
                     </Link>
+                </div>
+            </motion.div>
+        );
+    }
+
+    if (isLoading) {
+        return (
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
+                <p className="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider mb-4">Today&apos;s Outfit</p>
+                <div
+                    aria-live="polite"
+                    role="status"
+                    className="bg-surface-container/50 border border-primary/10 rounded-3xl p-6 text-center"
+                >
+                    <span className="material-symbols-outlined text-3xl text-primary animate-spin mx-auto mb-3 block">progress_activity</span>
+                    <p className="text-on-surface-variant text-sm">Loading today&apos;s outfit…</p>
                 </div>
             </motion.div>
         );
