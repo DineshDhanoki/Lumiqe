@@ -5,29 +5,29 @@ import TodaysOutfit from '../../../src/components/dashboard/TodaysOutfit';
 describe('TodaysOutfit', () => {
     it('renders nothing when no data, not empty, not error', () => {
         const { container } = render(
-            <TodaysOutfit dailyOutfit={null} isEmpty={false} isError={false} onRetry={vi.fn()} />
+            <TodaysOutfit dailyOutfit={null} isEmpty={false} isError={false} isLoading={false} onRetry={vi.fn()} />
         );
         expect(container.innerHTML).toBe('');
     });
 
     it('renders empty wardrobe state when isEmpty=true', () => {
-        render(<TodaysOutfit dailyOutfit={null} isEmpty={true} isError={false} onRetry={vi.fn()} />);
+        render(<TodaysOutfit dailyOutfit={null} isEmpty={true} isError={false} isLoading={false} onRetry={vi.fn()} />);
         expect(screen.getByText(/Add items to your wardrobe/i)).toBeInTheDocument();
     });
 
     it('wardrobe empty state links to /wardrobe', () => {
-        render(<TodaysOutfit dailyOutfit={null} isEmpty={true} isError={false} onRetry={vi.fn()} />);
+        render(<TodaysOutfit dailyOutfit={null} isEmpty={true} isError={false} isLoading={false} onRetry={vi.fn()} />);
         expect(screen.getByText('Go to Wardrobe').closest('a')).toHaveAttribute('href', '/wardrobe');
     });
 
     it('renders error state message', () => {
-        render(<TodaysOutfit dailyOutfit={null} isEmpty={false} isError={true} onRetry={vi.fn()} />);
+        render(<TodaysOutfit dailyOutfit={null} isEmpty={false} isError={true} isLoading={false} onRetry={vi.fn()} />);
         expect(screen.getByText(/Could not load/i)).toBeInTheDocument();
     });
 
     it('calls onRetry when Retry button is clicked', () => {
         const onRetry = vi.fn();
-        render(<TodaysOutfit dailyOutfit={null} isEmpty={false} isError={true} onRetry={onRetry} />);
+        render(<TodaysOutfit dailyOutfit={null} isEmpty={false} isError={true} isLoading={false} onRetry={onRetry} />);
         fireEvent.click(screen.getByText('Retry'));
         expect(onRetry).toHaveBeenCalledOnce();
     });
@@ -44,7 +44,7 @@ describe('TodaysOutfit', () => {
             filled_count: 1,
             total_slots: 4,
         };
-        render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} onRetry={vi.fn()} />);
+        render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} isLoading={false} onRetry={vi.fn()} />);
         expect(screen.getByText('Your outfit for 2025-04-04')).toBeInTheDocument();
         expect(screen.getByText('T-Shirt')).toBeInTheDocument();
         expect(screen.getByText('95% match')).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe('TodaysOutfit', () => {
             filled_count: 1,
             total_slots: 4,
         };
-        render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} onRetry={vi.fn()} />);
+        render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} isLoading={false} onRetry={vi.fn()} />);
         expect(screen.getAllByText('No item')).toHaveLength(4);
     });
 
@@ -68,7 +68,14 @@ describe('TodaysOutfit', () => {
             filled_count: 1,
             total_slots: 4,
         };
-        render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} onRetry={vi.fn()} />);
+        render(<TodaysOutfit dailyOutfit={dailyOutfit} isEmpty={false} isError={false} isLoading={false} onRetry={vi.fn()} />);
         expect(screen.getByText('View full outfit').closest('a')).toHaveAttribute('href', '/wardrobe');
+    });
+
+    it('replaces actions with an announced loading state', () => {
+        render(<TodaysOutfit dailyOutfit={null} isEmpty={false} isError={false} isLoading onRetry={vi.fn()} />);
+
+        expect(screen.getByRole('status')).toHaveTextContent(/Loading today's outfit/i);
+        expect(screen.queryByRole('button', { name: 'Retry' })).not.toBeInTheDocument();
     });
 });

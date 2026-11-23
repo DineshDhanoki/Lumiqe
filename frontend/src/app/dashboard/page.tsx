@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -88,6 +88,8 @@ export default function Dashboard() {
     const [dailyOutfit, setDailyOutfit] = useState<DailyOutfitData | null>(null);
     const [dailyOutfitEmpty, setDailyOutfitEmpty] = useState(false);
     const [dailyOutfitError, setDailyOutfitError] = useState(false);
+    const [dailyOutfitLoading, setDailyOutfitLoading] = useState(false);
+    const dailyOutfitRequestInFlight = useRef(false);
 
     const storeHistory = useLumiqeStore((s) => s.history);
     const storeQuiz = useLumiqeStore((s) => s.quiz);
@@ -113,16 +115,37 @@ export default function Dashboard() {
         }
     }, [storeQuiz]);
 
+    const fetchDailyOutfit = useCallback(async () => {
+        if (dailyOutfitRequestInFlight.current) return;
+
+        dailyOutfitRequestInFlight.current = true;
+        setDailyOutfitLoading(true);
+        setDailyOutfit(null);
+        setDailyOutfitEmpty(false);
+        setDailyOutfitError(false);
+
+        try {
+            const response = await apiFetch('/api/daily-outfit');
+            if (response.status === 404) {
+                setDailyOutfitEmpty(true);
+                return;
+            }
+            if (!response.ok) {
+                throw new Error(`Daily outfit request failed with status ${response.status}`);
+            }
+            setDailyOutfit(await response.json() as DailyOutfitData);
+        } catch (error) {
+            console.error('[dashboard] Daily outfit fetch failed:', error);
+            setDailyOutfitError(true);
+        } finally {
+            dailyOutfitRequestInFlight.current = false;
+            setDailyOutfitLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
-        if (status !== 'authenticated') return;
-        apiFetch('/api/daily-outfit')
-            .then((res) => {
-                if (res.status === 404) { setDailyOutfitEmpty(true); return null; }
-                return res.ok ? res.json() : null;
-            })
-            .then((data: DailyOutfitData | null) => { if (data) setDailyOutfit(data); })
-            .catch((err) => { console.error('[dashboard] Daily outfit fetch failed:', err); setDailyOutfitError(true); });
-    }, [status]);
+        if (status === 'authenticated') void fetchDailyOutfit();
+    }, [status, fetchDailyOutfit]);
 
     const _loadFromLocalStorage = useCallback(() => {
         try {
@@ -227,7 +250,8 @@ export default function Dashboard() {
                                 dailyOutfit={dailyOutfit}
                                 isEmpty={dailyOutfitEmpty}
                                 isError={dailyOutfitError}
-                                onRetry={() => { setDailyOutfitError(false); setDailyOutfit(null); }}
+                                isLoading={dailyOutfitLoading}
+                                onRetry={fetchDailyOutfit}
                             />
                         )}
 
